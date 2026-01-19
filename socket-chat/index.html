@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chatroom</title>
+    <style>
+      #login-section {
+        display: block;
+      }
+      #chat-section {
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <section id="login-section">
+      <label for="username">Username: </label>
+      <input
+        type="text"
+        id="username"
+        placeholder="Enter your username"
+        maxlength="16"
+        required
+      />
+      <button id="connectBtn">Connect</button>
+    </section>
+
+    <section id="chat-section">
+      <section>
+        <form id="form" action="">
+          <input id="input" autocomplete="off" /> <button>Send</button>
+          <!-- <button id="toggle-btn">Disconnect</button> -->
+        </form>
+      </section>
+
+      <section>
+        <ul id="messages"></ul>
+      </section>
+
+      <section>
+        <span>Online User:</span>
+        <ul id="onlineUsers"></ul>
+      </section>
+    </section>
+
+    <!-- Create the SocketIO client -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="module" src="/static/username-handler.js"></script>
+  </body>
+</html>

@@ -1,0 +1,13 @@
+{
+    "name": "socket-chat",
+    "version": "0.0.1",
+    "type": "module",
+    "dependencies": {
+        "@socket.io/mongo-adapter": "^0.4.0",
+        "dotenv": "^17.2.3",
+        "express": "^4.22.1",
+        "mongodb": "^7.0.0",
+        "mongoose": "^9.1.4",
+        "socket.io": "^4.8.3"
+    }
+}
