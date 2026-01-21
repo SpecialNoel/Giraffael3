@@ -1,6 +1,7 @@
 // server-services.js
 import storeMessage from "./db-operations/message-saver.js";
 
+// Check whether this client socket connection is either "recovered" or "newly connected"
 function handleClientRecoverOrConnect(socket) {
     if (socket.recovered) {
         // This will be proc'ed only if the client socket disconnects
@@ -12,23 +13,27 @@ function handleClientRecoverOrConnect(socket) {
     }
 }
 
+// Get the usernames of online users in the room
 async function getOnlineUsersInRoom(io, roomName) {
     const onlineUserSockets = await io.to(roomName).fetchSockets();
     const onlineUsers = onlineUserSockets.map(onlineSocket => onlineSocket.username);
     return onlineUsers;
 }
 
+// Handle client connection events
 async function handleClientConnection(io, roomName, socket) {
+    // Join the client to the room
     socket.join(roomName);
     console.log(`User ${socket.id} connected`);
     console.log(`User ${socket.id} joined room ${roomName}`);
 
     // Broadcast a message to all clients in the room upon client connection
     const onlineUsers = await getOnlineUsersInRoom(io, roomName);
-    console.log(`Online users: ${onlineUsers}\n`)
     io.to(roomName).emit("user joined", onlineUsers);
+    console.log(`Online users: ${onlineUsers}\n`)
 }
 
+// Handle client disconnection event
 async function handleClientDisconnection(io, roomName, socket) {
     // Leave the client from the room
     socket.leave(roomName);
@@ -37,13 +42,14 @@ async function handleClientDisconnection(io, roomName, socket) {
 
     // Broadcast a message to all clients in the room upon client disconnection
     const onlineUsers = await getOnlineUsersInRoom(io, roomName);
-    console.log(`Online users: ${onlineUsers}\n`)
     io.to(roomName).emit("user left", onlineUsers);
+    console.log(`Online users: ${onlineUsers}\n`)
 }
 
+// Handle client chat message event
 async function handleClientChatMessage(roomName, socket, username, msg, callback) {
     socket.username = username;
-    console.log(`User ${socket.id}: ${msg}`);
+    console.log(`User ${username} [${socket.id}]: ${msg}`);
     
     // Send the message to all connected clients (including the sender client)
     // io.emit("chat message", socket.id, msg);

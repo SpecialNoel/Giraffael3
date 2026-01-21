@@ -54,7 +54,7 @@ await connectToDB();
 //     })
 // );
 
-// Get the correct path to a directory
+// Get the correct path to a directory inside server repository
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // Handle home page function
@@ -71,12 +71,12 @@ io.on("connection", async (socket) => {
     const roomName = "Room 1";
     await ServerServices.handleClientConnection(io, roomName, socket);
 
-    // Handle disconnection event
+    // Handle the disconnection event
     socket.on("disconnect", async () => {
         await ServerServices.handleClientDisconnection(io, roomName, socket);
     });
 
-    // Handle chat message event
+    // Handle the chat message event
     socket.on("chat message", async (username, msg, callback) => {
         await ServerServices.handleClientChatMessage(roomName, socket, username, msg, callback);
     });

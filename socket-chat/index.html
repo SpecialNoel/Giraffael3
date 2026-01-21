@@ -3,6 +3,7 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chatroom</title>
+    <!-- Display the login section only before connecting to server -->
     <style>
       #login-section {
         display: block;
@@ -14,6 +15,7 @@
   </head>
 
   <body>
+    <!-- Login section -->
     <section id="login-section">
       <label for="username">Username: </label>
       <input
@@ -26,18 +28,21 @@
       <button id="connectBtn">Connect</button>
     </section>
 
+    <!-- Chat section -->
     <section id="chat-section">
+      <!-- Input and send message -->
       <section>
         <form id="form" action="">
           <input id="input" autocomplete="off" /> <button>Send</button>
-          <!-- <button id="toggle-btn">Disconnect</button> -->
         </form>
       </section>
 
+      <!-- Chat list -->
       <section>
         <ul id="messages"></ul>
       </section>
 
+      <!-- Current online users -->
       <section>
         <span>Online User:</span>
         <ul id="onlineUsers"></ul>

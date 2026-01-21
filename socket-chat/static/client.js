@@ -13,25 +13,12 @@ function startConnection(username) {
     const input = document.getElementById("input");
     const messagesElement = document.getElementById("messages");
     const onlineUsersElement = document.getElementById("onlineUsers");
-    // const toggleButton = document.getElementById("toggle-btn");
-
-    // Connect or disconnect the client from server via the toggle button
-    // toggleButton.addEventListener("click", (e) => {
-    //   e.preventDefault();
-    //   if (socket.connected) {
-    //     toggleButton.innerText = "Connect";
-    //     socket.disconnect();
-    //   } else {
-    //     toggleButton.innerText = "Disconnect";
-    //     socket.connect();
-    //   }
-    // });
 
     // Upon form submission, send the input message (if any) to the server
     form.addEventListener("submit", (e) => {
         // Prevent web page reloading upon form submission
         e.preventDefault();
-        ClientServices.handleFormSubmission(
+        ClientServices.handleSendMessage(
             username,
             messagesElement,
             input,
@@ -39,7 +26,7 @@ function startConnection(username) {
         );
     });
 
-    // Handle update on online users list upon user join or leave the room
+    // Handle update on online users list upon user joining or leaving the room
     socket.on("user joined", (onlineUsers) =>
         ClientServices.updateOnlineUserList(onlineUsersElement, onlineUsers),
     );
@@ -49,20 +36,8 @@ function startConnection(username) {
 
     // Handle client socket receiving chat messages sent by connected clients
     socket.on("chat message", (senderId, msg) => {
-        ClientServices.addMessageToChatList(messagesElement, senderId, msg);
+        ClientServices.appendMessageToChatList(messagesElement, senderId, msg);
     });
-
-    // A catch-all listeners; will be called for any incoming event
-    // socket.onAny((eventName, ...args) => {
-    //   console.log(`Event: ${eventName}`);
-    //   console.log(`Content: ${args}`);
-    // });
-
-    // A catch-all listeners; will be called for any outgoing event
-    // socket.onAnyOutgoing((eventName, ...args) => {
-    //   console.log(`Event: ${eventName}`);
-    //   console.log(`Content: ${args}`);
-    // });
 }
 
 export { startConnection }

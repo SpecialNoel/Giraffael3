@@ -2,6 +2,7 @@
 
 import Message from "../models/message-model.js";
 
+// Store the chat message sent by a client to the database
 async function storeMessage(senderId, username, messageText) {
     try {
         const expiringDate = new Date(Date.now() + 60 * 60 * 1000); // 1 hour from now

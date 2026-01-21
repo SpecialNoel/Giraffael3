@@ -15,6 +15,8 @@ function getMessageWithNYTimezone(message) {
         timeZone: "America/New_York"
     });
 
+    // Note that convertedMessage is only for readability purpose (i.e. it
+    // is not really a message, and it does not follow the "Message" model)
     const convertedMessage = {
         senderId: senderId,
         username: username,

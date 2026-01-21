@@ -4,6 +4,9 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
+// Schema for the "Message" model
+// It should have the following attributes:
+/* senderId, username, text, expiredAt */
 const messageSchema = new Schema({
     senderId: {
         type: String,
@@ -24,8 +27,9 @@ const messageSchema = new Schema({
         index: { expires: 0 } // Specify this field when creating a new message
     },
     }, 
-    { timestamps: true } // Adds createdAt and updatedAt fields
+    { timestamps: true } // Adds the createdAt and the updatedAt fields
 );
 
+// The "Message" model
 const Message = mongoose.model("Message", messageSchema, "messages");
 export default Message;

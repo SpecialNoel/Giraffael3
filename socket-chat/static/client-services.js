@@ -1,12 +1,14 @@
 // client-services.js
 
-function addMessageToChatList(username, messagesElement, msg) {
+// Append the message to the chat list
+function appendMessageToChatList(username, messagesElement, msg) {
     const item = document.createElement("li");
     item.textContent = username + ": " + msg;
     messagesElement.appendChild(item);
     window.scrollTo(0, document.body.scrollHeight);
 }
 
+// Update the current online users in the room
 function updateOnlineUserList(onlineUsersElement, onlineUsers) {
     onlineUsersElement.innerHTML = "";
     onlineUsers.forEach((userId) => {
@@ -17,7 +19,8 @@ function updateOnlineUserList(onlineUsersElement, onlineUsers) {
     });
 }
 
-function handleFormSubmission(username, messagesElement, input, socket) {
+// Send the input message to server (for which server will then relay to other online users in the room)
+function handleSendMessage(username, messagesElement, input, socket) {
     if (input.value) {
         // Emit the chat message to server, with a 5-second timeout
         // This reaches the same functionality as "emiWithAck()"
@@ -30,12 +33,13 @@ function handleFormSubmission(username, messagesElement, input, socket) {
             console.log(`Server acknowledgement: ${res.status}`);
         }
         });
+        
         // Append client message directly to the chat list
-        addMessageToChatList(username, messagesElement, input.value);
+        appendMessageToChatList(username, messagesElement, input.value);
         input.value = "";
     }
 }
     
-export { addMessageToChatList, 
+export { appendMessageToChatList, 
          updateOnlineUserList, 
-         handleFormSubmission }
+         handleSendMessage }
