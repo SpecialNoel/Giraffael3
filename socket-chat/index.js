@@ -7,6 +7,7 @@ import path from "path";
 import "./environment-loader.js";
 // import { createAdapter } from "@socket.io/mongo-adapter";
 import * as ServerServices from "./server-services.js"
+import createUser from "./db-operations/user-generator.js"
 import { connectToDB } from "./conn.js";
 import { createServer } from "node:http";
 import { fileURLToPath } from "node:url";
@@ -22,15 +23,7 @@ app.use("/static", express.static(path.join(process.cwd(), "static")));
 const server = createServer(app);
 
 // Create a SocketIO server on the HTTP server
-const io = new Server(server, {
-    // Server will temporarily store all events that are 
-    // sent by the server, and will try to restore the state
-    // of a client (rooms, and missed events) when it reconnects.
-    // connectionStateRecovery: {
-    //     // Server will store these info for 1 minute
-    //     maxDisconnectionDuration: 1 * 60 * 1000, // 1 minute
-    // }
-})
+const io = new Server(server)
 
 // Connect to MongoDB
 await connectToDB();
@@ -63,23 +56,45 @@ app.get("/", (req, res) => {
     res.sendFile(join(__dirname, "index.html"));
 });
 
+// Authenticate client credentials before proceeding the connection
+io.use((socket, next) => {
+    // Receive login credentials from client (one time only)
+    const username = socket.handshake.auth.username;
+    if (!username) {
+        // Refuse the connection
+        return next(new Error("invalid username"));
+    }
+    // Apply received username to the socket for later use
+    socket.username = username;
+    next();
+});
+
 // SocketIO server handles the connection event
 io.on("connection", async (socket) => {
-    ServerServices.handleClientRecoverOrConnect(socket);
+    console.log(`User ${socket.username} [${socket.id}] connected`);
 
-    // Join the client to the room
-    const roomName = "Room 1";
-    await ServerServices.handleClientConnection(io, roomName, socket);
+    // Create an User model for this client
+    const user = await createUser(socket.username);
+    const userId = user.userId;
 
-    // Handle the disconnection event
-    socket.on("disconnect", async () => {
-        await ServerServices.handleClientDisconnection(io, roomName, socket);
+    // Handle the room selection event
+    let roomCode = null;
+    socket.on("create room", async (inputRoomName) => {
+        roomCode = await ServerServices.handleClientCreateRoom(socket, userId, inputRoomName);
+    });
+    socket.on("join room", async (inputRoomCode) => {
+        roomCode = await ServerServices.handleClientJoinRoom(socket, userId, inputRoomCode);
     });
 
-    // Handle the chat message event
-    socket.on("chat message", async (username, msg, callback) => {
-        await ServerServices.handleClientChatMessage(roomName, socket, username, msg, callback);
-    });
+    // // Handle the disconnection event
+    // socket.on("disconnect", async () => {
+    //     await ServerServices.handleClientDisconnection(io, roomId, socket);
+    // });
+
+    // // Handle the chat message event
+    // socket.on("chat message", async (msg, callback) => {
+    //     await ServerServices.handleClientChatMessage(socket, roomId, socket.id, msg, callback);
+    // });
 })
 
 // HTTP server listens on port 3000 (default localhost server for Express)

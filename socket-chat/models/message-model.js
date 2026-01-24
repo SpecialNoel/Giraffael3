@@ -6,16 +6,17 @@ const Schema = mongoose.Schema;
 
 // Schema for the "Message" model
 // It should have the following attributes:
-/* senderId, username, text, expiredAt */
+/* _id, room, sender, text, expiredAt */
 const messageSchema = new Schema({
-    senderId: {
-        type: String,
-        required: true,
-        unique: true
+    room: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Room",
+        required: true
     },
-    username: {
-        type: String,
-        require: true
+    sender: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
     },
     text: {
         type: String,

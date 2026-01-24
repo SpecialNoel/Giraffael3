@@ -11,9 +11,9 @@ function appendMessageToChatList(username, messagesElement, msg) {
 // Update the current online users in the room
 function updateOnlineUserList(onlineUsersElement, onlineUsers) {
     onlineUsersElement.innerHTML = "";
-    onlineUsers.forEach((userId) => {
+    onlineUsers.forEach((username) => {
         const item = document.createElement("li");
-        item.textContent = userId;
+        item.textContent = username;
         onlineUsersElement.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
     });
@@ -25,21 +25,23 @@ function handleSendMessage(username, messagesElement, input, socket) {
         // Emit the chat message to server, with a 5-second timeout
         // This reaches the same functionality as "emiWithAck()"
         socket.timeout(5000).emit("chat message", username, input.value, (err, res) => {
-        if (err) {
-            console.log(
-            "Server did not acknowledge the transmission of this chat message in the given delay.",
-            );
-        } else {
-            console.log(`Server acknowledgement: ${res.status}`);
-        }
+            if (err) {
+                console.log(
+                    "Server did not acknowledge the transmission of this chat message in the given delay.",
+                );
+            } else {
+                console.log(`Server acknowledgement: ${res.status}`);
+            }
         });
-        
+
         // Append client message directly to the chat list
         appendMessageToChatList(username, messagesElement, input.value);
         input.value = "";
     }
 }
-    
-export { appendMessageToChatList, 
-         updateOnlineUserList, 
-         handleSendMessage }
+
+export {
+    appendMessageToChatList,
+    updateOnlineUserList,
+    handleSendMessage
+}

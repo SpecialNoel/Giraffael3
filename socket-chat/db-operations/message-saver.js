@@ -1,15 +1,20 @@
 // message-saver.js
 
 import Message from "../models/message-model.js";
+import Room from "../models/room-model.js";
+import User from "../models/user-model.js";
 
 // Store the chat message sent by a client to the database
-async function storeMessage(senderId, username, messageText) {
+async function storeMessage(roomId, senderId, messageText) {
     try {
+        const room = await Room.findById(roomId); // Find room based on _id
+        const sender = await User.findOne({ userId: senderId });
+
         const expiringDate = new Date(Date.now() + 60 * 60 * 1000); // 1 hour from now
 
         const newMessage = new Message({
-            senderId: senderId,
-            username: username,
+            room: room,
+            sender: sender,
             text: messageText,
             expireAt: expiringDate
         });

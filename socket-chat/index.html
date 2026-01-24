@@ -8,6 +8,9 @@
       #login-section {
         display: block;
       }
+      #room-selection-section {
+        display: none;
+      }
       #chat-section {
         display: none;
       }
@@ -25,12 +28,36 @@
         maxlength="16"
         required
       />
-      <button id="connectBtn">Connect</button>
+      <button id="loginBtn">Log in</button>
+    </section>
+
+    <!-- Room selection section -->
+    <section id="room-selection-section">
+      <!-- Create a new room -->
+      <label>Room name: </label>
+      <input
+        type="text"
+        id="roomNameInSelection"
+        placeholder="Enter room name"
+        maxlength="20"
+      />
+      <button id="createRoomBtn">Create room</button>
+
+      <!-- Join an existing room -->
+      <label>Room code: </label>
+      <input
+        type="text"
+        id="roomCodeInSelection"
+        placeholder="Enter room code"
+        maxlength="20"
+      />
+      <button id="joinRoomBtn">Join room</button>
     </section>
 
     <!-- Chat section -->
     <section id="chat-section">
       <!-- Input and send message -->
+      <label>Messages: </label>
       <section>
         <form id="form" action="">
           <input id="input" autocomplete="off" /> <button>Send</button>
@@ -51,6 +78,8 @@
 
     <!-- Create the SocketIO client -->
     <script src="/socket.io/socket.io.js"></script>
-    <script type="module" src="/static/username-handler.js"></script>
+
+    <!-- Handle client side services -->
+    <script type="module" src="/static/client.js"></script>
   </body>
 </html>

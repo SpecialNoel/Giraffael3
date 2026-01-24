@@ -1,43 +1,22 @@
 // client.js
 
-import * as ClientServices from "/static/client-services.js";
+import login from "/static/login-handler.js";
+import { connect } from "/static/connection-handler.js";
+import { roomSelection } from "/static/room-selection-handler.js";
+import startSession from "/static/session-handler.js";
 
-function startConnection(username) {
-    /*
-    * io() by default tries to connect the client to the host/server
-    * that serves the page (this home page in this case)
-    */
-    const socket = io();
+async function start_client() {
+    // Handle user login credentials, and user connection (if authenticated)
+    const credentials = await login();
 
-    const form = document.getElementById("form");
-    const input = document.getElementById("input");
-    const messagesElement = document.getElementById("messages");
-    const onlineUsersElement = document.getElementById("onlineUsers");
+    // Obtain client socket after authenticating 
+    const socket = await connect(credentials);
 
-    // Upon form submission, send the input message (if any) to the server
-    form.addEventListener("submit", (e) => {
-        // Prevent web page reloading upon form submission
-        e.preventDefault();
-        ClientServices.handleSendMessage(
-            username,
-            messagesElement,
-            input,
-            socket,
-        );
-    });
+    // Handle user room selection (create or join)
+    const roomCode = await roomSelection(socket);
 
-    // Handle update on online users list upon user joining or leaving the room
-    socket.on("user joined", (onlineUsers) =>
-        ClientServices.updateOnlineUserList(onlineUsersElement, onlineUsers),
-    );
-    socket.on("user left", (onlineUsers) =>
-        ClientServices.updateOnlineUserList(onlineUsersElement, onlineUsers),
-    );
-
-    // Handle client socket receiving chat messages sent by connected clients
-    socket.on("chat message", (senderId, msg) => {
-        ClientServices.appendMessageToChatList(messagesElement, senderId, msg);
-    });
+    // Handle user chatting session
+    startSession(socket, roomCode);
 }
 
-export { startConnection }
+start_client();
