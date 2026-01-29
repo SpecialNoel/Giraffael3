@@ -8,14 +8,6 @@ async function login() {
     
     const loginBtn = document.getElementById("loginBtn");
 
-    // Click the button upon user hitting the "Enter" key when filling the username field
-    document.getElementById("username").addEventListener("keydown", (e) => {
-        if (e.key == "Enter") {
-            e.preventDefault();
-            loginBtn.click();
-        }
-    });
-
     // Obtain the username inputted by the user
     return new Promise((resolve) => {
         loginBtn.addEventListener("click", () => {

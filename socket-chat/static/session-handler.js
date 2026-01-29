@@ -3,10 +3,19 @@
 import showSection from "/static/section-renderer.js";
 import * as ClientServices from "/static/client-services.js";
 
-function startSession(socket, roomCode) {
+function startSession(socket, roomCode, roomName) {
+    const username = document.getElementById("username").value.trim();
+
+    // Update code and name of the room, as well as user info, on user GUI
+    const roomCodeInChatElement = document.getElementById("roomCodeInChat");
+    if (roomCodeInChatElement) roomCodeInChatElement.textContent = `Room code: ${roomCode}`;
+    const roomNameInChatElement = document.getElementById("roomNameInChat");
+    if (roomNameInChatElement)roomNameInChatElement.textContent = `Room name: ${roomName}`;
+    const usernameInChatElement = document.getElementById("usernameInChat");
+    if (usernameInChatElement) usernameInChatElement.textContent = `Username: ${username}`;
+
     showSection("chat");
 
-    const username = document.getElementById("username").value.trim();
     const form = document.getElementById("form");
     const input = document.getElementById("input");
     const messagesElement = document.getElementById("messages");

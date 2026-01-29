@@ -54,25 +54,36 @@
       <button id="joinRoomBtn">Join room</button>
     </section>
 
-    <!-- Chat section -->
+    <!-- Chat room section -->
     <section id="chat-section">
-      <!-- Input and send message -->
-      <label>Messages: </label>
-      <section>
-        <form id="form" action="">
-          <input id="input" autocomplete="off" /> <button>Send</button>
-        </form>
+      <!-- Chat room header section -->
+      <section id="chat-header-section">
+        <!-- Room information -->
+        <label id="roomNameInChat">Room name</label>
+        <label id="roomCodeInChat">Room code</label>
+
+        <!-- User information -->
+        <label id="usernameInChat">Username</label>
       </section>
 
       <!-- Chat list -->
       <section>
+        <label>Message history: </label>
         <ul id="messages"></ul>
       </section>
 
       <!-- Current online users -->
       <section>
-        <span>Online User:</span>
+        <label>Online User:</label>
         <ul id="onlineUsers"></ul>
+      </section>
+
+      <!-- Input and send message -->
+      <label>Send Message: </label>
+      <section>
+        <form id="form" action="">
+          <input id="input" autocomplete="off" /> <button>Send</button>
+        </form>
       </section>
     </section>
 

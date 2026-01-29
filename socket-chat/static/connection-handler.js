@@ -1,14 +1,11 @@
 // connection-handler.js
 
-// Client socket singleton that will be used across scripts
-let socket = null;
-
 // Connect to server via Socket.IO
 function connect(credentials) {
 	return new Promise((resolve, reject) => {
 		// io() by default tries to connect the client to the host/server
 		// that serves the page (this home page in this case)
-		socket = io({
+		const socket = io({
 			auth: credentials
 		});
 
@@ -18,9 +15,4 @@ function connect(credentials) {
 	});
 }
 
-function getSocket() {
-	if (!socket) throw new Error("Socket not initialized");
-	return socket;
-}
-
-export { connect, getSocket };
+export default connect;

@@ -2,46 +2,15 @@
 
 import showSection from "/static/section-renderer.js";
 
-let roomCode = null;
-let roomName = null;
-
-function setRoomCode(roomCode) { 
-    roomCode = roomCode;
-}
-function getRoomCode() {
-    if (!roomCode) throw new Error("Room code not set yet");
-    return roomCode;
-}
-
-function setRoomName(roomName) { 
-    roomName = roomName;
-}
-function getRoomName() {
-    if (!roomName) throw new Error("Room name not set yet");
-    return roomName;
-}
-
 // Handle client create room selection
 async function handleRoomCreationSelection(socket) {
     // Retrieve room name from user input
     const inputRoomName = document.getElementById("roomNameInSelection").value.trim();
     if (!inputRoomName) return;
 
-    console.log(`Inputted room name: ${inputRoomName}`)
-
     // Send the create-room request to the server
     socket.emit("create room", inputRoomName);
-
-    // Wait for the server to send the room code; set room code if success
-    socket.once("room-created", (roomCode, roomName) => {
-        setRoomCode(roomCode);
-        setRoomName(roomName);
-    });
-
-    // Report failure otherwise
-    socket.once("room-create-failed", () => {
-        throw new Error(`Room creation failed. Room name: ${inputRoomName}`);
-    });
+    return inputRoomName;
 }
 
 // Handle client join room selection
@@ -52,17 +21,37 @@ async function handleRoomJoinSelection(socket) {
 
     // Send it to the server to check room existence
     socket.emit("join room", inputRoomCode);
+    return inputRoomCode;
+}
 
-    // Set room code to the inputted one if success
-    socket.once("room-joined", (roomCode, roomName) => {
-        setRoomCode(roomCode);
-        setRoomName(roomName);
-    });
+// Wait until receiving responses on room creation from server
+async function waitingForServerResponseOnCreatingRoom(socket, inputRoomName) {
+    return new Promise((resolve, reject) => {
+        // Wait for the server to send the room code; set room code if success
+        socket.once("room-created", (roomCode, roomName) => {
+            resolve({ roomCode, roomName });         
+        });
 
-    // Report inputted room code invalidness to user otherwise
-    socket.once("room-join-failed", () => {
-        throw new Error(`Room join failed. Room code: ${inputRoomCode}`);
-    });
+        // Report failure otherwise
+        socket.once("room-create-failed", () => {
+            reject(new Error(`Room creation failed. Room name: ${inputRoomName}`));
+        });
+    }); 
+}
+
+// Wait until receiving responses on room join from server
+async function waitingForServerResponseOnJoiningRoom(socket, inputRoomCode) {
+    return new Promise((resolve, reject) => {
+        // Set room code to the inputted one if success
+        socket.once("room-joined", (roomCode, roomName) => {
+            resolve({ roomCode, roomName });     
+        });
+
+        // Report failure otherwise
+        socket.once("room-join-failed", () => {
+            reject(new Error(`Room join failed. Room code: ${inputRoomCode}`));
+        });
+    }); 
 }
 
 // Set up the create and join room buttons, and obtain inputs from the user
@@ -73,32 +62,27 @@ async function roomSelection(socket) {
         const createRoomBtn = document.getElementById("createRoomBtn");
         const joinRoomBtn = document.getElementById("joinRoomBtn");
 
-        // Click the button upon user hitting the "Enter" key when filling the fields
-        document.getElementById("roomNameInSelection").addEventListener("keydown", (e) => {
-            if (e.key == "Enter") {
-                e.preventDefault();
-                createRoomBtn.click();
-            }
-        });
-        document.getElementById("roomCodeInSelection").addEventListener("keydown", (e) => {
-            if (e.key == "Enter") {
-                e.preventDefault();
-                joinRoomBtn.click();
-            }
-        });
-
-        // Obtain room code from the user upon button clicks
+        // Obtain room name from the user upon button click
         createRoomBtn.addEventListener("click", async () => {
-            await handleRoomCreationSelection(socket);
-            if (!roomCode) reject;
-            resolve(roomCode);
+            try {
+                const inputRoomName = await handleRoomCreationSelection(socket);
+                const { roomCode, roomName } = await waitingForServerResponseOnCreatingRoom(socket, inputRoomName);
+                resolve({ roomCode, roomName });
+            } catch {
+                reject(new Error("Error in room selection."));
+            }
         });
+        // Obtain room code from the user upon button click
         joinRoomBtn.addEventListener("click", async () => {
-            await handleRoomJoinSelection(socket);
-            if (!roomCode) reject;
-            resolve(roomCode);
+            try {
+                const inputRoomCode = await handleRoomJoinSelection(socket);
+                const { roomCode, roomName } = await waitingForServerResponseOnJoiningRoom(socket, inputRoomCode);
+                resolve({ roomCode, roomName });
+            } catch {
+                reject(new Error("Error in room selection."));
+            }
         });
     });
 }
 
-export { roomSelection, getRoomCode };
+export default roomSelection;
