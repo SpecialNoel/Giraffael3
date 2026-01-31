@@ -2,7 +2,7 @@
 
 import User from "../models/user-model.js";
 import retrieveAllUserIds from "./user-ids-retriever.js"
-import generateUserId from "../user-id-generator.js";
+import generateUserId from "../utilities/user-id-generator.js";
 
 // Create a new user with the given username, and store it to the database
 async function createUser(username) {

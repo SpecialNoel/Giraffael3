@@ -1,6 +1,6 @@
 // session-handler.js
 
-import showSection from "/static/section-renderer.js";
+import showSection from "/static/utilities/section-renderer.js";
 import * as ClientServices from "/static/client-services.js";
 
 function startSession(socket, roomCode, roomName) {

@@ -1,6 +1,6 @@
 // login-handler.js
 
-import showSection from "/static/section-renderer.js";
+import showSection from "/static/utilities/section-renderer.js";
 
 // Set up the login button
 async function login() {
@@ -18,4 +18,4 @@ async function login() {
     }, { once: true });
 }
 
-export default login
+export default login;

@@ -4,17 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chatroom</title>
     <!-- Display the login section only before connecting to server -->
-    <style>
-      #login-section {
-        display: block;
-      }
-      #room-selection-section {
-        display: none;
-      }
-      #chat-section {
-        display: none;
-      }
-    </style>
+    <link rel="stylesheet" href="/static/styles.css" />
   </head>
 
   <body>
@@ -34,57 +24,63 @@
     <!-- Room selection section -->
     <section id="room-selection-section">
       <!-- Create a new room -->
-      <label>Room name: </label>
-      <input
-        type="text"
-        id="roomNameInSelection"
-        placeholder="Enter room name"
-        maxlength="20"
-      />
-      <button id="createRoomBtn">Create room</button>
+      <div>
+        <label>Room name: </label>
+        <input
+          type="text"
+          id="roomNameInSelection"
+          placeholder="Enter room name"
+          maxlength="20"
+        />
+        <button id="createRoomBtn">Create room</button>
+      </div>
+
+      <label>OR: </label>
 
       <!-- Join an existing room -->
-      <label>Room code: </label>
-      <input
-        type="text"
-        id="roomCodeInSelection"
-        placeholder="Enter room code"
-        maxlength="20"
-      />
-      <button id="joinRoomBtn">Join room</button>
+      <div>
+        <label>Room code: </label>
+        <input
+          type="text"
+          id="roomCodeInSelection"
+          placeholder="Enter room code"
+          maxlength="20"
+        />
+        <button id="joinRoomBtn">Join room</button>
+      </div>
     </section>
 
     <!-- Chat room section -->
     <section id="chat-section">
       <!-- Chat room header section -->
-      <section id="chat-header-section">
+      <div id="chat-header-section">
         <!-- Room information -->
         <label id="roomNameInChat">Room name</label>
         <label id="roomCodeInChat">Room code</label>
 
         <!-- User information -->
         <label id="usernameInChat">Username</label>
-      </section>
+      </div>
 
       <!-- Chat list -->
-      <section>
+      <div>
         <label>Message history: </label>
         <ul id="messages"></ul>
-      </section>
+      </div>
 
       <!-- Current online users -->
-      <section>
+      <div>
         <label>Online User:</label>
         <ul id="onlineUsers"></ul>
-      </section>
+      </div>
 
       <!-- Input and send message -->
       <label>Send Message: </label>
-      <section>
+      <div>
         <form id="form" action="">
           <input id="input" autocomplete="off" /> <button>Send</button>
         </form>
-      </section>
+      </div>
     </section>
 
     <!-- Create the SocketIO client -->

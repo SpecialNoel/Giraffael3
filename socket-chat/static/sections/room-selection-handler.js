@@ -1,6 +1,6 @@
 // room-selection-handler.js
 
-import showSection from "/static/section-renderer.js";
+import showSection from "/static/utilities/section-renderer.js";
 
 // Handle client create room selection
 async function handleRoomCreationSelection(socket) {

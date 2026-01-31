@@ -2,7 +2,7 @@
 
 import Room from "../models/room-model.js";
 import retrieveAllRoomCodes from "./room-codes-retriever.js"
-import generateRoomCode from "../room-code-generator.js";
+import generateRoomCode from "../utilities/room-code-generator.js";
 
 // Create a new room with the given room name, and store it to the database
 async function createRoom(roomName) {

@@ -1,0 +1,17 @@
+/* styles.css */
+
+#login-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#room-selection-section {
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+#chat-section {
+    display: none;
+    justify-content: center;
+    align-items: center;
+}

@@ -1,10 +1,10 @@
 // client.js
 
-import login from "/static/login-handler.js";
-import connect from "/static/connection-handler.js";
-import roomSelection from "/static/room-selection-handler.js";
-import startSession from "/static/session-handler.js";
-import setUpButtonClickWithEnterKey from "./button-click-setup.js";
+import login from "/static/sections/login-handler.js";
+import connect from "/static/sections/connection-handler.js";
+import roomSelection from "/static/sections/room-selection-handler.js";
+import startSession from "/static/sections/session-handler.js";
+import setUpButtonClickWithEnterKey from "/static/utilities/button-click-setup.js";
 
 async function start_client() {
     // Set up the page such that the button will be clicked 

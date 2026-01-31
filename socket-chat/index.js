@@ -4,15 +4,16 @@
 
 import express from "express";
 import path from "path";
-import "./environment-loader.js";
-// import { createAdapter } from "@socket.io/mongo-adapter";
-import * as ServerServices from "./server-services.js"
-import createUser from "./db-operations/user-generator.js"
-import { connectToDB } from "./conn.js";
 import { createServer } from "node:http";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { Server } from "socket.io";
+// import { createAdapter } from "@socket.io/mongo-adapter";
+
+import "./server/utilities/environment-loader.js";
+import createUser from "./server/db-operations/user-generator.js"
+import connectToDB from "./server/utilities/conn.js";
+import * as ServerServices from "./server/server-services.js"
 
 // Initialize an Express application (a function handler)
 const app = express();
