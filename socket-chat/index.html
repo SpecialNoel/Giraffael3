@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chatroom</title>
+    <title id="title">Chatroom</title>
     <!-- Display the login section only before connecting to server -->
     <link rel="stylesheet" href="/static/styles.css" />
   </head>
@@ -16,7 +16,6 @@
         id="username"
         placeholder="Enter your username"
         maxlength="16"
-        required
       />
       <button id="loginBtn">Log in</button>
     </section>
@@ -55,7 +54,6 @@
       <!-- Chat room header section -->
       <div id="chat-header-section">
         <!-- Room information -->
-        <label id="roomNameInChat">Room name</label>
         <label id="roomCodeInChat">Room code</label>
 
         <!-- User information -->

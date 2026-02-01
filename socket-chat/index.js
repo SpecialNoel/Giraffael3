@@ -8,7 +8,6 @@ import { createServer } from "node:http";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { Server } from "socket.io";
-// import { createAdapter } from "@socket.io/mongo-adapter";
 
 import "./server/utilities/environment-loader.js";
 import createUser from "./server/db-operations/user-generator.js"
@@ -28,25 +27,6 @@ const io = new Server(server)
 
 // Connect to MongoDB
 await connectToDB();
-
-// Attach the adapter to the adapter collection (not the "messages" collection)
-// The adapter collection lets Socket.IO work correctly across multiple server instances (scaling horizontally)
-// It should be used in case of multiple Socket.IO servers (e.g. multiple EC2 instances)
-// It stores ephemeral coordination events like room join/leave broadcasts, io.to(room).emit(), etc.
-// These events are written by one server, read by other servers, and deleted automatically via TTL
-// This collection is not for chat messages, user data, persistent logs, etc.
-// Do this only if one process can no longer handle the workload properly
-// Example for one process: 5k-20k concurrent connections, 10k-50k msg/s, and hundreds of rooms
-// const adapterCollection = mongoose.connection.db.collection("socket.io-adapter-events");
-// await adapterCollection.createIndex(
-//     { createdAt: 1 },
-//     { expireAfterSeconds: 3600 }
-// );
-// io.adapter(
-//     createAdapter(adapterCollection, {
-//         addCreatedAtField: true
-//     })
-// );
 
 // Get the correct path to a directory inside server repository
 const __dirname = dirname(fileURLToPath(import.meta.url));

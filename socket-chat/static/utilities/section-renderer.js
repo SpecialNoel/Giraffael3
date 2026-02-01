@@ -1,7 +1,7 @@
 // section-renderer.js
 
 // Display the given section, and hide the other sections
-function showSection(section) {
+async function showSection(section) {
     if (section === "login") {
         document.getElementById("login-section").style.display = "flex";
         document.getElementById("room-selection-section").style.display = "none";

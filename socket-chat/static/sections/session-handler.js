@@ -1,6 +1,5 @@
 // session-handler.js
 
-import showSection from "/static/utilities/section-renderer.js";
 import * as ClientServices from "/static/client-services.js";
 
 function startSession(socket, roomCode, roomName) {
@@ -9,13 +8,11 @@ function startSession(socket, roomCode, roomName) {
     // Update code and name of the room, as well as user info, on user GUI
     const roomCodeInChatElement = document.getElementById("roomCodeInChat");
     if (roomCodeInChatElement) roomCodeInChatElement.textContent = `Room code: ${roomCode}`;
-    const roomNameInChatElement = document.getElementById("roomNameInChat");
-    if (roomNameInChatElement)roomNameInChatElement.textContent = `Room name: ${roomName}`;
+    const titleElement = document.getElementById("title");
+    if (titleElement)titleElement.textContent = roomName;
     const usernameInChatElement = document.getElementById("usernameInChat");
     if (usernameInChatElement) usernameInChatElement.textContent = `Username: ${username}`;
-
-    showSection("chat");
-
+    
     const form = document.getElementById("form");
     const input = document.getElementById("input");
     const messagesElement = document.getElementById("messages");
