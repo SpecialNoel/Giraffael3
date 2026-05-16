@@ -1,7 +1,6 @@
 // conn.js
 
 import mongoose from "mongoose";
-import "./environment-loader.js";
 
 // Connect to MongoDB 
 async function connectToDB() {

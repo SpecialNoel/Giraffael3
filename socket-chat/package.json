@@ -8,5 +8,8 @@
         "mongodb": "^7.0.0",
         "mongoose": "^9.1.4",
         "socket.io": "^4.8.3"
+    },
+    "scripts": {
+        "start": "node -r dotenv/config ./index.js"
     }
 }

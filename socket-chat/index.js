@@ -1,7 +1,5 @@
 // index.js
 
-// node index.js
-
 import express from "express";
 import path from "path";
 import { createServer } from "node:http";
@@ -9,7 +7,6 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { Server } from "socket.io";
 
-import "./server/utilities/environment-loader.js";
 import createUser from "./server/db-operations/user-generator.js"
 import connectToDB from "./server/utilities/conn.js";
 import * as ServerServices from "./server/server-services.js"
