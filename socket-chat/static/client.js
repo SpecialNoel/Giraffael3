@@ -6,7 +6,7 @@ import login from "/static/sections/login-handler.js";
 import validateCredentials from "/static/utilities/credentials-validator.js";
 import connect from "/static/sections/connection-handler.js";
 import * as RoomSelectionServices from "/static/sections/room-selection-handler.js";
-import validateRoomInfo from "/static/utilities/room-info-validator.js";
+import roomInfoNotValid from "/static/utilities/room-info-validator.js";
 import startSession from "/static/sections/session-handler.js";
 
 async function start_client() {
@@ -30,7 +30,9 @@ async function start_client() {
     let inputRoomName = "";
     do {
         inputRoomCode, inputRoomName = await RoomSelectionServices.receiveUserInputOnRoomSelection();
-    } while (await validateRoomInfo(inputRoomCode, inputRoomName)); 
+        console.log("inputRoomCode", inputRoomCode)
+        console.log("inputRoomName", inputRoomName)
+    } while (!(await roomInfoNotValid(inputRoomCode, inputRoomName))); 
 
     // Sent user input on room selection to server and wait for the response
     let roomCode = "";

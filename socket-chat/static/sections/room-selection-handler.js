@@ -11,6 +11,7 @@ async function receiveUserInputOnRoomSelection() {
     // Get and return user input on room code, with an empty room name
     async function handleRoomJoinSelection() {
         const inputRoomCode = document.getElementById("roomCodeInSelection").value.trim();
+        console.log("Room code: ", inputRoomCode)
         return { roomCode: inputRoomCode, roomName: "" };
     }
 
@@ -20,18 +21,20 @@ async function receiveUserInputOnRoomSelection() {
 
         // Obtain room name from the user upon button clicking "create room"
         createRoomBtn.addEventListener("click", async () => {
+            console.log("Client chose to create room")
             try {
                 const result = await handleRoomCreationSelection();
-                resolve(result.roomCode, result.roomName);
+                resolve({roomCode: result.roomCode, roomName: result.roomName});
             } catch {
                 reject(new Error("Error in room selection."));
             }
         }, { once: true });
         // Obtain room code from the user upon button clicking "join room"
         joinRoomBtn.addEventListener("click", async () => {
+            console.log("Client chose to join room")
             try {
                 const result = await handleRoomJoinSelection();
-                resolve(result.roomCode, result.roomName);
+                resolve({roomCode: result.roomCode, roomName: result.roomName});
             } catch {
                 reject(new Error("Error in room selection."));
             }
