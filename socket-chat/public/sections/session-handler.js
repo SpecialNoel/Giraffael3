@@ -1,6 +1,6 @@
 // session-handler.js
 
-import * as ClientServices from "/static/client-services.js";
+import * as ClientServices from "/public/client-services.js";
 
 function startSession(socket, roomCode, roomName) {
     const username = document.getElementById("username").value.trim();

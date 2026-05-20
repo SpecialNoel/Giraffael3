@@ -11,7 +11,6 @@ async function receiveUserInputOnRoomSelection() {
     // Get and return user input on room code, with an empty room name
     async function handleRoomJoinSelection() {
         const inputRoomCode = document.getElementById("roomCodeInSelection").value.trim();
-        console.log("Room code: ", inputRoomCode)
         return { roomCode: inputRoomCode, roomName: "" };
     }
 

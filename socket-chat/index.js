@@ -1,20 +1,40 @@
 // index.js
 
 import express from "express";
-import path from "path";
+import path from "node:path";
 import { createServer } from "node:http";
-import { fileURLToPath } from "node:url";
-import { dirname, join } from "node:path";
+import { join } from "node:path";
 import { Server } from "socket.io";
 
-import createUser from "./server/db-operations/user-generator.js"
+import signinRouter from "./routes/signin.js";
+import signupRouter from "./routes/signup.js";
+import dashboardRouter from "./routes/dashboard.js";
+import chatroomRouter from "./routes/chatroom.js";
+
+import createUser from "./server/db-operations/user-generator.js";
 import connectToDB from "./server/utilities/conn.js";
-import * as ServerServices from "./server/server-services.js"
+import * as ServerServices from "./server/server-services.js";
 
 // Initialize an Express application (a function handler)
 const app = express();
-// Expose the files inside the "static" folder to the browser when it requests them
-app.use("/static", express.static(path.join(process.cwd(), "static")));
+
+/* 
+   Expose the files inside the "public" folder to the browser when it requests them.
+   Now "public" is treated as the root folder of the website files.
+   This means that other files (like the html files) can directly call files inside "public",
+   without adding "public" as part of the path. 
+*/
+app.use(express.static(path.join(process.cwd(), "public")));
+
+// Set up page routings
+app.use("/signin", signinRouter);
+app.use("/signup", signupRouter);
+app.use("/dashboard", dashboardRouter);
+app.use("/chatroom", chatroomRouter);
+app.get("/", (req, res) => {
+    // Set the default displaying page to be "signin" 
+    res.redirect("/signin");
+});
 
 // Create an HTTP server on the application
 const server = createServer(app);
@@ -24,15 +44,6 @@ const io = new Server(server)
 
 // Connect to MongoDB
 await connectToDB();
-
-// Get the correct path to a directory inside server repository
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
-// Handle home page function
-app.get("/", (req, res) => {
-    // Set the content of index.html as the home page
-    res.sendFile(join(__dirname, "index.html"));
-});
 
 // Authenticate client credentials before proceeding the connection
 io.use((socket, next) => {
@@ -76,7 +87,7 @@ io.on("connection", async (socket) => {
 })
 
 // HTTP server listens on port 3000 (default localhost server for Express)
-const serverPort = process.env.PORT || "3000";
+const serverPort = process.env.PORT || 3000;
 server.listen(serverPort, () => {
-    console.log(`Server is running at http://localhost:${serverPort}\n`)
+    console.log(`Server is running at http://localhost:${serverPort}/signin\n`)
 });
