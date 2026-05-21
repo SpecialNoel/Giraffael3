@@ -15,6 +15,8 @@ import createUser from "./server/db-operations/user-generator.js";
 import connectToDB from "./server/utilities/conn.js";
 import * as ServerServices from "./server/server-services.js";
 
+
+// ========== Express App ========== 
 // Initialize an Express application (a function handler)
 const app = express();
 
@@ -25,6 +27,7 @@ const app = express();
    without adding "public" as part of the path. 
 */
 app.use(express.static(path.join(process.cwd(), "public")));
+app.use(express.json());
 
 // Set up page routings
 app.use("/signin", signinRouter);
@@ -35,7 +38,22 @@ app.get("/", (req, res) => {
     // Set the default displaying page to be "signin" 
     res.redirect("/signin");
 });
+app.post("/signin", (req, res) => {
+    // TODO: Add more authentication logics here
+    // Currently: as long as the user typed something as their username, 
+    //            they will be authenticated
+    const { username } = req.body;
+    if (!username) {
+        console.log(`Recevied invalid redentials.`);
+        return res.status(400).json({ error: "missing credentials" });
+    }
+    console.log(`Recevied credentials: ${username}`);
+    return res.json({ username });
+});
+// ========== Express App ========== 
 
+
+// ========== Server Socket ========== 
 // Create an HTTP server on the application
 const server = createServer(app);
 
@@ -47,7 +65,7 @@ await connectToDB();
 
 // Authenticate client credentials before proceeding the connection
 io.use((socket, next) => {
-    // Receive login credentials from client (one time only)
+    // Receive signin credentials from client (one time only)
     const username = socket.handshake.auth.username;
     if (!username) {
         // Refuse the connection
@@ -91,3 +109,4 @@ const serverPort = process.env.PORT || 3000;
 server.listen(serverPort, () => {
     console.log(`Server is running at http://localhost:${serverPort}/signin\n`)
 });
+// ========== Server Socket ========== 

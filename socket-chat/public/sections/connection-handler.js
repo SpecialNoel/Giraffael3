@@ -10,8 +10,14 @@ function connect(credentials) {
 		});
 
 		// Return the socket if this connection is a success
-		socket.once("connect", () => resolve(socket));
-		socket.once("connect_error", reject);
+		socket.once("connect", () => {
+			console.log("Connected to server.");
+			resolve(socket);
+		});
+		socket.once("connect_error", (err) => {
+			console.error(err);
+			reject(err);
+		});
 	});
 }
 

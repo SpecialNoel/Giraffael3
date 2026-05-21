@@ -1,26 +1,24 @@
 // client.js
 
-import setUpButtonClickWithEnterKey from "/public/utilities/button-click-setup.js";
-import login from "/public/sections/login-handler.js";
-import validateCredentials from "/public/utilities/credentials-validator.js";
-import connect from "/public/sections/connection-handler.js";
-import * as RoomSelectionServices from "/public/sections/room-selection-handler.js";
-import roomInfoNotValid from "/public/utilities/room-info-validator.js";
-import startSession from "/public/sections/session-handler.js";
+import signin from "/sections/signin-handler.js";
+import connect from "/sections/connection-handler.js";
+import * as RoomSelectionServices from "/sections/room-selection-handler.js";
+import roomInfoNotValid from "/utilities/room-info-validator.js";
+import startSession from "/sections/session-handler.js";
 
 async function start_client() {
-    // Set up the page such that the button will be clicked 
-    // upon user "Enter" key press on the corresponding form
-    await setUpButtonClickWithEnterKey();
-    
-    // Handle user login credentials, and user connection (if authenticated)
-    let credentials = null;
-    do {
-        credentials = await login();
-    } while (await validateCredentials(credentials));
+    // Handle user signin credentials, and user connection (if authenticated)
+    const username = await signin();
+
+    if (username) {
+        console.log("Credential passed. Username: ", username);
+    } else {
+        window.location.href = "/signin.html"
+        console.log("Credential invalid. Returned to sign in page.");
+    }
 
     // Obtain client socket after authenticating 
-    const socket = await connect(credentials);
+    const socket = await connect(username);
 
     // Get user input on room selection (create or join); repeat until either one is not empty
     // let inputRoomCode = "";

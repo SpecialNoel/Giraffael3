@@ -10,10 +10,9 @@ async function roomNameIsNotEmpty(roomName) {
     return roomName !== "";
 }
 
-// Returns true if at least one field among room name and room code is true; returns false otherwise
+// Returns true if at least one field among room name and room code is no empty; returns false otherwise
 async function roomInfoIsValid(roomCode, roomName) {
-    const validness = (await roomCodeIsNotEmpty(roomCode)) || (await roomNameIsNotEmpty(roomName));
-    return validness;
+    return (await roomCodeIsNotEmpty(roomCode)) || (await roomNameIsNotEmpty(roomName));
 }
 
 export default roomInfoIsValid;
