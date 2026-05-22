@@ -1,6 +1,6 @@
 // session-handler.js
 
-import * as ClientServices from "/client-services.js";
+import * as ChatServices from "/chat-services.js";
 
 function startSession(socket, roomCode, roomName) {
     const username = document.getElementById("username").value.trim();
@@ -22,7 +22,7 @@ function startSession(socket, roomCode, roomName) {
     form.addEventListener("submit", (e) => {
         // Prevent web page reloading upon form submission
         e.preventDefault();
-        ClientServices.handleSendMessage(
+        ChatServices.handleSendMessage(
             username,
             messagesElement,
             input,
@@ -32,15 +32,15 @@ function startSession(socket, roomCode, roomName) {
 
     // Handle update on online users list upon user joining or leaving the room
     socket.on("user joined", (onlineUsers) =>
-        ClientServices.updateOnlineUserList(onlineUsersElement, onlineUsers),
+        ChatServices.updateOnlineUserList(onlineUsersElement, onlineUsers),
     );
     socket.on("user left", (onlineUsers) =>
-        ClientServices.updateOnlineUserList(onlineUsersElement, onlineUsers),
+        ChatServices.updateOnlineUserList(onlineUsersElement, onlineUsers),
     );
 
     // Handle client socket receiving chat messages sent by connected clients
     socket.on("chat message", (senderId, msg) => {
-        ClientServices.appendMessageToChatList(messagesElement, senderId, msg);
+        ChatServices.appendMessageToChatList(messagesElement, senderId, msg);
     });
 }
 

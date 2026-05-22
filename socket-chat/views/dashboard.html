@@ -6,8 +6,76 @@
   </head>
 
   <body>
-    <h1>Dashboard page</h1>
-    <a href="/chatroom">Go to Chatroom</a>
-    <a href="/signin">Go to Sign-In</a>
+    <!-- Buttons to other pages -->
+    <a href="/chatroom-list"><button>Chatroom List</button></a>
+    <a href="/friends"><button>Friends</button></a>
+    <a href="/settings"><button>Settings</button></a>
+    <a href="/signin"><button>Quit</button></a>
+
+    <!-- Room selection section -->
+    <section id="room-selection-section">
+      <!-- Create a new room -->
+      <div>
+        <label>Room name: </label>
+        <input
+          type="text"
+          id="roomNameInSelection"
+          placeholder="Enter room name"
+          maxlength="20"
+        />
+        <button id="createRoomBtn">Create room</button>
+      </div>
+
+      <label> OR: </label>
+
+      <!-- Join an existing room -->
+      <div>
+        <label>Room code: </label>
+        <input
+          type="text"
+          id="roomCodeInSelection"
+          placeholder="Enter room code"
+          maxlength="20"
+        />
+        <button id="joinRoomBtn">Join room</button>
+      </div>
+    </section>
+
+    <!-- Chatroom -->
+    <section id="chat-section">
+      <div id="chat-header-section">
+        <!-- Room information -->
+        <label id="roomCodeInChat">Room code</label>
+
+        <!-- User information -->
+        <label id="usernameInChat">Username</label>
+      </div>
+
+      <!-- Chat list -->
+      <div>
+        <label>Message history: </label>
+        <ul id="messages"></ul>
+      </div>
+
+      <!-- Current online users -->
+      <div>
+        <label>Online User:</label>
+        <ul id="onlineUsers"></ul>
+      </div>
+
+      <!-- Input and send message -->
+      <label>Send Message: </label>
+      <div>
+        <form id="form" action="">
+          <input id="input" autocomplete="off" /> <button>Send</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Create the SocketIO client -->
+    <script src="/socket.io/socket.io.js"></script>
+
+    <!-- Handle client side dashboard services -->
+    <script type="module" src="/dashboard-client.js"></script>
   </body>
 </html>

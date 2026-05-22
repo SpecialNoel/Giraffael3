@@ -1,4 +1,4 @@
-// chatroom-router.js
+// chatroom-list-router.js
 
 import express from "express";
 import path from "node:path";
@@ -8,7 +8,7 @@ const router = express.Router();
 
 // Chatroom page
 router.get("/", (req, res) => {
-    res.sendFile(path.join(pathToViewsDir, "chatroom.html"));
+    res.sendFile(path.join(pathToViewsDir, "chatroom-list.html"));
 });
 
 export default router;

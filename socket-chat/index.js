@@ -9,7 +9,7 @@ import { Server } from "socket.io";
 import signinRouter from "./routes/signin-router.js";
 import signupRouter from "./routes/signup-router.js";
 import dashboardRouter from "./routes/dashboard-router.js";
-import chatroomRouter from "./routes/chatroom-router.js";
+import chatroomListRouter from "./routes/chatroom-list-router.js";
 
 import createUser from "./server/db-operations/user-generator.js";
 import connectToDB from "./server/utilities/conn.js";
@@ -33,20 +33,10 @@ app.use(express.json());
 app.use("/signin", signinRouter);
 app.use("/signup", signupRouter);
 app.use("/dashboard", dashboardRouter);
-app.use("/chatroom", chatroomRouter);
+app.use("/chatroom-list", chatroomListRouter);
 app.get("/", (req, res) => {
     // Set the default displaying page to be the sign-in page
     res.redirect("/signin");
-});
-app.post("/signin", (req, res) => {
-    // TODO: Add more authentication logics here
-    const { username } = req.body;
-    if (username === "username") { // Testing phase: reject the credential if username is "username"
-        console.log(`Recevied invalid redentials: ${username}`);
-        return res.status(400).json({ error: "missing credentials" });
-    }
-    console.log(`Recevied credentials: ${username}`);
-    return res.json({ username });
 });
 // ========== Express App ========== 
 
@@ -79,6 +69,8 @@ io.on("connection", async (socket) => {
     console.log(`User ${socket.username} [${socket.id}] connected`);
 
     // Create an User model for this client
+    // TODO: Instead of creating a new user every time, first try to find the user from the database
+    //       Doing this would prevent the case where the user will be overwritten after re-entering the page
     const user = await createUser(socket.username);
     const userId = user.userId;
 

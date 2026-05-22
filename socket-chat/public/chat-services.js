@@ -1,4 +1,4 @@
-// client-services.js
+// chat-services.js
 
 // Append the message to the chat list
 function appendMessageToChatList(username, messagesElement, msg) {

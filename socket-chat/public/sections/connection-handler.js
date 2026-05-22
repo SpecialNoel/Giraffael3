@@ -6,12 +6,11 @@ function connect(credentials) {
 		// io() by default tries to connect the client to the host/server
 		// that serves the page (this home page in this case)
 		const socket = io({
-			auth: credentials
+			auth: {username: credentials}
 		});
 
 		// Return the socket if this connection is a success
 		socket.once("connect", () => {
-			console.log("Connected to server.");
 			resolve(socket);
 		});
 		socket.once("connect_error", (err) => {

@@ -3,7 +3,7 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title id="title">Sign In</title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="styles.css" />
   </head>
 
   <body>
@@ -22,13 +22,9 @@
       <button type="submit" class="signinBtn">Sign in</button>
     </form>
 
-    <a href="/dashboard">Go to Dashboard</a>
     <a href="/signup">Go to Sign-Up</a>
 
-    <!-- Create the SocketIO client -->
-    <script src="/socket.io/socket.io.js"></script>
-
-    <!-- Handle client side services -->
-    <script type="module" src="/client.js"></script>
+    <!-- Handle client side sign-in services -->
+    <script type="module" src="/signin-client.js"></script>
   </body>
 </html>
