@@ -16,6 +16,14 @@ const userSchema = new Schema({
     },
     username: {
         type: String,
+    },
+    userEmail: {
+        type: String,
+        required: false,
+        unique: true
+    },
+    hashedPassword: {
+        type: String,
         required: true
     }
     },

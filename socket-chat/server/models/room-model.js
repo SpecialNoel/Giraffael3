@@ -19,7 +19,7 @@ const roomSchema = new Schema({
     },
     members: {
         type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User"}],
-        require: true
+        required: true
     }
     },
     { timestamps: true } // Adds the createdAt and the updatedAt fields

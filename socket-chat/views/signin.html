@@ -11,15 +11,22 @@
 
     <!-- Signin section -->
     <form id="signin-form">
-      <label for="username"> Username: </label>
+      <label for="userEmail"> Email: </label>
       <input
-        id="username"
-        type="text"
-        placeholder="Enter your username"
+        id="userEmail"
+        type="email"
+        placeholder="Enter your email"
+        required
+      />
+      <label for="userPassword"> Password: </label>
+      <input
+        id="userPassword"
+        type="password"
+        placeholder="Enter your password"
         maxlength="16"
         required
       />
-      <button type="submit" class="signinBtn">Sign in</button>
+      <button type="submit">Sign in</button>
     </form>
 
     <a href="/signup">Go to Sign-Up</a>

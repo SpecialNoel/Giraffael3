@@ -4,13 +4,13 @@ import mongoose from "mongoose";
 
 // Connect to MongoDB 
 async function connectToDB() {
-    const databasePassword = process.env.DATABASE_PASSWORD;
-    const connectionString = `mongodb+srv://jianminglin2893:${databasePassword}` +
-        "@cluster0.wu2ivo7.mongodb.net/Giraffael3DB?" +
-        "retryWrites=true&w=majority&tls=true";
-    await mongoose.connect(connectionString)
-        .then(() => console.log("Connected to MongoDB successfully"))
-        .catch(err => console.error("MongoDB connection error", err));
+    try {
+        const connectionString = process.env.MONGODB_URI;
+        await mongoose.connect(connectionString);
+        console.log("Connected to MongoDB successfully");
+    } catch (err) {
+        console.error("MongoDB connection error:", err);
+    }
 }
 
 export default connectToDB;

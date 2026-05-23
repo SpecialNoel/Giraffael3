@@ -17,8 +17,9 @@ async function signin() {
             e.preventDefault();
             
             try {
-                // Get user input on username field
-                const username = document.getElementById("username").value.trim();
+                // Get user input
+                const userEmail = document.getElementById("userEmail").value.trim();
+                const userPassword = document.getElementById("userPassword").value.trim();
 
                 // Send the username to server for validation
                 const response = await fetch("/signin", {
@@ -26,12 +27,14 @@ async function signin() {
                     headers: {
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify({ username: username })
+                    body: JSON.stringify({ userEmail: userEmail, userPassword: userPassword })
                 });
 
                 // Return to sign-in page if the credentials are not valid
                 if (!response.ok) {
-                    alert("Invalid username.")
+                    alert("Invalid credentials.")
+                    // Remove the event listener to avoid duplicated submissions on sign-in event 
+                    signinForm.removeEventListener("submit", handleSubmit);
                     return;
                 }
 
@@ -41,7 +44,7 @@ async function signin() {
                 // Remove the event listener to avoid duplicated submissions on sign-in event 
                 signinForm.removeEventListener("submit", handleSubmit);
 
-                resolve(data.username);
+                resolve({ userEmail: data.userEmail });
             } catch (err) {
                 reject(err);
             }

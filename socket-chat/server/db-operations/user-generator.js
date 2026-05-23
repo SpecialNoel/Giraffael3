@@ -5,7 +5,7 @@ import retrieveAllUserIds from "./user-ids-retriever.js"
 import generateUserId from "../utilities/user-id-generator.js";
 
 // Create a new user with the given username, and store it to the database
-async function createUser(username) {
+async function createUser(userEmail, hashedPassword) {
     try {
         // Generate an unique user id
         const userIdsInDB = await retrieveAllUserIds();
@@ -14,10 +14,12 @@ async function createUser(username) {
             userId = generateUserId();
         } while (userIdsInDB.has(userId));
 
-        // Create a new user with the user id and given username
+        // Create a new user with an empty username
         const newUser = new User({
             userId: userId,
-            username: username
+            username: "",
+            userEmail: userEmail,
+            hashedPassword: hashedPassword
         });
 
         // Store the user to the DB

@@ -13,7 +13,7 @@ const messageSchema = new Schema({
         ref: "Room",
         required: true
     },
-    sender: {
+    senderId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true

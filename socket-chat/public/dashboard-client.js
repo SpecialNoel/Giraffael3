@@ -2,7 +2,7 @@
 
 import connect from "/sections/connection-handler.js";
 import * as RoomSelectionServices from "/sections/room-selection-handler.js";
-import roomInfoNotValid from "/utilities/room-info-validator.js";
+import roomInfoIsValid from "/utilities/room-info-validator.js";
 import startSession from "/sections/session-handler.js";
 
 async function handle_dashboard() {
@@ -23,7 +23,7 @@ async function handle_dashboard() {
         inputRoomName = result.roomName;
         console.log("inputRoomCode: ", inputRoomCode)
         console.log("inputRoomName: ", inputRoomName)
-    } while (await roomInfoNotValid(inputRoomCode, inputRoomName)); 
+    } while (!(await roomInfoIsValid(inputRoomCode, inputRoomName))); 
 
     // Sent user input on room selection to server and wait for the response
     let roomCode = "";

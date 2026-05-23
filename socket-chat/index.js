@@ -6,12 +6,11 @@ import { createServer } from "node:http";
 import { join } from "node:path";
 import { Server } from "socket.io";
 
-import signinRouter from "./routes/signin-router.js";
-import signupRouter from "./routes/signup-router.js";
-import dashboardRouter from "./routes/dashboard-router.js";
-import chatroomListRouter from "./routes/chatroom-list-router.js";
+import signinRouter from "./server/routes/signin-router.js";
+import signupRouter from "./server/routes/signup-router.js";
+import dashboardRouter from "./server/routes/dashboard-router.js";
+import chatroomListRouter from "./server/routes/chatroom-list-router.js";
 
-import createUser from "./server/db-operations/user-generator.js";
 import connectToDB from "./server/utilities/conn.js";
 import * as ServerServices from "./server/server-services.js";
 
@@ -67,31 +66,6 @@ io.use((socket, next) => {
 // SocketIO server handles the connection event
 io.on("connection", async (socket) => {
     console.log(`User ${socket.username} [${socket.id}] connected`);
-
-    // Create an User model for this client
-    // TODO: Instead of creating a new user every time, first try to find the user from the database
-    //       Doing this would prevent the case where the user will be overwritten after re-entering the page
-    const user = await createUser(socket.username);
-    const userId = user.userId;
-
-    // Handle the room selection event
-    let roomCode = null;
-    socket.on("create room", async (inputRoomName) => {
-        roomCode = await ServerServices.handleClientCreateRoom(socket, userId, inputRoomName);
-    });
-    socket.on("join room", async (inputRoomCode) => {
-        roomCode = await ServerServices.handleClientJoinRoom(socket, userId, inputRoomCode);
-    });
-
-    // // Handle the disconnection event
-    // socket.on("disconnect", async () => {
-    //     await ServerServices.handleClientDisconnection(io, roomId, socket);
-    // });
-
-    // // Handle the chat message event
-    // socket.on("chat message", async (msg, callback) => {
-    //     await ServerServices.handleClientChatMessage(socket, roomId, socket.id, msg, callback);
-    // });
 })
 
 // HTTP server listens on port 3000 (default localhost server for Express)

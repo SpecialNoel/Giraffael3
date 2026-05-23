@@ -3,7 +3,7 @@
 import * as ChatServices from "/chat-services.js";
 
 function startSession(socket, roomCode, roomName) {
-    const username = document.getElementById("username").value.trim();
+    const username = document.getElementById("username").value.trim(); // TODO: Fix logic here to not use username only
 
     // Update code and name of the room, as well as user info, on user GUI
     const roomCodeInChatElement = document.getElementById("roomCodeInChat");
@@ -39,8 +39,8 @@ function startSession(socket, roomCode, roomName) {
     );
 
     // Handle client socket receiving chat messages sent by connected clients
-    socket.on("chat message", (senderId, msg) => {
-        ChatServices.appendMessageToChatList(messagesElement, senderId, msg);
+    socket.on("chat message", (username, msg) => {
+        ChatServices.appendMessageToChatList(username, messagesElement, msg);
     });
 }
 

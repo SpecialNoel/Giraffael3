@@ -3,10 +3,34 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title id="title">Sign up</title>
+    <link rel="stylesheet" href="styles.css" />
   </head>
 
   <body>
     <h1>This is a sign up page</h1>
+    <!-- Signup section -->
+    <form id="signup-form">
+      <label for="userEmail"> Email: </label>
+      <input
+        id="userEmail"
+        type="email"
+        placeholder="Enter your email"
+        required
+      />
+      <label for="userPassword"> Password: </label>
+      <input
+        id="userPassword"
+        type="password"
+        placeholder="Enter your password"
+        maxlength="16"
+        required
+      />
+      <button type="submit">Sign up</button>
+    </form>
+
     <a href="/signin">Go to Sign-In</a>
+
+    <!-- Handle client side sign-up services -->
+    <script type="module" src="/signup-client.js"></script>
   </body>
 </html>
