@@ -33,16 +33,11 @@ async function signin() {
                 // Return to sign-in page if the credentials are not valid
                 if (!response.ok) {
                     alert("Invalid credentials.")
-                    // Remove the event listener to avoid duplicated submissions on sign-in event 
-                    signinForm.removeEventListener("submit", handleSubmit);
                     return;
                 }
 
                 // Otherwise, pass the verified, valid credentials back to client
                 const data = await response.json()
-
-                // Remove the event listener to avoid duplicated submissions on sign-in event 
-                signinForm.removeEventListener("submit", handleSubmit);
 
                 resolve({ userEmail: data.userEmail });
             } catch (err) {
