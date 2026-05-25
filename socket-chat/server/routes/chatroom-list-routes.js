@@ -1,4 +1,4 @@
-// dashboard-router.js
+// chatroom-list-routes.js
 
 import express from "express";
 import path from "node:path";
@@ -6,9 +6,9 @@ import pathToViewsDir from "./route-helper.js"
 
 const router = express.Router();
 
-// Dashboard page
+// Chatroom page
 router.get("/", (req, res) => {
-    res.sendFile(path.join(pathToViewsDir, "dashboard.html"));
+    res.sendFile(path.join(pathToViewsDir, "chatroom-list.html"));
 });
 
 export default router;

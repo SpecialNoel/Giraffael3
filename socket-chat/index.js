@@ -6,10 +6,10 @@ import { createServer } from "node:http";
 import { join } from "node:path";
 import { Server } from "socket.io";
 
-import signinRouter from "./server/routes/signin-router.js";
+import signinRouter from "./server/routes/signin-routers.js";
 import signupRouter from "./server/routes/signup-router.js";
-import dashboardRouter from "./server/routes/dashboard-router.js";
-import chatroomListRouter from "./server/routes/chatroom-list-router.js";
+import dashboardRouter from "./server/routes/dashboard-routes.js";
+import chatroomListRouter from "./server/routes/chatroom-list-routes.js";
 
 import connectToDB from "./server/utilities/conn.js";
 import * as ServerServices from "./server/server-services.js";

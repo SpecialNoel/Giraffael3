@@ -1,4 +1,4 @@
-// signup-router.js
+// signup-routes.js
 
 import express from "express";
 import path from "node:path";
