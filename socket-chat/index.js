@@ -6,16 +6,16 @@ import { createServer } from "node:http";
 import { join } from "node:path";
 import { Server } from "socket.io";
 
-import signinRouter from "./server/routes/signin-routers.js";
-import signupRouter from "./server/routes/signup-router.js";
+import signinRouter from "./server/routes/signin-routes.js";
+import signupRouter from "./server/routes/signup-routes.js";
 import dashboardRouter from "./server/routes/dashboard-routes.js";
-import chatroomListRouter from "./server/routes/chatroom-list-routes.js";
+import roomListRouter from "./server/routes/room-list-routes.js";
 
-import connectToDB from "./server/utilities/conn.js";
-import * as ServerServices from "./server/server-services.js";
+import connectToDB from "./server/utilities/db-connector.js";
+import * as Services from "./server/services.js";
 
 
-// ========== Express App ========== 
+// ==================== Express App ====================
 // Initialize an Express application (a function handler)
 const app = express();
 
@@ -32,15 +32,15 @@ app.use(express.json());
 app.use("/signin", signinRouter);
 app.use("/signup", signupRouter);
 app.use("/dashboard", dashboardRouter);
-app.use("/chatroom-list", chatroomListRouter);
+app.use("/room-list", roomListRouter);
 app.get("/", (req, res) => {
     // Set the default displaying page to be the sign-in page
     res.redirect("/signin");
 });
-// ========== Express App ========== 
+// ==================== Express App ====================
 
 
-// ========== Server Socket ========== 
+// ==================== Server Socket ==================== 
 // Create an HTTP server on the application
 const server = createServer(app);
 
@@ -60,6 +60,7 @@ io.use((socket, next) => {
     }
     // Apply received username to the socket for later use
     socket.username = username;
+    // next() continues the connection; use next(new Error()) if need to reject connection
     next();
 });
 
@@ -73,4 +74,4 @@ const serverPort = process.env.PORT || 3000;
 server.listen(serverPort, () => {
     console.log(`Server is running at http://localhost:${serverPort}/signin\n`)
 });
-// ========== Server Socket ========== 
+// ==================== Server Socket ==================== 

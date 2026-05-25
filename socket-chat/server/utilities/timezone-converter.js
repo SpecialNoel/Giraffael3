@@ -1,10 +1,10 @@
-// message-timezone-converter.js
+// timezone-converter.js
 
 // Convert the timestamp of the message into NY timezone for readability
 function getMessageWithNYTimezone(message) {
     const senderId = message.senderId;
     const username = message.username;
-    const text = message.text;
+    const content = message.content;
     
     const createdAtTimestamp = message.createdAt;
     const nyCreatedAtTimestamp = createdAtTimestamp.toLocaleString("en-US", {
@@ -20,7 +20,7 @@ function getMessageWithNYTimezone(message) {
     const convertedMessage = {
         senderId: senderId,
         username: username,
-        text: text,
+        content: content,
         createdAt: nyCreatedAtTimestamp,
         expireAt: nyExpireAtTimestamp
     };

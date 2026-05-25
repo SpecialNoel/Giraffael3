@@ -17,8 +17,8 @@ function signin() {
         
         try {
             // Get user input
-            const userEmail = document.getElementById("userEmail").value.trim();
-            const userPassword = document.getElementById("userPassword").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const plainPassword = document.getElementById("plainPassword").value.trim();
 
             // Send the username to server for validation
             const response = await fetch("/signin", {
@@ -26,7 +26,7 @@ function signin() {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ userEmail: userEmail, userPassword: userPassword })
+                body: JSON.stringify({ email: email, plainPassword: plainPassword })
             });
 
             // Return to sign-in page if the credentials are not valid

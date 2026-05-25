@@ -4,7 +4,7 @@ import express from "express";
 import path from "node:path";
 import pathToViewsDir from "./route-helper.js";
 
-import findUserInDB from "../db-operations/user-finder.js";
+import findUser from "../db-services/user-services.js";
 import hashPassword from "../utilities/password-hasher.js";
 import comparePassword from "../utilities/password-comparer.js";
 
@@ -17,25 +17,25 @@ router.get("/", (req, res) => {
 router.post("/", async (req, res) => {
     try {
         // Receive email and plaintext password from user as sign-in credentials
-        const { userEmail, userPassword } = req.body;
+        const { email, plainPassword } = req.body;
 
         // Check account existence in DB based on user email
-        const user = await findUserInDB(userEmail);
+        const user = await findUser(email);
 
         // Account with email does not exist in DB
         if (!user) {
-            console.log(`Email does not exist in DB: ${userEmail}`);
+            console.log(`Email does not exist in DB: ${email}`);
             return res.status(401).json({ 
                 error: "Invalid credentials"
             });
         }
         
         // Compare the received plain password with the record found in DB
-        const isPasswordValid = await comparePassword(userPassword, user.hashedPassword);
+        const isPasswordValid = await comparePassword(plainPassword, user.passwordHash);
         console.log("isPasswordValid: ", isPasswordValid);
 
         if (!isPasswordValid) {
-            console.log(`Invalid login attempt for email: ${userEmail}`);
+            console.log(`Invalid login attempt for email: ${email}`);
             return res.status(401).json({ 
                 error: "Invalid credentials"
             });

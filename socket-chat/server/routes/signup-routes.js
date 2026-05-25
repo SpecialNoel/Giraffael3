@@ -4,9 +4,8 @@ import express from "express";
 import path from "node:path";
 import pathToViewsDir from "./route-helper.js";
 
-import findUserInDB from "../db-operations/user-finder.js";
+import { findUser, createUser } from "../db-services/user-services.js";
 import hashPassword from "../utilities/password-hasher.js";
-import createUser from "../db-operations/user-generator.js";
 
 const router = express.Router();
 
@@ -17,17 +16,17 @@ router.get("/", (req, res) => {
 router.post("/", async (req, res) => {
     try {
         // Receive email and plaintext password from user as sign-up credentials
-        const { userEmail, userPassword } = req.body;
+        const { email, plainPassword } = req.body;
 
         // Handle invalid credentials
-        if (!userEmail || !userPassword) {
+        if (!email || !plainPassword) {
             return res.status(400).json({
                 error: "Missing credentials"
             });
         }
 
         // Check account existence in DB based on user email
-        const userInDB = await findUserInDB(userEmail);
+        const userInDB = await findUser(email);
 
         // Received email already associated with an existing account
         if (userInDB) {
@@ -37,10 +36,10 @@ router.post("/", async (req, res) => {
         }
 
         // Hash the received password
-        const hashedPassword = await hashPassword(userPassword);
+        const passwordHash = await hashPassword(plainPassword);
 
         // Create user in DB
-        const user = await createUser(userEmail, hashedPassword);
+        const user = await createUser(email, passwordHash);
         console.log("Created user:", user.id);
 
         return res.status(201).json({

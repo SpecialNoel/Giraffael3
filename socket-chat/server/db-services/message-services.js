@@ -1,11 +1,11 @@
-// message-saver.js
+// message-services.js
 
 import Message from "../models/message-model.js";
 import Room from "../models/room-model.js";
 import User from "../models/user-model.js";
 
 // Store the chat message sent by a client to the database
-async function storeMessage(roomId, senderId, messageText) {
+async function storeMessage(roomId, senderId, content) {
     try {
         const room = await Room.findById(roomId); // Find room based on _id
         const sender = await User.findOne({ userId: senderId });
@@ -15,7 +15,7 @@ async function storeMessage(roomId, senderId, messageText) {
         const newMessage = new Message({
             room: room,
             sender: sender,
-            text: messageText,
+            content: content,
             expireAt: expiringDate
         });
 
@@ -28,4 +28,18 @@ async function storeMessage(roomId, senderId, messageText) {
     }
 }
 
-export default storeMessage;
+// Retrieve all the messages sent by the client from the database
+async function findMessagesByUserId(senderId) {
+    try {
+        const messages = await Message.find({
+            senderId: senderId
+        });
+        
+        return messages;
+    } catch (error) {
+        console.error("Error in retrieving message from DB:", error);
+        throw error;
+    }
+}
+
+export { storeMessage, findMessagesByUserId };

@@ -1,11 +1,9 @@
-// server-services.js
+// services.js
 
 import User from "./models/user-model.js";
 import Room from "./models/room-model.js";
-import storeMessage from "./db-operations/message-saver.js";
-import createRoom from "./db-operations/room-generator.js";
-import retrieveAllRoomCodes from "./db-operations/room-codes-retriever.js"
-import joinClientToRoom from "./db-operations/client-join-room-handler.js"
+import { storeMessage } from "./db-services/message-services.js";
+import { findRoomCodes, createRoom, addUserToRoom } from "./db-services/room-services.js"
 
 // Get the usernames of online users in the room
 async function getOnlineUsers(io, roomName) {
@@ -50,7 +48,7 @@ async function handleClientCreateRoom(socket, userId, inputRoomName) {
     const roomName = generatedRoom.roomName;
 
     // Join the client to this new room
-    await joinClientToRoom(roomCode, userId);
+    await addUserToRoom(roomCode, userId);
 
     // Send the room name and room code to the client
     socket.emit("room-created", roomCode, roomName);
@@ -62,7 +60,7 @@ async function handleClientCreateRoom(socket, userId, inputRoomName) {
 // Handle client join room request
 async function handleClientJoinRoom(socket, userId, inputRoomCode) {
     // Check the room existence of the given room code
-    const roomCodesInDB = await retrieveAllRoomCodes();
+    const roomCodesInDB = await findRoomCodes();
 
     if (!roomCodesInDB.has(inputRoomCode)) {
         console.log("Invalid room code: room code not exist")
@@ -75,7 +73,7 @@ async function handleClientJoinRoom(socket, userId, inputRoomCode) {
     const roomName = room.roomName;
 
     // Join the client to this new room
-    await joinClientToRoom(roomCode, userId);
+    await addUserToRoom(roomCode, userId);
 
     // Send the room name and room code to the client
     socket.emit("room-joined", roomCode, roomName);

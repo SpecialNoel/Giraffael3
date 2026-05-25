@@ -1,4 +1,4 @@
-// conn.js
+// db-connector.js
 
 import mongoose from "mongoose";
 

@@ -5,29 +5,37 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 // Schema for the "User" model
-// It should have the following attributes: 
-// (Note that userId is used here along with _id as only userId can and should be made public)
-/* _id, userId, username */
-const userSchema = new Schema({
-    userId: {
-        type: String,
-        required: true,
-        unique: true
+const userSchema = new Schema(
+    {
+        // userId is mainly displayed to users (e.g. searching a particular user); server accesses the user via "_id"
+        userId: {
+            type: String,
+            required: true,
+            unique: true
+        },
+        // username is mainly used by users to differentiate each other
+        username: {
+            type: String,
+            required: true
+        },
+        // email is used by server as a way for user authentication
+        email: {
+            type: String,
+            sparse: true, // set sparse to true to allow User documents with no email field
+            unique: true
+        },
+        // passwordHash is invisible to users; it is used in authentication steps
+        passwordHash: {
+            type: String
+        },
+        // googleId is used for user authentication via Google Login
+        googleId: {
+            type: String,
+            sparse: true,
+            unique: true
+        }
     },
-    username: {
-        type: String,
-    },
-    userEmail: {
-        type: String,
-        required: false,
-        unique: true
-    },
-    hashedPassword: {
-        type: String,
-        required: true
-    }
-    },
-    { timestamps: true } // Adds the createdAt and the updatedAt fields
+    { timestamps: true } // Adds the createdAt and the updatedAt fields to each document
 );
 
 // The "User" model

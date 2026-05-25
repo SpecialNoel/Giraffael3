@@ -18,8 +18,8 @@ function signupTraditional() {
         
         try {
             // Get user input on email and password field
-            const userEmail = document.getElementById("userEmail").value.trim();
-            const userPassword = document.getElementById("userPassword").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const plainPassword = document.getElementById("plainPassword").value.trim();
 
             // Send the input to server for validation
             const response = await fetch("/signup", {
@@ -28,8 +28,8 @@ function signupTraditional() {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({ 
-                    userEmail: userEmail, 
-                    userPassword: userPassword 
+                    email: email, 
+                    plainPassword: plainPassword 
                 })
             });
 
