@@ -63,4 +63,4 @@ async function addUserToRoom(roomCode, userId) {
     }
 }
 
-export { addUserToRoom, createRoom };
+export { findRoomCodes, addUserToRoom, createRoom };
