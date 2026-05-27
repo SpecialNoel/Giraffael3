@@ -9,6 +9,8 @@ import hashPassword from "../utilities/password-hasher.js";
 
 const router = express.Router();
 
+const PASSWORD_MIN_LENGTH = 8;
+
 // Sign-up page
 router.get("/", (req, res) => {
     res.sendFile(path.join(pathToViewsDir, "signup.html"));
@@ -22,6 +24,13 @@ router.post("/", async (req, res) => {
         if (!email || !plainPassword) {
             return res.status(400).json({
                 error: "Missing credentials"
+            });
+        }
+
+        // Handle too short passwords
+        if (plainPassword.length < PASSWORD_MIN_LENGTH) {
+            return res.status(400).json({
+                error: `Password must be at least ${PASSWORD_MIN_LENGTH} characters`
             });
         }
 

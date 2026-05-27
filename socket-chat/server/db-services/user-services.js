@@ -45,11 +45,10 @@ async function createUser(email, passwordHash) {
     }
 }
 
-// Return true if user already exists in DB; return false otherwise
+// Return the user if it already exists in DB; return null otherwise
 async function findUser(email) {
     try {
-        const user = await User.findOne({ email: email });
-        return user;
+        return await User.findOne({ email: email });
     } catch (error) {
         console.error("Error in checking user existence in DB:", error);
         throw error;

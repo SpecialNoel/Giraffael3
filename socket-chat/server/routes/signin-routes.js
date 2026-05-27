@@ -22,7 +22,7 @@ router.post("/", async (req, res) => {
         // Check account existence in DB based on user email
         const user = await findUser(email);
 
-        // Account with email does not exist in DB
+        // Account with the received email does not exist in DB
         if (!user) {
             console.log(`Email does not exist in DB: ${email}`);
             return res.status(401).json({ 

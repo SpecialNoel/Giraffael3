@@ -33,16 +33,16 @@ function signupTraditional() {
                 })
             });
 
-            // Return to sign-in page if the inputs are not valid
+            // Retrieve anything sent from server
+            const data = await response.json()
+
+            // Return to sign-in page if the signup failed
             if (!response.ok) {
-                alert("Invalid Input.");
+                alert(data.error);
                 return;
             }
 
-            // Otherwise, retrieve anything sent from server
-            const data = await response.json()
-
-            // Redirect the user back to the sign-in page
+            // Otherwise, redirect the user back to the sign-in page
             window.location.href = "/signin";
         } catch (err) {
             console.error(err);
