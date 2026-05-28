@@ -4,35 +4,36 @@ import User from "../models/user-model.js"
 import Room from "../models/room-model.js"
 import generateRoomCode from "../utilities/room-code-generator.js";
 
-// Retrieve room codes of all rooms stored in the DB
+// Retrieve all existing room codes from the database
 async function findRoomCodes() {
     try {
-        // roomCode: 1 means to include the roomCode field
-        // _id: 0 means to exclude the _id field
-        const roomsInDB = await Room.find({}, { roomCode: 1, _id: 0 });
-        const roomCodesInDB = roomsInDB.map(room => room.roomCode);
-        return new Set(roomCodesInDB);
+        // Fetch the roomCode field of each room
+        const rooms = await Room.find({}, "roomCode");
+
+        // Convert the room codes into a Set for fast lookup
+        return new Set(rooms.map(room => room.roomCode));
     } catch (error) {
-        console.error("Error in retrieving all room codes from DB:", error);
+        console.error("Error in retrieving room codes:", error);
         throw error;
     }
 }
 
 // Create a new room with the given room name, and store it to the database
-async function createRoom(roomName) {
+async function createRoom(roomName, creatorId) {
     try {
-        // Generate an unique room code
+        // Generate an unique room code for this room
         const roomCodesInDB = await findRoomCodes();
         let roomCode;
         do {
             roomCode = generateRoomCode();
         } while (roomCodesInDB.has(roomCode));
 
-        // Create a new room with the room code and given room name
+        // Create the new room
         const newRoom = new Room({
             roomCode: roomCode,
             roomName: roomName,
-            members: []
+            creator: creatorId,
+            members: [creatorId]
         });
 
         // Store the room to the DB
@@ -40,16 +41,16 @@ async function createRoom(roomName) {
         console.log("Room generated and stored to DB\n");
         return generatedRoom;
     } catch (error) {
-        console.error("Error in generating room and storing it to DB:", error);
+        console.error("Failed to create room:", error);
         throw error;
     }
 }
 
-// Join the client to the given room (update it in DB)
+// Join the user to the given room (update it in DB)
 async function addUserToRoom(roomCode, userId) {
     try {
-        // Find the user
-        const user = await User.findOne({ userId: userId });
+        // Get the user document based on user _id
+        const user = await User.findById(userId);
         if (!user) throw new Error("User not found");
 
         await Room.findOneAndUpdate(
@@ -58,7 +59,7 @@ async function addUserToRoom(roomCode, userId) {
             { new: true }
         );
     } catch (error) {
-        console.error("Error in joining client to room:", error);
+        console.error("Failed to add user to room:", error);
         throw error;
     }
 }

@@ -7,7 +7,7 @@ const Schema = mongoose.Schema;
 // Schema for the "Room" model
 const roomSchema = new Schema(
     {
-        // roomCode is used by users to reference each room (client-only interaction)
+        // roomCode is used by users to reference each room (user-only interaction)
         // Server should use the "_id" property of the document/instance when referring to the room
         roomCode: {
             type: String,
@@ -28,7 +28,7 @@ const roomSchema = new Schema(
         // members contains a list of User documents
         members: {
             type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User"}],
-            required: true
+            default: []
         },
     },
     { timestamps: true } // Adds the createdAt and the updatedAt fields to each document

@@ -1,4 +1,4 @@
-// signin-routes.js
+// sign-in-routes.js
 
 import express from "express";
 import path from "node:path";
@@ -12,7 +12,7 @@ const router = express.Router();
 
 // Sign-in page
 router.get("/", (req, res) => {
-    res.sendFile(path.join(pathToViewsDir, "signin.html"));
+    res.sendFile(path.join(pathToViewsDir, "sign-in.html"));
 });
 router.post("/", async (req, res) => {
     try {

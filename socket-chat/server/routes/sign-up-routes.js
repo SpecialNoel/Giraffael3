@@ -1,4 +1,4 @@
-// signup-routes.js
+// sign-up-routes.js
 
 import express from "express";
 import path from "node:path";
@@ -13,7 +13,7 @@ const PASSWORD_MIN_LENGTH = 8;
 
 // Sign-up page
 router.get("/", (req, res) => {
-    res.sendFile(path.join(pathToViewsDir, "signup.html"));
+    res.sendFile(path.join(pathToViewsDir, "sign-up.html"));
 });
 router.post("/", async (req, res) => {
     try {

@@ -6,8 +6,8 @@ import { createServer } from "node:http";
 import { join } from "node:path";
 import { Server } from "socket.io";
 
-import signinRouter from "./server/routes/signin-routes.js";
-import signupRouter from "./server/routes/signup-routes.js";
+import signInRouter from "./server/routes/sign-in-routes.js";
+import signUpRouter from "./server/routes/sign-up-routes.js";
 import dashboardRouter from "./server/routes/dashboard-routes.js";
 import roomListRouter from "./server/routes/room-list-routes.js";
 
@@ -29,8 +29,8 @@ app.use(express.static(path.join(process.cwd(), "public")));
 app.use(express.json());
 
 // Set up page routings
-app.use("/signin", signinRouter);
-app.use("/signup", signupRouter);
+app.use("/signin", signInRouter);
+app.use("/signup", signUpRouter);
 app.use("/dashboard", dashboardRouter);
 app.use("/room-list", roomListRouter);
 app.get("/", (req, res) => {
@@ -50,9 +50,9 @@ const io = new Server(server)
 // Connect to MongoDB
 await connectToDB();
 
-// Authenticate client credentials before proceeding the connection
+// Authenticate user credentials before proceeding the connection
 io.use((socket, next) => {
-    // Receive sign-in credentials from client (one time only)
+    // Receive sign-in credentials from user (one time only)
     const username = socket.handshake.auth.username;
     if (!username) {
         // Refuse the connection

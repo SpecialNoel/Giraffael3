@@ -2,15 +2,15 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title id="title">Sign In</title>
+    <title id="title">Sign up</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
 
   <body>
-    <h1>This is a sign-in page</h1>
-
-    <!-- Signin section -->
-    <form id="signin-form">
+    <h1>This is a sign-up page</h1>
+    
+    <!-- Sign-up section -->
+    <form id="sign-up-form">
       <label for="email"> Email: </label>
       <input
         id="email"
@@ -26,12 +26,12 @@
         maxlength="16"
         required
       />
-      <button type="submit">Sign in</button>
+      <button type="submit">Sign up</button>
     </form>
 
-    <a href="/signup">Go to Sign-Up</a>
+    <a href="/signin">Go to Sign-In</a>
 
-    <!-- Handle client side sign-in services -->
-    <script type="module" src="/pages/signin-page.js"></script>
+    <!-- Handle user side sign-up services -->
+    <script type="module" src="/pages/sign-up-page.js"></script>
   </body>
 </html>

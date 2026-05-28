@@ -1,16 +1,16 @@
-// signup-service.js
+// sign-up-service.js
 
 // Set up the signup form
-function signupTraditional() { 
+function signUpTraditional() { 
     /*
-        On the sign-up page, collect the client's credentials and
+        On the sign-up page, collect the user's credentials and
         send them to the server for account creation result.
 
-        If the input credentials already exist, prompt the client about this.
+        If the input credentials already exist, prompt the user about this.
         Otherwise, receive the session cookie sent by the server and 
-        redirect client to sign-in page.
+        redirect user to sign-in page.
     */
-    const signupForm = document.querySelector("#signup-form");
+    const signUpForm = document.querySelector("#sign-up-form");
 
     const handleSubmit = async (e) => {
         // Prevent the page from refreshing
@@ -36,7 +36,7 @@ function signupTraditional() {
             // Retrieve anything sent from server
             const data = await response.json()
 
-            // Return to sign-in page if the signup failed
+            // Display the error message to the user if the sign up failed
             if (!response.ok) {
                 alert(data.error);
                 return;
@@ -50,7 +50,8 @@ function signupTraditional() {
         }
     };
 
-    signupForm.addEventListener("submit", handleSubmit);
+    // Add the functionality to the sign-up form
+    signUpForm.addEventListener("submit", handleSubmit);
 }
 
-export { signupTraditional };
+export { signUpTraditional };

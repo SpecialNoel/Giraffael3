@@ -4,40 +4,40 @@ import Message from "../models/message-model.js";
 import Room from "../models/room-model.js";
 import User from "../models/user-model.js";
 
-// Store the chat message sent by a client to the database
+const MESSAGE_EXPIRATION_MS = 60 * 60 * 1000; // 1 hour
+
+// Store the chat message to the database
 async function storeMessage(roomId, senderId, content) {
     try {
-        const room = await Room.findById(roomId); // Find room based on _id
-        const sender = await User.findOne({ userId: senderId });
+        // Auto-delete this message 1 hour after creation
+        const expireAt = new Date(Date.now() + MESSAGE_EXPIRATION_MS);
 
-        const expiringDate = new Date(Date.now() + 60 * 60 * 1000); // 1 hour from now
-
+        // Construct the message using the Message model
         const newMessage = new Message({
-            room: room,
-            sender: sender,
-            content: content,
-            expireAt: expiringDate
+            room: roomId,
+            sender: senderId,
+            content,
+            expireAt
         });
 
+        // Save the message to the message collection
         const savedMessage = await newMessage.save();
         console.log("Message saved to DB\n");
         return savedMessage;
     } catch (error) {
-        console.error("Error in storing message to DB:", error);
+        console.error("Failed to store message:", error);
         throw error;
     }
 }
 
-// Retrieve all the messages sent by the client from the database
+// Retrieve all the messages sent by the user from the database
 async function findMessagesByUserId(senderId) {
     try {
-        const messages = await Message.find({
-            senderId: senderId
-        });
-        
-        return messages;
+        // Find the sent messages based on user _id
+        const messages = await Message.find({ sender: senderId });
+        return await Message.findById(senderId);
     } catch (error) {
-        console.error("Error in retrieving message from DB:", error);
+        console.error("Failed to retrieve messages:", error);
         throw error;
     }
 }

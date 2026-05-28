@@ -1,26 +1,26 @@
-// signin-service.js
+// sign-in-service.js
 
 // Set up the signin form
-function signin() {    
+function signIn() {    
     /*
-        On the sign-in page, collect the client's credentials and
+        On the sign-in page, collect the user's credentials and
         send them to the server for verification.
 
-        If credentials are invalid, prompt the client to try again.
+        If credentials are invalid, prompt the user to try again.
         Otherwise, proceed to the next phase with the verified credentials.
     */
-    const signinForm = document.querySelector("#signin-form");
+    const signInForm = document.querySelector("#sign-in-form");
 
     const handleSubmit = async (e) => {
         // Prevent the page from refreshing
         e.preventDefault();
         
         try {
-            // Get user input
+            // Get user input on credentials
             const email = document.getElementById("email").value.trim();
             const plainPassword = document.getElementById("plainPassword").value.trim();
 
-            // Send the username to server for validation
+            // Send them to server for validation
             const response = await fetch("/signin", {
                 method: "POST",
                 headers: {
@@ -29,24 +29,26 @@ function signin() {
                 body: JSON.stringify({ email: email, plainPassword: plainPassword })
             });
 
-            // Return to sign-in page if the credentials are not valid
+            // Retrieve anything sent from server
+            const data = await response.json()
+
+            // Display the error message to the user if the credentials are invalid
             if (!response.ok) {
-                alert("Invalid credentials.")
+                alert(data.error);
                 return;
             }
-
-            // Otherwise, retrieve anything sent from server
-            const data = await response.json()
 
             // The credentials are verified by server to be valid, proceed to the Dashboard page.
             window.location.href = "/dashboard";
         } catch (err) {
+            // Print error message to server side in case something went wrong during this signin process
             console.error(err);
             alert("Something went wrong");        
         }
     };
 
-    signinForm.addEventListener("submit", handleSubmit);
+    // Add the functionality to the sign-in form
+    signInForm.addEventListener("submit", handleSubmit);
 }
 
-export default signin;
+export default signIn;

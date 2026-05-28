@@ -12,34 +12,34 @@ async function getOnlineUsers(io, roomName) {
     return onlineUsers;
 }
 
-// Handle client connection events
-async function handleClientConnection(io, roomName, socket) {
-    // Join the client to the room
+// Handle user connection events
+async function handleUserConnection(io, roomName, socket) {
+    // Join the user to the room
     socket.join(roomName);
     console.log(`User ${socket.id} connected`);
     console.log(`User ${socket.id} joined room ${roomName}`);
 
-    // Broadcast a message to all clients in the room upon client connection
+    // Broadcast a message to all users in the room upon user connection
     const onlineUsers = await getOnlineUsers(io, roomName);
     io.to(roomName).emit("user joined", onlineUsers);
     console.log(`Online users: ${onlineUsers}\n`)
 }
 
-// Handle client disconnection event
-async function handleClientDisconnection(io, roomName, socket) {
-    // Leave the client from the room
+// Handle user disconnection event
+async function handleUserDisconnection(io, roomName, socket) {
+    // Leave the user from the room
     socket.leave(roomName);
     console.log(`User ${socket.id} left room ${roomName}`);
     console.log(`User ${socket.id} disconnected`);
 
-    // Broadcast a message to all clients in the room upon client disconnection
+    // Broadcast a message to all users in the room upon user disconnection
     const onlineUsers = await getOnlineUsers(io, roomName);
     io.to(roomName).emit("user left", onlineUsers);
     console.log(`Online users: ${onlineUsers}\n`)
 }
 
-// Handle client create room request
-async function handleClientCreateRoom(socket, userId, inputRoomName) {
+// Handle user create room request
+async function handleUserCreateRoom(socket, userId, inputRoomName) {
     console.log(`Received room name: ${inputRoomName}`);
 
     // Create a new room with the given room name
@@ -47,18 +47,18 @@ async function handleClientCreateRoom(socket, userId, inputRoomName) {
     const roomCode = generatedRoom.roomCode;
     const roomName = generatedRoom.roomName;
 
-    // Join the client to this new room
+    // Join the user to this new room
     await addUserToRoom(roomCode, userId);
 
-    // Send the room name and room code to the client
+    // Send the room name and room code to the user
     socket.emit("room-created", roomCode, roomName);
 
     // Return the room code
     return roomCode;
 }
 
-// Handle client join room request
-async function handleClientJoinRoom(socket, userId, inputRoomCode) {
+// Handle user join room request
+async function handleUserJoinRoom(socket, userId, inputRoomCode) {
     // Check the room existence of the given room code
     const roomCodesInDB = await findRoomCodes();
 
@@ -72,24 +72,24 @@ async function handleClientJoinRoom(socket, userId, inputRoomCode) {
     const roomCode = room.roomCode;
     const roomName = room.roomName;
 
-    // Join the client to this new room
+    // Join the user to this new room
     await addUserToRoom(roomCode, userId);
 
-    // Send the room name and room code to the client
+    // Send the room name and room code to the user
     socket.emit("room-joined", roomCode, roomName);
 
     // Return the room code
     return roomCode;
 }
 
-// Handle client chat message event
+// Handle user chat message event
 // Note: use io.to() to include the sender; use socket.to() to exclude the sender
-async function handleClientChatMessage(socket, roomId, senderId, msg, callback) {
+async function handleUserChatMessage(socket, roomId, senderId, msg, callback) {
     const sender = await User.findOne({ userId: senderId });
     socket.username = sender.username;
     console.log(`User ${username} [${socket.id}]: ${msg}`);
 
-    // Send the message to all connected clients in the room (excluding the sender client)
+    // Send the message to all connected users in the room (excluding the sender user)
     socket.to(roomName).emit("chat message", username, msg);
 
     // Store the message to MongoDB
@@ -101,8 +101,8 @@ async function handleClientChatMessage(socket, roomId, senderId, msg, callback) 
     });
 }
 
-export { handleClientConnection, 
-         handleClientDisconnection, 
-         handleClientCreateRoom,
-         handleClientJoinRoom,
-         handleClientChatMessage }
+export { handleUserConnection, 
+         handleUserDisconnection, 
+         handleUserCreateRoom,
+         handleUserJoinRoom,
+         handleUserChatMessage }
