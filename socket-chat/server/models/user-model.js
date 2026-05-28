@@ -28,7 +28,11 @@ const userSchema = new Schema(
         },
         // passwordHash is invisible to users; it is used in authentication steps
         passwordHash: {
-            type: String
+            type: String,
+            required: function() {
+                // passwordHash is only required if the user does not sign-in via Google
+                return !this.googleId;
+            }
         },
         // googleId is used for user authentication via Google Login
         googleId: {

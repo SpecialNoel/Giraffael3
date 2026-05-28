@@ -21,25 +21,28 @@ async function findRoomCodes() {
 // Create a new room with the given room name, and store it to the database
 async function createRoom(roomName, creatorId) {
     try {
+        // Check if the creatorId exists in the database
+        const user = await User.findById(creatorId);
+        if (!user) throw new Error("Creator not found");
+
         // Generate an unique room code for this room
         const roomCodesInDB = await findRoomCodes();
-        let roomCode;
-        do {
-            roomCode = generateRoomCode();
-        } while (roomCodesInDB.has(roomCode));
-
-        // Create the new room
-        const newRoom = new Room({
-            roomCode: roomCode,
-            roomName: roomName,
-            creator: creatorId,
-            members: [creatorId]
-        });
-
-        // Store the room to the DB
-        const generatedRoom = await newRoom.save();
-        console.log("Room generated and stored to DB\n");
-        return generatedRoom;
+        let room;
+        while (!room) {
+            try {
+                room = await Room.create({
+                    roomCode: generateRoomCode(),
+                    roomName,
+                    creator: creatorId,
+                    members: [creatorId]
+                });
+            } catch (err) {
+                if (err.code === 11000) continue; // duplicate key, retry
+                throw err; // otherwise, report error
+            }
+        }
+        console.log("Room created and stored to DB\n");
+        return room;
     } catch (error) {
         console.error("Failed to create room:", error);
         throw error;
@@ -49,13 +52,9 @@ async function createRoom(roomName, creatorId) {
 // Join the user to the given room (update it in DB)
 async function addUserToRoom(roomCode, userId) {
     try {
-        // Get the user document based on user _id
-        const user = await User.findById(userId);
-        if (!user) throw new Error("User not found");
-
-        await Room.findOneAndUpdate(
+        return await Room.findOneAndUpdate(
             { roomCode },
-            { $addToSet: { members: user._id } },
+            { $addToSet: { members: userId } },
             { new: true }
         );
     } catch (error) {
