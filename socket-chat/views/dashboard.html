@@ -3,19 +3,22 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title id="title">Dashboard</title>
+    <link rel="stylesheet" href="styles.css" />
   </head>
 
   <body>
     <!-- Buttons to other pages -->
-    <a href="/room-list"><button>Room List</button></a>
-    <a href="/friends"><button>Friends</button></a>
-    <a href="/settings"><button>Settings</button></a>
-    <a href="/signin"><button>Quit</button></a>
+    <div class="card">
+      <a href="/room-list"><button>Room List</button></a>
+      <a href="/friends"><button>Friends</button></a>
+      <a href="/settings"><button>Settings</button></a>
+      <a href="/signin"><button>Quit</button></a>
+    </div>
 
-    <!-- Room selection section -->
-    <section id="room-selection-section">
-      <!-- Create a new room -->
+    <!-- Room selection -->
+    <div class="card">
       <div>
+        <!-- Create a new room -->
         <label>Room name: </label>
         <input
           type="text"
@@ -25,9 +28,7 @@
         />
         <button id="createRoomBtn">Create room</button>
       </div>
-
       <label> OR: </label>
-
       <!-- Join an existing room -->
       <div>
         <label>Room code: </label>
@@ -39,38 +40,47 @@
         />
         <button id="joinRoomBtn">Join room</button>
       </div>
-    </section>
+    </div>
+
+    <!-- Room list -->
+    <div class="card" id="room-list">
+      <div><label>Room List: </label></div>
+      <div>
+        <button class="room-btn" data-room-id="1">1</button>
+        <button class="room-btn" data-room-id="2">2</button>
+        <button class="room-btn" data-room-id="3">3</button>
+      </div>
+    </div>
 
     <!-- Chatting room -->
-    <section id="chat-section">
-      <div id="chat-header-section">
-        <!-- Room information -->
-        <label id="roomCodeInChat">Room code</label>
-
-        <!-- User information -->
-        <label id="usernameInChat">Username</label>
-      </div>
-
-      <!-- Chat list -->
+    <div class="card">
       <div>
-        <label>Message history: </label>
-        <ul id="messages"></ul>
+        <label id="roomCodeInChat">Room code: </label>
       </div>
-
-      <!-- Current online users -->
       <div>
-        <label>Online User:</label>
-        <ul id="onlineUsers"></ul>
+        <label id="usernameInChat">Username: </label>
       </div>
+    </div>
 
-      <!-- Input and send message -->
+    <!-- Chat list -->
+    <div class="card">
+      <label>Message history: </label>
+      <ul id="messages"></ul>
+    </div>
+
+    <!-- Current online users -->
+    <div class="card">
+      <label>Online User:</label>
+      <ul id="onlineUsers"></ul>
+    </div>
+
+    <!-- Input and send message -->
+    <div class="card">
       <label>Send Message: </label>
-      <div>
-        <form id="form" action="">
-          <input id="input" autocomplete="off" /> <button>Send</button>
-        </form>
-      </div>
-    </section>
+      <form id="form" action="">
+        <input id="input" autocomplete="off" /> <button>Send</button>
+      </form>
+    </div>
 
     <!-- Create the SocketIO user -->
     <script src="/socket.io/socket.io.js"></script>

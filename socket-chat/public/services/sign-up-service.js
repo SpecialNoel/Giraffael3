@@ -45,6 +45,7 @@ function signUpTraditional() {
             // Otherwise, redirect the user back to the sign-in page
             window.location.href = "/signin";
         } catch (err) {
+            // Print error message to server side in case something went wrong during this process
             console.error(err);
             alert("Something went wrong");
         }

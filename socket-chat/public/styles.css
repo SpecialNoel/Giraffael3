@@ -1,10 +1,57 @@
 /* styles.css */
 
+.card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+/* Sign-up and Sign-in forms */
+#sign-up-form {
+    justify-content: center;
+    align-items: center;
+}
 #sign-in-form {
     justify-content: center;
     align-items: center;
 }
-#sign-up-form {
-    justify-content: center;
+
+/* Room button */
+.room-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
     align-items: center;
+    justify-content: center;
+    border: 1px solid gray;
+    border-radius: 8px;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s;
+}
+.room-btn:hover {
+    background-color: orange;
+}
+.room-btn:active {
+    transform: scale(0.95);
+}
+
+/* Room list */
+#room-list {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* Room card */
+.room-card { /* Used for displaying room information on a separate panel when hovering over the room icon/button */
+    padding: 16px;
+    margin-bottom: 10px;
+    border: 2px solid gray;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.room-card:hover {
+    background-color: orange;
 }

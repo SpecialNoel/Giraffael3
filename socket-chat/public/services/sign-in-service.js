@@ -41,7 +41,7 @@ function signIn() {
             // The credentials are verified by server to be valid, proceed to the Dashboard page.
             window.location.href = "/dashboard";
         } catch (err) {
-            // Print error message to server side in case something went wrong during this signin process
+            // Print error message to server side in case something went wrong during this process
             console.error(err);
             alert("Something went wrong");        
         }

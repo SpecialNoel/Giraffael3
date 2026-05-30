@@ -1,9 +1,6 @@
 // dashboard-page.js
 
+import handleDashboard from "../services/dashboard-service.js";
 
-async function handleDashboard() {
-    // Handle user dashboard services, including friend list, room list, and setting management,
-    // and the main panel as the main chatting room
-}
-
-handleDashboard();
+// Handle user dashboard services
+handleDashboard()
