@@ -1,12 +1,14 @@
 /* styles.css */
 
+/* Basic section divider */
 .card {
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 16px;
     margin-bottom: 16px;
 }
-/* Sign-up and Sign-in forms */
+
+/* Sign-up and sign-in forms */
 #sign-up-form {
     justify-content: center;
     align-items: center;

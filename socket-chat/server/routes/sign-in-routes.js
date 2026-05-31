@@ -22,7 +22,7 @@ router.post("/", async (req, res) => {
         // Check account existence in DB based on user email
         const user = await findUser(email);
 
-        // Account with the received email does not exist in DB
+        // Handle error where the account associated with the received email does not exist in DB
         if (!user) {
             console.log(`Email does not exist in DB: ${email}`);
             return res.status(401).json({ 
@@ -34,6 +34,7 @@ router.post("/", async (req, res) => {
         const isPasswordValid = await comparePassword(plainPassword, user.passwordHash);
         console.log("isPasswordValid: ", isPasswordValid);
 
+        // Handle error where the password does not match the one stored in DB
         if (!isPasswordValid) {
             console.log(`Invalid login attempt for email: ${email}`);
             return res.status(401).json({ 
@@ -41,6 +42,7 @@ router.post("/", async (req, res) => {
             });
         }
 
+        // Signin success
         return res.status(200).json({
             success: true,
             message: "Sign in success"

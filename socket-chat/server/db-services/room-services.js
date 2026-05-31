@@ -7,7 +7,7 @@ import generateRoomCode from "../utilities/room-code-generator.js";
 // Retrieve all existing room codes from the database
 async function findRoomCodes() {
     try {
-        // Fetch the roomCode field of each room
+        // Fetch the room code of each room
         const rooms = await Room.find({}, "roomCode");
 
         // Convert the room codes into a Set for fast lookup
@@ -21,12 +21,11 @@ async function findRoomCodes() {
 // Create a new room with the given room name, and store it to the database
 async function createRoom(roomName, creatorId) {
     try {
-        // Check if the creatorId exists in the database
+        // Check if the user exists in the database
         const user = await User.findById(creatorId);
         if (!user) throw new Error("Creator not found");
 
-        // Generate an unique room code for this room
-        const roomCodesInDB = await findRoomCodes();
+        // Create and store the room to DB. Repeat if failed due to roomCode duplication
         let room;
         while (!room) {
             try {
@@ -37,7 +36,7 @@ async function createRoom(roomName, creatorId) {
                     members: [creatorId]
                 });
             } catch (err) {
-                if (err.code === 11000) continue; // duplicate key, retry
+                if (err.code === 11000) continue; // duplicate key error of MongoDB; retry
                 throw err; // otherwise, report error
             }
         }
@@ -49,13 +48,14 @@ async function createRoom(roomName, creatorId) {
     }
 }
 
-// Join the user to the given room (update it in DB)
+// Add the user to the given room
 async function addUserToRoom(roomCode, userId) {
     try {
+        // Find and update the room in DB
         return await Room.findOneAndUpdate(
             { roomCode },
-            { $addToSet: { members: userId } },
-            { new: true }
+            { $addToSet: { members: userId } }, // add userId to the members list, if it is not in the list yet
+            { new: true } // return the updated Room document
         );
     } catch (error) {
         console.error("Failed to add user to room:", error);

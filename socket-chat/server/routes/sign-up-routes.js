@@ -37,7 +37,7 @@ router.post("/", async (req, res) => {
         // Check account existence in DB based on user email
         const userInDB = await findUser(email);
 
-        // Received email already associated with an existing account
+        // Handle error where received email already associated with an existing account
         if (userInDB) {
             return res.status(409).json({
                 error: "User already exists"
@@ -51,6 +51,7 @@ router.post("/", async (req, res) => {
         const user = await createUser(email, passwordHash);
         console.log("Created user:", user.id);
 
+        // Signup success
         return res.status(201).json({
             success: true,
             message: "Account created"

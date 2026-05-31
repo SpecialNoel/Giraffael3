@@ -9,21 +9,22 @@ const MESSAGE_EXPIRATION_MS = 60 * 60 * 1000; // 1 hour
 // Store the chat message to the database
 async function storeMessage(roomId, senderId, content) {
     try {
+        // Check if the user exists in the database
+        const user = await User.findById(senderId);
+        if (!user) throw new Error("Sender not found");
+
         // Auto-delete this message 1 hour after creation
         const expireAt = new Date(Date.now() + MESSAGE_EXPIRATION_MS);
 
-        // Construct the message using the Message model
-        const newMessage = new Message({
+        // Construct and store the message using the Message model
+        const message = await Message.create({
             room: roomId,
             sender: senderId,
             content,
             expireAt
         });
-
-        // Save the message to the message collection
-        const savedMessage = await newMessage.save();
         console.log("Message saved to DB\n");
-        return savedMessage;
+        return message;
     } catch (error) {
         console.error("Failed to store message:", error);
         throw error;
@@ -34,8 +35,7 @@ async function storeMessage(roomId, senderId, content) {
 async function findMessagesByUserId(senderId) {
     try {
         // Find the sent messages based on user _id
-        const messages = await Message.find({ sender: senderId });
-        return await Message.findById(senderId);
+        return await Message.find({ sender: senderId });
     } catch (error) {
         console.error("Failed to retrieve messages:", error);
         throw error;

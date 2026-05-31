@@ -32,7 +32,7 @@ const messageSchema = new Schema(
             default: "text"
         },
         // expiresAt enables message auto-deletion after it lived for a specified amount of time
-        // This field is specified during Message document creation
+        // This field should be specified during Message document creation
         // e.g.: expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000) // expires after 24h since creation
         expiresAt: {
             type: Date,

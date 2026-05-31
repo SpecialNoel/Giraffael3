@@ -3,9 +3,10 @@
 import User from "../models/user-model.js";
 import generateUserId from "../utilities/user-id-generator.js";
 
-// Create a new user with the given username, and store it to the database
+// Create a new user, and store it to the database
 async function createUser(email, passwordHash) {
     try {
+        // Create and store the user to DB. Repeat if failed due to userId duplication
         let user;
         while (!user) {
             try {
@@ -15,7 +16,7 @@ async function createUser(email, passwordHash) {
                     passwordHash
                 });
             } catch (err) {
-                if (err.code === 11000) continue; // duplicate key, retry
+                if (err.code === 11000) continue; // duplicate key error of MondoDB; retry
                 throw err; // otherwise, report error
             }
         } 
