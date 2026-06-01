@@ -38,6 +38,8 @@ function signIn() {
                 return;
             }
 
+            localStorage.setItem("email", email);
+
             // The credentials are verified by server to be valid, proceed to the Dashboard page.
             window.location.href = "/dashboard";
         } catch (err) {

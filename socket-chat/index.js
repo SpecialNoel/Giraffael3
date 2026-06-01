@@ -9,7 +9,7 @@ import { Server } from "socket.io";
 import signInRouter from "./server/routes/sign-in-routes.js";
 import signUpRouter from "./server/routes/sign-up-routes.js";
 import dashboardRouter from "./server/routes/dashboard-routes.js";
-import roomListRouter from "./server/routes/room-list-routes.js";
+import roomsRouter from "./server/routes/rooms-routes.js";
 
 import connectToDB from "./server/utilities/db-connector.js";
 import * as Services from "./server/services.js";
@@ -32,7 +32,7 @@ app.use(express.json());
 app.use("/signin", signInRouter);
 app.use("/signup", signUpRouter);
 app.use("/dashboard", dashboardRouter);
-app.use("/room-list", roomListRouter);
+app.use("/rooms", roomsRouter);
 app.get("/", (req, res) => {
     // Set the default displaying page to be the sign-in page
     res.redirect("/signin");
