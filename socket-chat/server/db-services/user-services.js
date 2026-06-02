@@ -38,4 +38,13 @@ async function findUser(email) {
     }
 }
 
-export { createUser, findUser };
+async function findUserByObjectId(id) {
+    try {
+        return await User.findOne({ _id: id });
+    } catch (error) {
+        console.error("Failed to find user:", error);
+        throw error;
+    }
+}
+
+export { createUser, findUser, findUserByObjectId };

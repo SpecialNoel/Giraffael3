@@ -22,7 +22,7 @@ function handleRoomList() {
             const email = localStorage.getItem("email");
 
             // Send roomId to server
-            const response = await fetch("/rooms/join-room", {
+            const response = await fetch("/rooms/join", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -50,9 +50,24 @@ function handleRoomList() {
     roomList.addEventListener("click", handleClick);
 }
 
+// Set up the create-room logic
+function handleCreateRoom() {
+
+
+    const roomsInfo = data.roomsInfo;
+    console.log("Rooms info:", roomsInfo)
+}
+
+// Set up the join-room logic
+function handleJoinRoom() {
+
+}
+
 // Set up the whole dashboard page, which consists of many small components
 function handleDashboard() {
-    handleRoomList()
+    handleRoomList();
+    handleCreateRoom();
+    handleJoinRoom();
 }
 
 export default handleDashboard;

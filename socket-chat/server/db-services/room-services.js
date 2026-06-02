@@ -63,4 +63,11 @@ async function addUserToRoom(roomCode, userId) {
     }
 }
 
-export { findRoomCodes, addUserToRoom, createRoom };
+// Retrieve necessary information of rooms the user has joined
+async function getRoomsInfo(userId) {
+    return await Room.find({
+        members: userId
+    }).select("_id roomName roomCode");
+}
+
+export { findRoomCodes, createRoom, addUserToRoom, getRoomsInfo };
