@@ -8,6 +8,7 @@ function handleRoomList() {
     */
     const roomList = document.querySelector("#room-list");
 
+    // Enter the target room upon user clicking on the room icon
     const handleClick = async (e) => {
         // Prevent the page from refreshing
         e.preventDefault();
@@ -22,7 +23,7 @@ function handleRoomList() {
             const email = localStorage.getItem("email");
 
             // Send roomId to server
-            const response = await fetch("/rooms/join", {
+            const response = await fetch("/rooms/enter", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -30,7 +31,7 @@ function handleRoomList() {
                 body: JSON.stringify({ roomId: roomId, email: email })
             });
 
-            // Retrieve anything sent from server
+            // Retrieve response sent from server
             const data = await response.json()
 
             // Display the error message to the user if the operation fails
@@ -52,24 +53,26 @@ function handleRoomList() {
 
 // Set up the create-room logic
 function handleCreateRoom() {
+    /*
+        On the dashboard page, add functionality to the create room button such that
+        user will submit the inputted room name to server to create a room upon clicking the button.
+    */
     const createRoomBtn = document.querySelector(".create-btn");
-
-    // const roomsInfo = data.roomsInfo;
-    // console.log("Rooms info:", roomsInfo)
 
     const handleClick = async (e) => {
         // Prevent the page from refreshing
         e.preventDefault();
         
         try {
+            // Retrieve inputted room name
             const roomName = document.querySelector("#roomNameInCreateRoom").value;
             if (!roomName) {
                 alert("Please enter a room name");
                 return;
             }
 
-            const email = localStorage.getItem("email");
-            const _id = localStorage.getItem("_id");
+            // Retrieve user information
+            const creatorId = localStorage.getItem("_id");
 
             // Send roomName to server
             const response = await fetch("/rooms/create", {
@@ -77,10 +80,10 @@ function handleCreateRoom() {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ roomName: roomName, _id: _id })
+                body: JSON.stringify({ roomName: roomName, creatorId: creatorId })
             });
 
-            // Retrieve anything sent from server
+            // Retrieve response sent from server
             const data = await response.json()
 
             // Display the error message to the user if the operation fails
@@ -88,7 +91,8 @@ function handleCreateRoom() {
                 alert(data.error);
                 return;
             }
-            console.log("Received response from server:", data.message)
+            console.log("roomCode: ", data.roomCode)
+            console.log("roomsInfo: ", data.roomsInfo)
         } catch (err) {
             // Print error message to server side in case something went wrong during this process
             console.error(err);

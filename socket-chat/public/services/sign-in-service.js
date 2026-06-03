@@ -29,7 +29,7 @@ function signIn() {
                 body: JSON.stringify({ email: email, plainPassword: plainPassword })
             });
 
-            // Retrieve anything sent from server
+            // Retrieve response sent from server
             const data = await response.json()
 
             // Display the error message to the user if the credentials are invalid
