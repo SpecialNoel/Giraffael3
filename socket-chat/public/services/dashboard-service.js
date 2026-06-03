@@ -52,10 +52,52 @@ function handleRoomList() {
 
 // Set up the create-room logic
 function handleCreateRoom() {
+    const createRoomBtn = document.querySelector(".create-btn");
 
+    // const roomsInfo = data.roomsInfo;
+    // console.log("Rooms info:", roomsInfo)
 
-    const roomsInfo = data.roomsInfo;
-    console.log("Rooms info:", roomsInfo)
+    const handleClick = async (e) => {
+        // Prevent the page from refreshing
+        e.preventDefault();
+        
+        try {
+            const roomName = document.querySelector("#roomNameInCreateRoom").value;
+            if (!roomName) {
+                alert("Please enter a room name");
+                return;
+            }
+
+            const email = localStorage.getItem("email");
+            const _id = localStorage.getItem("_id");
+
+            // Send roomName to server
+            const response = await fetch("/rooms/create", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ roomName: roomName, _id: _id })
+            });
+
+            // Retrieve anything sent from server
+            const data = await response.json()
+
+            // Display the error message to the user if the operation fails
+            if (!response.ok) {
+                alert(data.error);
+                return;
+            }
+            console.log("Received response from server:", data.message)
+        } catch (err) {
+            // Print error message to server side in case something went wrong during this process
+            console.error(err);
+            alert("Something went wrong");        
+        }
+    };
+
+    // Add the functionality to create button
+    createRoomBtn.addEventListener("click", handleClick);
 }
 
 // Set up the join-room logic

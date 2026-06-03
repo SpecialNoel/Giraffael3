@@ -38,7 +38,8 @@ function signIn() {
                 return;
             }
 
-            localStorage.setItem("email", email);
+            localStorage.setItem("email", data.email);
+            localStorage.setItem("_id", data._id);
 
             // The credentials are verified by server to be valid, proceed to the Dashboard page.
             window.location.href = "/dashboard";

@@ -4,7 +4,7 @@ import express from "express";
 import path from "node:path";
 import pathToViewsDir from "./route-helper.js"
 
-import { findUserByObjectId } from "../db-services/user-services.js";
+import { findUserByObjectId, findUser } from "../db-services/user-services.js";
 import { createRoom, getRoomsInfo } from "../db-services/room-services.js";
 import generateRoomCode from "../utilities/room-code-generator.js";
 
@@ -18,6 +18,8 @@ router.post("/create", async (req, res) => {
     try {
         // Receive room name and creator info
         const { roomName, creatorId } = req.body;
+
+        console.log("creator id: ", creatorId)
 
         // Check account existence in DB based on user id
         const user = await findUserByObjectId(creatorId);

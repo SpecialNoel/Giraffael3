@@ -3,7 +3,7 @@
 import User from "./models/user-model.js";
 import Room from "./models/room-model.js";
 import { storeMessage } from "./db-services/message-services.js";
-import { findRoomCodes, createRoom, addUserToRoom } from "./db-services/room-services.js"
+import { findRoomCodes, addUserToRoom } from "./db-services/room-services.js"
 
 // Get the usernames of online users in the room
 async function getOnlineUsers(io, roomName) {
@@ -36,25 +36,6 @@ async function handleUserDisconnection(io, roomName, socket) {
     const onlineUsers = await getOnlineUsers(io, roomName);
     io.to(roomName).emit("user left", onlineUsers);
     console.log(`Online users: ${onlineUsers}\n`)
-}
-
-// Handle user create room request
-async function handleUserCreateRoom(socket, userId, inputRoomName) {
-    console.log(`Received room name: ${inputRoomName}`);
-
-    // Create a new room with the given room name
-    const generatedRoom = await createRoom(inputRoomName);
-    const roomCode = generatedRoom.roomCode;
-    const roomName = generatedRoom.roomName;
-
-    // Join the user to this new room
-    await addUserToRoom(roomCode, userId);
-
-    // Send the room name and room code to the user
-    socket.emit("room-created", roomCode, roomName);
-
-    // Return the room code
-    return roomCode;
 }
 
 // Handle user join room request
@@ -103,6 +84,5 @@ async function handleUserChatMessage(socket, roomId, senderId, msg, callback) {
 
 export { handleUserConnection, 
          handleUserDisconnection, 
-         handleUserCreateRoom,
          handleUserJoinRoom,
          handleUserChatMessage }
