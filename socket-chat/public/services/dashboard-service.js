@@ -1,12 +1,12 @@
 // dashboard-service.js
 
-// Set up the room list
-function handleRoomList() {    
+// Set up the rooms container
+function handleRoomsContainer() {    
     /*
         On the dashboard page, add functionality to each room icon/button such that
         a certain task will be executed whenever the user clicks on the room icon.
     */
-    const roomList = document.querySelector("#room-list");
+    const roomsContainer = document.querySelector("#rooms-container");
 
     // Enter the target room upon user clicking on the room icon
     const handleClick = async (e) => {
@@ -17,18 +17,18 @@ function handleRoomList() {
             // Get the room button the user clicked on
             const roomBtn = e.target.closest(".room-btn"); 
             if (!roomBtn) return;
-            const roomId = roomBtn.dataset.roomId; // dataset.roomId is dynamically parsed from "data-room-id" attribute in html
-            console.log("Clicked room:", roomId)
+            const roomCode = roomBtn.dataset.roomCode; // dataset.roomCode is dynamically parsed from "data-room-code" attribute in html
+            console.log("Clicked room:", roomCode)
 
             const email = localStorage.getItem("email");
 
-            // Send roomId to server
+            // Send roomCode to server
             const response = await fetch("/rooms/enter", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ roomId: roomId, email: email })
+                body: JSON.stringify({ roomCode: roomCode, email: email })
             });
 
             // Retrieve response sent from server
@@ -47,8 +47,8 @@ function handleRoomList() {
         }
     };
 
-    // Add the functionality to roomList
-    roomList.addEventListener("click", handleClick);
+    // Add the functionality to roomContainer
+    roomsContainer.addEventListener("click", handleClick);
 }
 
 // Set up the create-room logic
@@ -57,6 +57,18 @@ function handleCreateRoom() {
         On the dashboard page, add functionality to the create room button such that
         user will submit the inputted room name to server to create a room upon clicking the button.
     */
+    function updateRoomsContainer(newRoomInfo) {
+        // Update the rooms container once the room is successfully created
+        const containerDiv = document.getElementById("rooms-container");
+
+        const newRoomBtn = document.createElement("button");
+        newRoomBtn.className = "room-btn";
+        newRoomBtn.dataset.roomCode = newRoomInfo.roomCode;
+        newRoomBtn.textContent = newRoomInfo.roomName;
+
+        containerDiv.append(newRoomBtn);
+    }
+
     const createRoomBtn = document.querySelector(".create-btn");
 
     const handleClick = async (e) => {
@@ -91,8 +103,9 @@ function handleCreateRoom() {
                 alert(data.error);
                 return;
             }
-            console.log("roomCode: ", data.roomCode)
-            console.log("roomsInfo: ", data.roomsInfo)
+
+            // Update the rooms container by appending the new room to the list
+            updateRoomsContainer(data.newRoomInfo);
         } catch (err) {
             // Print error message to server side in case something went wrong during this process
             console.error(err);
@@ -111,7 +124,7 @@ function handleJoinRoom() {
 
 // Set up the whole dashboard page, which consists of many small components
 function handleDashboard() {
-    handleRoomList();
+    handleRoomsContainer();
     handleCreateRoom();
     handleJoinRoom();
 }

@@ -18,31 +18,39 @@
     align-items: center;
 }
 
+/* Rooms container */
+#rooms-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+}
+
 /* Room button */
 .room-btn {
-    width: 40px;
-    height: 40px;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
+
+    padding: 4px 10px;
+    font-size: 14px;
+
     border: 1px solid gray;
-    border-radius: 8px;
+    border-radius: 6px;
+
     cursor: pointer;
     user-select: none;
     transition: all 0.2s;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .room-btn:hover {
     background-color: orange;
 }
 .room-btn:active {
     transform: scale(0.95);
-}
-
-/* Room list */
-#room-list {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
 }
 
 /* Room card */

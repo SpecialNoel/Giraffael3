@@ -67,7 +67,7 @@ async function addUserToRoom(roomCode, userId) {
 async function getRoomsInfo(userId) {
     return await Room.find({
         members: userId
-    }).select("_id roomName roomCode");
+    }).select("roomName roomCode -_id"); // exclude the _id property of each Room document
 }
 
 export { findRoomCodes, createRoom, addUserToRoom, getRoomsInfo };

@@ -10,9 +10,27 @@ import generateRoomCode from "../utilities/room-code-generator.js";
 
 const router = express.Router();
 
-// Rooms page
-router.get("/", (req, res) => {
-    res.sendFile(path.join(pathToViewsDir, "rooms.html"));
+// Rooms API endpoints
+router.post("/", async (req, res) => {
+    // Retrieve the _id of the requesting user 
+    const { userId } = req.body;
+
+    // Retrieve the info about all rooms this user has joined
+    const roomsInfo = await getRoomsInfo(userId);
+
+    try {
+        // Return the list of room info
+        return res.status(200).json({
+            success: true,
+            message: "Fetch rooms success",
+            roomsInfo
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            error: "Internal server error"
+        });
+    }
 });
 router.post("/create", async (req, res) => {
     try {
@@ -22,15 +40,14 @@ router.post("/create", async (req, res) => {
         // Create the room
         const room = await createRoom(roomName, creatorId);
 
-        // Retrieve necessary info about rooms the creator has joined
-        const roomsInfo = await getRoomsInfo(creatorId);
+        // Retrieve necessary info about this new room
+        const newRoomInfo = { roomName: room.roomName, roomCode: room.roomCode };
 
         // Create-room success
         return res.status(200).json({
             success: true,
             message: "Create room success",
-            roomCode: room.roomCode,
-            roomsInfo: roomsInfo
+            newRoomInfo: newRoomInfo
         });
     } catch (err) {
         console.error(err);
@@ -42,7 +59,7 @@ router.post("/create", async (req, res) => {
 router.post("/enter", async (req, res) => {
     try {
         // Receive room id and user info
-        const { roomId, email } = req.body;
+        const { roomCode, email } = req.body;
 
         // Check account existence in DB based on user email
         const user = await findUser(email);
