@@ -12,9 +12,9 @@ async function findRoomCodes() {
 
         // Convert the room codes into a Set for fast lookup
         return new Set(rooms.map(room => room.roomCode));
-    } catch (error) {
-        console.error("Error in retrieving room codes:", error);
-        throw error;
+    } catch (err) {
+        console.error("Error in retrieving room codes:", err);
+        throw err;
     }
 }
 
@@ -47,9 +47,9 @@ async function createRoom(roomName, creatorId) {
         }
         console.log("Room created and stored to DB\n");
         return room;
-    } catch (error) {
-        console.error("Failed to create room:", error);
-        throw error;
+    } catch (err) {
+        console.error("Failed to create room:", err);
+        throw err;
     }
 }
 
@@ -62,7 +62,7 @@ async function joinRoom(roomCode, userId) {
             return {
                 success: false,
                 reason: "ROOM_NOT_FOUND"
-            }
+            };
         }
 
         // Check the user has already joined the room or not.
@@ -70,7 +70,7 @@ async function joinRoom(roomCode, userId) {
             return {
                 success: false,
                 reason: "ALREADY_IN_ROOM"            
-            }
+            };
         }
 
         // Update the room by adding the user to it
@@ -85,9 +85,9 @@ async function joinRoom(roomCode, userId) {
             success: true,
             room: updatedRoom
         };
-    } catch (error) {
-        console.error("Failed to add user to room:", error);
-        throw error;
+    } catch (err) {
+        console.error("Failed to add user to room:", err);
+        throw err;
     }
 }
 

@@ -45,7 +45,7 @@ app.get("/", (req, res) => {
 const server = createServer(app);
 
 // Create a SocketIO server on the HTTP server
-const io = new Server(server)
+const io = new Server(server);
 
 // Connect to MongoDB
 await connectToDB();

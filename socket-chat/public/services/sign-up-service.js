@@ -34,7 +34,7 @@ function signUpTraditional() {
             });
 
             // Retrieve response sent from server
-            const data = await response.json()
+            const data = await response.json();
 
             // Display the error message to the user if the sign up failed
             if (!response.ok) {

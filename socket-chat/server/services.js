@@ -20,7 +20,7 @@ async function handleUserConnection(io, roomName, socket) {
     // Broadcast a message to all users in the room upon user connection
     const onlineUsers = await getOnlineUsers(io, roomName);
     io.to(roomName).emit("user joined", onlineUsers);
-    console.log(`Online users: ${onlineUsers}\n`)
+    console.log(`Online users: ${onlineUsers}\n`);
 }
 
 // Handle user disconnection event
@@ -33,7 +33,7 @@ async function handleUserDisconnection(io, roomName, socket) {
     // Broadcast a message to all users in the room upon user disconnection
     const onlineUsers = await getOnlineUsers(io, roomName);
     io.to(roomName).emit("user left", onlineUsers);
-    console.log(`Online users: ${onlineUsers}\n`)
+    console.log(`Online users: ${onlineUsers}\n`);
 }
 
 // Handle user chat message event
@@ -57,4 +57,4 @@ async function handleUserChatMessage(socket, roomId, senderId, msg, callback) {
 
 export { handleUserConnection, 
          handleUserDisconnection, 
-         handleUserChatMessage }
+         handleUserChatMessage };

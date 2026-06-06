@@ -22,9 +22,9 @@ async function createUser(email, passwordHash) {
         } 
         console.log("User created and stored to DB\n");
         return user;
-    } catch (error) {
-        console.error("Failed to create user:", error);
-        throw error;
+    } catch (err) {
+        console.error("Failed to create user:", err);
+        throw err;
     }
 }
 
@@ -32,9 +32,9 @@ async function createUser(email, passwordHash) {
 async function findUser(email) {
     try {
         return await User.findOne({ email: email.trim().toLowerCase() });
-    } catch (error) {
-        console.error("Failed to find user:", error);
-        throw error;
+    } catch (err) {
+        console.error("Failed to find user:", err);
+        throw err;
     }
 }
 

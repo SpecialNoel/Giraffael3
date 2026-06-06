@@ -18,7 +18,7 @@ function handleRoomsContainer() {
             const roomBtn = e.target.closest(".room-btn"); 
             if (!roomBtn) return;
             const roomCode = roomBtn.dataset.roomCode; // dataset.roomCode is dynamically parsed from "data-room-code" attribute in html
-            console.log("Clicked room:", roomCode)
+            console.log("Clicked room:", roomCode);
 
             const email = localStorage.getItem("email");
 
@@ -32,14 +32,14 @@ function handleRoomsContainer() {
             });
 
             // Retrieve response sent from server
-            const data = await response.json()
+            const data = await response.json();
 
             // Display the error message to the user if the operation fails
             if (!response.ok) {
                 alert(data.error);
                 return;
             }
-            console.log("Current room members:", data.members)
+            console.log("Current room members:", data.members);
         } catch (err) {
             // Print error message to server side in case something went wrong during this process
             console.error(err);
@@ -96,7 +96,7 @@ function handleCreateRoom() {
             });
 
             // Retrieve response sent from server
-            const data = await response.json()
+            const data = await response.json();
 
             // Display the error message to the user if the operation fails
             if (!response.ok) {
@@ -145,7 +145,7 @@ function handleJoinRoom() {
             // Retrieve inputted room code
             const roomCode = document.querySelector("#roomCodeInJoinRoom").value;
             if (!roomCode) {
-                alert("Please enter a room code");
+                alert("Please enter the room code");
                 return;
             }
 
@@ -162,7 +162,7 @@ function handleJoinRoom() {
             });
 
             // Retrieve response sent from server
-            const data = await response.json()
+            const data = await response.json();
 
             // Display the error message to the user if the operation fails
             if (!response.ok) {

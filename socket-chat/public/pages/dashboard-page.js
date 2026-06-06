@@ -30,4 +30,4 @@ window.addEventListener("DOMContentLoaded", async () => {
 });
 
 // Handle user dashboard services
-handleDashboard()
+handleDashboard();
