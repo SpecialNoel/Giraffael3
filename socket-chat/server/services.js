@@ -1,7 +1,7 @@
 // services.js
 
-import User from "./models/user-model.js";
-import Room from "./models/room-model.js";
+import { User } from "./models/user-model.js";
+import { Room } from "./models/room-model.js";
 import { storeMessage } from "./db-services/message-services.js";
 import { findRoomCodes, addUserToRoom } from "./db-services/room-services.js"
 

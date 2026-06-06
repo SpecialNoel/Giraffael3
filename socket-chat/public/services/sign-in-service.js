@@ -54,4 +54,4 @@ function signIn() {
     signInForm.addEventListener("submit", handleSubmit);
 }
 
-export default signIn;
+export { signIn };

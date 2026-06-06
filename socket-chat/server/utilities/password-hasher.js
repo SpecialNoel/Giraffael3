@@ -8,4 +8,4 @@ function hashPassword(password) {
     return bcrypt.hash(password, saltRound);
 }
 
-export default hashPassword;
+export { hashPassword };

@@ -6,4 +6,4 @@ function generateRoomCode(length=11) {
     return crypto.randomBytes(length).toString("base64url").slice(0, length).toUpperCase();
 }
 
-export default generateRoomCode;
+export { generateRoomCode };

@@ -129,4 +129,4 @@ function handleDashboard() {
     handleJoinRoom();
 }
 
-export default handleDashboard;
+export { handleDashboard };

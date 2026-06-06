@@ -6,12 +6,12 @@ import { createServer } from "node:http";
 import { join } from "node:path";
 import { Server } from "socket.io";
 
-import signInRouter from "./server/routes/sign-in-routes.js";
-import signUpRouter from "./server/routes/sign-up-routes.js";
-import dashboardRouter from "./server/routes/dashboard-routes.js";
-import roomsRouter from "./server/routes/rooms-routes.js";
+import { router as signInRouter } from "./server/routes/sign-in-routes.js";
+import { router as signUpRouter } from "./server/routes/sign-up-routes.js";
+import { router as dashboardRouter } from "./server/routes/dashboard-routes.js";
+import { router as roomsRouter } from "./server/routes/rooms-routes.js";
 
-import connectToDB from "./server/utilities/db-connector.js";
+import { connectToDB } from "./server/utilities/db-connector.js";
 import * as Services from "./server/services.js";
 
 

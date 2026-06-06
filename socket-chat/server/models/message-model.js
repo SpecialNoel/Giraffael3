@@ -47,4 +47,4 @@ messageSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 // The "Message" model
 const Message = mongoose.model("Message", messageSchema, "messages");
-export default Message;
+export { Message };

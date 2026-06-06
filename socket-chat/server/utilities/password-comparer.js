@@ -6,4 +6,4 @@ function comparePassword(plainPassword, passwordHash) {
     return bcrypt.compare(plainPassword, passwordHash);
 }
 
-export default comparePassword;
+export { comparePassword };

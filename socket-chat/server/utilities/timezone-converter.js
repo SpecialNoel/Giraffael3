@@ -27,4 +27,4 @@ function getMessageWithNYTimezone(message) {
     return convertedMessage;
 }
 
-export default getMessageWithNYTimezone;
+export { getMessageWithNYTimezone };

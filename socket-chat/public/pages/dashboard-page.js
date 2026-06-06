@@ -1,6 +1,6 @@
 // dashboard-page.js
 
-import handleDashboard from "../services/dashboard-service.js";
+import { handleDashboard } from "../services/dashboard-service.js";
 
 // Retrieve the info upon user refreshing the dashboard page
 window.addEventListener("DOMContentLoaded", async () => {

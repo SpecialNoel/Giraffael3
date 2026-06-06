@@ -1,8 +1,8 @@
 // message-services.js
 
-import Message from "../models/message-model.js";
-import Room from "../models/room-model.js";
-import User from "../models/user-model.js";
+import { Message } from "../models/message-model.js";
+import { Room } from "../models/room-model.js";
+import { User } from "../models/user-model.js";
 
 const MESSAGE_EXPIRATION_MS = 60 * 60 * 1000; // 1 hour
 

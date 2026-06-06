@@ -9,4 +9,4 @@ const projectRoot = process.cwd();
 // Get the path to the "views" directory
 const pathToViewsDir = path.join(projectRoot, "views");
 
-export default pathToViewsDir;
+export { pathToViewsDir };

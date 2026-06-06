@@ -1,8 +1,8 @@
 // room-services.js
 
-import User from "../models/user-model.js"
-import Room from "../models/room-model.js"
-import generateRoomCode from "../utilities/room-code-generator.js";
+import { User } from "../models/user-model.js"
+import { Room } from "../models/room-model.js"
+import { generateRoomCode } from "../utilities/room-code-generator.js";
 
 // Retrieve all existing room codes from the database
 async function findRoomCodes() {

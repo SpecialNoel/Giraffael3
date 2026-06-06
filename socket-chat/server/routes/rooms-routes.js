@@ -2,11 +2,11 @@
 
 import express from "express";
 import path from "node:path";
-import pathToViewsDir from "./route-helper.js"
 
+import { pathToViewsDir } from "./route-helper.js"
 import { findUser } from "../db-services/user-services.js";
 import { createRoom, getRoomsInfo, findRoomByRoomCode } from "../db-services/room-services.js";
-import generateRoomCode from "../utilities/room-code-generator.js";
+import { generateRoomCode } from "../utilities/room-code-generator.js";
 
 const router = express.Router();
 
@@ -95,4 +95,4 @@ router.post("/enter", async (req, res) => {
     }
 });
 
-export default router;
+export { router };

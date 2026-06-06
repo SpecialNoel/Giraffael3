@@ -2,10 +2,10 @@
 
 import express from "express";
 import path from "node:path";
-import pathToViewsDir from "./route-helper.js";
 
+import { pathToViewsDir } from "./route-helper.js";
 import { findUser, createUser } from "../db-services/user-services.js";
-import hashPassword from "../utilities/password-hasher.js";
+import { hashPassword } from "../utilities/password-hasher.js";
 
 const router = express.Router();
 
@@ -64,4 +64,4 @@ router.post("/", async (req, res) => {
     }
 });
 
-export default router;
+export { router };

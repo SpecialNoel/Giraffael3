@@ -2,11 +2,11 @@
 
 import express from "express";
 import path from "node:path";
-import pathToViewsDir from "./route-helper.js";
 
+import { pathToViewsDir } from "./route-helper.js";
 import { findUser } from "../db-services/user-services.js";
-import hashPassword from "../utilities/password-hasher.js";
-import comparePassword from "../utilities/password-comparer.js";
+import { hashPassword } from "../utilities/password-hasher.js";
+import { comparePassword } from "../utilities/password-comparer.js";
 
 const router = express.Router();
 
@@ -57,4 +57,4 @@ router.post("/", async (req, res) => {
     }
 });
 
-export default router;
+export { router };
