@@ -119,7 +119,68 @@ function handleCreateRoom() {
 
 // Set up the join-room logic
 function handleJoinRoom() {
+    /*
+        On the dashboard page, add functionality to the join room button such that
+        user will submit the inputted room code to server to join a room upon clicking the button.
+    */
+    function updateRoomsContainer(roomInfo) {        
+        // Update the rooms container once the user successfully joined the room
+        const containerDiv = document.getElementById("rooms-container");
 
+        const newRoomBtn = document.createElement("button");
+        newRoomBtn.className = "room-btn";
+        newRoomBtn.dataset.roomCode = roomInfo.roomCode;
+        newRoomBtn.textContent = roomInfo.roomName;
+
+        containerDiv.append(newRoomBtn);
+    }
+
+    const joinRoomBtn = document.querySelector(".join-btn");
+
+    const handleClick = async (e) => {
+        // Prevent the page from refreshing
+        e.preventDefault();
+        
+        try {
+            // Retrieve inputted room code
+            const roomCode = document.querySelector("#roomCodeInJoinRoom").value;
+            if (!roomCode) {
+                alert("Please enter a room code");
+                return;
+            }
+
+            // Retrieve user information
+            const userId = localStorage.getItem("_id");
+
+            // Send roomCode to server
+            const response = await fetch("/rooms/join", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ roomCode: roomCode, userId: userId })
+            });
+
+            // Retrieve response sent from server
+            const data = await response.json()
+
+            // Display the error message to the user if the operation fails
+            if (!response.ok) {
+                alert(data.error);
+                return;
+            }
+
+            // Update the rooms container by appending the room to the list
+            updateRoomsContainer(data.roomInfo);
+        } catch (err) {
+            // Print error message to server side in case something went wrong during this process
+            console.error(err);
+            alert("Something went wrong");        
+        }
+    };
+
+    // Add the functionality to join button
+    joinRoomBtn.addEventListener("click", handleClick);
 }
 
 // Set up the whole dashboard page, which consists of many small components
