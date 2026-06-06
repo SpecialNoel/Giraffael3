@@ -18,6 +18,11 @@ async function findRoomCodes() {
     }
 }
 
+// Retrieve the target room by room code
+async function findRoomByRoomCode(roomCode) {
+    return await Room.findOne({ roomCode });
+}
+
 // Create a new room with the given room name, and store it to the database
 async function createRoom(roomName, creatorId) {
     try {
@@ -49,14 +54,37 @@ async function createRoom(roomName, creatorId) {
 }
 
 // Add the user to the given room
-async function addUserToRoom(roomCode, userId) {
+async function joinRoom(roomCode, userId) {
     try {
-        // Find and update the room in DB
-        return await Room.findOneAndUpdate(
+        // Check for existence of the room
+        const room = await findRoomByRoomCode(roomCode);
+        if (!room) { 
+            return {
+                success: false,
+                reason: "ROOM_NOT_FOUND"
+            }
+        }
+
+        // Check the user has already joined the room or not.
+        if (room.members.includes(userId)) {
+            return {
+                success: false,
+                reason: "ALREADY_IN_ROOM"            
+            }
+        }
+
+        // Update the room by adding the user to it
+        const updatedRoom = await Room.findOneAndUpdate(
             { roomCode },
             { $addToSet: { members: userId } }, // add userId to the members list, if it is not in the list yet
-            { new: true } // return the updated Room document
+            { new: true } // get the updated Room document
         );
+        
+        // Return the updated room
+        return {
+            success: true,
+            room: updatedRoom
+        };
     } catch (error) {
         console.error("Failed to add user to room:", error);
         throw error;
@@ -70,9 +98,4 @@ async function getRoomsInfo(userId) {
     }).select("roomName roomCode -_id"); // exclude the _id property of each Room document
 }
 
-// Retrieve the target room by room code
-async function findRoomByRoomCode(roomCode) {
-    return await Room.findOne({ roomCode });
-}
-
-export { findRoomCodes, createRoom, addUserToRoom, getRoomsInfo, findRoomByRoomCode };
+export { findRoomCodes, findRoomByRoomCode, createRoom, joinRoom, getRoomsInfo };

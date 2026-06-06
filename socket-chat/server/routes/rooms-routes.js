@@ -5,7 +5,7 @@ import path from "node:path";
 
 import { pathToViewsDir } from "./route-helper.js"
 import { findUser } from "../db-services/user-services.js";
-import { createRoom, getRoomsInfo, findRoomByRoomCode } from "../db-services/room-services.js";
+import { createRoom, joinRoom, getRoomsInfo, findRoomByRoomCode } from "../db-services/room-services.js";
 import { generateRoomCode } from "../utilities/room-code-generator.js";
 
 const router = express.Router();
@@ -48,6 +48,52 @@ router.post("/create", async (req, res) => {
             success: true,
             message: "Create room success",
             newRoomInfo: newRoomInfo
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            error: "Internal server error"
+        });    
+    }
+});
+router.post("/join", async (req, res) => {
+    try {
+        // Receive room code and user info
+        const { roomCode, userId } = req.body;
+
+        // Join the room
+        const joinRoomResult = await joinRoom(roomCode, userId);
+        
+        // Handle join-room failure
+        if (!joinRoomResult.success) {
+            switch (joinRoomResult.reason) {
+                case "ALREADY_IN_ROOM":
+                    return res.status(409).json({
+                        success: false,
+                        error: "User already in room",
+                    });
+                case "ROOM_NOT_FOUND":
+                    return res.status(404).json({
+                        success: false,
+                        error: "Room not found",
+                    });
+                default: 
+                    return res.status(500).json({
+                        success: false,
+                        error: "Join room failure",
+                    });
+            }
+        }
+
+        // Retrieve necessary info about this room
+        const room = joinRoomResult.room;
+        const roomInfo = { roomName: room.roomName, roomCode: room.roomCode, members: room.members };
+
+        // Join-room success
+        return res.status(200).json({
+            success: true,
+            message: "Join room success",
+            roomInfo: roomInfo
         });
     } catch (err) {
         console.error(err);

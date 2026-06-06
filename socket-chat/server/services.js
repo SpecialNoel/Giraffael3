@@ -1,9 +1,7 @@
 // services.js
 
 import { User } from "./models/user-model.js";
-import { Room } from "./models/room-model.js";
 import { storeMessage } from "./db-services/message-services.js";
-import { findRoomCodes, addUserToRoom } from "./db-services/room-services.js"
 
 // Get the usernames of online users in the room
 async function getOnlineUsers(io, roomName) {
@@ -38,31 +36,6 @@ async function handleUserDisconnection(io, roomName, socket) {
     console.log(`Online users: ${onlineUsers}\n`)
 }
 
-// Handle user join room request
-async function handleUserJoinRoom(socket, userId, inputRoomCode) {
-    // Check the room existence of the given room code
-    const roomCodesInDB = await findRoomCodes();
-
-    if (!roomCodesInDB.has(inputRoomCode)) {
-        console.log("Invalid room code: room code not exist")
-        return null;
-    }
-
-    // Find the room instance
-    const room = await Room.findOne({ roomCode: inputRoomCode });
-    const roomCode = room.roomCode;
-    const roomName = room.roomName;
-
-    // Join the user to this new room
-    await addUserToRoom(roomCode, userId);
-
-    // Send the room name and room code to the user
-    socket.emit("room-joined", roomCode, roomName);
-
-    // Return the room code
-    return roomCode;
-}
-
 // Handle user chat message event
 // Note: use io.to() to include the sender; use socket.to() to exclude the sender
 async function handleUserChatMessage(socket, roomId, senderId, msg, callback) {
@@ -84,5 +57,4 @@ async function handleUserChatMessage(socket, roomId, senderId, msg, callback) {
 
 export { handleUserConnection, 
          handleUserDisconnection, 
-         handleUserJoinRoom,
          handleUserChatMessage }
