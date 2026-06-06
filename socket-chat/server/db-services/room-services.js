@@ -70,4 +70,9 @@ async function getRoomsInfo(userId) {
     }).select("roomName roomCode -_id"); // exclude the _id property of each Room document
 }
 
-export { findRoomCodes, createRoom, addUserToRoom, getRoomsInfo };
+// Retrieve the target room by room code
+async function findRoomByRoomCode(roomCode) {
+    return await Room.findOne({ roomCode });
+}
+
+export { findRoomCodes, createRoom, addUserToRoom, getRoomsInfo, findRoomByRoomCode };

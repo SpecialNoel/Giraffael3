@@ -39,7 +39,7 @@ function handleRoomsContainer() {
                 alert(data.error);
                 return;
             }
-            console.log("Received response from server:", data.message)
+            console.log("Current room members:", data.members)
         } catch (err) {
             // Print error message to server side in case something went wrong during this process
             console.error(err);
@@ -103,7 +103,7 @@ function handleCreateRoom() {
                 alert(data.error);
                 return;
             }
-
+            
             // Update the rooms container by appending the new room to the list
             updateRoomsContainer(data.newRoomInfo);
         } catch (err) {

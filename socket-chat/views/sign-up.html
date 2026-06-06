@@ -3,12 +3,13 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title id="title">Sign up</title>
+    <link rel="icon" type="image/png" href="giraffe-favicon.png" />
     <link rel="stylesheet" href="styles.css" />
   </head>
 
   <body>
     <h1>This is a sign-up page</h1>
-    
+
     <!-- Sign-up -->
     <form id="sign-up-form">
       <label for="email"> Email: </label>
@@ -16,6 +17,7 @@
         id="email"
         type="email"
         placeholder="Enter your email"
+        autocomplete="email"
         required
       />
       <label for="plainPassword"> Password: </label>
@@ -23,6 +25,7 @@
         id="plainPassword"
         type="password"
         placeholder="Enter your password"
+        autocomplete="new-password"
         maxlength="16"
         required
       />

@@ -5,7 +5,7 @@ import path from "node:path";
 import pathToViewsDir from "./route-helper.js"
 
 import { findUser } from "../db-services/user-services.js";
-import { createRoom, getRoomsInfo } from "../db-services/room-services.js";
+import { createRoom, getRoomsInfo, findRoomByRoomCode } from "../db-services/room-services.js";
 import generateRoomCode from "../utilities/room-code-generator.js";
 
 const router = express.Router();
@@ -41,7 +41,7 @@ router.post("/create", async (req, res) => {
         const room = await createRoom(roomName, creatorId);
 
         // Retrieve necessary info about this new room
-        const newRoomInfo = { roomName: room.roomName, roomCode: room.roomCode };
+        const newRoomInfo = { roomName: room.roomName, roomCode: room.roomCode, members: room.members };
 
         // Create-room success
         return res.status(200).json({
@@ -63,7 +63,6 @@ router.post("/enter", async (req, res) => {
 
         // Check account existence in DB based on user email
         const user = await findUser(email);
-
         // Handle error where the account associated with the received email does not exist in DB
         if (!user) {
             console.log(`Email does not exist in DB: ${email}`);
@@ -72,10 +71,21 @@ router.post("/enter", async (req, res) => {
             });
         }
 
+        // Find the requesting room
+        const room = await findRoomByRoomCode(roomCode);
+        // Handle error where the requesting room does not exist in DB
+        if (!room) {
+            console.log(`Room does not exist in DB:`);
+            return res.status(401).json({ 
+                error: "Invalid request"
+            });
+        }
+
         // Enter-room success
         return res.status(200).json({
             success: true,
-            message: "Enter room success"
+            message: "Enter room success",
+            members: room.members
         });
     } catch (err) {
         console.error(err);
