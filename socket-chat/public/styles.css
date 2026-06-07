@@ -25,14 +25,18 @@
     gap: 10px;
     align-items: flex-start;
 }
+.room-row {
+    display: flex;
+    gap: 3px;
+}
 
 /* Room button */
-.room-btn {
+.room-btn, .leave-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
 
-    padding: 4px 10px;
+    padding: 4px 16px;
     font-size: 14px;
 
     border: 1px solid gray;
@@ -46,10 +50,10 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
-.room-btn:hover {
+.room-btn:hover, .leave-btn:hover {
     background-color: orange;
 }
-.room-btn:active {
+.room-btn:active, .leave-btn:active {
     transform: scale(0.95);
 }
 

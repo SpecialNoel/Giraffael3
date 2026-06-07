@@ -1,8 +1,9 @@
 // dashboard-page.js
 
 import { handleDashboard } from "../services/dashboard-service.js";
+import { appendRoomToRoomsContainer } from "../utils/rooms-container-handler.js";
 
-// Retrieve the info upon user refreshing the dashboard page
+// Retrieve room info for rooms container, upon user refreshing the dashboard page
 window.addEventListener("DOMContentLoaded", async () => {
     // Retrieve user _id
     const userId = localStorage.getItem("_id");
@@ -20,14 +21,10 @@ window.addEventListener("DOMContentLoaded", async () => {
 
     // Append each room as a room button to rooms container
     const containerDiv = document.getElementById("rooms-container");
-    roomsInfo.forEach(newRoomInfo => {
-        const newRoomBtn = document.createElement("button");
-        newRoomBtn.className = "room-btn";
-        newRoomBtn.dataset.roomCode = newRoomInfo.roomCode;
-        newRoomBtn.textContent = newRoomInfo.roomName;
-        containerDiv.appendChild(newRoomBtn);
+    roomsInfo.forEach(roomInfo => {
+        appendRoomToRoomsContainer(containerDiv, roomInfo);
     });
 });
 
 // Handle user dashboard services
-handleDashboard()
+handleDashboard();

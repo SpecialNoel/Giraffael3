@@ -12,9 +12,9 @@ async function findRoomCodes() {
 
         // Convert the room codes into a Set for fast lookup
         return new Set(rooms.map(room => room.roomCode));
-    } catch (error) {
-        console.error("Error in retrieving room codes:", error);
-        throw error;
+    } catch (err) {
+        console.error("Error in retrieving room codes:", err);
+        throw err;
     }
 }
 
@@ -47,9 +47,9 @@ async function createRoom(roomName, creatorId) {
         }
         console.log("Room created and stored to DB\n");
         return room;
-    } catch (error) {
-        console.error("Failed to create room:", error);
-        throw error;
+    } catch (err) {
+        console.error("Failed to create room:", err);
+        throw err;
     }
 }
 
@@ -62,15 +62,15 @@ async function joinRoom(roomCode, userId) {
             return {
                 success: false,
                 reason: "ROOM_NOT_FOUND"
-            }
+            };
         }
 
-        // Check the user has already joined the room or not.
+        // Check the user has already joined the room or not
         if (room.members.includes(userId)) {
             return {
                 success: false,
                 reason: "ALREADY_IN_ROOM"            
-            }
+            };
         }
 
         // Update the room by adding the user to it
@@ -85,9 +85,46 @@ async function joinRoom(roomCode, userId) {
             success: true,
             room: updatedRoom
         };
-    } catch (error) {
-        console.error("Failed to add user to room:", error);
-        throw error;
+    } catch (err) {
+        console.error("Failed to add user to room:", err);
+        throw err;
+    }
+}
+
+// Remove the user to the given room
+async function leaveRoom(roomCode, userId) {
+    try {
+        // Check for existence of the room
+        const room = await findRoomByRoomCode(roomCode);
+        if (!room) { 
+            return {
+                success: false,
+                reason: "ROOM_NOT_FOUND"
+            };
+        }
+
+        // Check if the user is currently not in the room 
+        if (!room.members.includes(userId)) {
+            return {
+                success: false,
+                reason: "NOT_IN_ROOM"            
+            };
+        }
+
+        // Update the room by removing the user to it
+        await Room.findOneAndUpdate(
+            { roomCode },
+            { $pull: { members: userId } }, // remove userId from the members list
+            { new: true } // get the updated Room document
+        );
+        
+        // Return the updated room
+        return {
+            success: true
+        };
+    } catch (err) {
+        console.error("Failed to remove user from room:", err);
+        throw err;
     }
 }
 
@@ -98,4 +135,4 @@ async function getRoomsInfo(userId) {
     }).select("roomName roomCode -_id"); // exclude the _id property of each Room document
 }
 
-export { findRoomCodes, findRoomByRoomCode, createRoom, joinRoom, getRoomsInfo };
+export { findRoomCodes, findRoomByRoomCode, createRoom, joinRoom, leaveRoom, getRoomsInfo };

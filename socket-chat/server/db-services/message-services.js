@@ -25,9 +25,9 @@ async function storeMessage(roomId, senderId, content) {
         });
         console.log("Message saved to DB\n");
         return message;
-    } catch (error) {
-        console.error("Failed to store message:", error);
-        throw error;
+    } catch (err) {
+        console.error("Failed to store message:", err);
+        throw err;
     }
 }
 
@@ -36,9 +36,9 @@ async function findMessagesByUserId(senderId) {
     try {
         // Find the sent messages based on user _id
         return await Message.find({ sender: senderId });
-    } catch (error) {
-        console.error("Failed to retrieve messages:", error);
-        throw error;
+    } catch (err) {
+        console.error("Failed to retrieve messages:", err);
+        throw err;
     }
 }
 

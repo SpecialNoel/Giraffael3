@@ -30,7 +30,7 @@ function signIn() {
             });
 
             // Retrieve response sent from server
-            const data = await response.json()
+            const data = await response.json();
 
             // Display the error message to the user if the credentials are invalid
             if (!response.ok) {
