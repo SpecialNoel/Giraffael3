@@ -5,7 +5,7 @@ import path from "node:path";
 
 import { pathToViewsDir } from "./route-helper.js";
 import { findUser } from "../db-services/user-services.js";
-import { createRoom, joinRoom, getRoomsInfo, findRoomByRoomCode } from "../db-services/room-services.js";
+import { findRoomByRoomCode, createRoom, joinRoom, leaveRoom, getRoomsInfo } from "../db-services/room-services.js";
 import { generateRoomCode } from "../utilities/room-code-generator.js";
 
 const router = express.Router();
@@ -41,13 +41,13 @@ router.post("/create", async (req, res) => {
         const room = await createRoom(roomName, creatorId);
 
         // Retrieve necessary info about this new room
-        const newRoomInfo = { roomName: room.roomName, roomCode: room.roomCode, members: room.members };
+        const roomInfo = { roomName: room.roomName, roomCode: room.roomCode, members: room.members };
 
         // Create-room success
         return res.status(200).json({
             success: true,
             message: "Create room success",
-            newRoomInfo: newRoomInfo
+            roomInfo: roomInfo
         });
     } catch (err) {
         console.error(err);
@@ -94,6 +94,47 @@ router.post("/join", async (req, res) => {
             success: true,
             message: "Join room success",
             roomInfo: roomInfo
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            error: "Internal server error"
+        });    
+    }
+});
+router.post("/leave", async (req, res) => {
+    try {
+        // Receive room code and user info
+        const { roomCode, userId } = req.body;
+
+        // Join the room
+        const leaveRoomResult = await leaveRoom(roomCode, userId);
+        
+        // Handle join-room failure
+        if (!leaveRoomResult.success) {
+            switch (leaveRoomResult.reason) {
+                case "NOT_IN_ROOM":
+                    return res.status(400).json({
+                        success: false,
+                        error: "User already in room",
+                    });
+                case "ROOM_NOT_FOUND":
+                    return res.status(404).json({
+                        success: false,
+                        error: "Room not found",
+                    });
+                default: 
+                    return res.status(500).json({
+                        success: false,
+                        error: "Leave room failure",
+                    });
+            }
+        }
+
+        // Leave-room success
+        return res.status(200).json({
+            success: true,
+            message: "Leave room success",
         });
     } catch (err) {
         console.error(err);
