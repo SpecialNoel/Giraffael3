@@ -137,7 +137,7 @@ function handleCreateRoom() {
             
             // Update the rooms container by appending the new room to the list
             const containerDiv = document.getElementById("rooms-container");
-            appendRoomToRoomsContainer(containerDiv, data.roomInfo);
+            appendRoomToRoomsContainer(containerDiv, data.roomInfo, true);
         } catch (err) {
             // Print error message to server side in case something went wrong during this process
             console.error(err);
@@ -192,7 +192,9 @@ function handleJoinRoom() {
 
             // Update the rooms container by appending the new room to the list
             const containerDiv = document.getElementById("rooms-container");
-            appendRoomToRoomsContainer(containerDiv, data.roomInfo);
+            // Determine whether the user is the creator of the room
+            const isCreatorOfRoom = data.roomInfo.creatorId.toString() === userId.toString();
+            appendRoomToRoomsContainer(containerDiv, data.roomInfo, isCreatorOfRoom);
         } catch (err) {
             // Print error message to server side in case something went wrong during this process
             console.error(err);

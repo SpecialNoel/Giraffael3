@@ -41,7 +41,10 @@ router.post("/create", async (req, res) => {
         const room = await createRoom(roomName, creatorId);
 
         // Retrieve necessary info about this new room
-        const roomInfo = { roomName: room.roomName, roomCode: room.roomCode, members: room.members };
+        const roomInfo = { roomName: room.roomName, 
+                           roomCode: room.roomCode, 
+                           creatorId: room.creatorId, 
+                           members: room.members };
 
         // Create-room success
         return res.status(200).json({
@@ -87,8 +90,10 @@ router.post("/join", async (req, res) => {
 
         // Retrieve necessary info about this room
         const room = joinRoomResult.room;
-        const roomInfo = { roomName: room.roomName, roomCode: room.roomCode, members: room.members };
-
+        const roomInfo = { roomName: room.roomName, 
+                           roomCode: room.roomCode, 
+                           creatorId: room.creatorId, 
+                           members: room.members };
         // Join-room success
         return res.status(200).json({
             success: true,
