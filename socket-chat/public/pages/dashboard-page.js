@@ -19,8 +19,6 @@ window.addEventListener("DOMContentLoaded", async () => {
     const data = await response.json();
     const roomsInfo = data.roomsInfo;
 
-    console.log("roomsInfo: ", roomsInfo);
-
     // Append each room as a room button to rooms container
     const containerDiv = document.getElementById("rooms-container");
     roomsInfo.forEach(roomInfo => {

@@ -2,65 +2,95 @@
 
 import { appendRoomToRoomsContainer } from "../utils/rooms-container-handler.js";
 
+// Helper function of handleRoomsContainer; set up the functionality of the room button
+async function handleRoomBtn(roomBtn) {
+    const roomCode = roomBtn.dataset.roomCode; // dataset.roomCode is dynamically parsed from "data-room-code" attribute in html
+    console.log("Clicked room:", roomCode);
+
+    const email = localStorage.getItem("email");
+
+    // Send roomCode to server
+    const response = await fetch("/rooms/enter", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ roomCode: roomCode, email: email })
+    });
+
+    // Retrieve response sent from server
+    const data = await response.json();
+
+    // Display the error message to the user if the operation fails
+    if (!response.ok) {
+        alert(data.error);
+        return;
+    }
+    console.log("Current room members:", data.members);
+}
+
+// Helper function of handleRoomsContainer; set up the functionality of the leave button
+async function handleLeaveBtn(leaveBtn, roomRow) {
+    const roomCode = leaveBtn.dataset.roomCode;
+    console.log("Clicked leave:", roomCode);
+
+    const userId = localStorage.getItem("_id");
+
+    // Send roomCode to server
+    const response = await fetch("/rooms/leave", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ roomCode: roomCode, userId: userId })
+    });
+
+    // Retrieve response sent from server
+    const data = await response.json();
+
+    // Display the error message to the user if the operation fails
+    if (!response.ok) {
+        alert(data.error);
+        return;
+    }
+
+    // Remove the roomBtn-leaveBtn pair from the rooms container
+    roomRow.remove();
+}
+
+// Helper function of handleRoomsContainer; set up the functionality of the delete button
+async function handleDeleteBtn(roomBtn) {
+    const roomCode = roomBtn.dataset.roomCode;
+    console.log("Clicked room:", roomCode);
+
+    const userId = localStorage.getItem("_id");
+
+    // Send roomCode to server
+    const response = await fetch("/rooms/delete", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ roomCode: roomCode, userId: userId })
+    });
+
+    // Retrieve response sent from server
+    const data = await response.json();
+
+    // Display the error message to the user if the operation fails
+    if (!response.ok) {
+        alert(data.error);
+        return;
+    }
+    console.log("Response on deleting room: ", data.message);
+}
+
 // Set up the rooms container
 function handleRoomsContainer() {    
     /*
         On the dashboard page, add functionality to each room icon/button such that
         a certain task will be executed whenever the user clicks on the room icon.
     */
-    async function handleRoomBtn(roomBtn) {
-        const roomCode = roomBtn.dataset.roomCode; // dataset.roomCode is dynamically parsed from "data-room-code" attribute in html
-        console.log("Clicked room:", roomCode);
-
-        const email = localStorage.getItem("email");
-
-        // Send roomCode to server
-        const response = await fetch("/rooms/enter", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ roomCode: roomCode, email: email })
-        });
-
-        // Retrieve response sent from server
-        const data = await response.json();
-
-        // Display the error message to the user if the operation fails
-        if (!response.ok) {
-            alert(data.error);
-            return;
-        }
-        console.log("Current room members:", data.members);
-    }
-    async function handleLeaveBtn(leaveBtn, roomRow) {
-        const roomCode = leaveBtn.dataset.roomCode;
-        console.log("Clicked leave:", roomCode);
-
-        const userId = localStorage.getItem("_id");
-
-        // Send roomCode to server
-        const response = await fetch("/rooms/leave", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ roomCode: roomCode, userId: userId })
-        });
-
-        // Retrieve response sent from server
-        const data = await response.json();
-
-        // Display the error message to the user if the operation fails
-        if (!response.ok) {
-            alert(data.error);
-            return;
-        }
-
-        // Remove the roomBtn-leaveBtn pair from the rooms container
-        roomRow.remove();
-    }
-
     const roomsContainer = document.querySelector("#rooms-container");
 
     // Enter the target room upon user clicking on the room icon
@@ -81,6 +111,13 @@ function handleRoomsContainer() {
             if (leaveBtn) {
                 const roomRow = leaveBtn.closest(".room-row");
                 await handleLeaveBtn(leaveBtn, roomRow);
+                return;
+            }
+
+            // Get the delete button the user clicked on
+            const deleteBtn = e.target.closest(".delete-btn"); 
+            if (deleteBtn) {
+                await handleDeleteBtn(deleteBtn);
                 return;
             }
         } catch (err) {
