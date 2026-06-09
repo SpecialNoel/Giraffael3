@@ -84,6 +84,7 @@ async function handleDeleteBtn(deleteBtn, roomRow) {
     }
 
     // Remove the roomBtn-leaveBtn pair from the rooms container
+    console.log(`Room ${roomCode} deleted at ${data.deletedAt}`)
     roomRow.remove();
 }
 

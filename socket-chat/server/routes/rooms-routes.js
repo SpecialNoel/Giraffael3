@@ -16,7 +16,7 @@ router.post("/", async (req, res) => {
     // Retrieve the _id of the requesting user 
     const { userId } = req.body;
 
-    // Retrieve the info about all rooms this user has joined
+    // Retrieve the info about all existing rooms this user has joined
     const roomsInfo = await RoomServices.getRoomsInfo(userId);
 
     try {
@@ -74,12 +74,13 @@ router.post("/delete", async (req, res) => {
         }
 
         // Delete the room
-        await RoomServices.deleteRoom(roomCode);
+        const deletedAt = await RoomServices.deleteRoom(roomCode);
 
         // Delete-room success
         return res.status(200).json({
             success: true,
             message: "Delete room success",
+            deletedAt: deletedAt
         });
     } catch (err) {
         console.error(err);
