@@ -31,7 +31,7 @@
 }
 
 /* Room button */
-.room-btn, .leave-btn {
+.room-btn, .leave-btn, .delete-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -50,10 +50,10 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
-.room-btn:hover, .leave-btn:hover {
+.room-btn:hover, .leave-btn:hover, .delete-btn:hover {
     background-color: orange;
 }
-.room-btn:active, .leave-btn:active {
+.room-btn:active, .leave-btn:active, .delete-btn:active {
     transform: scale(0.95);
 }
 

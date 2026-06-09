@@ -22,7 +22,9 @@ window.addEventListener("DOMContentLoaded", async () => {
     // Append each room as a room button to rooms container
     const containerDiv = document.getElementById("rooms-container");
     roomsInfo.forEach(roomInfo => {
-        appendRoomToRoomsContainer(containerDiv, roomInfo);
+        // Determine whether the user is the creator of the room
+        const isCreatorOfRoom = roomInfo.creatorId.toString() === userId.toString();
+        appendRoomToRoomsContainer(containerDiv, roomInfo, isCreatorOfRoom);
     });
 });
 

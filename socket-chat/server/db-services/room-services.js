@@ -37,7 +37,7 @@ async function createRoom(roomName, creatorId) {
                 room = await Room.create({
                     roomCode: generateRoomCode(),
                     roomName,
-                    creator: creatorId,
+                    creatorId: creatorId,
                     members: [creatorId]
                 });
             } catch (err) {
@@ -49,6 +49,16 @@ async function createRoom(roomName, creatorId) {
         return room;
     } catch (err) {
         console.error("Failed to create room:", err);
+        throw err;
+    }
+}
+
+// Delete the given room from the database
+async function deleteRoom(roomCode) {
+    try {
+        await Room.deleteOne({ roomCode });
+    } catch (err) {
+        console.error("Failed to delete room:", err);
         throw err;
     }
 }
@@ -128,11 +138,22 @@ async function leaveRoom(roomCode, userId) {
     }
 }
 
+// Determine whether the user is the creator of the room
+async function isUserTheCreatorOfRoom(roomCode, userId) {
+    try {
+        const room = await findRoomByRoomCode(roomCode);
+        return room.creatorId == userId;
+    } catch (err) {
+        console.error("Failed to check whether user is the creator of the room:", err);
+        throw err;
+    }
+}
+
 // Retrieve necessary information of rooms the user has joined
 async function getRoomsInfo(userId) {
     return await Room.find({
         members: userId
-    }).select("roomName roomCode -_id"); // exclude the _id property of each Room document
+    }).select("roomName roomCode creatorId -_id"); // exclude the _id property of each Room document
 }
 
-export { findRoomCodes, findRoomByRoomCode, createRoom, joinRoom, leaveRoom, getRoomsInfo };
+export { findRoomCodes, findRoomByRoomCode, createRoom, deleteRoom, joinRoom, leaveRoom, isUserTheCreatorOfRoom, getRoomsInfo };

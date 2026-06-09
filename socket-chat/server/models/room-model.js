@@ -19,8 +19,8 @@ const roomSchema = new Schema(
             type: String,
             required: true
         },
-        // creator refers to the User document that creates this room
-        creator: {
+        // creatorId refers to the User document that creates this room
+        creatorId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
             required: true

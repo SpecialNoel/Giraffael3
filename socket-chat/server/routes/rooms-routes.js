@@ -5,7 +5,8 @@ import path from "node:path";
 
 import { pathToViewsDir } from "./route-helper.js";
 import { findUser } from "../db-services/user-services.js";
-import { findRoomByRoomCode, createRoom, joinRoom, leaveRoom, getRoomsInfo } from "../db-services/room-services.js";
+import * as RoomServices from "../db-services/room-services.js";
+import { findRoomByRoomCode, createRoom, deleteRoom, joinRoom, leaveRoom, isUserTheCreatorOfRoom, getRoomsInfo } from "../db-services/room-services.js";
 import { generateRoomCode } from "../utilities/room-code-generator.js";
 
 const router = express.Router();
@@ -16,7 +17,7 @@ router.post("/", async (req, res) => {
     const { userId } = req.body;
 
     // Retrieve the info about all rooms this user has joined
-    const roomsInfo = await getRoomsInfo(userId);
+    const roomsInfo = await RoomServices.getRoomsInfo(userId);
 
     try {
         // Return the list of room info
@@ -38,10 +39,13 @@ router.post("/create", async (req, res) => {
         const { roomName, creatorId } = req.body;
 
         // Create the room
-        const room = await createRoom(roomName, creatorId);
+        const room = await RoomServices.createRoom(roomName, creatorId);
 
         // Retrieve necessary info about this new room
-        const roomInfo = { roomName: room.roomName, roomCode: room.roomCode, members: room.members };
+        const roomInfo = { roomName: room.roomName, 
+                           roomCode: room.roomCode, 
+                           creatorId: room.creatorId, 
+                           members: room.members };
 
         // Create-room success
         return res.status(200).json({
@@ -56,13 +60,41 @@ router.post("/create", async (req, res) => {
         });    
     }
 });
+router.post("/delete", async (req, res) => {
+    try {
+        // Receive room name and user info
+        const { roomCode, userId } = req.body;
+
+        // Handle case where received userId does not match the room's creatorId
+        if (!RoomServices.isUserTheCreatorOfRoom(roomCode, userId)) {
+            return res.status(401).json({
+                success: false,
+                message: "Delete room failure",
+            });
+        }
+
+        // Delete the room
+        await RoomServices.deleteRoom(roomCode);
+
+        // Delete-room success
+        return res.status(200).json({
+            success: true,
+            message: "Delete room success",
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            error: "Internal server error"
+        });    
+    }
+});
 router.post("/join", async (req, res) => {
     try {
         // Receive room code and user info
         const { roomCode, userId } = req.body;
 
         // Join the room
-        const joinRoomResult = await joinRoom(roomCode, userId);
+        const joinRoomResult = await RoomServices.joinRoom(roomCode, userId);
         
         // Handle join-room failure
         if (!joinRoomResult.success) {
@@ -87,8 +119,10 @@ router.post("/join", async (req, res) => {
 
         // Retrieve necessary info about this room
         const room = joinRoomResult.room;
-        const roomInfo = { roomName: room.roomName, roomCode: room.roomCode, members: room.members };
-
+        const roomInfo = { roomName: room.roomName, 
+                           roomCode: room.roomCode, 
+                           creatorId: room.creatorId, 
+                           members: room.members };
         // Join-room success
         return res.status(200).json({
             success: true,
@@ -108,7 +142,7 @@ router.post("/leave", async (req, res) => {
         const { roomCode, userId } = req.body;
 
         // Join the room
-        const leaveRoomResult = await leaveRoom(roomCode, userId);
+        const leaveRoomResult = await RoomServices.leaveRoom(roomCode, userId);
         
         // Handle join-room failure
         if (!leaveRoomResult.success) {
@@ -159,7 +193,7 @@ router.post("/enter", async (req, res) => {
         }
 
         // Find the requesting room
-        const room = await findRoomByRoomCode(roomCode);
+        const room = await RoomServices.findRoomByRoomCode(roomCode);
         // Handle error where the requesting room does not exist in DB
         if (!room) {
             console.log(`Room does not exist in DB:`);
