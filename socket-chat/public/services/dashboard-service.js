@@ -59,9 +59,9 @@ async function handleLeaveBtn(leaveBtn, roomRow) {
 }
 
 // Helper function of handleRoomsContainer; set up the functionality of the delete button
-async function handleDeleteBtn(roomBtn) {
-    const roomCode = roomBtn.dataset.roomCode;
-    console.log("Clicked room:", roomCode);
+async function handleDeleteBtn(deleteBtn, roomRow) {
+    const roomCode = deleteBtn.dataset.roomCode;
+    console.log("Clicked delete:", roomCode);
 
     const userId = localStorage.getItem("_id");
 
@@ -82,7 +82,9 @@ async function handleDeleteBtn(roomBtn) {
         alert(data.error);
         return;
     }
-    console.log("Response on deleting room: ", data.message);
+
+    // Remove the roomBtn-leaveBtn pair from the rooms container
+    roomRow.remove();
 }
 
 // Set up the rooms container
@@ -117,7 +119,8 @@ function handleRoomsContainer() {
             // Get the delete button the user clicked on
             const deleteBtn = e.target.closest(".delete-btn"); 
             if (deleteBtn) {
-                await handleDeleteBtn(deleteBtn);
+                const roomRow = deleteBtn.closest(".room-row");
+                await handleDeleteBtn(deleteBtn, roomRow);
                 return;
             }
         } catch (err) {
