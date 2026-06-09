@@ -20,7 +20,7 @@ async function findRoomCodes() {
 
 // Retrieve the target room by room code
 async function findRoomByRoomCode(roomCode) {
-    return await Room.findOne({ roomCode });
+    return await Room.findOne({ roomCode, deleted: false });
 }
 
 // Create a new room with the given room name, and store it to the database
@@ -38,7 +38,7 @@ async function createRoom(roomName, creatorId) {
                     roomCode: generateRoomCode(),
                     roomName,
                     creatorId: creatorId,
-                    members: [creatorId]
+                    members: [creatorId],
                 });
             } catch (err) {
                 if (err.code === 11000) continue; // duplicate key error of MongoDB; retry
@@ -56,7 +56,22 @@ async function createRoom(roomName, creatorId) {
 // Delete the given room from the database
 async function deleteRoom(roomCode) {
     try {
-        await Room.deleteOne({ roomCode });
+        // await Room.deleteOne({ roomCode }); // Hard-delete
+
+        // Soft-delete: ”deleted” marked as true, messages 
+        // still exist, and the room becomes inaccessible to everyone
+        const date = new Date();
+        await Room.findOneAndUpdate(
+            { 
+                roomCode: roomCode, 
+                deleted: false 
+            },
+            {
+                deleted: true,
+                deletedAt: date
+            }
+        );
+        return date;
     } catch (err) {
         console.error("Failed to delete room:", err);
         throw err;
@@ -152,7 +167,8 @@ async function isUserTheCreatorOfRoom(roomCode, userId) {
 // Retrieve necessary information of rooms the user has joined
 async function getRoomsInfo(userId) {
     return await Room.find({
-        members: userId
+        members: userId,
+        deleted: false // exclude rooms that have been soft-deleted
     }).select("roomName roomCode creatorId -_id"); // exclude the _id property of each Room document
 }
 

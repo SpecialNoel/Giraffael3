@@ -30,6 +30,16 @@ const roomSchema = new Schema(
             type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User"}],
             default: []
         },
+        // Soft-deletion: room stays in the database after deletion, but users are not allowed interact with it
+        deleted: {
+            type: Boolean,
+            default: false
+        },
+        // deletedAt is the timestamp that records the time this room is soft-deleted 
+        deletedAt: {
+            type: Date,
+            default: null
+        }
     },
     { timestamps: true } // Adds the createdAt and the updatedAt fields to each document
 );
