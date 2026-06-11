@@ -11,7 +11,7 @@ import { router as signUpRouter } from "./server/routes/sign-up-routes.js";
 import { router as dashboardRouter } from "./server/routes/dashboard-routes.js";
 import { router as roomsRouter } from "./server/routes/rooms-routes.js";
 
-import { connectToDB } from "./server/utilities/db-connector.js";
+import { connectToDB } from "./server/utils/db-connector.js";
 import * as Services from "./server/services.js";
 
 

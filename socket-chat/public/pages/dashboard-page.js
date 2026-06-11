@@ -28,5 +28,8 @@ window.addEventListener("DOMContentLoaded", async () => {
     });
 });
 
+// Establish socket connection with server
+setupSocket();
+
 // Handle user dashboard services
 handleDashboard();

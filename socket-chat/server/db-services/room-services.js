@@ -2,7 +2,7 @@
 
 import { User } from "../models/user-model.js"
 import { Room } from "../models/room-model.js"
-import { generateRoomCode } from "../utilities/room-code-generator.js";
+import { generateRoomCode } from "../utils/crypto-value-generator.js";
 
 // Retrieve all existing room codes from the database
 async function findRoomCodes() {

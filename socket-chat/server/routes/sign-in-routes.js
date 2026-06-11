@@ -5,8 +5,9 @@ import path from "node:path";
 
 import { pathToViewsDir } from "./route-helper.js";
 import { findUser } from "../db-services/user-services.js";
-import { hashPassword } from "../utilities/password-hasher.js";
-import { comparePassword } from "../utilities/password-comparer.js";
+import { hashPassword } from "../utils/password-handler.js";
+import { comparePassword } from "../utils/password-handler.js";
+import { generateToken } from "../utils/jwt-token-handler.js";
 
 const router = express.Router();
 
@@ -42,12 +43,16 @@ router.post("/", async (req, res) => {
             });
         }
 
+        // Generate a JWT (JSON Web Token) for this user for both authentication and authorization
+        const token = generateToken(user._id);
+
         // Signin success
         return res.status(200).json({
             success: true,
             message: "Sign in success",
             email: email,
-            _id: user._id
+            _id: user._id,
+            token: token
         });
     } catch (err) {
         console.error(err);
