@@ -7,7 +7,6 @@ import { pathToViewsDir } from "./route-helper.js";
 import { findUser } from "../db-services/user-services.js";
 import * as RoomServices from "../db-services/room-services.js";
 import { findRoomByRoomCode, createRoom, deleteRoom, joinRoom, leaveRoom, isUserTheCreatorOfRoom, getRoomsInfo } from "../db-services/room-services.js";
-import { generateRoomCode } from "../utilities/room-code-generator.js";
 
 const router = express.Router();
 

@@ -11,8 +11,9 @@ import { router as signUpRouter } from "./server/routes/sign-up-routes.js";
 import { router as dashboardRouter } from "./server/routes/dashboard-routes.js";
 import { router as roomsRouter } from "./server/routes/rooms-routes.js";
 
-import { connectToDB } from "./server/utilities/db-connector.js";
+import { connectToDB } from "./server/utils/db-connector.js";
 import * as Services from "./server/services.js";
+import { verifyToken } from "./server/utils/jwt-token-handler.js";
 
 
 // ==================== Express App ====================
@@ -50,23 +51,39 @@ const io = new Server(server);
 // Connect to MongoDB
 await connectToDB();
 
-// Authenticate user credentials before proceeding the connection
+// Authenticate user credentials (JWT token) before proceeding the connection
 io.use((socket, next) => {
-    // Receive sign-in credentials from user (one time only)
-    const username = socket.handshake.auth.username;
-    if (!username) {
-        // Refuse the connection
-        return next(new Error("invalid username"));
+    // Receive JWT token from user (one time only)
+    const token = socket.handshake.auth.token;
+
+    try {
+        // Verify the received token to ensure its validity
+        const userId = verifyToken(token);
+        // Apply received userId inside the token for later use
+        socket.userId = userId;
+        // next() continues the connection
+        next();
+        console.log(`Authenticated user ${userId}`);
+    } catch (err) {
+        // next(new Error()) rejects the connection
+        next(new Error("Authentication failed"));
+        console.log("Error in authenticating user");
     }
-    // Apply received username to the socket for later use
-    socket.username = username;
-    // next() continues the connection; use next(new Error()) if need to reject connection
-    next();
 });
 
 // SocketIO server handles the connection event
 io.on("connection", async (socket) => {
-    console.log(`User ${socket.username} [${socket.id}] connected`);
+    console.log(`User ${socket.userId} connected`);
+
+    // Handle the disconnection event
+    socket.on("disconnect", async () => {
+        await Services.handleClientDisconnection(io, roomId, socket);
+    });
+
+    // Handle the chat message event
+    socket.on("chat message", async (msg, callback) => {
+        await Services.handleClientChatMessage(socket, roomId, socket.id, msg, callback);
+    });
 })
 
 // HTTP server listens on port 3000 (default localhost server for Express)

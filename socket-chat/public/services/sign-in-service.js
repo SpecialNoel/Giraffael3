@@ -40,6 +40,7 @@ function signIn() {
 
             localStorage.setItem("email", data.email);
             localStorage.setItem("_id", data._id);
+            localStorage.setItem("token", data.token);
 
             // The credentials are verified by server to be valid, proceed to the Dashboard page.
             window.location.href = "/dashboard";

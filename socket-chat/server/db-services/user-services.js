@@ -1,7 +1,7 @@
 // user-services.js
 
 import { User } from "../models/user-model.js";
-import { generateUserId } from "../utilities/user-id-generator.js";
+import { generateUserId } from "../utils/crypto-value-generator.js";
 
 // Create a new user, and store it to the database
 async function createUser(email, passwordHash) {
