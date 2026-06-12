@@ -1,6 +1,7 @@
 // dashboard-page.js
 
 import { handleDashboard } from "../services/dashboard-service.js";
+import { sendTokenToServer, startSession } from "../services/socket-service.js";
 import { appendRoomToRoomsContainer } from "../utils/rooms-container-handler.js";
 
 // Retrieve room info for rooms container, upon user refreshing the dashboard page
@@ -28,8 +29,11 @@ window.addEventListener("DOMContentLoaded", async () => {
     });
 });
 
-// Establish socket connection with server
-setupSocket();
+// Create a socket and send the JWT token to server for authentication
+const socket = await sendTokenToServer();
 
 // Handle user dashboard services
 handleDashboard();
+
+// Start the socket communication with server
+startSession(socket);
