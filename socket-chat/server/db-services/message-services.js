@@ -7,10 +7,10 @@ import { User } from "../models/user-model.js";
 const MESSAGE_EXPIRATION_MS = 60 * 60 * 1000; // 1 hour
 
 // Store the chat message to the database
-async function storeMessage(roomId, senderId, content) {
+async function storeMessage(roomId, _id, content) {
     try {
         // Check if the user exists in the database
-        const user = await User.findById(senderId);
+        const user = await User.findById(_id);
         if (!user) throw new Error("Sender not found");
 
         // Auto-delete this message 1 hour after creation
@@ -19,7 +19,7 @@ async function storeMessage(roomId, senderId, content) {
         // Construct and store the message using the Message model
         const message = await Message.create({
             room: roomId,
-            sender: senderId,
+            sender: _id,
             content,
             expireAt
         });
@@ -32,14 +32,14 @@ async function storeMessage(roomId, senderId, content) {
 }
 
 // Retrieve all the messages sent by the user from the database
-async function findMessagesByUserId(senderId) {
+async function findMessages(_id) {
     try {
-        // Find the sent messages based on user _id
-        return await Message.find({ sender: senderId });
+        // Find the sent messages based on _id
+        return await Message.find({ sender: _id });
     } catch (err) {
         console.error("Failed to retrieve messages:", err);
         throw err;
     }
 }
 
-export { storeMessage, findMessagesByUserId };
+export { storeMessage, findMessages };

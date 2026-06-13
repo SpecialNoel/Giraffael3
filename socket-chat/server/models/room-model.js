@@ -25,7 +25,7 @@ const roomSchema = new Schema(
             ref: "User",
             required: true
         },
-        // members contains a list of User documents
+        // members contains a list of User documents, in terms of their object ids
         members: {
             type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User"}],
             default: []

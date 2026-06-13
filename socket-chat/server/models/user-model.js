@@ -7,8 +7,8 @@ const Schema = mongoose.Schema;
 // Schema for the "User" model
 const userSchema = new Schema(
     {
-        // userId is mainly displayed to users (e.g. searching a particular user); server accesses the user via "_id"
-        userId: { // TODO: Revise the usage of userId (public) and user's _id (object id)
+        // userId is publicly accessible by users (e.g. searching a particular user); server accesses the user via the "_id" field
+        userId: {
             type: String,
             required: true,
             unique: true

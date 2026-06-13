@@ -39,7 +39,7 @@ function signIn() {
             }
 
             localStorage.setItem("email", data.email);
-            localStorage.setItem("_id", data._id);
+            localStorage.setItem("userId", data.userId);
             localStorage.setItem("token", data.token);
 
             // The credentials are verified by server to be valid, proceed to the Dashboard page.

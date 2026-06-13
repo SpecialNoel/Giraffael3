@@ -4,7 +4,7 @@ import express from "express";
 import path from "node:path";
 
 import { pathToViewsDir } from "./route-helper.js";
-import { findUser } from "../db-services/user-services.js";
+import { findUserByEmail } from "../db-services/user-services.js";
 import { hashPassword } from "../utils/password-handler.js";
 import { comparePassword } from "../utils/password-handler.js";
 import { generateToken } from "../utils/jwt-token-handler.js";
@@ -19,9 +19,11 @@ router.post("/", async (req, res) => {
     try {
         // Receive email and plaintext password from user as sign-in credentials
         const { email, plainPassword } = req.body;
+        // Retrieve _id of the requesting user 
+        const userId = req.user.userId;
 
         // Check account existence in DB based on user email
-        const user = await findUser(email);
+        const user = await findUserByEmail(email);
 
         // Handle error where the account associated with the received email does not exist in DB
         if (!user) {
@@ -44,7 +46,7 @@ router.post("/", async (req, res) => {
         }
 
         // Generate a JWT (JSON Web Token) for this user for both authentication and authorization
-        const token = generateToken(user._id);
+        const token = generateToken(user._id, userId);
 
         // Signin success
         return res.status(200).json({

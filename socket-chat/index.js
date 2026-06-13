@@ -58,9 +58,12 @@ io.use((socket, next) => {
 
     try {
         // Verify the received token to ensure its validity
-        const userId = verifyToken(token);
-        // Apply received userId inside the token for later use
-        socket.userId = userId;
+        const { _id, userId } = verifyToken(token);
+        // Apply received user info inside the token for later use
+        socket.user = {
+            id: _id,
+            userId: userId,
+        };
         // next() continues the connection
         next();
         console.log(`Authenticated user ${userId}`);
