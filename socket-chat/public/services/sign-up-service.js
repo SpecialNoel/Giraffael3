@@ -28,8 +28,8 @@ function signUpTraditional() {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({ 
-                    email: email, 
-                    plainPassword: plainPassword 
+                    email, 
+                    plainPassword 
                 })
             });
 
@@ -45,7 +45,7 @@ function signUpTraditional() {
             // Otherwise, redirect the user back to the sign-in page
             window.location.href = "/signin";
         } catch (err) {
-            // Print error message to server side in case something went wrong during this process
+            // Print error message to client side in case something went wrong during this process
             console.error(err);
             alert("Something went wrong");
         }

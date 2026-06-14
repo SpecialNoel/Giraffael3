@@ -159,7 +159,11 @@ async function leaveRoom(roomCode, _id) {
 async function isUserTheCreatorOfRoom(roomCode, _id) {
     try {
         const room = await findRoomByRoomCode(roomCode);
-        return room.creatorId === _id;
+
+        // Return false if the room cannot be found in database,
+        if (!room) return false;
+
+        return room.creatorId.toString() === _id.toString();
     } catch (err) {
         console.error("Failed to check whether user is the creator of the room:", err);
         throw err;

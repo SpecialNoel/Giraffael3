@@ -3,6 +3,7 @@
 import { verifyToken } from "./utils/jwt-token-handler.js";
 import { User } from "./models/user-model.js";
 import { storeMessage } from "./db-services/message-services.js";
+import { io } from "../index.js";
 
 // Authenticate the user for operations handled with http api endpoints
 function authenticate(req, res, next) {
@@ -10,7 +11,7 @@ function authenticate(req, res, next) {
         const authHeader = req.headers.authorization;
         if (!authHeader?.startsWith("Bearer ")) {
             return res.status(401).json({
-                message: "Missing token",
+                error: "Missing token",
             });
         }
 
@@ -27,56 +28,52 @@ function authenticate(req, res, next) {
         console.log(`Authenticated user ${userId} for HTTP endpoints.`);
     } catch (err) {
         return res.status(401).json({
-            message: "Invalid token",
+            error: "Invalid token",
         });
     }
 }
 
+// Notify every user who joined the room about the room deletion
+function notifyUsersAboutRoomDeletion(roomCode) {
+    console.log(io.sockets.adapter.rooms.get(roomCode));
+
+    io.to(roomCode).emit("roomDeleted", {
+        roomCode,
+        msg: "This room has been deleted."
+    });
+}
+
 // Get the user ids of online users in the room
-async function getOnlineUsers(io, roomName) {
-    const onlineUserSockets = await io.to(roomName).fetchSockets();
+async function getOnlineUsers(roomCode) {
+    const onlineUserSockets = await io.to(roomCode).fetchSockets();
     const onlineUsers = onlineUserSockets.map(onlineSocket => onlineSocket.userId);
     return onlineUsers;
 }
 
-// Handle user connection events
-async function handleUserConnection(io, roomName, socket) {
-    // Join the user to the room
-    socket.join(roomName);
-    console.log(`User ${socket.id} connected`);
-    console.log(`User ${socket.id} joined room ${roomName}`);
-
-    // Broadcast a message to all users in the room upon user connection
-    const onlineUsers = await getOnlineUsers(io, roomName);
-    io.to(roomName).emit("user joined", onlineUsers);
-    console.log(`Online users: ${onlineUsers}\n`);
-}
-
 // Handle user disconnection event
-async function handleUserDisconnection(io, roomName, socket) {
+async function handleUserDisconnection(io, roomCode, socket) {
     // Leave the user from the room
-    socket.leave(roomName);
-    console.log(`User ${socket.id} left room ${roomName}`);
+    socket.leave(roomCode);
+    console.log(`User ${socket.id} left room ${roomCode}`);
     console.log(`User ${socket.id} disconnected`);
 
     // Broadcast a message to all users in the room upon user disconnection
-    const onlineUsers = await getOnlineUsers(io, roomName);
-    io.to(roomName).emit("user left", onlineUsers);
+    const onlineUsers = await getOnlineUsers(roomCode);
+    io.to(roomCode).emit("userLeft", onlineUsers);
     console.log(`Online users: ${onlineUsers}\n`);
 }
 
 // Handle user chat message event
 // Note: use io.to() to include the sender; use socket.to() to exclude the sender
-async function handleUserChatMessage(socket, roomId, senderId, msg, callback) {
-    const sender = await User.findOne({ userId: senderId });
-    socket.userId = sender.userId;
-    console.log(`User ${userId} [${socket.id}]: ${msg}`);
+async function handleUserChatMessage(socket, roomId, userId, msg, callback) {
+    const sender = await User.findOne({ userId });
+    console.log(`User ${sender.username} [${userId}]: ${msg}`);
 
     // Send the message to all connected users in the room (excluding the sender user)
-    socket.to(roomName).emit("chat message", senderId, msg);
+    socket.to(roomName).emit("chatMessage", userId, msg);
 
     // Store the message to MongoDB
-    await storeMessage(roomId, senderId, msg);
+    await storeMessage(roomId, userId, msg);
 
     // The callback function will be called to mark the acknowledgement from server on this event
     callback({
@@ -85,6 +82,6 @@ async function handleUserChatMessage(socket, roomId, senderId, msg, callback) {
 }
 
 export { authenticate,
-         handleUserConnection, 
+         notifyUsersAboutRoomDeletion,
          handleUserDisconnection, 
          handleUserChatMessage };

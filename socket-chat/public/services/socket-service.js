@@ -1,14 +1,25 @@
 // socket-service.js
 
 // Create a socket and send the JWT token to server for authentication using the socket
-function sendTokenToServer() {
+function createAuthenticatedSocket() {
     const token = localStorage.getItem("token");
+    const socket = io({
+        auth: { token }
+    });
+
     return new Promise((resolve, reject) => {
-        const socket = io({
-            auth: { token }
+        // Connect the socket to server
+        socket.once("connect", () => {
+            console.log("Socket connected");
+
+            // Receive response on token authentication
+            socket.once("auth:success", () => {
+                console.log("Socket authenticated");
+                resolve(socket);
+            });
         });
 
-        socket.once("connect", () => resolve(socket));
+        // Server side triggered "next(new Error())"
         socket.once("connect_error", reject);
     });
 }
@@ -37,7 +48,7 @@ function handleSendMessage(userId, messagesElement, input, socket) {
     if (input.value) {
         // Emit the chat message to server, with a 5-second timeout
         // This reaches the same functionality as "emiWithAck()"
-        socket.timeout(5000).emit("chat message", userId, input.value, (err, res) => {
+        socket.timeout(5000).emit("chatMessage", userId, input.value, (err, res) => {
             if (err) {
                 console.log("Server did not acknowledge the transmission of this chat message in the given delay.");
             } else {
@@ -88,17 +99,25 @@ function startSession(socket) {
     });
 
     // Handle update on online users list upon user joining or leaving the room
-    socket.on("user joined", (onlineUsers) =>
-        updateOnlineUserList(onlineUsersElement, onlineUsers),
-    );
-    socket.on("user left", (onlineUsers) =>
-        updateOnlineUserList(onlineUsersElement, onlineUsers),
-    );
+    socket.on("userJoined", (onlineUsers) => {
+        updateOnlineUserList(onlineUsersElement, onlineUsers);
+    });
+    socket.on("userLeft", (onlineUsers) => {
+        updateOnlineUserList(onlineUsersElement, onlineUsers);
+    });
 
     // Handle client socket receiving chat messages sent by connected clients
-    socket.on("chat message", (senderId, msg) => {
+    socket.on("chatMessage", (senderId, msg) => {
         appendMessageToChatList(messagesElement, senderId, msg);
+    });
+
+    // Handle room deletion event
+    socket.on("roomDeleted", ({ roomCode, msg }) => {
+        alert(msg);
+        console.log(`Room ${roomCode} has been deleted.`)        
+        // Navigate to the dashboard after receiving the room deletion notification
+        window.location.href = "/dashboard";
     });
 }
 
-export { sendTokenToServer, startSession };
+export { createAuthenticatedSocket, startSession };
