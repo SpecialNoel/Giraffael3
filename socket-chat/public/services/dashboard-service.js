@@ -1,6 +1,7 @@
 // dashboard-service.js
 
 import { appendRoomToRoomsContainer } from "../utils/rooms-container-handler.js";
+import { apiFetch } from "../utils/api-fetcher.js";
 
 // Helper function of handleRoomsContainer; set up the functionality of the room button
 async function handleRoomBtn(roomBtn) {
@@ -10,14 +11,11 @@ async function handleRoomBtn(roomBtn) {
     const email = localStorage.getItem("email");
 
     // Send roomCode to server
-    const token = localStorage.getItem("token");
-    const response = await fetch("/rooms/enter", {
+    const response = await apiFetch("/rooms/enter", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`        
-        },
-        body: JSON.stringify({ roomCode: roomCode, email: email })
+        body: JSON.stringify({ 
+            roomCode 
+        })
     });
 
     // Retrieve response sent from server
@@ -37,14 +35,11 @@ async function handleLeaveBtn(leaveBtn, roomRow) {
     console.log("Clicked leave:", roomCode);
 
     // Send roomCode to server
-    const token = localStorage.getItem("token");
-    const response = await fetch("/rooms/leave", {
+    const response = await apiFetch("/rooms/leave", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify({ roomCode: roomCode })
+        body: JSON.stringify({ 
+            roomCode 
+        })
     });
 
     // Retrieve response sent from server
@@ -66,14 +61,11 @@ async function handleDeleteBtn(deleteBtn, roomRow) {
     console.log("Clicked delete:", roomCode);
 
     // Send roomCode to server
-    const token = localStorage.getItem("token");
-    const response = await fetch("/rooms/delete", {
+    const response = await apiFetch("/rooms/delete", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify({ roomCode: roomCode })
+        body: JSON.stringify({ 
+            roomCode 
+        })
     });
 
     // Retrieve response sent from server
@@ -86,7 +78,7 @@ async function handleDeleteBtn(deleteBtn, roomRow) {
     }
 
     // Remove the roomBtn-leaveBtn pair from the rooms container
-    console.log(`Room ${roomCode} deleted at ${data.deletedAt}`)
+    console.log(`Room ${roomCode} deleted at ${data.deletedAt}`);
     roomRow.remove();
 }
 
@@ -127,7 +119,7 @@ function handleRoomsContainer() {
                 return;
             }
         } catch (err) {
-            // Print error message to server side in case something went wrong during this process
+            // Print error message to client side in case something went wrong during this process
             console.error(err);
             alert("Something went wrong");        
         }
@@ -138,7 +130,7 @@ function handleRoomsContainer() {
 }
 
 // Set up the create-room logic
-function handleCreateRoom() {
+function handleCreateRoom(socket) {
     /*
         On the dashboard page, add functionality to the create room button such that
         user will submit the inputted room name to server to create a room upon clicking the button.
@@ -158,14 +150,11 @@ function handleCreateRoom() {
             }
 
             // Send roomName to server
-            const token = localStorage.getItem("token");
-            const response = await fetch("/rooms/create", {
+            const response = await apiFetch("/rooms/create", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-                body: JSON.stringify({ roomName: roomName })
+                body: JSON.stringify({ 
+                    roomName 
+                })
             });
 
             // Retrieve response sent from server
@@ -176,12 +165,19 @@ function handleCreateRoom() {
                 alert(data.error);
                 return;
             }
+
+            /*
+             * Emit the join room event to server via socket as well
+             * This is necessary as the http request above only updates the database,
+             *   which does not make real-time subscription to the room.
+            */
+            socket.emit("joinRoom", data.roomInfo.roomCode);
             
             // Update the rooms container by appending the new room to the list
             const containerDiv = document.getElementById("rooms-container");
             appendRoomToRoomsContainer(containerDiv, data.roomInfo, true);
         } catch (err) {
-            // Print error message to server side in case something went wrong during this process
+            // Print error message to client side in case something went wrong during this process
             console.error(err);
             alert("Something went wrong");        
         }
@@ -192,7 +188,7 @@ function handleCreateRoom() {
 }
 
 // Set up the join-room logic
-function handleJoinRoom() {
+function handleJoinRoom(socket) {
     /*
         On the dashboard page, add functionality to the join room button such that
         user will submit the inputted room code to server to join a room upon clicking the button.
@@ -217,14 +213,11 @@ function handleJoinRoom() {
              *   its functionality is to send the token to server to authenticate
              *   this identity.
             */
-            const token = localStorage.getItem("token");
-            const response = await fetch("/rooms/join", {
+            const response = await apiFetch("/rooms/join", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}` // add a header for token authentication
-                },
-                body: JSON.stringify({ roomCode: roomCode })
+                body: JSON.stringify({ 
+                    roomCode 
+                })
             });
 
             // Retrieve response sent from server
@@ -236,11 +229,18 @@ function handleJoinRoom() {
                 return;
             }
 
+            /*
+             * Emit the join room event to server via socket as well
+             * This is necessary as the http request above only updates the database,
+             *   which does not make real-time subscription to the room.
+            */
+            socket.emit("joinRoom", roomCode);
+
             // Update the rooms container by appending the new room to the list
             const containerDiv = document.getElementById("rooms-container");
             appendRoomToRoomsContainer(containerDiv, data.roomInfo, data.isCreatorOfRoom);
         } catch (err) {
-            // Print error message to server side in case something went wrong during this process
+            // Print error message to client side in case something went wrong during this process
             console.error(err);
             alert("Something went wrong");        
         }
@@ -251,23 +251,18 @@ function handleJoinRoom() {
 }
 
 // Set up the whole dashboard page, which consists of many small components
-function handleDashboard() {
+function handleDashboard(socket) {
     handleRoomsContainer();
-    handleCreateRoom();
-    handleJoinRoom();
+    handleCreateRoom(socket);
+    handleJoinRoom(socket);
 }
 
 function setupRoomsContainerRefresher() {
     // Retrieve room info for rooms container, upon user refreshing the dashboard page
-    window.addEventListener("DOMContentLoaded", async () => {
+    const loadRooms = async () => {
         // Retrieve info about all rooms the user has joined from server
-        const token = localStorage.getItem("token");
-        const response = await fetch("/rooms", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            }
+        const response = await apiFetch("/rooms", {
+            method: "GET"
         });
 
         const data = await response.json();
@@ -281,7 +276,9 @@ function setupRoomsContainerRefresher() {
             const isCreatorOfRoom = roomInfo.creatorId.userId === userId;
             appendRoomToRoomsContainer(containerDiv, roomInfo, isCreatorOfRoom);
         });
-    });
+    };
+
+    loadRooms();
 }
 
 export { handleDashboard, setupRoomsContainerRefresher };

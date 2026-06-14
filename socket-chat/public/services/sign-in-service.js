@@ -20,13 +20,20 @@ function signIn() {
             const email = document.getElementById("email").value.trim();
             const plainPassword = document.getElementById("plainPassword").value.trim();
 
-            // Send them to server for validation
+            /*
+             * Send them to server for validation
+             * Note that client needs to send information to server at this stage
+             * to get the JWT token for later operations
+            */
             const response = await fetch("/signin", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ email: email, plainPassword: plainPassword })
+                body: JSON.stringify({ 
+                    email, 
+                    plainPassword 
+                })
             });
 
             // Retrieve response sent from server
@@ -43,9 +50,11 @@ function signIn() {
             localStorage.setItem("token", data.token);   // JWT token
 
             // The credentials are verified by server to be valid, proceed to the Dashboard page.
-            window.location.href = "/dashboard";
+            setTimeout(() => {
+                window.location.href = "/dashboard";
+            }, 50); // 0.05s
         } catch (err) {
-            // Print error message to server side in case something went wrong during this process
+            // Print error message to client side in case something went wrong during this process
             console.error(err);
             alert("Something went wrong");        
         }

@@ -6,7 +6,7 @@ import path from "node:path";
 import { pathToViewsDir } from "./route-helper.js";
 import { findUserByEmail } from "../db-services/user-services.js";
 import * as RoomServices from "../db-services/room-services.js";
-import { authenticate } from "../services.js";
+import { authenticate, notifyUsersAboutRoomDeletion } from "../services.js";
 
 const router = express.Router();
 
@@ -70,11 +70,15 @@ router.post("/delete", authenticate, async (req, res) => {
         if (!RoomServices.isUserTheCreatorOfRoom(roomCode, _id)) {
             return res.status(401).json({
                 success: false,
-                message: "Delete room failure",
+                error: "Delete room failure",
             });
         }
 
-        // Delete the room
+        // Broadcast the room deletion to all users who joined this room via socket events
+        notifyUsersAboutRoomDeletion(roomCode);
+        console.log(`Notified all users in room ${roomCode} about room deletion`);
+
+        // Delete the room from the database
         const deletedAt = await RoomServices.deleteRoom(roomCode);
 
         // Delete-room success
@@ -122,12 +126,10 @@ router.post("/join", authenticate, async (req, res) => {
 
         // Retrieve necessary info about this room
         const room = joinRoomResult.room;
-        const roomInfo = { 
-            roomName: room.roomName, 
-            roomCode: room.roomCode, 
-            creatorId: room.creatorId, 
-            members: room.members 
-        };
+        const roomInfo = { roomName:  room.roomName, 
+                           roomCode:  room.roomCode, 
+                           creatorId: room.creatorId, 
+                           members:   room.members };
         const isCreatorOfRoom = _id.toString() === room.creatorId.toString();
         // Join-room success
         return res.status(200).json({

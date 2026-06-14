@@ -12,6 +12,7 @@ async function createUser(email, passwordHash) {
             try {
                 user = await User.create({
                     userId: generateUserId(),
+                    username: "default_username",
                     email,
                     passwordHash
                 });

@@ -66,19 +66,29 @@ io.use((socket, next) => {
             _id: _id,
             userId: userId,
         };
-        // next() continues the connection
-        next();
         console.log(`Authenticated user ${userId} for socket events.`);
+
+        // "next()" continues the connection by invocating "io.on("connection")"
+        next();
     } catch (err) {
-        // next(new Error()) rejects the connection
-        next(new Error("Authentication failed"));
         console.log("Error in authenticating user");
+
+        // "next(new Error())" rejects the connection
+        next(new Error("Authentication failed"));
     }
 });
 
 // SocketIO server handles the connection event
 io.on("connection", async (socket) => {
-    console.log(`User ${socket.userId} connected`);
+    // Notify the user that about authentication success
+    socket.emit("auth:success");
+
+    console.log(`User ${socket.user.userId} connected`);
+
+    // Handle user join room event
+    socket.on("joinRoom", (roomCode) => {
+        socket.join(roomCode);
+    });
 
     // // Handle the disconnection event
     // socket.on("disconnect", async (roomId) => {
@@ -86,7 +96,7 @@ io.on("connection", async (socket) => {
     // });
 
     // // Handle the chat message event
-    // socket.on("chat message", async (msg, roomId, callback) => {
+    // socket.on("chatMessage", async (msg, roomId, callback) => {
     //     await Services.handleClientChatMessage(socket, roomId, socket.id, msg, callback);
     // });
 })
@@ -97,3 +107,5 @@ server.listen(serverPort, () => {
     console.log(`Server is running at http://localhost:${serverPort}/signin\n`)
 });
 // ==================== Server Socket ==================== 
+
+export { io };
