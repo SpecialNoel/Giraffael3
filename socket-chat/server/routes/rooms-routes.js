@@ -6,11 +6,12 @@ import path from "node:path";
 import { pathToViewsDir } from "./route-helper.js";
 import { findUserByEmail } from "../db-services/user-services.js";
 import * as RoomServices from "../db-services/room-services.js";
+import { authenticate } from "../services.js";
 
 const router = express.Router();
 
 // Rooms API endpoints
-router.post("/", async (req, res) => {
+router.get("/", authenticate, async (req, res) => {
     try {
         // Retrieve _id of the requesting user 
         const _id = req.user._id;
@@ -31,7 +32,7 @@ router.post("/", async (req, res) => {
         });
     }
 });
-router.post("/create", async (req, res) => {
+router.post("/create", authenticate, async (req, res) => {
     try {
         // Receive room name and creator info
         const { roomName } = req.body;
@@ -59,7 +60,7 @@ router.post("/create", async (req, res) => {
         });    
     }
 });
-router.post("/delete", async (req, res) => {
+router.post("/delete", authenticate, async (req, res) => {
     try {
         // Receive room name and user info
         const { roomCode } = req.body;
@@ -89,7 +90,7 @@ router.post("/delete", async (req, res) => {
         });    
     }
 });
-router.post("/join", async (req, res) => {
+router.post("/join", authenticate, async (req, res) => {
     try {
         // Receive room code and user info
         const { roomCode } = req.body;
@@ -121,10 +122,12 @@ router.post("/join", async (req, res) => {
 
         // Retrieve necessary info about this room
         const room = joinRoomResult.room;
-        const roomInfo = { roomName: room.roomName, 
-                           roomCode: room.roomCode, 
-                           creatorId: room.creatorId, 
-                           members: room.members };
+        const roomInfo = { 
+            roomName: room.roomName, 
+            roomCode: room.roomCode, 
+            creatorId: room.creatorId, 
+            members: room.members 
+        };
         const isCreatorOfRoom = _id.toString() === room.creatorId.toString();
         // Join-room success
         return res.status(200).json({
@@ -140,7 +143,7 @@ router.post("/join", async (req, res) => {
         });    
     }
 });
-router.post("/leave", async (req, res) => {
+router.post("/leave", authenticate, async (req, res) => {
     try {
         // Receive room code and user info
         const { roomCode } = req.body;
@@ -182,20 +185,10 @@ router.post("/leave", async (req, res) => {
         });    
     }
 });
-router.post("/enter", async (req, res) => {
+router.post("/enter", authenticate, async (req, res) => {
     try {
         // Receive room id and user info
-        const { roomCode, email } = req.body;
-
-        // Check account existence in DB based on user email
-        const user = await findUserByEmail(email);
-        // Handle error where the account associated with the received email does not exist in DB
-        if (!user) {
-            console.log(`Email does not exist in DB: ${email}`);
-            return res.status(401).json({ 
-                error: "Invalid credentials"
-            });
-        }
+        const { roomCode } = req.body;
 
         // Find the requesting room
         const room = await RoomServices.findRoomByRoomCode(roomCode);

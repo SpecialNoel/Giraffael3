@@ -51,22 +51,24 @@ const io = new Server(server);
 // Connect to MongoDB
 await connectToDB();
 
-// Authenticate user credentials (JWT token) before proceeding the connection
+// Authenticate the user for operations handled with socket events, 
+//   before proceeding the connection
+// Note that this comes after the client successfully signed in to the app
 io.use((socket, next) => {
-    // Receive JWT token from user (one time only)
-    const token = socket.handshake.auth.token;
-
     try {
+        // Receive JWT token from user (one time only)
+        const token = socket.handshake.auth.token;
+
         // Verify the received token to ensure its validity
         const { _id, userId } = verifyToken(token);
         // Apply received user info inside the token for later use
         socket.user = {
-            id: _id,
+            _id: _id,
             userId: userId,
         };
         // next() continues the connection
         next();
-        console.log(`Authenticated user ${userId}`);
+        console.log(`Authenticated user ${userId} for socket events.`);
     } catch (err) {
         // next(new Error()) rejects the connection
         next(new Error("Authentication failed"));
@@ -78,15 +80,15 @@ io.use((socket, next) => {
 io.on("connection", async (socket) => {
     console.log(`User ${socket.userId} connected`);
 
-    // Handle the disconnection event
-    socket.on("disconnect", async () => {
-        await Services.handleClientDisconnection(io, roomId, socket);
-    });
+    // // Handle the disconnection event
+    // socket.on("disconnect", async (roomId) => {
+    //     await Services.handleClientDisconnection(io, roomId, socket);
+    // });
 
-    // Handle the chat message event
-    socket.on("chat message", async (msg, callback) => {
-        await Services.handleClientChatMessage(socket, roomId, socket.id, msg, callback);
-    });
+    // // Handle the chat message event
+    // socket.on("chat message", async (msg, roomId, callback) => {
+    //     await Services.handleClientChatMessage(socket, roomId, socket.id, msg, callback);
+    // });
 })
 
 // HTTP server listens on port 3000 (default localhost server for Express)

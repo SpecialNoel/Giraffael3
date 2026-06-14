@@ -71,6 +71,7 @@ async function deleteRoom(roomCode) {
                 deletedAt: date
             }
         );
+        console.log("Room deleted from DB\n");
         return date;
     } catch (err) {
         console.error("Failed to delete room:", err);
@@ -154,10 +155,11 @@ async function leaveRoom(roomCode, _id) {
 }
 
 // Determine whether the user is the creator of the room
+// _id is the object id of the creator of the room
 async function isUserTheCreatorOfRoom(roomCode, _id) {
     try {
         const room = await findRoomByRoomCode(roomCode);
-        return room.creatorId == _id;
+        return room.creatorId === _id;
     } catch (err) {
         console.error("Failed to check whether user is the creator of the room:", err);
         throw err;
