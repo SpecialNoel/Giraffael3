@@ -10,10 +10,12 @@ async function handleRoomBtn(roomBtn) {
     const email = localStorage.getItem("email");
 
     // Send roomCode to server
+    const token = localStorage.getItem("token");
     const response = await fetch("/rooms/enter", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`        
         },
         body: JSON.stringify({ roomCode: roomCode, email: email })
     });
@@ -34,15 +36,15 @@ async function handleLeaveBtn(leaveBtn, roomRow) {
     const roomCode = leaveBtn.dataset.roomCode;
     console.log("Clicked leave:", roomCode);
 
-    const userId = localStorage.getItem("_id");
-
     // Send roomCode to server
+    const token = localStorage.getItem("token");
     const response = await fetch("/rooms/leave", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify({ roomCode: roomCode, userId: userId })
+        body: JSON.stringify({ roomCode: roomCode })
     });
 
     // Retrieve response sent from server
@@ -63,15 +65,15 @@ async function handleDeleteBtn(deleteBtn, roomRow) {
     const roomCode = deleteBtn.dataset.roomCode;
     console.log("Clicked delete:", roomCode);
 
-    const userId = localStorage.getItem("_id");
-
     // Send roomCode to server
+    const token = localStorage.getItem("token");
     const response = await fetch("/rooms/delete", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify({ roomCode: roomCode, userId: userId })
+        body: JSON.stringify({ roomCode: roomCode })
     });
 
     // Retrieve response sent from server
@@ -155,16 +157,15 @@ function handleCreateRoom() {
                 return;
             }
 
-            // Retrieve user information
-            const creatorId = localStorage.getItem("_id");
-
             // Send roomName to server
+            const token = localStorage.getItem("token");
             const response = await fetch("/rooms/create", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
                 },
-                body: JSON.stringify({ roomName: roomName, creatorId: creatorId })
+                body: JSON.stringify({ roomName: roomName })
             });
 
             // Retrieve response sent from server
@@ -210,16 +211,20 @@ function handleJoinRoom() {
                 return;
             }
 
-            // Retrieve user information
-            const userId = localStorage.getItem("_id");
-
-            // Send roomCode to server
+            /* 
+             * Send roomCode to server
+             * Note that even though the field is called "Authorization",
+             *   its functionality is to send the token to server to authenticate
+             *   this identity.
+            */
+            const token = localStorage.getItem("token");
             const response = await fetch("/rooms/join", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}` // add a header for token authentication
                 },
-                body: JSON.stringify({ roomCode: roomCode, userId: userId })
+                body: JSON.stringify({ roomCode: roomCode })
             });
 
             // Retrieve response sent from server
@@ -233,9 +238,7 @@ function handleJoinRoom() {
 
             // Update the rooms container by appending the new room to the list
             const containerDiv = document.getElementById("rooms-container");
-            // Determine whether the user is the creator of the room
-            const isCreatorOfRoom = data.roomInfo.creatorId.toString() === userId.toString();
-            appendRoomToRoomsContainer(containerDiv, data.roomInfo, isCreatorOfRoom);
+            appendRoomToRoomsContainer(containerDiv, data.roomInfo, data.isCreatorOfRoom);
         } catch (err) {
             // Print error message to server side in case something went wrong during this process
             console.error(err);
@@ -254,4 +257,31 @@ function handleDashboard() {
     handleJoinRoom();
 }
 
-export { handleDashboard };
+function setupRoomsContainerRefresher() {
+    // Retrieve room info for rooms container, upon user refreshing the dashboard page
+    window.addEventListener("DOMContentLoaded", async () => {
+        // Retrieve info about all rooms the user has joined from server
+        const token = localStorage.getItem("token");
+        const response = await fetch("/rooms", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        const data = await response.json();
+        const roomsInfo = data.roomsInfo;
+        const userId = localStorage.getItem("userId");
+        
+        // Append each room as a room button to rooms container
+        const containerDiv = document.getElementById("rooms-container");
+        roomsInfo.forEach(roomInfo => {
+            // Determine whether the user is the creator of the room
+            const isCreatorOfRoom = roomInfo.creatorId.userId === userId;
+            appendRoomToRoomsContainer(containerDiv, roomInfo, isCreatorOfRoom);
+        });
+    });
+}
+
+export { handleDashboard, setupRoomsContainerRefresher };

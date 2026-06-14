@@ -38,9 +38,9 @@ function signIn() {
                 return;
             }
 
-            localStorage.setItem("email", data.email);
-            localStorage.setItem("_id", data._id);
-            localStorage.setItem("token", data.token);
+            localStorage.setItem("email", email);        // user email
+            localStorage.setItem("userId", data.userId); // userId
+            localStorage.setItem("token", data.token);   // JWT token
 
             // The credentials are verified by server to be valid, proceed to the Dashboard page.
             window.location.href = "/dashboard";

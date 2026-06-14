@@ -4,7 +4,7 @@ import express from "express";
 import path from "node:path";
 
 import { pathToViewsDir } from "./route-helper.js";
-import { findUser, createUser } from "../db-services/user-services.js";
+import { findUserByEmail, createUser } from "../db-services/user-services.js";
 import { hashPassword } from "../utils/password-handler.js";
 
 const router = express.Router();
@@ -35,7 +35,7 @@ router.post("/", async (req, res) => {
         }
 
         // Check account existence in DB based on user email
-        const userInDB = await findUser(email);
+        const userInDB = await findUserByEmail(email);
 
         // Handle error where received email already associated with an existing account
         if (userInDB) {

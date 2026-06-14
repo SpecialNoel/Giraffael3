@@ -1,12 +1,41 @@
 // services.js
 
+import { verifyToken } from "./utils/jwt-token-handler.js";
 import { User } from "./models/user-model.js";
 import { storeMessage } from "./db-services/message-services.js";
 
-// Get the usernames of online users in the room
+// Authenticate the user for operations handled with http api endpoints
+function authenticate(req, res, next) {
+    try {
+        const authHeader = req.headers.authorization;
+        if (!authHeader?.startsWith("Bearer ")) {
+            return res.status(401).json({
+                message: "Missing token",
+            });
+        }
+
+        const token = authHeader.split(" ")[1];
+
+        const { _id, userId } = verifyToken(token);
+
+        req.user = {
+            _id,
+            userId,
+        };
+
+        next();
+        console.log(`Authenticated user ${userId} for HTTP endpoints.`);
+    } catch (err) {
+        return res.status(401).json({
+            message: "Invalid token",
+        });
+    }
+}
+
+// Get the user ids of online users in the room
 async function getOnlineUsers(io, roomName) {
     const onlineUserSockets = await io.to(roomName).fetchSockets();
-    const onlineUsers = onlineUserSockets.map(onlineSocket => onlineSocket.username);
+    const onlineUsers = onlineUserSockets.map(onlineSocket => onlineSocket.userId);
     return onlineUsers;
 }
 
@@ -40,11 +69,11 @@ async function handleUserDisconnection(io, roomName, socket) {
 // Note: use io.to() to include the sender; use socket.to() to exclude the sender
 async function handleUserChatMessage(socket, roomId, senderId, msg, callback) {
     const sender = await User.findOne({ userId: senderId });
-    socket.username = sender.username;
-    console.log(`User ${username} [${socket.id}]: ${msg}`);
+    socket.userId = sender.userId;
+    console.log(`User ${userId} [${socket.id}]: ${msg}`);
 
     // Send the message to all connected users in the room (excluding the sender user)
-    socket.to(roomName).emit("chat message", username, msg);
+    socket.to(roomName).emit("chat message", senderId, msg);
 
     // Store the message to MongoDB
     await storeMessage(roomId, senderId, msg);
@@ -55,6 +84,7 @@ async function handleUserChatMessage(socket, roomId, senderId, msg, callback) {
     });
 }
 
-export { handleUserConnection, 
+export { authenticate,
+         handleUserConnection, 
          handleUserDisconnection, 
          handleUserChatMessage };

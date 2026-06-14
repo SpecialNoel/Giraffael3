@@ -29,7 +29,7 @@ async function createUser(email, passwordHash) {
 }
 
 // Return the user if it already exists in DB; return null otherwise
-async function findUser(email) {
+async function findUserByEmail(email) {
     try {
         return await User.findOne({ email: email.trim().toLowerCase() });
     } catch (err) {
@@ -38,4 +38,4 @@ async function findUser(email) {
     }
 }
 
-export { createUser, findUser };
+export { createUser, findUserByEmail };

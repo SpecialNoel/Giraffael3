@@ -4,21 +4,21 @@ import express from "express";
 import path from "node:path";
 
 import { pathToViewsDir } from "./route-helper.js";
-import { findUser } from "../db-services/user-services.js";
+import { findUserByEmail } from "../db-services/user-services.js";
 import * as RoomServices from "../db-services/room-services.js";
-import { findRoomByRoomCode, createRoom, deleteRoom, joinRoom, leaveRoom, isUserTheCreatorOfRoom, getRoomsInfo } from "../db-services/room-services.js";
+import { authenticate } from "../services.js";
 
 const router = express.Router();
 
 // Rooms API endpoints
-router.post("/", async (req, res) => {
-    // Retrieve the _id of the requesting user 
-    const { userId } = req.body;
-
-    // Retrieve the info about all existing rooms this user has joined
-    const roomsInfo = await RoomServices.getRoomsInfo(userId);
-
+router.get("/", authenticate, async (req, res) => {
     try {
+        // Retrieve _id of the requesting user 
+        const _id = req.user._id;
+
+        // Retrieve the info about all existing rooms this user has joined
+        const roomsInfo = await RoomServices.getRoomsInfo(_id);
+        
         // Return the list of room info
         return res.status(200).json({
             success: true,
@@ -32,19 +32,20 @@ router.post("/", async (req, res) => {
         });
     }
 });
-router.post("/create", async (req, res) => {
+router.post("/create", authenticate, async (req, res) => {
     try {
         // Receive room name and creator info
-        const { roomName, creatorId } = req.body;
+        const { roomName } = req.body;
+        const _id = req.user._id;
 
         // Create the room
-        const room = await RoomServices.createRoom(roomName, creatorId);
+        const room = await RoomServices.createRoom(roomName, _id);
 
         // Retrieve necessary info about this new room
-        const roomInfo = { roomName: room.roomName, 
-                           roomCode: room.roomCode, 
+        const roomInfo = { roomName:  room.roomName, 
+                           roomCode:  room.roomCode, 
                            creatorId: room.creatorId, 
-                           members: room.members };
+                           members:   room.members };
 
         // Create-room success
         return res.status(200).json({
@@ -59,13 +60,14 @@ router.post("/create", async (req, res) => {
         });    
     }
 });
-router.post("/delete", async (req, res) => {
+router.post("/delete", authenticate, async (req, res) => {
     try {
         // Receive room name and user info
-        const { roomCode, userId } = req.body;
+        const { roomCode } = req.body;
+        const _id = req.user._id;
 
-        // Handle case where received userId does not match the room's creatorId
-        if (!RoomServices.isUserTheCreatorOfRoom(roomCode, userId)) {
+        // Handle case where received _id does not match the room's creatorId
+        if (!RoomServices.isUserTheCreatorOfRoom(roomCode, _id)) {
             return res.status(401).json({
                 success: false,
                 message: "Delete room failure",
@@ -88,13 +90,14 @@ router.post("/delete", async (req, res) => {
         });    
     }
 });
-router.post("/join", async (req, res) => {
+router.post("/join", authenticate, async (req, res) => {
     try {
         // Receive room code and user info
-        const { roomCode, userId } = req.body;
+        const { roomCode } = req.body;
+        const _id = req.user._id;
 
         // Join the room
-        const joinRoomResult = await RoomServices.joinRoom(roomCode, userId);
+        const joinRoomResult = await RoomServices.joinRoom(roomCode, _id);
         
         // Handle join-room failure
         if (!joinRoomResult.success) {
@@ -119,15 +122,19 @@ router.post("/join", async (req, res) => {
 
         // Retrieve necessary info about this room
         const room = joinRoomResult.room;
-        const roomInfo = { roomName: room.roomName, 
-                           roomCode: room.roomCode, 
-                           creatorId: room.creatorId, 
-                           members: room.members };
+        const roomInfo = { 
+            roomName: room.roomName, 
+            roomCode: room.roomCode, 
+            creatorId: room.creatorId, 
+            members: room.members 
+        };
+        const isCreatorOfRoom = _id.toString() === room.creatorId.toString();
         // Join-room success
         return res.status(200).json({
             success: true,
             message: "Join room success",
-            roomInfo: roomInfo
+            roomInfo: roomInfo,
+            isCreatorOfRoom: isCreatorOfRoom
         });
     } catch (err) {
         console.error(err);
@@ -136,13 +143,14 @@ router.post("/join", async (req, res) => {
         });    
     }
 });
-router.post("/leave", async (req, res) => {
+router.post("/leave", authenticate, async (req, res) => {
     try {
         // Receive room code and user info
-        const { roomCode, userId } = req.body;
+        const { roomCode } = req.body;
+        const _id = req.user._id;
 
         // Join the room
-        const leaveRoomResult = await RoomServices.leaveRoom(roomCode, userId);
+        const leaveRoomResult = await RoomServices.leaveRoom(roomCode, _id);
         
         // Handle join-room failure
         if (!leaveRoomResult.success) {
@@ -177,20 +185,10 @@ router.post("/leave", async (req, res) => {
         });    
     }
 });
-router.post("/enter", async (req, res) => {
+router.post("/enter", authenticate, async (req, res) => {
     try {
         // Receive room id and user info
-        const { roomCode, email } = req.body;
-
-        // Check account existence in DB based on user email
-        const user = await findUser(email);
-        // Handle error where the account associated with the received email does not exist in DB
-        if (!user) {
-            console.log(`Email does not exist in DB: ${email}`);
-            return res.status(401).json({ 
-                error: "Invalid credentials"
-            });
-        }
+        const { roomCode } = req.body;
 
         // Find the requesting room
         const room = await RoomServices.findRoomByRoomCode(roomCode);

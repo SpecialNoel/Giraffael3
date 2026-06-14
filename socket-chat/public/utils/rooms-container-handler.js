@@ -6,13 +6,13 @@ function appendRoomToRoomsContainer(containerDiv, roomInfo, isCreatorOfRoom) {
     const roomRow = document.createElement("div");
     roomRow.className = "room-row";
 
-    // Room button
+    // Room button; enter the room upon clicking
     const roomBtn = document.createElement("button");
     roomBtn.className = "room-btn";
     roomBtn.dataset.roomCode = roomInfo.roomCode;
     roomBtn.textContent = roomInfo.roomName;
 
-    // Leave button
+    // Leave button; leave the room upon clicking
     const leaveBtn = document.createElement("button");
     leaveBtn.className = "leave-btn";
     leaveBtn.dataset.roomCode = roomInfo.roomCode;
@@ -23,6 +23,7 @@ function appendRoomToRoomsContainer(containerDiv, roomInfo, isCreatorOfRoom) {
     roomRow.appendChild(leaveBtn);
 
     // Delete button; enabled only for creator of the room
+    // Delete the room from the database upon clicking
     if (isCreatorOfRoom) {
         const deleteBtn = document.createElement("button");
         deleteBtn.className = "delete-btn";

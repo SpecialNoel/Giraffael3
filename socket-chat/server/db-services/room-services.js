@@ -24,10 +24,10 @@ async function findRoomByRoomCode(roomCode) {
 }
 
 // Create a new room with the given room name, and store it to the database
-async function createRoom(roomName, creatorId) {
+async function createRoom(roomName, _id) {
     try {
         // Check if the user exists in the database
-        const user = await User.findById(creatorId);
+        const user = await User.findById(_id);
         if (!user) throw new Error("Creator not found");
 
         // Create and store the room to DB. Repeat if failed due to roomCode duplication
@@ -37,8 +37,8 @@ async function createRoom(roomName, creatorId) {
                 room = await Room.create({
                     roomCode: generateRoomCode(),
                     roomName,
-                    creatorId: creatorId,
-                    members: [creatorId],
+                    creatorId: _id,
+                    members: [_id],
                 });
             } catch (err) {
                 if (err.code === 11000) continue; // duplicate key error of MongoDB; retry
@@ -71,6 +71,7 @@ async function deleteRoom(roomCode) {
                 deletedAt: date
             }
         );
+        console.log("Room deleted from DB\n");
         return date;
     } catch (err) {
         console.error("Failed to delete room:", err);
@@ -79,7 +80,7 @@ async function deleteRoom(roomCode) {
 }
 
 // Add the user to the given room
-async function joinRoom(roomCode, userId) {
+async function joinRoom(roomCode, _id) {
     try {
         // Check for existence of the room
         const room = await findRoomByRoomCode(roomCode);
@@ -91,7 +92,7 @@ async function joinRoom(roomCode, userId) {
         }
 
         // Check the user has already joined the room or not
-        if (room.members.includes(userId)) {
+        if (room.members.includes(_id)) {
             return {
                 success: false,
                 reason: "ALREADY_IN_ROOM"            
@@ -101,7 +102,7 @@ async function joinRoom(roomCode, userId) {
         // Update the room by adding the user to it
         const updatedRoom = await Room.findOneAndUpdate(
             { roomCode },
-            { $addToSet: { members: userId } }, // add userId to the members list, if it is not in the list yet
+            { $addToSet: { members: _id } }, // add _id to the members list, if it is not in the list yet
             { new: true } // get the updated Room document
         );
         
@@ -117,7 +118,7 @@ async function joinRoom(roomCode, userId) {
 }
 
 // Remove the user to the given room
-async function leaveRoom(roomCode, userId) {
+async function leaveRoom(roomCode, _id) {
     try {
         // Check for existence of the room
         const room = await findRoomByRoomCode(roomCode);
@@ -129,7 +130,7 @@ async function leaveRoom(roomCode, userId) {
         }
 
         // Check if the user is currently not in the room 
-        if (!room.members.includes(userId)) {
+        if (!room.members.includes(_id)) {
             return {
                 success: false,
                 reason: "NOT_IN_ROOM"            
@@ -139,7 +140,7 @@ async function leaveRoom(roomCode, userId) {
         // Update the room by removing the user to it
         await Room.findOneAndUpdate(
             { roomCode },
-            { $pull: { members: userId } }, // remove userId from the members list
+            { $pull: { members: _id } }, // remove _id from the members list
             { new: true } // get the updated Room document
         );
         
@@ -154,10 +155,11 @@ async function leaveRoom(roomCode, userId) {
 }
 
 // Determine whether the user is the creator of the room
-async function isUserTheCreatorOfRoom(roomCode, userId) {
+// _id is the object id of the creator of the room
+async function isUserTheCreatorOfRoom(roomCode, _id) {
     try {
         const room = await findRoomByRoomCode(roomCode);
-        return room.creatorId == userId;
+        return room.creatorId === _id;
     } catch (err) {
         console.error("Failed to check whether user is the creator of the room:", err);
         throw err;
@@ -165,11 +167,16 @@ async function isUserTheCreatorOfRoom(roomCode, userId) {
 }
 
 // Retrieve necessary information of rooms the user has joined
-async function getRoomsInfo(userId) {
+async function getRoomsInfo(_id) {
     return await Room.find({
-        members: userId,
+        members: _id,
         deleted: false // exclude rooms that have been soft-deleted
-    }).select("roomName roomCode creatorId -_id"); // exclude the _id property of each Room document
+    })
+    .select("roomName roomCode creatorId -_id") // exclude the _id property of each Room document
+    .populate({
+        path: "creatorId",
+        select: "userId -_id" 
+    }); // convert the creator Id (a private object id) into userId of the creator (public id) to make it suitable for client-side logics 
 }
 
 export { findRoomCodes, findRoomByRoomCode, createRoom, deleteRoom, joinRoom, leaveRoom, isUserTheCreatorOfRoom, getRoomsInfo };
