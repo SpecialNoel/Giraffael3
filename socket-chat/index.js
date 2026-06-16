@@ -82,12 +82,37 @@ io.use((socket, next) => {
 io.on("connection", async (socket) => {
     // Notify the user that about authentication success
     socket.emit("auth:success");
-
     console.log(`User ${socket.user.userId} connected`);
+
+    let currentRoomCode = null;
 
     // Handle user join room event
     socket.on("joinRoom", (roomCode) => {
+        if (currentRoomCode) socket.leave(currentRoomCode);
+        currentRoomCode = roomCode;
         socket.join(roomCode);
+    });
+
+    // Handle user enter room event
+    socket.on("enterRoom", async (roomCode) => {
+        if (currentRoomCode) socket.leave(currentRoomCode);
+        currentRoomCode = roomCode;
+        socket.join(roomCode);
+
+        // Fetch members and message history of the room
+        const members = [socket.user.userId]; // TODO: change this
+        const messages = ["msg1", "msg2"] // TODO: change this
+
+        // Send these information to the user
+        socket.emit("userEntered", {
+            members,
+            messages
+        });
+    });
+
+    // Handle user exit room event
+    socket.on("exitRoom", () => {
+
     });
 
     // // Handle the disconnection event

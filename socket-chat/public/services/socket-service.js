@@ -66,8 +66,8 @@ function handleSendMessage(userId, messagesElement, input, socket) {
 function startSession(socket) {
     function updateBasicGui(roomCode, roomName, userId) {
         // Update code and name of the room, as well as user info, on user GUI
-        const roomCodeInChatElement = document.getElementById("roomCodeInChat");
-        if (roomCodeInChatElement) roomCodeInChatElement.textContent = `Room code: ${roomCode}`;
+        // const roomCodeInChatElement = document.getElementById("roomCodeInChat");
+        // if (roomCodeInChatElement) roomCodeInChatElement.textContent = `Room code: ${roomCode}`;
 
         const titleElement = document.getElementById("title");
         if (titleElement)titleElement.textContent = roomName;
@@ -104,6 +104,11 @@ function startSession(socket) {
     });
     socket.on("userLeft", (onlineUsers) => {
         updateOnlineUserList(onlineUsersElement, onlineUsers);
+    });
+
+    socket.on("userEntered", ({ members, messages }) => {
+        console.log(`Members: ${members}`); // TODO: modify this by updating dashboard page this these information
+        console.log(`Messages: ${messages}`);
     });
 
     // Handle client socket receiving chat messages sent by connected clients
