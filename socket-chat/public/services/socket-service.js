@@ -13,10 +13,10 @@ function createAuthenticatedSocket() {
             console.log("Socket connected");
 
             // Receive response on token authentication
-            socket.once("auth:success", () => {
-                console.log("Socket authenticated");
-                resolve(socket);
-            });
+            console.log("Socket authenticated");
+
+            // Return this authenticated socket
+            resolve(socket);
         });
 
         // Server side triggered "next(new Error())"

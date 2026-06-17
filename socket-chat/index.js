@@ -80,8 +80,8 @@ io.use((socket, next) => {
 
 // SocketIO server handles the connection event
 io.on("connection", async (socket) => {
-    // Notify the user that about authentication success
-    socket.emit("auth:success");
+    // Note that the server has already authenticated the user,
+    // given the socket connection is established successfully between the user and server
     console.log(`User ${socket.user.userId} connected`);
 
     let currentRoomCode = null;

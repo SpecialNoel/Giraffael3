@@ -2,6 +2,7 @@
 
 import { appendRoomToRoomsContainer } from "../utils/rooms-container-handler.js";
 import { apiFetch } from "../utils/api-fetcher.js";
+import { enterRoom, enterRoomFromURL } from "./room-service.js";
 
 // Helper function of handleRoomsContainer; set up the functionality of the room button
 async function handleRoomBtn(roomBtn, socket) {
@@ -28,14 +29,10 @@ async function handleRoomBtn(roomBtn, socket) {
     }
 
     // Modify the url to reflect user entering this room without refreshing the page
-    history.pushState(
-        {},
-        "",
-        `/dashboard?room=${roomCode}` // TODO: think of cases where this url needs to be reverted back to the default "/dashboard"
-    );
+    history.pushState({}, "", `/dashboard?room=${roomCode}`); // TODO: think of cases where this url needs to be reverted back to the default "/dashboard"
 
-    // Send an enter room request to server via socket events
-    socket.emit("enterRoom", roomCode);
+    // Send an "enter room" request to server via socket events
+    enterRoom(socket, roomCode);
 }
 
 // Helper function of handleRoomsContainer; set up the functionality of the leave button
@@ -99,7 +96,7 @@ function handleRoomsContainer(socket) {
     */
     const roomsContainer = document.querySelector("#rooms-container");
 
-    // Enter the target room upon user clicking on the room icon
+    // Attach functionalities to each button associated with a room
     const handleClick = async (e) => {
         // Prevent the page from refreshing
         e.preventDefault();
@@ -259,11 +256,18 @@ function handleJoinRoom(socket) {
     joinRoomBtn.addEventListener("click", handleClick);
 }
 
+function handleUserNavigation(socket) {
+    window.addEventListener("popstate", () => {
+        enterRoomFromURL(socket);
+    });
+}
+
 // Set up the whole dashboard page, which consists of many small components
 function handleDashboard(socket) {
     handleRoomsContainer(socket);
     handleCreateRoom(socket);
     handleJoinRoom(socket);
+    handleUserNavigation(socket);
 }
 
 function setupRoomsContainerRefresher() {
