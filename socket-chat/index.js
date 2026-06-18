@@ -14,6 +14,8 @@ import { router as roomsRouter } from "./server/routes/rooms-routes.js";
 import { connectToDB } from "./server/utils/db-connector.js";
 import * as Services from "./server/services.js";
 import { verifyToken } from "./server/utils/jwt-token-handler.js";
+import { getMembers } from "./server/db-services/room-services.js";
+import { getMessageHistory } from "./server/db-services/message-services.js";
 
 
 // ==================== Express App ====================
@@ -82,26 +84,32 @@ io.use((socket, next) => {
 io.on("connection", async (socket) => {
     // Note that the server has already authenticated the user,
     // given the socket connection is established successfully between the user and server
-    console.log(`User ${socket.user.userId} connected`);
+    console.log(`User ${socket.user.userId} connected\n`);
 
     let currentRoomCode = null;
 
     // Handle user join room event
     socket.on("joinRoom", (roomCode) => {
+        // Leave the user from the room if they are already in the room to prevent duplicated join
         if (currentRoomCode) socket.leave(currentRoomCode);
+
+        // Join the user to the room
         currentRoomCode = roomCode;
         socket.join(roomCode);
     });
 
     // Handle user enter room event
     socket.on("enterRoom", async (roomCode) => {
+        // Leave the user from the room if they are already in the room to prevent duplicated join
         if (currentRoomCode) socket.leave(currentRoomCode);
+
+        // Join the user to the room
         currentRoomCode = roomCode;
         socket.join(roomCode);
 
         // Fetch members and message history of the room
-        const members = [socket.user.userId]; // TODO: change this
-        const messages = ["msg1", "msg2"] // TODO: change this
+        const members = await getMembers(roomCode);
+        const messages = await getMessageHistory(roomCode);
 
         // Send these information to the user
         socket.emit("userEntered", {

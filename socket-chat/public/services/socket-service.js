@@ -107,8 +107,21 @@ function startSession(socket) {
     });
 
     socket.on("userEntered", ({ members, messages }) => {
-        console.log(`Members: ${members}`); // TODO: modify this by updating dashboard page this these information
-        console.log(`Messages: ${messages}`);
+        // TODO: Update the dashboard UI
+
+        // members is a list of { userId, username }
+        console.log("Members: ");
+        members.forEach(member => {
+            console.log(`${member.username}: [${member.userId}]`);
+        });
+
+        // messages is a list of Message documents
+        console.log("\nMessages: ");
+        // members.map(member => (
+        //     <div key={member.userId}>
+        //         {member.username}
+        //     </div>
+        // ));
     });
 
     // Handle client socket receiving chat messages sent by connected clients

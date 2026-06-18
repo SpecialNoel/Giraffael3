@@ -30,6 +30,11 @@ const roomSchema = new Schema(
             type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User"}],
             default: []
         },
+        // messages contains a list of Message documents, in terms of their object ids
+        messages: {
+            type: [{ type: mongoose.Schema.Types.ObjectId, ref: "Message"}],
+            default: []
+        },
         // Soft-deletion: room stays in the database after deletion, but users are not allowed interact with it
         deleted: {
             type: Boolean,

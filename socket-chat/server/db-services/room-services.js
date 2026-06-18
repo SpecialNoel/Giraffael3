@@ -180,7 +180,41 @@ async function getRoomsInfo(_id) {
     .populate({
         path: "creatorId",
         select: "userId -_id" 
-    }); // convert the creator Id (a private object id) into userId of the creator (public id) to make it suitable for client-side logics 
+    }); // convert the creator Id (private object id for user) into userId (public id for user) to make it suitable for client-side logics 
 }
 
-export { findRoomCodes, findRoomByRoomCode, createRoom, deleteRoom, joinRoom, leaveRoom, isUserTheCreatorOfRoom, getRoomsInfo };
+// Retrieve all members of the room from the database
+async function getMembers(roomCode) {
+    try {
+        const room = await Room.findOne({
+            roomCode,
+            deleted: false
+        }) // fetch the target room
+        .select("members") // select only the members field
+        .populate({
+            path: "members",
+            select: "userId username"
+        }) // fetch only the specific fields from each element of members
+        .lean(); // return a plain JS object rather than the full Mongoose document
+        
+        if (!room) throw new Error("Room not found");
+
+        return room.members.map(m => ({
+            userId: m.userId,
+            username: m.username
+        }));
+    } catch (err) {
+        console.error("Failed to retrieve members:", err);
+        throw err;
+    }
+}
+
+export { findRoomCodes, 
+         findRoomByRoomCode, 
+         createRoom, 
+         deleteRoom, 
+         joinRoom, 
+         leaveRoom, 
+         isUserTheCreatorOfRoom, 
+         getRoomsInfo,
+         getMembers };

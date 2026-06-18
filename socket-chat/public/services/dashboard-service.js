@@ -29,7 +29,7 @@ async function handleRoomBtn(roomBtn, socket) {
     }
 
     // Modify the url to reflect user entering this room without refreshing the page
-    history.pushState({}, "", `/dashboard?room=${roomCode}`); // TODO: think of cases where this url needs to be reverted back to the default "/dashboard"
+    history.pushState({}, "", `/dashboard?room=${roomCode}`);
 
     // Send an "enter room" request to server via socket events
     enterRoom(socket, roomCode);
