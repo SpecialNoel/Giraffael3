@@ -2,9 +2,10 @@
 
 import { appendRoomToRoomsContainer } from "../utils/rooms-container-handler.js";
 import { apiFetch } from "../utils/api-fetcher.js";
+import { enterRoom, enterRoomFromURL } from "./room-service.js";
 
 // Helper function of handleRoomsContainer; set up the functionality of the room button
-async function handleRoomBtn(roomBtn) {
+async function handleRoomBtn(roomBtn, socket) {
     const roomCode = roomBtn.dataset.roomCode; // dataset.roomCode is dynamically parsed from "data-room-code" attribute in html
     console.log("Clicked room:", roomCode);
 
@@ -26,7 +27,12 @@ async function handleRoomBtn(roomBtn) {
         alert(data.error);
         return;
     }
-    console.log("Current room members:", data.members);
+
+    // Modify the url to reflect user entering this room without refreshing the page
+    history.pushState({}, "", `/dashboard?room=${roomCode}`);
+
+    // Send an "enter room" request to server via socket events
+    enterRoom(socket, roomCode);
 }
 
 // Helper function of handleRoomsContainer; set up the functionality of the leave button
@@ -83,14 +89,14 @@ async function handleDeleteBtn(deleteBtn, roomRow) {
 }
 
 // Set up the rooms container
-function handleRoomsContainer() {    
+function handleRoomsContainer(socket) {    
     /*
         On the dashboard page, add functionality to each room icon/button such that
         a certain task will be executed whenever the user clicks on the room icon.
     */
     const roomsContainer = document.querySelector("#rooms-container");
 
-    // Enter the target room upon user clicking on the room icon
+    // Attach functionalities to each button associated with a room
     const handleClick = async (e) => {
         // Prevent the page from refreshing
         e.preventDefault();
@@ -99,7 +105,7 @@ function handleRoomsContainer() {
             // Get the room button the user clicked on
             const roomBtn = e.target.closest(".room-btn"); 
             if (roomBtn) {
-                await handleRoomBtn(roomBtn);
+                await handleRoomBtn(roomBtn, socket);
                 return;
             }
 
@@ -250,11 +256,18 @@ function handleJoinRoom(socket) {
     joinRoomBtn.addEventListener("click", handleClick);
 }
 
+function handleUserNavigation(socket) {
+    window.addEventListener("popstate", () => {
+        enterRoomFromURL(socket);
+    });
+}
+
 // Set up the whole dashboard page, which consists of many small components
 function handleDashboard(socket) {
-    handleRoomsContainer();
+    handleRoomsContainer(socket);
     handleCreateRoom(socket);
     handleJoinRoom(socket);
+    handleUserNavigation(socket);
 }
 
 function setupRoomsContainerRefresher() {

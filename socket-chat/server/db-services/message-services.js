@@ -1,8 +1,9 @@
 // message-services.js
 
 import { Message } from "../models/message-model.js";
-import { Room } from "../models/room-model.js";
 import { User } from "../models/user-model.js";
+import { Room } from "../models/room-model.js";
+import { findRoomByRoomCode } from "../db-services/room-services.js";
 
 const MESSAGE_EXPIRATION_MS = 60 * 60 * 1000; // 1 hour
 
@@ -31,15 +32,52 @@ async function storeMessage(roomId, _id, content) {
     }
 }
 
-// Retrieve all the messages sent by the user from the database
-async function findMessages(_id) {
+// Retrieve all the messages sent to the room from the database
+async function getMessageHistory(roomCode) {
     try {
-        // Find the sent messages based on _id
-        return await Message.find({ sender: _id });
+        // Fetch the target room
+        const room = await Room.findOne({
+            roomCode,
+            deleted: false
+        }).select("_id").lean();
+        if (!room) throw new Error("Room not found");
+
+        // Fetch the messages sent over the target room 
+        return await Message.find({
+            room: room._id,
+        }).sort({ createdAt: 1 }).lean();
     } catch (err) {
-        console.error("Failed to retrieve messages:", err);
+        console.error("Failed to retrieve message history:", err);
         throw err;
     }
 }
 
-export { storeMessage, findMessages };
+async function getMessageHistoryWithPagination(roomCode, messageType, limit = 50, cursor = null) {
+    try {
+        const room = await Room.findOne({
+            roomCode,
+            deleted: false
+        }).select("_id").lean();
+        if (!room) throw new Error("Room not found");
+
+        const query = {
+            room: room._id,
+            type: messageType
+        };
+
+        // Pagination using createdAt cursor
+        if (cursor) {
+            query.createdAt = { $lt: new Date(cursor) };
+        }
+
+        return await Message.find(query)
+            .sort({ createdAt: -1 }) // newest first for chat UI
+            .limit(limit)
+            .lean();
+    } catch (err) {
+        console.error("Failed to retrieve message history:", err);
+        throw err;
+    }
+}
+
+export { storeMessage, getMessageHistory, getMessageHistoryWithPagination };

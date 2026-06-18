@@ -25,7 +25,7 @@ function authenticate(req, res, next) {
         };
 
         next();
-        console.log(`Authenticated user ${userId} for HTTP endpoints.`);
+        // console.log(`Authenticated user ${userId} for HTTP endpoints.`);
     } catch (err) {
         return res.status(401).json({
             error: "Invalid token",

@@ -13,10 +13,10 @@ function createAuthenticatedSocket() {
             console.log("Socket connected");
 
             // Receive response on token authentication
-            socket.once("auth:success", () => {
-                console.log("Socket authenticated");
-                resolve(socket);
-            });
+            console.log("Socket authenticated");
+
+            // Return this authenticated socket
+            resolve(socket);
         });
 
         // Server side triggered "next(new Error())"
@@ -66,8 +66,8 @@ function handleSendMessage(userId, messagesElement, input, socket) {
 function startSession(socket) {
     function updateBasicGui(roomCode, roomName, userId) {
         // Update code and name of the room, as well as user info, on user GUI
-        const roomCodeInChatElement = document.getElementById("roomCodeInChat");
-        if (roomCodeInChatElement) roomCodeInChatElement.textContent = `Room code: ${roomCode}`;
+        // const roomCodeInChatElement = document.getElementById("roomCodeInChat");
+        // if (roomCodeInChatElement) roomCodeInChatElement.textContent = `Room code: ${roomCode}`;
 
         const titleElement = document.getElementById("title");
         if (titleElement)titleElement.textContent = roomName;
@@ -104,6 +104,24 @@ function startSession(socket) {
     });
     socket.on("userLeft", (onlineUsers) => {
         updateOnlineUserList(onlineUsersElement, onlineUsers);
+    });
+
+    socket.on("userEntered", ({ members, messages }) => {
+        // TODO: Update the dashboard UI
+
+        // members is a list of { userId, username }
+        console.log("Members: ");
+        members.forEach(member => {
+            console.log(`${member.username}: [${member.userId}]`);
+        });
+
+        // messages is a list of Message documents
+        console.log("\nMessages: ");
+        // members.map(member => (
+        //     <div key={member.userId}>
+        //         {member.username}
+        //     </div>
+        // ));
     });
 
     // Handle client socket receiving chat messages sent by connected clients

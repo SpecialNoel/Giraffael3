@@ -51,7 +51,7 @@ function signIn() {
 
             // The credentials are verified by server to be valid, proceed to the Dashboard page.
             setTimeout(() => {
-                window.location.href = "/dashboard";
+                window.location.href = "/dashboard"; 
             }, 50); // 0.05s
         } catch (err) {
             // Print error message to client side in case something went wrong during this process
