@@ -19,8 +19,8 @@ const roomSchema = new Schema(
             type: String,
             required: true
         },
-        // creatorId refers to the User document that creates this room
-        creatorId: {
+        // creator refers to the User document that creates this room
+        creator: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
             required: true
@@ -28,11 +28,6 @@ const roomSchema = new Schema(
         // members contains a list of User documents, in terms of their object ids
         members: {
             type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User"}],
-            default: []
-        },
-        // messages contains a list of Message documents, in terms of their object ids
-        messages: {
-            type: [{ type: mongoose.Schema.Types.ObjectId, ref: "Message"}],
             default: []
         },
         // Soft-deletion: room stays in the database after deletion, but users are not allowed interact with it
