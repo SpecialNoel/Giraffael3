@@ -286,7 +286,7 @@ function setupRoomsContainerRefresher() {
         const containerDiv = document.getElementById("rooms-container");
         roomsInfo.forEach(roomInfo => {
             // Determine whether the user is the creator of the room
-            const isCreatorOfRoom = roomInfo.creatorId.userId === userId;
+            const isCreatorOfRoom = roomInfo.creator.userId === userId;
             appendRoomToRoomsContainer(containerDiv, roomInfo, isCreatorOfRoom);
         });
     };

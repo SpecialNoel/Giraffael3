@@ -124,14 +124,23 @@ io.on("connection", async (socket) => {
     });
 
     // // Handle the disconnection event
-    // socket.on("disconnect", async (roomId) => {
-    //     await Services.handleClientDisconnection(io, roomId, socket);
-    // });
+    socket.on("disconnect", async (roomId) => {
+        console.log(`User ${socket.user.userId} disconnected\n`);
+        // await Services.handleClientDisconnection(io, roomId, socket);
+    });
 
-    // // Handle the chat message event
-    // socket.on("chatMessage", async (msg, roomId, callback) => {
-    //     await Services.handleClientChatMessage(socket, roomId, socket.id, msg, callback);
-    // });
+    // Handle the chat message event
+    socket.on("chatMessage", async (msgContent, callback) => {
+        // If somehow the server received a message the user sent while the user is not currently inside a room,
+        // abandon the received message
+        // TODO: Add more guardrail to this problem
+        if (!currentRoomCode) {
+            console.log("Received a message from user while they are not inside a room yet")
+            return;
+        }
+
+        await Services.handleUserChatMessage(socket, currentRoomCode, socket.user._id, msgContent, callback);
+    });
 })
 
 // HTTP server listens on port 3000 (default localhost server for Express)

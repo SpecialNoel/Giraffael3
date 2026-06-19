@@ -37,7 +37,7 @@ async function createRoom(roomName, _id) {
                 room = await Room.create({
                     roomCode: generateRoomCode(),
                     roomName,
-                    creatorId: _id,
+                    creator: _id,
                     members: [_id],
                 });
             } catch (err) {
@@ -163,7 +163,7 @@ async function isUserTheCreatorOfRoom(roomCode, _id) {
         // Return false if the room cannot be found in database,
         if (!room) return false;
 
-        return room.creatorId.toString() === _id.toString();
+        return room.creator.toString() === _id.toString();
     } catch (err) {
         console.error("Failed to check whether user is the creator of the room:", err);
         throw err;
@@ -176,9 +176,9 @@ async function getRoomsInfo(_id) {
         members: _id,
         deleted: false // exclude rooms that have been soft-deleted
     })
-    .select("roomName roomCode creatorId -_id") // exclude the _id property of each Room document
+    .select("roomName roomCode creator -_id") // exclude the _id property of each Room document
     .populate({
-        path: "creatorId",
+        path: "creator",
         select: "userId -_id" 
     }); // convert the creator Id (private object id for user) into userId (public id for user) to make it suitable for client-side logics 
 }

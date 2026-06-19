@@ -42,10 +42,10 @@ router.post("/create", authenticate, async (req, res) => {
         const room = await RoomServices.createRoom(roomName, _id);
 
         // Retrieve necessary info about this new room
-        const roomInfo = { roomName:  room.roomName, 
-                           roomCode:  room.roomCode, 
-                           creatorId: room.creatorId, 
-                           members:   room.members };
+        const roomInfo = { roomName: room.roomName, 
+                           roomCode: room.roomCode, 
+                           creator:  room.creator, 
+                           members:  room.members };
 
         // Create-room success
         return res.status(200).json({
@@ -66,7 +66,7 @@ router.post("/delete", authenticate, async (req, res) => {
         const { roomCode } = req.body;
         const _id = req.user._id;
 
-        // Handle case where received _id does not match the room's creatorId
+        // Handle case where received _id does not match the room's creator id
         if (!RoomServices.isUserTheCreatorOfRoom(roomCode, _id)) {
             return res.status(401).json({
                 success: false,
@@ -126,11 +126,11 @@ router.post("/join", authenticate, async (req, res) => {
 
         // Retrieve necessary info about this room
         const room = joinRoomResult.room;
-        const roomInfo = { roomName:  room.roomName, 
-                           roomCode:  room.roomCode, 
-                           creatorId: room.creatorId, 
-                           members:   room.members };
-        const isCreatorOfRoom = _id.toString() === room.creatorId.toString();
+        const roomInfo = { roomName: room.roomName, 
+                           roomCode: room.roomCode, 
+                           creator:  room.creator, 
+                           members:  room.members };
+        const isCreatorOfRoom = _id.toString() === room.creator.toString();
         // Join-room success
         return res.status(200).json({
             success: true,

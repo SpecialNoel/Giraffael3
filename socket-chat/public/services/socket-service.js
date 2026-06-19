@@ -48,9 +48,10 @@ function handleSendMessage(userId, messagesElement, input, socket) {
     if (input.value) {
         // Emit the chat message to server, with a 5-second timeout
         // This reaches the same functionality as "emiWithAck()"
-        socket.timeout(5000).emit("chatMessage", userId, input.value, (err, res) => {
+        socket.timeout(5000).emit("chatMessage", input.value, (err, res) => {
             if (err) {
                 console.log("Server did not acknowledge the transmission of this chat message in the given delay.");
+                return;
             } else {
                 console.log(`Server acknowledgement: ${res.status}`);
             }
@@ -66,8 +67,8 @@ function handleSendMessage(userId, messagesElement, input, socket) {
 function startSession(socket) {
     function updateBasicGui(roomCode, roomName, userId) {
         // Update code and name of the room, as well as user info, on user GUI
-        // const roomCodeInChatElement = document.getElementById("roomCodeInChat");
-        // if (roomCodeInChatElement) roomCodeInChatElement.textContent = `Room code: ${roomCode}`;
+        const roomCodeInChatElement = document.getElementById("roomCodeInChat");
+        if (roomCodeInChatElement) roomCodeInChatElement.textContent = `Room code: ${roomCode}`;
 
         const titleElement = document.getElementById("title");
         if (titleElement)titleElement.textContent = roomName;
@@ -125,8 +126,8 @@ function startSession(socket) {
     });
 
     // Handle client socket receiving chat messages sent by connected clients
-    socket.on("chatMessage", (senderId, msg) => {
-        appendMessageToChatList(messagesElement, senderId, msg);
+    socket.on("chatMessageReceived", (senderId, msgContent) => {
+        appendMessageToChatList(messagesElement, senderId, msgContent);
     });
 
     // Handle room deletion event
