@@ -22,15 +22,15 @@ async function storeMessage(roomCode, _id, msgContent, type) {
         if (!room) throw new Error("Room not found");
 
         // Auto-delete this message 1 hour after creation
-        const expireAt = new Date(Date.now() + MESSAGE_EXPIRATION_MS);
+        const expiresAt = new Date(Date.now() + MESSAGE_EXPIRATION_MS);
 
         // Construct and store the message using the Message model
         const message = await Message.create({
             room: room._id,
             sender: _id,
-            msgContent,
+            content: msgContent,
             type,
-            expireAt
+            expiresAt
         });
         console.log("Message saved to DB\n");
         return message;

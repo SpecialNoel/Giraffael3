@@ -130,16 +130,33 @@ io.on("connection", async (socket) => {
     });
 
     // Handle the chat message event
-    socket.on("chatMessage", async (msgContent, callback) => {
-        // If somehow the server received a message the user sent while the user is not currently inside a room,
-        // abandon the received message
-        // TODO: Add more guardrail to this problem
-        if (!currentRoomCode) {
-            console.log("Received a message from user while they are not inside a room yet")
-            return;
-        }
+    socket.on("chatMessage", async ({ msgContent, tmpId }, callback) => {
+        try {
+            // If somehow the server received a message the user sent while the user is not currently inside a room,
+            // abandon the received message
+            // TODO: Add more guardrail to this problem
+            if (!currentRoomCode) {
+                console.log("Received a message from user while they are not inside a room yet")
+                return;
+            }
 
-        await Services.handleUserChatMessage(socket, currentRoomCode, socket.user._id, msgContent, callback);
+            // Store the message to the database
+            const message = await Services.handleUserChatMessage(socket, 
+                                                                 currentRoomCode, 
+                                                                 socket.user._id, 
+                                                                 msgContent);
+
+            // The callback function will be called to mark the acknowledgement from server on this event
+            callback({
+                status: "success", // return "success" back to client to make them update the status of the message
+                tmpId, // piggyback the tmpId received from client
+                message
+            });
+        } catch (err) {
+            callback({
+                status: "error" // return "error" (i.e. not success) back to client
+            });        
+        }
     });
 })
 

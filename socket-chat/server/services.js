@@ -65,21 +65,16 @@ async function handleUserDisconnection(io, roomCode, socket) {
 
 // Handle user chat message event
 // Note: use io.to() to include the sender; use socket.to() to exclude the sender
-async function handleUserChatMessage(socket, roomCode, _id, msgContent, callback) {
+async function handleUserChatMessage(socket, roomCode, _id, msgContent) {
     // Send the message to all connected users in the room (excluding the sender user)
     socket.to(roomCode).emit("chatMessageReceived", _id, msgContent);
 
     // Store the message to MongoDB
-    await storeMessage(roomCode, _id, msgContent, "text");
+    const message = await storeMessage(roomCode, _id, msgContent, "text");
 
     // Print the message out on server side for debugging purpose
-    const sender = await User.findOne({ _id });
-    console.log(`${sender.username} [${userId}]: ${msgContent}`);
-
-    // The callback function will be called to mark the acknowledgement from server on this event
-    callback({
-        status: "ok"
-    });
+    console.log(`[${_id}]: ${msgContent}`);
+    return message;
 }
 
 export { authenticate,
