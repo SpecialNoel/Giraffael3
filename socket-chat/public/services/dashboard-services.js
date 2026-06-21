@@ -1,8 +1,38 @@
-// dashboard-service.js
+// dashboard-services.js
 
 import { appendRoomToRoomsContainer } from "../utils/rooms-container-handler.js";
 import { apiFetch } from "../utils/api-fetcher.js";
-import { enterRoom, enterRoomFromURL } from "./room-service.js";
+import { enterRoom, enterRoomFromURL } from "./room-services.js";
+
+function updateBasicGui() {
+    const params = new URLSearchParams(window.location.search);
+    const roomCode = params.get("room");
+    if (!roomCode) return;
+
+    const roomName = "default_roomName";
+    const userId = localStorage.getItem("userId");
+
+    // Update code and name of the room, as well as user info, on user GUI
+    const titleElement = document.getElementById("title");
+    if (titleElement)titleElement.textContent = roomName;
+
+    const roomCodeInChatElement = document.getElementById("roomCodeInChat");
+    if (roomCodeInChatElement) roomCodeInChatElement.textContent = `Room Code: ${roomCode}`;
+
+    const userIdInChatElement = document.getElementById("userIdInChat");
+    if (userIdInChatElement) userIdInChatElement.textContent = `User ID: ${userId}`;
+}
+
+// Update the current online users in the room
+function updateOnlineUserList(onlineUsersElement, onlineUsers) {
+    onlineUsersElement.innerHTML = "";
+    onlineUsers.forEach((userId) => {
+        const item = document.createElement("li");
+        item.textContent = userId;
+        onlineUsersElement.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+    });
+}
 
 // Helper function of handleRoomsContainer; set up the functionality of the room button
 async function handleRoomBtn(roomBtn, socket) {
@@ -33,6 +63,9 @@ async function handleRoomBtn(roomBtn, socket) {
 
     // Send an "enter room" request to server via socket events
     enterRoom(socket, roomCode);
+
+    // Update the main panel upon enter room success
+    updateBasicGui();
 }
 
 // Helper function of handleRoomsContainer; set up the functionality of the leave button
@@ -294,4 +327,4 @@ function setupRoomsContainerRefresher() {
     loadRooms();
 }
 
-export { handleDashboard, setupRoomsContainerRefresher };
+export { updateOnlineUserList, handleDashboard, setupRoomsContainerRefresher };

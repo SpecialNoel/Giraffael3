@@ -22,15 +22,15 @@ async function storeMessage(roomCode, _id, msgContent, type) {
         if (!room) throw new Error("Room not found");
 
         // Auto-delete this message 1 hour after creation
-        const expireAt = new Date(Date.now() + MESSAGE_EXPIRATION_MS);
+        const expiresAt = new Date(Date.now() + MESSAGE_EXPIRATION_MS);
 
         // Construct and store the message using the Message model
         const message = await Message.create({
             room: room._id,
             sender: _id,
-            msgContent,
+            content: msgContent,
             type,
-            expireAt
+            expiresAt
         });
         console.log("Message saved to DB\n");
         return message;
@@ -51,9 +51,20 @@ async function getMessageHistory(roomCode) {
         if (!room) throw new Error("Room not found");
 
         // Fetch the messages sent over the target room using the Message model
-        return await Message.find({
+        const messages = await Message.find({
             room: room._id,
-        }).sort({ createdAt: 1 }).lean();
+        })
+        .sort({ createdAt: 1 })
+        .populate({
+            path: "sender",
+            select: "userId -_id" 
+        }) // convert user object id to user public id
+        .lean();
+
+        return messages.map(msg => ({
+            ...msg,
+            userId: msg.sender?.userId
+        }));
     } catch (err) {
         console.error("Failed to retrieve message history:", err);
         throw err;

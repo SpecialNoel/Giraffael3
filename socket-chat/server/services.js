@@ -54,32 +54,27 @@ async function getOnlineUsers(roomCode) {
 async function handleUserDisconnection(io, roomCode, socket) {
     // Leave the user from the room
     socket.leave(roomCode);
-    console.log(`User ${socket.id} left room ${roomCode}`);
-    console.log(`User ${socket.id} disconnected`);
+    console.log(`User ${socket.user.userId} left room ${roomCode}`);
+    console.log(`User ${socket.user.userId} disconnected`);
 
     // Broadcast a message to all users in the room upon user disconnection
-    const onlineUsers = await getOnlineUsers(roomCode);
-    io.to(roomCode).emit("userLeft", onlineUsers);
-    console.log(`Online users: ${onlineUsers}\n`);
+    // const onlineUsers = await getOnlineUsers(roomCode);
+    // io.to(roomCode).emit("userLeft", onlineUsers);
+    // console.log(`Online users: ${onlineUsers}\n`);
 }
 
 // Handle user chat message event
 // Note: use io.to() to include the sender; use socket.to() to exclude the sender
-async function handleUserChatMessage(socket, roomCode, _id, msgContent, callback) {
+async function handleUserChatMessage(socket, roomCode, _id, msgContent) {
     // Send the message to all connected users in the room (excluding the sender user)
     socket.to(roomCode).emit("chatMessageReceived", _id, msgContent);
 
     // Store the message to MongoDB
-    await storeMessage(roomCode, _id, msgContent, "text");
+    const message = await storeMessage(roomCode, _id, msgContent, "text");
 
     // Print the message out on server side for debugging purpose
-    const sender = await User.findOne({ _id });
-    console.log(`${sender.username} [${userId}]: ${msgContent}`);
-
-    // The callback function will be called to mark the acknowledgement from server on this event
-    callback({
-        status: "ok"
-    });
+    console.log(`[${_id}]: ${msgContent}`);
+    return message;
 }
 
 export { authenticate,
