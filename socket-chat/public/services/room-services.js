@@ -1,4 +1,4 @@
-// room-service.js
+// room-services.js
 
 // Fire the "enter room" event to server
 function enterRoom(socket, roomCode) {

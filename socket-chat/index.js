@@ -12,7 +12,9 @@ import { router as dashboardRouter } from "./server/routes/dashboard-routes.js";
 import { router as roomsRouter } from "./server/routes/rooms-routes.js";
 
 import { connectToDB } from "./server/utils/db-connector.js";
+import { connectToRedis } from "./server/utils/redis-connector.js";
 import * as Services from "./server/services.js";
+import * as RedisUserServices from "./server/redis-services/user-services.js";
 import { verifyToken } from "./server/utils/jwt-token-handler.js";
 import { getMembers } from "./server/db-services/room-services.js";
 import { getMessageHistory } from "./server/db-services/message-services.js";
@@ -53,6 +55,9 @@ const io = new Server(server);
 // Connect to MongoDB
 await connectToDB();
 
+// Connect to Redis
+const redis = await connectToRedis();
+
 // Authenticate the user for operations handled with socket events, 
 //   before proceeding the connection
 // Note that this comes after the client successfully signed in to the app
@@ -89,13 +94,22 @@ io.on("connection", async (socket) => {
     let currentRoomCode = null;
 
     // Handle user join room event
-    socket.on("joinRoom", (roomCode) => {
+    socket.on("joinRoom", async (roomCode) => {
         // Leave the user from the room if they are already in the room to prevent duplicated join
         if (currentRoomCode) socket.leave(currentRoomCode);
 
         // Join the user to the room
         currentRoomCode = roomCode;
         socket.join(roomCode);
+
+        // Add the user to the room in Redis
+        await RedisUserServices.addUser(redis, roomCode, socket.user.userId);
+        console.log(`Added user ${socket.user.userId} to room in Redis`);
+
+        // Notify the user about join room success
+        const onlineUsers = await RedisUserServices.getOnlineUsers(redis, roomCode);
+        console.log("onlineUsers:", onlineUsers);
+        socket.emit("userJoined", onlineUsers);
     });
 
     // Handle user enter room event
@@ -124,9 +138,16 @@ io.on("connection", async (socket) => {
     });
 
     // // Handle the disconnection event
-    socket.on("disconnect", async (roomId) => {
-        console.log(`User ${socket.user.userId} disconnected\n`);
-        // await Services.handleClientDisconnection(io, roomId, socket);
+    socket.on("disconnect", async () => {
+        if (!currentRoomCode) {
+            console.log("User tries to disconnect while they are not inside a room yet");
+        }
+
+        // Remove the user from the room in Redis
+        await RedisUserServices.removeUser(redis, socket.user.userId);
+        console.log(`Removed user ${socket.user.userId} from room in Redis`);
+
+        await Services.handleUserDisconnection(io, currentRoomCode, socket);
     });
 
     // Handle the chat message event
@@ -136,7 +157,7 @@ io.on("connection", async (socket) => {
             // abandon the received message
             // TODO: Add more guardrail to this problem
             if (!currentRoomCode) {
-                console.log("Received a message from user while they are not inside a room yet")
+                console.log("Received a message from user while they are not inside a room yet");
                 return;
             }
 

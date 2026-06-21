@@ -51,9 +51,20 @@ async function getMessageHistory(roomCode) {
         if (!room) throw new Error("Room not found");
 
         // Fetch the messages sent over the target room using the Message model
-        return await Message.find({
+        const messages = await Message.find({
             room: room._id,
-        }).sort({ createdAt: 1 }).lean();
+        })
+        .sort({ createdAt: 1 })
+        .populate({
+            path: "sender",
+            select: "userId -_id" 
+        }) // convert user object id to user public id
+        .lean();
+
+        return messages.map(msg => ({
+            ...msg,
+            userId: msg.sender?.userId
+        }));
     } catch (err) {
         console.error("Failed to retrieve message history:", err);
         throw err;
