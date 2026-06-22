@@ -13,9 +13,8 @@ import { router as roomsRouter } from "./server/routes/rooms-routes.js";
 
 import { connectToDB } from "./server/utils/db-connector.js";
 import { connectToRedis } from "./server/utils/redis-connector.js";
-import * as Services from "./server/services.js";
+import * as SocketServices from "./server/services/socket-services.js";
 import * as RedisUserServices from "./server/redis-services/user-services.js";
-import { verifyToken } from "./server/utils/jwt-token-handler.js";
 import { getMembers } from "./server/db-services/room-services.js";
 import { getMessageHistory } from "./server/db-services/message-services.js";
 
@@ -58,31 +57,10 @@ await connectToDB();
 // Connect to Redis
 const redis = await connectToRedis();
 
-// Authenticate the user for operations handled with socket events, 
-//   before proceeding the connection
+// Authenticate the user for operations handled with socket events before proceeding the connection
 // Note that this comes after the client successfully signed in to the app
 io.use((socket, next) => {
-    try {
-        // Receive JWT token from user (one time only)
-        const token = socket.handshake.auth.token;
-
-        // Verify the received token to ensure its validity
-        const { _id, userId } = verifyToken(token);
-        // Apply received user info inside the token for later use
-        socket.user = {
-            _id: _id,
-            userId: userId,
-        };
-        console.log(`Authenticated user ${userId} for socket events.`);
-
-        // "next()" continues the connection by invocating "io.on("connection")"
-        next();
-    } catch (err) {
-        console.log("Error in authenticating user");
-
-        // "next(new Error())" rejects the connection
-        next(new Error("Authentication failed"));
-    }
+    SocketServices.authenticateForSocketEvents(socket, next);
 });
 
 // SocketIO server handles the connection event
@@ -107,7 +85,7 @@ io.on("connection", async (socket) => {
         console.log(`Added user ${socket.user.userId} to room in Redis`);
 
         // Notify the user about join room success
-        const onlineUsers = await RedisUserServices.getOnlineUsers(redis, roomCode);
+        const onlineUsers = await SocketServices.getOnlineUsers(io, roomCode);
         console.log("onlineUsers:", onlineUsers);
         socket.emit("userJoined", onlineUsers);
     });
@@ -144,10 +122,13 @@ io.on("connection", async (socket) => {
         }
 
         // Remove the user from the room in Redis
-        await RedisUserServices.removeUser(redis, socket.user.userId);
+        const userId = socket.user.userId;
+        await RedisUserServices.removeUser(redis, currentRoomCode, userId);
         console.log(`Removed user ${socket.user.userId} from room in Redis`);
 
-        await Services.handleUserDisconnection(io, currentRoomCode, socket);
+        socket.leave(currentRoomCode);
+        console.log(`User ${socket.user.userId} left room ${currentRoomCode}`);
+        console.log(`User ${socket.user.userId} disconnected`);
     });
 
     // Handle the chat message event
@@ -162,7 +143,7 @@ io.on("connection", async (socket) => {
             }
 
             // Store the message to the database
-            const message = await Services.handleUserChatMessage(socket, 
+            const message = await SocketServices.handleUserChatMessage(socket, 
                                                                  currentRoomCode, 
                                                                  socket.user._id, 
                                                                  msgContent);

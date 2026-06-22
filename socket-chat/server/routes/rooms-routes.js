@@ -6,12 +6,14 @@ import path from "node:path";
 import { pathToViewsDir } from "./route-helper.js";
 import { findUserByEmail } from "../db-services/user-services.js";
 import * as RoomServices from "../db-services/room-services.js";
-import { authenticate, notifyUsersAboutRoomDeletion } from "../services.js";
+import { authenticateForHTTPEndpoints } from "../services/http-endpoint-services.js";
+import { notifyUsersAboutRoomDeletion } from "../services/socket-services.js";
+import { io } from "../../index.js";
 
 const router = express.Router();
 
 // Rooms API endpoints
-router.get("/", authenticate, async (req, res) => {
+router.get("/", authenticateForHTTPEndpoints, async (req, res) => {
     try {
         // Retrieve _id of the requesting user 
         const _id = req.user._id;
@@ -32,7 +34,7 @@ router.get("/", authenticate, async (req, res) => {
         });
     }
 });
-router.post("/create", authenticate, async (req, res) => {
+router.post("/create", authenticateForHTTPEndpoints, async (req, res) => {
     try {
         // Receive room name and creator info
         const { roomName } = req.body;
@@ -60,7 +62,7 @@ router.post("/create", authenticate, async (req, res) => {
         });    
     }
 });
-router.post("/delete", authenticate, async (req, res) => {
+router.post("/delete", authenticateForHTTPEndpoints, async (req, res) => {
     try {
         // Receive room name and user info
         const { roomCode } = req.body;
@@ -75,7 +77,7 @@ router.post("/delete", authenticate, async (req, res) => {
         }
 
         // Broadcast the room deletion to all users who joined this room via socket events
-        notifyUsersAboutRoomDeletion(roomCode);
+        notifyUsersAboutRoomDeletion(io, roomCode);
         console.log(`Notified all users in room ${roomCode} about room deletion`);
 
         // Delete the room from the database
@@ -94,7 +96,7 @@ router.post("/delete", authenticate, async (req, res) => {
         });    
     }
 });
-router.post("/join", authenticate, async (req, res) => {
+router.post("/join", authenticateForHTTPEndpoints, async (req, res) => {
     try {
         // Receive room code and user info
         const { roomCode } = req.body;
@@ -145,7 +147,7 @@ router.post("/join", authenticate, async (req, res) => {
         });    
     }
 });
-router.post("/leave", authenticate, async (req, res) => {
+router.post("/leave", authenticateForHTTPEndpoints, async (req, res) => {
     try {
         // Receive room code and user info
         const { roomCode } = req.body;
@@ -187,7 +189,7 @@ router.post("/leave", authenticate, async (req, res) => {
         });    
     }
 });
-router.post("/enter", authenticate, async (req, res) => {
+router.post("/enter", authenticateForHTTPEndpoints, async (req, res) => {
     try {
         // Receive room id and user info
         const { roomCode } = req.body;
