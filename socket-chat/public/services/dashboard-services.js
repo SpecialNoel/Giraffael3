@@ -34,7 +34,7 @@ function updateOnlineUserList(onlineUsersElement, onlineUsers) {
     });
 }
 
-// Helper function of handleRoomsContainer; set up the functionality of the room button
+// Helper function of handleRoomsContainer; set up the functionality of the room button (to enter room)
 async function handleRoomBtn(roomBtn, socket) {
     const roomCode = roomBtn.dataset.roomCode; // dataset.roomCode is dynamically parsed from "data-room-code" attribute in html
     console.log("Clicked room:", roomCode);

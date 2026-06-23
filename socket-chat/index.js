@@ -69,19 +69,20 @@ io.on("connection", async (socket) => {
     // given the socket connection is established successfully between the user and server
     console.log(`User ${socket.user.userId} connected\n`);
 
-    let currentRoomCode = null;
+    // Store the room code of the current visiting room to the connecting socket
+    socket.currentRoomCode = null;
 
     // Handle user join room event
     socket.on("joinRoom", async (roomCode) => {
         // Leave the user from the room if they are already in the room to prevent duplicated join
-        if (currentRoomCode) socket.leave(currentRoomCode);
+        if (socket.currentRoomCode) socket.leave(socket.currentRoomCode);
 
         // Join the user to the room
-        currentRoomCode = roomCode;
+        socket.currentRoomCode = roomCode;
         socket.join(roomCode);
 
         // Add the user to the room in Redis
-        await RedisUserServices.addUser(redis, roomCode, socket.user.userId);
+        await RedisUserServices.addUserToRoom(redis, roomCode, socket.user.userId);
         console.log(`Added user ${socket.user.userId} to room in Redis`);
 
         // Notify the user about join room success
@@ -93,10 +94,10 @@ io.on("connection", async (socket) => {
     // Handle user enter room event
     socket.on("enterRoom", async (roomCode) => {
         // Leave the user from the room if they are already in the room to prevent duplicated join
-        if (currentRoomCode) socket.leave(currentRoomCode);
+        if (socket.currentRoomCode) socket.leave(socket.currentRoomCode);
 
         // Join the user to the room
-        currentRoomCode = roomCode;
+        socket.currentRoomCode = roomCode;
         socket.join(roomCode);
 
         // Fetch members and message history of the room
@@ -117,17 +118,18 @@ io.on("connection", async (socket) => {
 
     // // Handle the disconnection event
     socket.on("disconnect", async () => {
-        if (!currentRoomCode) {
+        if (!socket.currentRoomCode) {
             console.log("User tries to disconnect while they are not inside a room yet");
         }
 
         // Remove the user from the room in Redis
         const userId = socket.user.userId;
-        await RedisUserServices.removeUser(redis, currentRoomCode, userId);
+        await RedisUserServices.removeUserFromRoom(redis, socket.currentRoomCode, userId);
         console.log(`Removed user ${socket.user.userId} from room in Redis`);
 
-        socket.leave(currentRoomCode);
-        console.log(`User ${socket.user.userId} left room ${currentRoomCode}`);
+        socket.leave(socket.currentRoomCode);
+        socket.currentRoomCode = null;
+        console.log(`User ${socket.user.userId} left room ${socket.currentRoomCode}`);
         console.log(`User ${socket.user.userId} disconnected`);
     });
 
@@ -137,14 +139,14 @@ io.on("connection", async (socket) => {
             // If somehow the server received a message the user sent while the user is not currently inside a room,
             // abandon the received message
             // TODO: Add more guardrail to this problem
-            if (!currentRoomCode) {
+            if (!socket.currentRoomCode) {
                 console.log("Received a message from user while they are not inside a room yet");
                 return;
             }
 
             // Store the message to the database
             const message = await SocketServices.handleUserChatMessage(socket, 
-                                                                 currentRoomCode, 
+                                                                 socket.currentRoomCode, 
                                                                  socket.user._id, 
                                                                  msgContent);
 

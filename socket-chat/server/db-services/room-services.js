@@ -38,7 +38,6 @@ async function createRoom(roomName, _id) {
                     roomCode: generateRoomCode(),
                     roomName,
                     creator: _id,
-                    members: [_id],
                 });
             } catch (err) {
                 if (err.code === 11000) continue; // duplicate key error of MongoDB; retry

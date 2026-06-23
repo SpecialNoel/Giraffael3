@@ -15,6 +15,7 @@ const PASSWORD_MIN_LENGTH = 8;
 router.get("/", (req, res) => {
     res.sendFile(path.join(pathToViewsDir, "sign-up.html"));
 });
+
 router.post("/", async (req, res) => {
     try {
         // Receive email and plaintext password from user as sign-up credentials

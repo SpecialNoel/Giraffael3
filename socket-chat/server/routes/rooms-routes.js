@@ -34,6 +34,7 @@ router.get("/", authenticateForHTTPEndpoints, async (req, res) => {
         });
     }
 });
+
 router.post("/create", authenticateForHTTPEndpoints, async (req, res) => {
     try {
         // Receive room name and creator info
@@ -62,6 +63,7 @@ router.post("/create", authenticateForHTTPEndpoints, async (req, res) => {
         });    
     }
 });
+
 router.post("/delete", authenticateForHTTPEndpoints, async (req, res) => {
     try {
         // Receive room name and user info
@@ -96,6 +98,7 @@ router.post("/delete", authenticateForHTTPEndpoints, async (req, res) => {
         });    
     }
 });
+
 router.post("/join", authenticateForHTTPEndpoints, async (req, res) => {
     try {
         // Receive room code and user info
@@ -147,6 +150,7 @@ router.post("/join", authenticateForHTTPEndpoints, async (req, res) => {
         });    
     }
 });
+
 router.post("/leave", authenticateForHTTPEndpoints, async (req, res) => {
     try {
         // Receive room code and user info
@@ -189,6 +193,7 @@ router.post("/leave", authenticateForHTTPEndpoints, async (req, res) => {
         });    
     }
 });
+
 router.post("/enter", authenticateForHTTPEndpoints, async (req, res) => {
     try {
         // Receive room id and user info
