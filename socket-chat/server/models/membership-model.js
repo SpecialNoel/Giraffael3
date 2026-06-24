@@ -18,6 +18,12 @@ const membershipSchema = new Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: "Room",
             required: true
+        },
+        // role specifies the authority this user has in the room
+        role: {
+            type: String,
+            enum: ["member", "creator"],
+            default: "member"
         }
     }
 );

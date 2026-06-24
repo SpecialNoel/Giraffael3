@@ -6,6 +6,7 @@ import path from "node:path";
 import { pathToViewsDir } from "./route-helper.js";
 import { findUserByEmail } from "../db-services/user-services.js";
 import * as RoomServices from "../db-services/room-services.js";
+import * as MembershipServices from "../db-services/membership-services.js";
 import { authenticateForHTTPEndpoints } from "../services/http-endpoint-services.js";
 import { notifyUsersAboutRoomDeletion } from "../services/socket-services.js";
 import { io } from "../../index.js";
@@ -19,7 +20,7 @@ router.get("/", authenticateForHTTPEndpoints, async (req, res) => {
         const _id = req.user._id;
 
         // Retrieve the info about all existing rooms this user has joined
-        const roomsInfo = await RoomServices.getRoomsInfo(_id);
+        const roomsInfo = await MembershipServices.getRoomsInfo(_id);
         
         // Return the list of room info
         return res.status(200).json({
@@ -44,11 +45,13 @@ router.post("/create", authenticateForHTTPEndpoints, async (req, res) => {
         // Create the room
         const room = await RoomServices.createRoom(roomName, _id);
 
+        // Create membership by join to the room
+        await MembershipServices.joinRoom(_id, room._id, "creator");
+
         // Retrieve necessary info about this new room
         const roomInfo = { roomName: room.roomName, 
                            roomCode: room.roomCode, 
-                           creator:  room.creator, 
-                           members:  room.members };
+                           creator:  room.creator };
 
         // Create-room success
         return res.status(200).json({
@@ -71,7 +74,7 @@ router.post("/delete", authenticateForHTTPEndpoints, async (req, res) => {
         const _id = req.user._id;
 
         // Handle case where received _id does not match the room's creator id
-        if (!RoomServices.isUserTheCreatorOfRoom(roomCode, _id)) {
+        if (!RoomServices.isCreator(_id, roomCode)) {
             return res.status(401).json({
                 success: false,
                 error: "Delete room failure",
@@ -102,11 +105,11 @@ router.post("/delete", authenticateForHTTPEndpoints, async (req, res) => {
 router.post("/join", authenticateForHTTPEndpoints, async (req, res) => {
     try {
         // Receive room code and user info
-        const { roomCode } = req.body;
+        const { roomCode, role } = req.body;
         const _id = req.user._id;
 
         // Join the room
-        const joinRoomResult = await RoomServices.joinRoom(roomCode, _id);
+        const joinRoomResult = await MembershipServices.joinRoom(_id, roomCode, "member");
         
         // Handle join-room failure
         if (!joinRoomResult.success) {
@@ -158,7 +161,7 @@ router.post("/leave", authenticateForHTTPEndpoints, async (req, res) => {
         const _id = req.user._id;
 
         // Join the room
-        const leaveRoomResult = await RoomServices.leaveRoom(roomCode, _id);
+        const leaveRoomResult = await RoomServices.leaveRoom(_id, roomCode);
         
         // Handle join-room failure
         if (!leaveRoomResult.success) {
@@ -200,7 +203,7 @@ router.post("/enter", authenticateForHTTPEndpoints, async (req, res) => {
         const { roomCode } = req.body;
 
         // Find the requesting room
-        const room = await RoomServices.findRoomByRoomCode(roomCode);
+        const room = await RoomServices.findRoom(roomCode);
         // Handle error where the requesting room does not exist in DB
         if (!room) {
             console.log(`Room does not exist in DB:`);

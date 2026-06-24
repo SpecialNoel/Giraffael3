@@ -16,7 +16,7 @@ import { connectToRedis } from "./server/utils/redis-connector.js";
 import * as SocketServices from "./server/services/socket-services.js";
 import * as RedisUserServices from "./server/redis-services/user-services.js";
 import { getMembers } from "./server/db-services/room-services.js";
-import { getMessageHistory } from "./server/db-services/message-services.js";
+import { getMessages } from "./server/db-services/message-services.js";
 
 
 // ==================== Express App ====================
@@ -102,7 +102,7 @@ io.on("connection", async (socket) => {
 
         // Fetch members and message history of the room
         const members = await getMembers(roomCode);
-        const messages = await getMessageHistory(roomCode);
+        const messages = await getMessages(roomCode);
 
         // Send these information to the user
         socket.emit("userEntered", {
