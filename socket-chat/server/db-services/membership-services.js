@@ -149,4 +149,4 @@ export { joinRoom,
          getMembersInRoom, 
          getRoomsOfUser,
          getRoomsInfo,
-         isCreator };
+         isCreatorByRoomCode };

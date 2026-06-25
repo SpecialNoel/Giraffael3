@@ -7,7 +7,7 @@ import { pathToViewsDir } from "./route-helper.js";
 import { findUserByEmail } from "../db-services/user-services.js";
 import * as RoomServices from "../db-services/room-services.js";
 import * as MembershipServices from "../db-services/membership-services.js";
-import { authenticateForHTTPEndpoints } from "../services/http-endpoint-services.js";
+import { authenticateForHTTPEndpoints } from "../services/api-services.js";
 import { notifyUsersAboutRoomDeletion } from "../services/socket-services.js";
 import { io } from "../../index.js";
 
@@ -74,7 +74,7 @@ router.post("/delete", authenticateForHTTPEndpoints, async (req, res) => {
         const _id = req.user._id;
 
         // Handle case where received _id does not match the room's creator id
-        if (!RoomServices.isCreator(_id, roomCode)) {
+        if (!MembershipServices.isCreatorByRoomCode(_id, roomCode)) {
             return res.status(401).json({
                 success: false,
                 error: "Delete room failure",
@@ -161,7 +161,7 @@ router.post("/leave", authenticateForHTTPEndpoints, async (req, res) => {
         const _id = req.user._id;
 
         // Join the room
-        const leaveRoomResult = await RoomServices.leaveRoom(_id, roomCode);
+        const leaveRoomResult = await MembershipServices.leaveRoom(_id, roomCode);
         
         // Handle join-room failure
         if (!leaveRoomResult.success) {

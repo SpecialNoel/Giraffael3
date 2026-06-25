@@ -1,4 +1,34 @@
-// rooms-container-handler.js
+// room-view.js
+
+function updateBasicGui() {
+    const params = new URLSearchParams(window.location.search);
+    const roomCode = params.get("room");
+    if (!roomCode) return;
+
+    const roomName = "default_roomName";
+    const userId = localStorage.getItem("userId");
+
+    // Update code and name of the room, as well as user info, on user GUI
+    const titleElement = document.getElementById("title");
+    if (titleElement)titleElement.textContent = roomName;
+
+    const roomCodeInChatElement = document.getElementById("roomCodeInChat");
+    if (roomCodeInChatElement) roomCodeInChatElement.textContent = `Room Code: ${roomCode}`;
+
+    const userIdInChatElement = document.getElementById("userIdInChat");
+    if (userIdInChatElement) userIdInChatElement.textContent = `User ID: ${userId}`;
+}
+
+// Update the current online users in the room
+function updateOnlineUserList(onlineUsersElement, onlineUsers) {
+    onlineUsersElement.innerHTML = "";
+    onlineUsers.forEach((userId) => {
+        const item = document.createElement("li");
+        item.textContent = userId;
+        onlineUsersElement.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+    });
+}
 
 // Update the rooms container upon room list modification (create room, join room, refresh page, etc.)
 function appendRoomToRoomsContainer(containerDiv, roomInfo, isCreatorOfRoom) {
@@ -36,4 +66,4 @@ function appendRoomToRoomsContainer(containerDiv, roomInfo, isCreatorOfRoom) {
     containerDiv.appendChild(roomRow);
 }
 
-export { appendRoomToRoomsContainer };
+export { updateBasicGui, updateOnlineUserList, appendRoomToRoomsContainer };

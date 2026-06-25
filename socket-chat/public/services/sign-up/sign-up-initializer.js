@@ -1,4 +1,4 @@
-// sign-up-services.js
+// sign-up-initializer.js
 
 // Set up the signup form
 function signUpTraditional() { 

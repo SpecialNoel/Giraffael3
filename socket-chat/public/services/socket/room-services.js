@@ -6,14 +6,12 @@ function enterRoom(socket, roomCode) {
     socket.emit("enterRoom", roomCode);
 }
 
-// Fetch the room code encoded in user's browser url bar
-function getRoomCodeFromURL() {
-    return new URLSearchParams(window.location.search).get("room");
-}
-
 // Atomically fetch the room code from url bar, and fire the "enter room" event
 function enterRoomFromURL(socket) {
-    const roomCode = getRoomCodeFromURL();
+    // Fetch the room code encoded in user's browser url bar
+    const roomCode = new URLSearchParams(window.location.search).get("room");
+
+    // Fire the "enter room" event to server
     enterRoom(socket, roomCode);
 }
 

@@ -1,8 +1,9 @@
 // dashboard-page.js
 
 import { handleDashboard, setupRoomsContainerRefresher } from "../services/dashboard-services.js";
-import { createAuthenticatedSocket, startSession } from "../services/socket-services.js";
-import { enterRoomFromURL } from "../services/room-services.js";
+import { startSession } from "../services/socket/socket-events.js";
+import { createAuthenticatedSocket } from "../services/socket/socket-client.js";
+import { enterRoomFromURL } from "../services/socket/room-services.js";
 
 // Initialize the socket used to communicate with server, and adds event listeners to dashboard services
 window.addEventListener("DOMContentLoaded", async () => {

@@ -1,4 +1,4 @@
-// http-endpoint-services.js
+// api-services.js
 
 import { verifyToken } from "../utils/jwt-token-handler.js";
 

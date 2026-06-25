@@ -1,4 +1,4 @@
-// sign-in-services.js
+// sign-in-initializer.js
 
 // Set up the signin form
 function signIn() {    

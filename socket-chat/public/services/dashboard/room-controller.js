@@ -1,62 +1,25 @@
-// dashboard-services.js
+// room-controller.js
 
-import { appendRoomToRoomsContainer } from "../utils/rooms-container-handler.js";
-import { apiFetch } from "../utils/api-fetcher.js";
-import { enterRoom, enterRoomFromURL } from "./room-services.js";
+import { deleteRoom } from "./room-api.js";
+import { updateBasicGui, appendRoomToRoomsContainer } from "./room-view.js";
+import { enterRoom } from "../socket/room-services.js";
 
-function updateBasicGui() {
-    const params = new URLSearchParams(window.location.search);
-    const roomCode = params.get("room");
-    if (!roomCode) return;
-
-    const roomName = "default_roomName";
-    const userId = localStorage.getItem("userId");
-
-    // Update code and name of the room, as well as user info, on user GUI
-    const titleElement = document.getElementById("title");
-    if (titleElement)titleElement.textContent = roomName;
-
-    const roomCodeInChatElement = document.getElementById("roomCodeInChat");
-    if (roomCodeInChatElement) roomCodeInChatElement.textContent = `Room Code: ${roomCode}`;
-
-    const userIdInChatElement = document.getElementById("userIdInChat");
-    if (userIdInChatElement) userIdInChatElement.textContent = `User ID: ${userId}`;
-}
-
-// Update the current online users in the room
-function updateOnlineUserList(onlineUsersElement, onlineUsers) {
-    onlineUsersElement.innerHTML = "";
-    onlineUsers.forEach((userId) => {
-        const item = document.createElement("li");
-        item.textContent = userId;
-        onlineUsersElement.appendChild(item);
-        window.scrollTo(0, document.body.scrollHeight);
-    });
-}
-
-// Helper function of handleRoomsContainer; set up the functionality of the room button (to enter room)
-async function handleRoomBtn(roomBtn, socket) {
-    const roomCode = roomBtn.dataset.roomCode; // dataset.roomCode is dynamically parsed from "data-room-code" attribute in html
-    console.log("Clicked room:", roomCode);
-
-    const email = localStorage.getItem("email");
-
-    // Send roomCode to server
-    const response = await apiFetch("/rooms/enter", {
-        method: "POST",
-        body: JSON.stringify({ 
-            roomCode 
-        })
-    });
-
-    // Retrieve response sent from server
+async function parseResponse(response) {
+    // Convert retrieved response received from server to json
     const data = await response.json();
 
     // Display the error message to the user if the operation fails
-    if (!response.ok) {
-        alert(data.error);
-        return;
-    }
+    if (!response.ok) throw new Error(data.error);
+
+    return data;
+}
+
+async function handleEnterRoom(roomBtn, socket) {
+    const roomCode = roomBtn.dataset.roomCode; // dataset.roomCode is dynamically parsed from "data-room-code" attribute in html
+    console.log("Clicked room:", roomCode);
+
+    // Send roomCode to server, then retrieve response from server
+    const data = await parseResponse(await deleteRoom(roomCode));
 
     // Modify the url to reflect user entering this room without refreshing the page
     history.pushState({}, "", `/dashboard?room=${roomCode}`);
@@ -327,4 +290,4 @@ function setupRoomsContainerRefresher() {
     loadRooms();
 }
 
-export { updateOnlineUserList, handleDashboard, setupRoomsContainerRefresher };
+export { handleDashboard, setupRoomsContainerRefresher };
