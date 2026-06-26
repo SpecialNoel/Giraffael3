@@ -3,10 +3,10 @@
 import jwt from "jsonwebtoken";
 
 // Generate a JWT for the user for authentication and authorization, which expires in "expiresIn"
-function generateToken(_id, userId, expiresIn = "1h") {
+function generateToken(userObjectId, userId, expiresIn = "1h") {
     // Construct the payload
     const payload = {
-        sub: _id.toString(), // subject is the Objective Id of the user document (private)
+        sub: userObjectId.toString(), // subject is the Objective Id of the user document (private)
         userId               // userId is the public user id
     };
 
@@ -28,7 +28,7 @@ function verifyToken(token) {
     
     // Return the information stored in the payload of this token
     return { 
-        _id: decoded.sub, 
+        userObjectId: decoded.sub, 
         userId: decoded.userId 
     };
 }

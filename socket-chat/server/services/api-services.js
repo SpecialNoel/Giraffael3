@@ -14,10 +14,10 @@ function authenticateForHTTPEndpoints(req, res, next) {
 
         const token = authHeader.split(" ")[1];
 
-        const { _id, userId } = verifyToken(token);
+        const { userObjectId, userId } = verifyToken(token);
 
         req.user = {
-            _id,
+            userObjectId,
             userId,
         };
 

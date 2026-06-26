@@ -10,10 +10,10 @@ async function findRoom(roomCode) {
 }
 
 // Create a new room with the given room name, and store it to the database
-async function createRoom(roomName, _id) {
+async function createRoom(roomName, userObjectId) {
     try {
         // Check if the user exists in the database
-        const user = await User.findById(_id);
+        const user = await User.findById(userObjectId);
         if (!user) throw new Error("Creator not found");
 
         // Create and store the room to DB. Repeat if failed due to roomCode duplication
@@ -23,7 +23,7 @@ async function createRoom(roomName, _id) {
                 room = await Room.create({
                     roomCode: generateRoomCode(),
                     roomName,
-                    creator: _id,
+                    creator: userObjectId,
                 });
             } catch (err) {
                 if (err.code === 11000) continue; // duplicate key error of MongoDB; retry

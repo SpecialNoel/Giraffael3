@@ -50,7 +50,7 @@ router.post("/", async (req, res) => {
 
         // Create user in DB
         const user = await createUser(email, passwordHash);
-        console.log("Created user:", user.id);
+        console.log("Created user:", user._id);
 
         // Signup success
         return res.status(201).json({

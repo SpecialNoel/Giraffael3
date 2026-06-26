@@ -10,10 +10,10 @@ function authenticateForSocketEvents(socket, next) {
         const token = socket.handshake.auth.token;
 
         // Verify the received token to ensure its validity
-        const { _id, userId } = verifyToken(token);
+        const { userObjectId, userId } = verifyToken(token);
         // Apply received user info inside the token for later use
         socket.user = {
-            _id: _id,
+            userObjectId: userObjectId,
             userId: userId,
         };
         console.log(`Authenticated user ${userId} for socket events.`);
@@ -58,15 +58,15 @@ function notifyUsersAboutRoomDeletion(io, roomCode) {
 
 // Handle user chat message event
 // Note: use io.to() to include the sender; use socket.to() to exclude the sender
-async function handleUserChatMessage(socket, roomCode, _id, msgContent) {
+async function handleUserChatMessage(socket, roomCode, userObjectId, msgContent) {
     // Send the message to all connected users in the room (excluding the sender user)
-    socket.to(roomCode).emit("chatMessageReceived", _id, msgContent);
+    socket.to(roomCode).emit("chatMessageReceived", userObjectId, msgContent);
 
     // Store the message to MongoDB
-    const message = await storeMessage(roomCode, _id, msgContent, "text");
+    const message = await storeMessage(roomCode, userObjectId, msgContent, "text");
 
     // Print the message out on server side for debugging purpose
-    console.log(`[${_id}]: ${msgContent}`);
+    console.log(`[${userObjectId}]: ${msgContent}`);
     return message;
 }
 

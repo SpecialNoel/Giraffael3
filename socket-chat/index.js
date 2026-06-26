@@ -13,10 +13,10 @@ import { router as roomsRouter } from "./server/routes/rooms-routes.js";
 
 import { connectToDB } from "./server/utils/db-connector.js";
 import { connectToRedis } from "./server/utils/redis-connector.js";
+import { getMembersInRoom } from "./server/db-services/membership-services.js";
+import { getMessages } from "./server/db-services/message-services.js";
 import * as SocketServices from "./server/services/socket-services.js";
 import * as RedisUserServices from "./server/redis-services/user-services.js";
-import { getMembers } from "./server/db-services/room-services.js";
-import { getMessages } from "./server/db-services/message-services.js";
 
 
 // ==================== Express App ====================
@@ -101,7 +101,7 @@ io.on("connection", async (socket) => {
         socket.join(roomCode);
 
         // Fetch members and message history of the room
-        const members = await getMembers(roomCode);
+        const members = await getMembersInRoom(roomCode);
         const messages = await getMessages(roomCode);
 
         // Send these information to the user
@@ -147,7 +147,7 @@ io.on("connection", async (socket) => {
             // Store the message to the database
             const message = await SocketServices.handleUserChatMessage(socket, 
                                                                  socket.currentRoomCode, 
-                                                                 socket.user._id, 
+                                                                 socket.user.userObjectId, 
                                                                  msgContent);
 
             // The callback function will be called to mark the acknowledgement from server on this event

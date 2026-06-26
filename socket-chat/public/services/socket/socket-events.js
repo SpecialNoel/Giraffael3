@@ -1,6 +1,6 @@
 // socket-events.js
 
-import { updateOnlineUserList } from "../dashboard-services.js";
+import { updateOnlineUserList } from "../dashboard/room-view.js";
 import { appendMessageToChatList } from "./message-view.js";
 import { handleSendMessage } from "./message-services.js";
 

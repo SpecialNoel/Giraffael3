@@ -16,11 +16,11 @@ const router = express.Router();
 // Rooms API endpoints
 router.get("/", authenticateForHTTPEndpoints, async (req, res) => {
     try {
-        // Retrieve _id of the requesting user 
-        const _id = req.user._id;
+        // Retrieve userObjectId of the requesting user 
+        const userObjectId = req.user.userObjectId;
 
         // Retrieve the info about all existing rooms this user has joined
-        const roomsInfo = await MembershipServices.getRoomsInfo(_id);
+        const roomsInfo = await MembershipServices.getRoomsInfo(userObjectId);
         
         // Return the list of room info
         return res.status(200).json({
@@ -40,13 +40,13 @@ router.post("/create", authenticateForHTTPEndpoints, async (req, res) => {
     try {
         // Receive room name and creator info
         const { roomName } = req.body;
-        const _id = req.user._id;
+        const userObjectId = req.user.userObjectId;
 
         // Create the room
-        const room = await RoomServices.createRoom(roomName, _id);
+        const room = await RoomServices.createRoom(roomName, userObjectId);
 
         // Create membership by join to the room
-        await MembershipServices.joinRoom(_id, room._id, "creator");
+        await MembershipServices.joinRoom(userObjectId, room._id, "creator");
 
         // Retrieve necessary info about this new room
         const roomInfo = { roomName: room.roomName, 
@@ -71,10 +71,10 @@ router.post("/delete", authenticateForHTTPEndpoints, async (req, res) => {
     try {
         // Receive room name and user info
         const { roomCode } = req.body;
-        const _id = req.user._id;
+        const userObjectId = req.user.userObjectId;
 
-        // Handle case where received _id does not match the room's creator id
-        if (!MembershipServices.isCreatorByRoomCode(_id, roomCode)) {
+        // Handle case where received userObjectId does not match the room's creator id
+        if (!MembershipServices.isCreatorByRoomCode(userObjectId, roomCode)) {
             return res.status(401).json({
                 success: false,
                 error: "Delete room failure",
@@ -106,10 +106,10 @@ router.post("/join", authenticateForHTTPEndpoints, async (req, res) => {
     try {
         // Receive room code and user info
         const { roomCode, role } = req.body;
-        const _id = req.user._id;
+        const userObjectId = req.user.userObjectId;
 
         // Join the room
-        const joinRoomResult = await MembershipServices.joinRoom(_id, roomCode, "member");
+        const joinRoomResult = await MembershipServices.joinRoom(userObjectId, roomCode, "member");
         
         // Handle join-room failure
         if (!joinRoomResult.success) {
@@ -138,7 +138,7 @@ router.post("/join", authenticateForHTTPEndpoints, async (req, res) => {
                            roomCode: room.roomCode, 
                            creator:  room.creator, 
                            members:  room.members };
-        const isCreatorOfRoom = _id.toString() === room.creator.toString();
+        const isCreatorOfRoom = userObjectId.toString() === room.creator.toString();
         // Join-room success
         return res.status(200).json({
             success: true,
@@ -158,10 +158,10 @@ router.post("/leave", authenticateForHTTPEndpoints, async (req, res) => {
     try {
         // Receive room code and user info
         const { roomCode } = req.body;
-        const _id = req.user._id;
+        const userObjectId = req.user.userObjectId;
 
         // Join the room
-        const leaveRoomResult = await MembershipServices.leaveRoom(_id, roomCode);
+        const leaveRoomResult = await MembershipServices.leaveRoom(userObjectId, roomCode);
         
         // Handle join-room failure
         if (!leaveRoomResult.success) {

@@ -1,6 +1,6 @@
 // dashboard-page.js
 
-import { handleDashboard, setupRoomsContainerRefresher } from "../services/dashboard-services.js";
+import { initializeDashboard } from "../services/dashboard/dashboard-initializer.js";
 import { startSession } from "../services/socket/socket-events.js";
 import { createAuthenticatedSocket } from "../services/socket/socket-client.js";
 import { enterRoomFromURL } from "../services/socket/room-services.js";
@@ -12,7 +12,7 @@ window.addEventListener("DOMContentLoaded", async () => {
         * Create a socket and send the JWT token to server for authentication for socket events.
         * This step needs to be done first for the server to authenticate the client.
         * Once the client is authenticated (i.e. is trusted by server), server can
-        *   use client information such as _id and userId directly without the client
+        *   use client information such as userObjectId and userId directly without the client
         *   send these information to server for each HTTP API endpoint operation and 
         *   other operations.
         * TLDR: token verification comes after user sign-in, but before every other 
@@ -24,7 +24,7 @@ window.addEventListener("DOMContentLoaded", async () => {
         enterRoomFromURL(socket);
 
         // Handle user dashboard services (HTTP endpoints operations)
-        handleDashboard(socket);
+        initializeDashboard(socket);
 
         // Refresh the rooms container upon user refreshing the dashboard page (HTTP endpoints operations)
         setupRoomsContainerRefresher();

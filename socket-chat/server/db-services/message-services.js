@@ -8,14 +8,14 @@ import { findRoom } from "./room-services.js";
 const MESSAGE_EXPIRATION_MS = 60 * 60 * 1000; // 1 hour
 
 // Store the chat message to the database
-async function storeMessage(roomCode, _id, msgContent, type) {
+async function storeMessage(roomCode, userObjectId, msgContent, type) {
     try {
         // Check if the user exists in the database
-        const user = await User.exists({ _id });
+        const user = await User.exists({ userObjectId });
         if (!user) throw new Error("Sender not found");
 
         // Fetch the target room
-        const room = findRoom().select("_id");
+        const room = findRoom(roomCode).select("userObjectId");
         if (!room) throw new Error("Room not found");
 
         // Auto-delete this message 1 hour after creation
@@ -24,7 +24,7 @@ async function storeMessage(roomCode, _id, msgContent, type) {
         // Construct and store the message using the Message model
         const message = await Message.create({
             room: room._id,
-            sender: _id,
+            sender: userObjectId,
             content: msgContent,
             type,
             expiresAt
@@ -41,7 +41,7 @@ async function storeMessage(roomCode, _id, msgContent, type) {
 async function getMessages(roomCode) {
     try {
         // Fetch the target room
-        const room = findRoom().select("_id").lean();
+        const room = findRoom(roomCode).select("_id").lean();
         if (!room) throw new Error("Room not found");
 
         // Fetch the messages sent over the target room using the Message model
@@ -67,7 +67,7 @@ async function getMessages(roomCode) {
 
 async function getPaginatedMessages(roomCode, messageType, limit = 50, cursor = null) {
     try {
-        const room = findRoom().select("_id").lean();
+        const room = findRoom(roomCode).select("_id").lean();
         if (!room) throw new Error("Room not found");
 
         const query = {
