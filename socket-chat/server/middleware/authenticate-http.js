@@ -1,9 +1,9 @@
-// api-services.js
+// authenticate-http.js
 
 import { verifyToken } from "../utils/jwt-token-handler.js";
 
 // Authenticate the user for operations handled with http api endpoints
-function authenticateForHTTPEndpoints(req, res, next) {
+function authenticateHTTP(req, res, next) {
     try {
         const authHeader = req.headers.authorization;
         if (!authHeader?.startsWith("Bearer ")) {
@@ -30,4 +30,4 @@ function authenticateForHTTPEndpoints(req, res, next) {
     }
 }
 
-export { authenticateForHTTPEndpoints };
+export { authenticateHTTP };

@@ -14,7 +14,7 @@ async function parseResponse(response) {
 
     return data;
 }
-
+   
 // Set up the enter-room logic
 async function handleEnterRoom(roomBtn, socket) {
     const roomCode = roomBtn.dataset.roomCode; // dataset.roomCode is dynamically parsed from "data-room-code" attribute in html

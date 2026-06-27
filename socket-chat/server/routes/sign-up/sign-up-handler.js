@@ -1,22 +1,10 @@
-// sign-up-routes.js
+// sign-up-handler.js
 
-import express from "express";
-import path from "node:path";
+import { findUserByEmail } from "../../services/db-services/user/find-user-service.js";
+import { createUser } from "../../services/db-services/user/create-user-service.js";
+import { hashPassword } from "../../utils/password-handler.js";
 
-import { pathToViewsDir } from "./route-helper.js";
-import { findUserByEmail, createUser } from "../db-services/user-services.js";
-import { hashPassword } from "../utils/password-handler.js";
-
-const router = express.Router();
-
-const PASSWORD_MIN_LENGTH = 8;
-
-// Sign-up page
-router.get("/", (req, res) => {
-    res.sendFile(path.join(pathToViewsDir, "sign-up.html"));
-});
-
-router.post("/", async (req, res) => {
+async function handleSignUp(req, res, PASSWORD_MIN_LENGTH) {
     try {
         // Receive email and plaintext password from user as sign-up credentials
         const { email, plainPassword } = req.body;
@@ -63,6 +51,6 @@ router.post("/", async (req, res) => {
             error: "Internal server error"
         });    
     }
-});
+}
 
-export { router };
+export { handleSignUp };

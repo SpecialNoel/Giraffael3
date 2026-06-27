@@ -1,22 +1,10 @@
-// sign-in-routes.js
+// sign-in-handler.js
 
-import express from "express";
-import path from "node:path";
+import { findUserByEmail } from "../../services/db-services/user/find-user-service.js";
+import { comparePassword } from "../../utils/password-handler.js";
+import { generateToken } from "../../utils/jwt-token-handler.js";
 
-import { pathToViewsDir } from "./route-helper.js";
-import { findUserByEmail } from "../db-services/user-services.js";
-import { hashPassword } from "../utils/password-handler.js";
-import { comparePassword } from "../utils/password-handler.js";
-import { generateToken } from "../utils/jwt-token-handler.js";
-
-const router = express.Router();
-
-// Sign-in page
-router.get("/", (req, res) => {
-    res.sendFile(path.join(pathToViewsDir, "sign-in.html"));
-});
-
-router.post("/", async (req, res) => {
+async function handleSignIn(req, res) {
     try {
         /* 
          * Receive email and plaintext password from user as sign-in credentials
@@ -64,6 +52,6 @@ router.post("/", async (req, res) => {
             error: "Internal server error"
         });    
     }
-});
+}
 
-export { router };
+export { handleSignIn };

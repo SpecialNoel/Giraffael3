@@ -1,9 +1,9 @@
 // dashboard-page.js
 
-import { initializeDashboard } from "../services/dashboard/dashboard-initializer.js";
-import { startSession } from "../services/socket/socket-events.js";
 import { createAuthenticatedSocket } from "../services/socket/socket-client.js";
 import { enterRoomFromURL } from "../services/socket/room-services.js";
+import { initializeDashboard } from "../services/dashboard/dashboard-initializer.js";
+import { startSession } from "../services/socket/socket-events.js";
 
 // Initialize the socket used to communicate with server, and adds event listeners to dashboard services
 window.addEventListener("DOMContentLoaded", async () => {
@@ -19,18 +19,19 @@ window.addEventListener("DOMContentLoaded", async () => {
         *       dashboard services.
         */
         const socket = await createAuthenticatedSocket();
+        console.log("Created authenticated socket");
 
         // Fire the "enter room" event immediately after successful socket connection (and authentication) 
         enterRoomFromURL(socket);
+        console.log("Entered room from url");
 
         // Handle user dashboard services (HTTP endpoints operations)
         initializeDashboard(socket);
-
-        // Refresh the rooms container upon user refreshing the dashboard page (HTTP endpoints operations)
-        setupRoomsContainerRefresher();
+        console.log("Initialized dashboard");
 
         // Start socket communication with server with the created socket
         startSession(socket);
+        console.log("Started session");
     } catch (err) {
         alert("Failed to enter dashboard page. Return to sign-in page.");
         window.location.href = "/signin";

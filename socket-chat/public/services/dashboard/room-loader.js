@@ -1,7 +1,7 @@
 // room-loader.js
 
 import { apiFetch } from "../utils/api-fetcher.js";
-import { appendRoomToRoomsContainer } from "../../utils/rooms-container-handler.js";
+import { appendRoomToRoomsContainer } from "./room-view.js";
 
 async function loadRooms() {
     // Retrieve info about all rooms the user has joined from server
