@@ -9,4 +9,9 @@ const projectRoot = process.cwd();
 // Get the path to the "views" directory
 const pathToViewsDir = path.join(projectRoot, "views");
 
-export { pathToViewsDir };
+// Send the target html file to client
+function sendHTMLFile(res, filename) {
+    res.sendFile(path.join(pathToViewsDir, filename));
+}
+
+export { sendHTMLFile };
