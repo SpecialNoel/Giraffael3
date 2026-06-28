@@ -19,11 +19,9 @@ window.addEventListener("DOMContentLoaded", async () => {
         *       dashboard services.
         */
         const socket = await createAuthenticatedSocket();
-        console.log("Created authenticated socket");
 
         // Fire the "enter room" event immediately after successful socket connection (and authentication) 
         enterRoomFromURL(socket);
-        console.log("Entered room from url");
 
         // Handle user dashboard services (HTTP endpoints operations)
         initializeDashboard(socket);

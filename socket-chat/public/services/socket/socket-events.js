@@ -16,9 +16,12 @@ function registerSocketEvents(socket, messagesElement, onlineUsersElement) {
     // Handle user enter room event
     socket.on("userEntered", ({ members, messages }) => {
         // members is a list of { userId, username }
+
+        console.log("members:", members);
+
         console.log("\Users: ");
         members.forEach((member, index) => {
-            console.log(`${index+1}. ${member.username} [${member.userId}]`);
+            console.log(`${index+1}. ${member.userObjectId}`);
         });
         // members.map(member => (
         //     <div key={member.userId}>

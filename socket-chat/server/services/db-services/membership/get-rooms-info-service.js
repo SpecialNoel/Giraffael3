@@ -11,7 +11,11 @@ async function getRoomsInfo(userObjectId) {
         .populate({
             path: "roomObjectId", // focusing on the room documents
             match: { deleted: false }, // mark soft-deleted rooms as null
-            select: "roomName roomCode creator" // get needed room information
+            select: "roomName roomCode creator", // get needed room information
+            populate: {
+                path: "creator",
+                select: "userId -_id" // convert user object id to user public id
+            }
         });
 
         return memberships
@@ -19,7 +23,7 @@ async function getRoomsInfo(userObjectId) {
             .map(membership => ({ // formatting the information as a list of key-value pairs
                 roomName: membership.roomObjectId.roomName,
                 roomCode: membership.roomObjectId.roomCode,
-                creator: membership.roomObjectId.creator,
+                userId: membership.roomObjectId.creator.userId,
                 role: membership.role
             }));
     } catch (err) {

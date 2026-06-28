@@ -6,14 +6,13 @@ import { appendRoomToRoomsContainer } from "./room-view.js";
 async function loadRooms() {
     // Retrieve info about all rooms the user has joined from server
     const response = await apiFetch("/rooms");
-
     const data = await response.json();
-
     const userId = localStorage.getItem("userId");
     const container = document.getElementById("rooms-container");
 
     data.roomsInfo.forEach(roomInfo => {
-        const isCreator = roomInfo.creator.userId === userId;
+        const isCreator = roomInfo.userId === userId;
+        console.log("isCreator:", isCreator);
         appendRoomToRoomsContainer(
             container,
             roomInfo,

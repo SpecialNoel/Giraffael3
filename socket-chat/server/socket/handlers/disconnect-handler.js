@@ -5,7 +5,8 @@ import { removeUserFromRoom } from "../../services/redis-services/user-services.
 async function registerDisconnectHandler(redis, socket) {
     // Handle the disconnection event
     if (!socket.currentRoomCode) {
-        console.log("User tries to disconnect while they are not inside a room yet");
+        console.log("User tries to disconnect while they are not inside a room yet\n");
+        return;
     }
 
     // Remove the user from the room in Redis
