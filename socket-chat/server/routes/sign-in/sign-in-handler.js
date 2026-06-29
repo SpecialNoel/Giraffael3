@@ -21,7 +21,9 @@ async function handleSignIn(req, res) {
         if (!user) {
             console.log(`Email does not exist in DB: ${email}`);
             return res.status(401).json({ 
-                error: "Invalid credentials"
+                success: false,
+                code: "USER_NOT_FOUND",
+                error: "User not found"
             });
         }
         
@@ -32,6 +34,8 @@ async function handleSignIn(req, res) {
         if (!isPasswordValid) {
             console.log(`Invalid login attempt for email: ${email}`);
             return res.status(401).json({ 
+                success: false,
+                code: "INVALID_CREDENTIALS",
                 error: "Invalid credentials"
             });
         }
@@ -49,6 +53,8 @@ async function handleSignIn(req, res) {
     } catch (err) {
         console.error(err);
         return res.status(500).json({
+            success: false,
+            code: "OTHER",
             error: "Internal server error"
         });    
     }

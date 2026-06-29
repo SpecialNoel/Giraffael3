@@ -13,6 +13,8 @@ async function handleEnterRoom(req, res) {
         if (!room) {
             console.log(`Room does not exist in DB:`);
             return res.status(401).json({ 
+                success: false,
+                code: "ROOM_NOT_FOUND",
                 error: "Invalid request"
             });
         }
@@ -26,6 +28,8 @@ async function handleEnterRoom(req, res) {
     } catch (err) {
         console.error(err);
         return res.status(500).json({
+            success: false,
+            code: "OTHER",
             error: "Internal server error"
         });    
     }

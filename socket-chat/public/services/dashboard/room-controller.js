@@ -10,7 +10,12 @@ async function parseResponse(response) {
     const data = await response.json();
 
     // Display the error message to the user if the operation fails
-    if (!response.ok) throw new Error(data.error);
+    if (!response.ok) {
+        const err = new Error(data.error);
+        err.status = response.status;
+        err.code = data.code;
+        throw err;
+    }
 
     return data;
 }
@@ -177,8 +182,15 @@ function handleJoinRoom(socket) {
             appendRoomToRoomsContainer(containerDiv, data.roomInfo, data.isCreatorOfRoom);
         } catch (err) {
             // Print error message to client side in case something went wrong during this process
-            console.error(err);
-            alert("Something went wrong");        
+            switch (err.code) {
+                case "ALREADY_IN_ROOM":
+                    alert("You have already joined this room");
+                    break;
+
+                default:
+                    console.error(err);
+                    alert("Something went wrong");
+            }   
         }
     };
 

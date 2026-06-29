@@ -14,6 +14,7 @@ async function handleDeleteRoom(req, res, io) {
         if (!isCreatorByRoomCode(userObjectId, roomCode)) {
             return res.status(401).json({
                 success: false,
+                code: "NOT_CREATOR",
                 error: "Delete room failure",
             });
         }
@@ -34,6 +35,8 @@ async function handleDeleteRoom(req, res, io) {
     } catch (err) {
         console.error(err);
         return res.status(500).json({
+            success: false,
+            code: "OTHER",
             error: "Internal server error"
         });    
     }

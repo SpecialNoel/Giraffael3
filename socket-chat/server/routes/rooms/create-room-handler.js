@@ -29,6 +29,8 @@ async function handleCreateRoom(req, res) {
     } catch (err) {
         console.error(err);
         return res.status(500).json({
+            success: false,
+            code: "OTHER",
             error: "Internal server error"
         });    
     }

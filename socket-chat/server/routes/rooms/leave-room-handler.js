@@ -17,16 +17,19 @@ async function handleLeaveRoom(req, res) {
                 case "NOT_IN_ROOM":
                     return res.status(400).json({
                         success: false,
+                        code: "NOT_IN_ROOM",
                         error: "User already in room",
                     });
                 case "ROOM_NOT_FOUND":
                     return res.status(404).json({
                         success: false,
+                        code: "ROOM_NOT_FOUND",
                         error: "Room not found",
                     });
                 default: 
                     return res.status(500).json({
                         success: false,
+                        code: "OTHER",
                         error: "Leave room failure",
                     });
             }
@@ -40,6 +43,8 @@ async function handleLeaveRoom(req, res) {
     } catch (err) {
         console.error(err);
         return res.status(500).json({
+            success: false,
+            code: "OTHER",
             error: "Internal server error"
         });    
     }

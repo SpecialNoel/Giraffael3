@@ -17,27 +17,30 @@ async function handleJoinRoom(req, res) {
                 case "ALREADY_IN_ROOM":
                     return res.status(409).json({
                         success: false,
+                        code: "ALREADY_IN_ROOM",
                         error: "User already in room",
                     });
                 case "ROOM_NOT_FOUND":
                     return res.status(404).json({
                         success: false,
+                        code: "ROOM_NOT_FOUND",
                         error: "Room not found",
                     });
                 default: 
                     return res.status(500).json({
                         success: false,
+                        code: "OTHER",
                         error: "Join room failure",
                     });
             }
         }
 
-        // Retrieve necessary info about this room
+        // Retrieve necessary info about this room // TODO: fix joinRoomResult, as it currently uses Room model rather than Membership model
         const room = joinRoomResult.room;
         const roomInfo = { roomName: room.roomName, 
-                            roomCode: room.roomCode, 
-                            creator:  room.creator, 
-                            members:  room.members };
+                           roomCode: room.roomCode, 
+                           creator:  room.creator, 
+                           members:  room.members };
         const isCreatorOfRoom = userObjectId.toString() === room.creator.toString();
         // Join-room success
         return res.status(200).json({
@@ -49,6 +52,8 @@ async function handleJoinRoom(req, res) {
     } catch (err) {
         console.error(err);
         return res.status(500).json({
+            success: false,
+            code: "OTHER",
             error: "Internal server error"
         });    
     }
