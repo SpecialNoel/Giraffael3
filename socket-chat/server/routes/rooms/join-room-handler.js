@@ -1,11 +1,13 @@
 // join-room-handler.js
 
 import { joinRoom } from "../../services/db-services/membership/join-room-service.js";
+import { getRoomInfo } from "../../services/db-services/room/get-room-info-service.js";
+import { isCreatorByRoomCode } from "../../services/db-services/membership/check-creator-service.js";
 
 async function handleJoinRoom(req, res) {
     try {
         // Receive room code and user info
-        const { roomCode, role } = req.body;
+        const { roomCode } = req.body;
         const userObjectId = req.user.userObjectId;
 
         // Join the room
@@ -35,13 +37,11 @@ async function handleJoinRoom(req, res) {
             }
         }
 
-        // Retrieve necessary info about this room // TODO: fix joinRoomResult, as it currently uses Room model rather than Membership model
-        const room = joinRoomResult.room;
-        const roomInfo = { roomName: room.roomName, 
-                           roomCode: room.roomCode, 
-                           creator:  room.creator, 
-                           members:  room.members };
-        const isCreatorOfRoom = userObjectId.toString() === room.creator.toString();
+        // Retrieve necessary info about this room
+        const newMembership = joinRoomResult.membership;
+        const roomInfo = await getRoomInfo(newMembership.roomObjectId);
+        const isCreatorOfRoom = isCreatorByRoomCode(userObjectId, roomCode);
+
         // Join-room success
         return res.status(200).json({
             success: true,

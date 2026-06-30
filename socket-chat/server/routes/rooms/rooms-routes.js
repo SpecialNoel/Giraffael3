@@ -9,12 +9,13 @@ import { handleCreateRoom } from "./create-room-handler.js";
 import { handleDeleteRoom } from "./delete-room-handler.js";
 import { handleJoinRoom } from "./join-room-handler.js";
 import { handleLeaveRoom } from "./leave-room-handler.js";
-import { handleEnterRoom } from "./enter-room-handler.js";
 import { io } from "../../../index.js";
 
 const router = express.Router();
 
 // Rooms API endpoints
+// Note that only "CreateRoom", "DeleteRoom", "JoinRoom", and "LeaveRoom" use HTTP API endpoints
+// "EnterRoom" and "ExitRoom" uses socket events only
 router.get("/", authenticateHTTP, async (req, res) => {
     return await handleFetchRoomInfo(req, res);
 });
@@ -29,9 +30,6 @@ router.post("/join", authenticateHTTP, async (req, res) => {
 });
 router.post("/leave", authenticateHTTP, async (req, res) => {
     return await handleLeaveRoom(req, res);
-});
-router.post("/enter", authenticateHTTP, async (req, res) => {
-    return await handleEnterRoom(req, res);
 });
 
 export { router };

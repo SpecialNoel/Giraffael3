@@ -11,7 +11,7 @@ async function loadRooms() {
     const container = document.getElementById("rooms-container");
 
     data.roomsInfo.forEach(roomInfo => {
-        const isCreator = roomInfo.userId === userId;
+        const isCreator = roomInfo.role === "creator";
         appendRoomToRoomsContainer(
             container,
             roomInfo,

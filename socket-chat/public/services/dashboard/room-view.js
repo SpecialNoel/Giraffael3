@@ -22,14 +22,24 @@ function updateBasicGui() {
 // Update the current online users in the room
 function updateOnlineUserList(onlineUsersElement, onlineUsers) {
     onlineUsersElement.innerHTML = "";
-    onlineUsers.forEach((userId) => {
+    onlineUsers.forEach(({ userId, username }) => {
         const item = document.createElement("li");
-        item.textContent = userId;
+        item.textContent = `[${username}]: ${userId}`;
         onlineUsersElement.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
     });
 }
 
+// Update the message history in the room
+function updateMessageHistoryList(messagesElement, messages) {
+    messagesElement.innerHTML = "";
+    messages.forEach(({ messageObjectId, userId, username, content, type }) => {
+        const item = document.createElement("li");
+        item.textContent = `[${username}]: ${content}`;
+        messagesElement.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+    });
+}
 // Update the rooms container upon room list modification (create room, join room, refresh page, etc.)
 function appendRoomToRoomsContainer(containerDiv, roomInfo, isCreatorOfRoom) {
     // A container that wraps around each roomBtn-leaveBtn pair
@@ -66,4 +76,7 @@ function appendRoomToRoomsContainer(containerDiv, roomInfo, isCreatorOfRoom) {
     containerDiv.appendChild(roomRow);
 }
 
-export { updateBasicGui, updateOnlineUserList, appendRoomToRoomsContainer };
+export { updateBasicGui, 
+         updateOnlineUserList, 
+         updateMessageHistoryList,
+         appendRoomToRoomsContainer };

@@ -1,12 +1,13 @@
 // socket-events.js
 
-import { updateOnlineUserList } from "../dashboard/room-view.js";
+import { updateOnlineUserList, updateMessageHistoryList } from "../dashboard/room-view.js";
 import { appendMessageToChatList } from "./message-view.js";
 import { handleSendMessage } from "./message-services.js";
 
 function registerSocketEvents(socket, messagesElement, onlineUsersElement) {
     // Handle update on online users list upon user joining or leaving the room
     socket.on("userJoined", (onlineUsers) => {
+        // onlineUsers is a list of { userId, username }
         updateOnlineUserList(onlineUsersElement, onlineUsers);
     });
     socket.on("userLeft", (onlineUsers) => {
@@ -14,23 +15,14 @@ function registerSocketEvents(socket, messagesElement, onlineUsersElement) {
     });
 
     // Handle user enter room event
-    socket.on("userEntered", ({ members, messages }) => {
-        // members is a list of { userId, username }
-        console.log("\Users: ");
-        members.forEach((member, index) => {
-            console.log(`${index+1}. ${member.userObjectId}`);
-        });
-        // members.map(member => (
-        //     <div key={member.userId}>
-        //         {member.username}
-        //     </div>
-        // ));
+    socket.on("userEntered", ({ onlineUsers, messages }) => {
+        updateOnlineUserList(onlineUsersElement, onlineUsers);
+        updateMessageHistoryList(messagesElement, messages);
+    });
 
-        // messages is a list of Message documents
-        console.log("\nMessages: ");
-        messages.forEach((message, index) => {
-            console.log(`${index+1}. ${message.userId} [${message.content}]`);
-        });
+    socket.on("userLeft", ({ onlineUsers, messages }) => {
+        updateOnlineUserList(onlineUsersElement, onlineUsers);
+        updateMessageHistoryList(messagesElement, messages);
     });
 
     // Handle client socket receiving chat messages sent by connected clients

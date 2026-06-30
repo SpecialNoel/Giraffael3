@@ -19,12 +19,6 @@ const roomSchema = new Schema(
             type: String,
             required: true
         },
-        // creator refers to the User document that creates this room
-        creator: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
-            required: true
-        },
         // Soft-deletion: room stays in the database after deletion, but users are not allowed interact with it
         deleted: {
             type: Boolean,

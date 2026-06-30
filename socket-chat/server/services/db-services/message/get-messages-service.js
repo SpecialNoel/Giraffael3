@@ -14,16 +14,21 @@ async function getMessages(roomCode) {
         const messages = await Message.find({
             room: room._id,
         })
+        .select("sender content type")
         .sort({ createdAt: 1 })
         .populate({
             path: "sender",
-            select: "userId -_id" 
+            select: "userId username -_id" 
         }) // convert user object id to user public id
         .lean();
 
+        // Return a list of messages sent over the room
         return messages.map(msg => ({
-            ...msg,
-            userId: msg.sender?.userId
+            messageObjectId: msg._id,
+            userId: msg.sender.userId,
+            username: msg.sender.username,
+            content: msg.content,
+            type: msg.type,
         }));
     } catch (err) {
         console.error("Failed to retrieve message history:", err);
