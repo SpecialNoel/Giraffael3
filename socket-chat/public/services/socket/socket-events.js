@@ -4,6 +4,7 @@ import { updateOnlineUserList, updateMessageHistoryList } from "../dashboard/roo
 import { appendMessageToChatList } from "./message-view.js";
 import { handleSendMessage } from "./message-services.js";
 
+// Set up socket events
 function registerSocketEvents(socket, messagesElement, onlineUsersElement) {
     // Handle update on online users list upon user joining or leaving the room
     socket.on("userJoined", (onlineUsers) => {
@@ -39,7 +40,7 @@ function registerSocketEvents(socket, messagesElement, onlineUsersElement) {
     });
 }
 
-// Handle socket communication with server
+// Start socket communication with server with the created socket by setting up the socket events
 function startSession(socket) {
     const form = document.getElementById("form");
     const input = document.getElementById("input");
@@ -48,11 +49,12 @@ function startSession(socket) {
 
     const userId = localStorage.getItem("userId");
 
-    // Upon form submission, send the input message (if any) to the server
+    // Upon receiving form submission, send the input message (if any) to the server
     form.addEventListener("submit", (e) => {
         // Prevent web page reloading upon form submission
         e.preventDefault();
 
+        // Send the input message to server (for which server will then relay to other online users in the room)
         handleSendMessage(
             userId,
             messagesElement,
@@ -61,6 +63,7 @@ function startSession(socket) {
         );
     });
 
+    // Set up socket events
     registerSocketEvents(socket, messagesElement, onlineUsersElement);
 }
 

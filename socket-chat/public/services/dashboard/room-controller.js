@@ -1,63 +1,35 @@
 // room-controller.js
 
+import { parseResponse } from "../utils/response-parser.js";
 import { createRoom, deleteRoom, joinRoom, leaveRoom } from "./room-api.js";
-import { updateBasicGui, appendRoomToRoomsContainer } from "./room-view.js";
-import { navigateToRoom } from "./room-navigation.js";
-
-// Helper function that retrieves data from server response
-async function parseResponse(response) {
-    // Convert retrieved response received from server to json
-    const data = await response.json();
-
-    // Display the error message to the user if the operation fails
-    if (!response.ok) {
-        const err = new Error(data.error);
-        err.status = response.status;
-        err.code = data.code;
-        throw err;
-    }
-
-    return data;
-}
-   
-// Set up the enter-room logic
-async function handleEnterRoom(roomBtn, socket) {
-    const roomCode = roomBtn.dataset.roomCode; // dataset.roomCode is dynamically parsed from "data-room-code" attribute in html
-    console.log("Clicked enter room:", roomCode);
-
-    // Modify the url of user browser, and fire an "enter room" socket event to server
-    navigateToRoom(socket, roomCode);
-
-    // Update the main panel upon enter room success
-    updateBasicGui();
-}
-
-// Set up the leave-room logic
-async function handleLeaveRoom(leaveBtn, roomRow) {
-    const roomCode = leaveBtn.dataset.roomCode;
-    console.log("Clicked leave room:", roomCode);
-
-    // Send roomCode to server, then retrieve response from server
-    const data = await parseResponse(await leaveRoom(roomCode));
-
-    // Remove the roomBtn-leaveBtn pair from the rooms container
-    roomRow.remove();
-}
-
-// Set up the delete-room logic
-async function handleDeleteRoom(deleteBtn, roomRow) {
-    const roomCode = deleteBtn.dataset.roomCode;
-    console.log("Clicked delete room:", roomCode);
-
-    // Send roomCode to server, then retrieve response from server
-    const data = await parseResponse(await deleteRoom(roomCode));
-
-    // Remove the roomBtn-leaveBtn pair from the rooms container
-    roomRow.remove();
-}
+import { appendRoomToRoomsContainer } from "./room-view.js";
 
 // Set up the rooms container
 function handleRoomsContainer(socket) {    
+    // Set up the leave-room logic
+    async function handleLeaveRoom(leaveBtn, roomRow) {
+        const roomCode = leaveBtn.dataset.roomCode;
+        console.log("Clicked leave room:", roomCode);
+
+        // Send roomCode to server, then retrieve data contained in response from server
+        const data = await parseResponse(await leaveRoom(roomCode));
+
+        // Remove the roomBtn-leaveBtn pair from the rooms container
+        roomRow.remove();
+    }
+
+    // Set up the delete-room logic
+    async function handleDeleteRoom(deleteBtn, roomRow) {
+        const roomCode = deleteBtn.dataset.roomCode;
+        console.log("Clicked delete room:", roomCode);
+
+        // Send roomCode to server, then retrieve data contained in response from server
+        const data = await parseResponse(await deleteRoom(roomCode));
+
+        // Remove the roomBtn-leaveBtn pair from the rooms container
+        roomRow.remove();
+    }
+
     /*
         On the dashboard page, add functionality to each room icon/button such that
         a certain task will be executed whenever the user clicks on the room icon.
@@ -70,13 +42,6 @@ function handleRoomsContainer(socket) {
         e.preventDefault();
         
         try {
-            // Handle user "enter room" request
-            const roomBtn = e.target.closest(".room-btn"); 
-            if (roomBtn) {
-                await handleEnterRoom(roomBtn, socket);
-                return;
-            }
-
             // Handle user "leave room" request
             const leaveBtn = e.target.closest(".leave-btn"); 
             if (leaveBtn) {
@@ -123,14 +88,12 @@ function handleCreateRoom(socket) {
                 return;
             }
 
-            // Send roomName to server, then retrieve response from server
+            // Step 1: Send room name to server via HTTP endpoints, 
+            // then retrieve data contained in response from server
             const data = await parseResponse(await createRoom(roomName));
             
-            /*
-             * Emit the join room event to server via socket as well
-             * This is necessary as the http request above only updates the database,
-             *   which does not make real-time subscription to the room.
-            */
+            // Step 2: Emit the "join room" event to server via socket events
+            // This step is needed to atomically join the user to the newly created room
             socket.emit("joinRoom", data.roomInfo.roomCode);
             
             // Update the rooms container by appending the new room to the list
@@ -167,14 +130,11 @@ function handleJoinRoom(socket) {
                 return;
             }
 
-            // Send roomCode to server, then retrieve response from server
+            // Step 1: Send room code to server via HTTP endpoints,
+            // then retrieve data contained in response from server
             const data = await parseResponse(await joinRoom(roomCode));
 
-            /*
-             * Emit the join room event to server via socket as well
-             * This is necessary as the http request above only updates the database,
-             *   which does not make real-time subscription to the room.
-            */
+            // Step 2: Emit the "join room" event to server via socket events
             socket.emit("joinRoom", roomCode);
 
             // Update the rooms container by appending the new room to the list
@@ -200,8 +160,11 @@ function handleJoinRoom(socket) {
 
 // Set up the room logics (via http endpoints, socket events, or both)
 function setupRoomEvents(socket) {
+    // Set up the events attached to each room container ("leave room", "delete room")
     handleRoomsContainer(socket);
+    // Set up the "create room" event
     handleCreateRoom(socket);
+    // Set up the "join room" event
     handleJoinRoom(socket);
 }
 

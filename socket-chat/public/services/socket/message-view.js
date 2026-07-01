@@ -1,6 +1,6 @@
 // message-view.js
 
-// Append the message to the chat list (messagesElement)
+// Append the message to the message list
 function appendMessageToChatList(messagesElement, tmpId, userId, msgContent, status) {
     // Each message contains two parts: content and status
     const msgElement = document.createElement("div");
@@ -8,12 +8,12 @@ function appendMessageToChatList(messagesElement, tmpId, userId, msgContent, sta
     msgElement.classList.add(status); // should be either "sending", "sent" or "failed"
     msgElement.dataset.id = tmpId; // this can be accessed with `data-id="${tmpId}"`
 
-    // Content is basically the value of msgContent
+    // Content: basically the value of msgContent
     const contentElement = document.createElement("span");
     contentElement.classList.add("content");
     contentElement.textContent = msgContent;
 
-    // Status is the verbal explanation on the status of the message 
+    // Status: the verbal explanation on the status of the message 
     const statusElement = document.createElement("span");
     statusElement.classList.add("status");
     if (msgContent.status === "sending") {
@@ -31,7 +31,7 @@ function appendMessageToChatList(messagesElement, tmpId, userId, msgContent, sta
     // Append the message element to the chat list element
     messagesElement.appendChild(msgElement);
     
-    // Scroll the page instantly to the very bottom
+    // Scroll the browser window to the bottom of the page
     window.scrollTo(0, document.body.scrollHeight);
 }
 
