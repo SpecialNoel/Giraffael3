@@ -10,7 +10,7 @@ const MESSAGE_EXPIRATION_MS = 60 * 60 * 1000; // 1 hour
 async function storeMessage(roomCode, userObjectId, msgContent, type) {
     try {
         // Check if the user exists in the database
-        const user = await User.exists({ userObjectId });
+        const user = await User.exists({ _id: userObjectId });
         if (!user) throw new Error("Sender not found");
 
         // Fetch the target room

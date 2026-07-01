@@ -1,6 +1,6 @@
 // sign-in-initializer.js
 
-// Set up the signin form
+// Handle user sign-in request by setting up the signin form
 function signIn() {    
     /*
         On the sign-in page, collect the user's credentials and
@@ -21,7 +21,7 @@ function signIn() {
             const plainPassword = document.getElementById("plainPassword").value.trim();
 
             /*
-             * Send them to server for validation
+             * Send them to server for validation (without JWT token)
              * Note that client needs to send information to server at this stage
              * to get the JWT token for later operations
             */
@@ -39,20 +39,20 @@ function signIn() {
             // Retrieve response sent from server
             const data = await response.json();
 
-            // Display the error message to the user if the credentials are invalid
+            // If the credentials are invalid, display the error message to the user
             if (!response.ok) {
                 alert(data.error);
                 return;
             }
 
-            localStorage.setItem("email", email);        // user email
-            localStorage.setItem("userId", data.userId); // userId
+            // Store necessary user information to the local storage of user's browser
+            localStorage.setItem("userId", data.userId); // userId (user public id)
             localStorage.setItem("token", data.token);   // JWT token
 
             // The credentials are verified by server to be valid, proceed to the Dashboard page.
             setTimeout(() => {
                 window.location.href = "/dashboard"; 
-            }, 50); // 0.05s
+            }, 50); // delay by 0.05s before switching the page
         } catch (err) {
             // Print error message to client side in case something went wrong during this process
             console.error(err);

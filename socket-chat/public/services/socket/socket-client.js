@@ -10,10 +10,8 @@ function createAuthenticatedSocket() {
     return new Promise((resolve, reject) => {
         // Connect the socket to server
         socket.once("connect", () => {
-            console.log("Socket connected");
-
             // Receive response on token authentication
-            console.log("Socket authenticated");
+            console.log("Connected and authenticated socket");
 
             // Return this authenticated socket
             resolve(socket);

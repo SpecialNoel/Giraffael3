@@ -1,36 +1,92 @@
 // room-view.js
 
-function updateBasicGui() {
-    const params = new URLSearchParams(window.location.search);
-    const roomCode = params.get("room");
-    if (!roomCode) return;
+import { getRoomInfoForDisplay } from "./room-api.js";
 
-    const roomName = "default_roomName";
+// Update the room info and user info on Dashboard page UI, after user entering a room
+async function updateBasicGui() {
+    // Fetch user public id from local storage
     const userId = localStorage.getItem("userId");
 
-    // Update code and name of the room, as well as user info, on user GUI
-    const titleElement = document.getElementById("title");
-    if (titleElement)titleElement.textContent = roomName;
+    // Fetch room code from the url bar of the user's browser
+    const params = new URLSearchParams(window.location.search);
+    const roomCodeFromUrl = params.get("room");
 
+    /* 
+     * Fetch room code and room name of the current room from session storage
+     * Note that these information should be updated upon user firing an
+     * "enter room" event to server when they "enter" the room, and successfully 
+     * receiving these information from server 
+    */
+
+    let roomCode;
+    let roomName;
+
+    const currentRoom = JSON.parse(
+        sessionStorage.getItem("currentRoom")
+    );
+    if (currentRoom && currentRoom.roomCode === roomCodeFromUrl) {
+        // There is a record of this <roomCode-roomName> pair in session storage
+        // Use them directly
+        roomCode = roomCodeFromUrl;
+        roomName = currentRoom.roomName;
+    } else {
+        // Fallback: there is no record of the pair in session storage
+        // Fetch them from the server
+        const roomInfoForDisplay = await getRoomInfoForDisplay(roomCodeFromUrl);
+        console.log("Fetched room info for display from server");
+        roomCode = roomInfoForDisplay.roomCode;
+        roomName = roomInfoForDisplay.roomName;
+        // Record the pair by updating session storage
+        sessionStorage.setItem(
+            "currentRoom",
+            JSON.stringify(roomInfoForDisplay)
+        );
+    }
+
+    // Update the public id of this user on Dashboard page UI
+    const userIdInChatElement = document.getElementById("userIdInChat");
+    if (userIdInChatElement) userIdInChatElement.textContent = `User ID: ${userId}`;
+
+    // Update the code of the room on Dashboard page UI
     const roomCodeInChatElement = document.getElementById("roomCodeInChat");
     if (roomCodeInChatElement) roomCodeInChatElement.textContent = `Room Code: ${roomCode}`;
 
-    const userIdInChatElement = document.getElementById("userIdInChat");
-    if (userIdInChatElement) userIdInChatElement.textContent = `User ID: ${userId}`;
+    // Update the name of the room on Dashboard page UI
+    const titleElement = document.getElementById("title");
+    if (titleElement)titleElement.textContent = roomName;
 }
 
-// Update the current online users in the room
+// Update the list of current online users in the room on Dashboard page UI
 function updateOnlineUserList(onlineUsersElement, onlineUsers) {
+    // Empty the list first
     onlineUsersElement.innerHTML = "";
-    onlineUsers.forEach((userId) => {
+
+    // For each user that is currently online in the room, add info about the user to the list
+    onlineUsers.forEach(({ userId, username }) => {
         const item = document.createElement("li");
-        item.textContent = userId;
+        item.textContent = `[${username}]: ${userId}`;
         onlineUsersElement.appendChild(item);
+        // Scroll the browser window to the bottom of the page
         window.scrollTo(0, document.body.scrollHeight);
     });
 }
 
-// Update the rooms container upon room list modification (create room, join room, refresh page, etc.)
+// Update the message history in the room on Dashboard page UI
+function updateMessageHistoryList(messagesElement, messages) {
+    // Empty the history first
+    messagesElement.innerHTML = "";
+
+    // For each message that was sent over the room, add info about the message to the history
+    messages.forEach(({ messageObjectId, userId, username, content, type }) => {
+        const item = document.createElement("li");
+        item.textContent = `[${username}]: ${content}`;
+        messagesElement.appendChild(item);
+        // Scroll the browser window to the bottom of the page
+        window.scrollTo(0, document.body.scrollHeight);
+    });
+}
+
+// Update the rooms container upon modification to the room list (create room, join room, etc.)
 function appendRoomToRoomsContainer(containerDiv, roomInfo, isCreatorOfRoom) {
     // A container that wraps around each roomBtn-leaveBtn pair
     const roomRow = document.createElement("div");
@@ -62,8 +118,11 @@ function appendRoomToRoomsContainer(containerDiv, roomInfo, isCreatorOfRoom) {
         roomRow.appendChild(deleteBtn);
     }
 
-    // Append the wrapper to the rooms container
+    // Append the container to the rooms container (the list of containers about room)
     containerDiv.appendChild(roomRow);
 }
 
-export { updateBasicGui, updateOnlineUserList, appendRoomToRoomsContainer };
+export { updateBasicGui, 
+         updateOnlineUserList, 
+         updateMessageHistoryList,
+         appendRoomToRoomsContainer };

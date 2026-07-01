@@ -1,6 +1,6 @@
 // sign-up-initializer.js
 
-// Set up the signup form
+// Handle user sign-up request by setting up the signup form which authenticates via credentials
 function signUpTraditional() { 
     /*
         On the sign-up page, collect the user's credentials and
@@ -21,7 +21,11 @@ function signUpTraditional() {
             const email = document.getElementById("email").value.trim();
             const plainPassword = document.getElementById("plainPassword").value.trim();
 
-            // Send the input to server for validation
+            /*
+             * Send them to server for validation (without JWT token)
+             * Note that client does not need the JWT token at this stage
+             * as they should not connect to the server yet.
+            */
             const response = await fetch("/signup", {
                 method: "POST",
                 headers: {
@@ -36,13 +40,13 @@ function signUpTraditional() {
             // Retrieve response sent from server
             const data = await response.json();
 
-            // Display the error message to the user if the sign up failed
+            // If the sign up failed, display the error message to the user
             if (!response.ok) {
                 alert(data.error);
                 return;
             }
 
-            // Otherwise, redirect the user back to the sign-in page
+            // If the sign up succeeded, redirect the user back to the sign-in page
             window.location.href = "/signin";
         } catch (err) {
             // Print error message to client side in case something went wrong during this process

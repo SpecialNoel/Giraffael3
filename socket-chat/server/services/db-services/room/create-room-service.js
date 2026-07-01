@@ -17,8 +17,7 @@ async function createRoom(roomName, userObjectId) {
             try {
                 room = await Room.create({
                     roomCode: generateRoomCode(),
-                    roomName,
-                    creator: userObjectId,
+                    roomName
                 });
             } catch (err) {
                 if (err.code === 11000) continue; // duplicate key error of MongoDB; retry

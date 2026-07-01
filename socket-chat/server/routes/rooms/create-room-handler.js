@@ -13,12 +13,35 @@ async function handleCreateRoom(req, res) {
         const room = await createRoom(roomName, userObjectId);
 
         // Create membership by join to the room
-        await joinRoom(userObjectId, room._id, "creator");
+        const joinRoomResult = await joinRoom(userObjectId, room.roomCode, "creator");
+
+        // Handle join-room failure
+        if (!joinRoomResult.success) {
+            switch (joinRoomResult.reason) {
+                case "ALREADY_IN_ROOM":
+                    return res.status(409).json({
+                        success: false,
+                        code: "ALREADY_IN_ROOM",
+                        error: "User already in room",
+                    });
+                case "ROOM_NOT_FOUND":
+                    return res.status(404).json({
+                        success: false,
+                        code: "ROOM_NOT_FOUND",
+                        error: "Room not found",
+                    });
+                default: 
+                    return res.status(500).json({
+                        success: false,
+                        code: "OTHER",
+                        error: "Join room failure",
+                    });
+            }
+        }
 
         // Retrieve necessary info about this new room
         const roomInfo = { roomName: room.roomName, 
-                            roomCode: room.roomCode, 
-                            creator:  room.creator };
+                           roomCode: room.roomCode };
 
         // Create-room success
         return res.status(200).json({
@@ -29,6 +52,8 @@ async function handleCreateRoom(req, res) {
     } catch (err) {
         console.error(err);
         return res.status(500).json({
+            success: false,
+            code: "OTHER",
             error: "Internal server error"
         });    
     }

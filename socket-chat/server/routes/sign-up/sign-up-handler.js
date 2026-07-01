@@ -12,6 +12,8 @@ async function handleSignUp(req, res, PASSWORD_MIN_LENGTH) {
         // Handle invalid credentials
         if (!email || !plainPassword) {
             return res.status(400).json({
+                success: false,
+                code: "INVALID_CREDENTIALS",
                 error: "Missing credentials"
             });
         }
@@ -19,6 +21,8 @@ async function handleSignUp(req, res, PASSWORD_MIN_LENGTH) {
         // Handle too short passwords
         if (plainPassword.length < PASSWORD_MIN_LENGTH) {
             return res.status(400).json({
+                success: false,
+                code: "INVALID_CREDENTIALS",
                 error: `Password must be at least ${PASSWORD_MIN_LENGTH} characters`
             });
         }
@@ -29,6 +33,8 @@ async function handleSignUp(req, res, PASSWORD_MIN_LENGTH) {
         // Handle error where received email already associated with an existing account
         if (userInDB) {
             return res.status(409).json({
+                success: false,
+                code: "USER_ALREADY_EXIST",
                 error: "User already exists"
             }); // server received duplicated info
         }
@@ -48,6 +54,8 @@ async function handleSignUp(req, res, PASSWORD_MIN_LENGTH) {
     } catch (err) {
         console.error(err);
         return res.status(500).json({
+            success: false,
+            code: "OTHER",
             error: "Internal server error"
         });    
     }

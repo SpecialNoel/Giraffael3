@@ -4,14 +4,17 @@ import { Membership } from "../../../models/membership-model.js";
 import { Room } from "../../../models/room-model.js";
 
 // Add the user to the given room by creating a new membership
-async function joinRoom(userObjectId, roomObjectId, role) {
+async function joinRoom(userObjectId, roomCode, role) {
     try {
         // Check room existence
-        const roomExists = await Room.exists({ _id: roomObjectId });
-        if (!roomExists) {
+        const room = await Room.findOne({
+            roomCode,
+            deleted: false
+        }).select("_id");
+        if (!room) {
             return {
                 success: false,
-                reason: "Room not found",
+                reason: "ROOM_NOT_FOUND",
                 membership: null
             };
         }
@@ -19,7 +22,7 @@ async function joinRoom(userObjectId, roomObjectId, role) {
         // Create a new membership
         const newMembership = await Membership.create({
             userObjectId,
-            roomObjectId,
+            roomObjectId: room._id,
             role
         });
         return {
@@ -31,7 +34,7 @@ async function joinRoom(userObjectId, roomObjectId, role) {
         if (err.code === 11000) {
             return {
                 success: false,
-                reason: "Already a member of room",
+                reason: "ALREADY_IN_ROOM",
                 membership: null
             };
         }

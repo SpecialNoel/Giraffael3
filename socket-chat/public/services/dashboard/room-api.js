@@ -2,40 +2,41 @@
 
 import { apiFetch } from "../utils/api-fetcher.js";
 
+// Send "create room" HTTP request to server, then receive an HTTP response from server
 async function createRoom(roomName) {
-    const response = await apiFetch("/rooms/create", {
+    return await apiFetch("/rooms/create", {
         method: "POST",
         body: JSON.stringify({ roomName })
     });
-
-    return response;
 }
 
+// Send "delete room" HTTP request to server, then receive an HTTP response from server
 async function deleteRoom(roomCode) {
-    const response = await apiFetch("/rooms/delete", {
+    return await apiFetch("/rooms/delete", {
         method: "POST",
         body: JSON.stringify({ roomCode })
     });
-
-    return response;
 }
 
+// Send "join room" HTTP request to server, then receive an HTTP response from server
 async function joinRoom(roomCode) {
-    const response = await apiFetch("/rooms/join", {
+    return await apiFetch("/rooms/join", {
         method: "POST",
         body: JSON.stringify({ roomCode })
     });
-
-    return response;
 }
 
+// Send "leave room" HTTP request to server, then receive an HTTP response from server
 async function leaveRoom(roomCode) {
-    const response = await apiFetch("/rooms/leave", {
+    return await apiFetch("/rooms/leave", {
         method: "POST",
         body: JSON.stringify({ roomCode })
     });
-
-    return response;
 }
 
-export { createRoom, deleteRoom, joinRoom, leaveRoom };
+// Send "get room info for display" HTTP request to server, then receive an HTTP response from server
+async function getRoomInfoForDisplay(roomCode) {
+    return await apiFetch(`/rooms/${roomCode}/display`);
+}
+
+export { createRoom, deleteRoom, joinRoom, leaveRoom, getRoomInfoForDisplay };
