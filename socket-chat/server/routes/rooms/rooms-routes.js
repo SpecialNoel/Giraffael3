@@ -5,6 +5,7 @@ import path from "node:path";
 
 import { authenticateHTTP } from "../../middleware/authenticate-http.js";
 import { handleFetchRoomInfo } from "./fetch-room-info-handler.js";
+import { handleFetchRoomInfoForDisplay } from "./fetch-room-info-for-display-handler.js";
 import { handleCreateRoom } from "./create-room-handler.js";
 import { handleDeleteRoom } from "./delete-room-handler.js";
 import { handleJoinRoom } from "./join-room-handler.js";
@@ -18,6 +19,9 @@ const router = express.Router();
 // "EnterRoom" and "ExitRoom" uses socket events only
 router.get("/", authenticateHTTP, async (req, res) => {
     return await handleFetchRoomInfo(req, res);
+});
+router.get("/:roomCode", authenticateHTTP, async (req, res) => {
+    return await handleFetchRoomInfoForDisplay(req, res);
 });
 router.post("/create", authenticateHTTP, async (req, res) => {
     return await handleCreateRoom(req, res);

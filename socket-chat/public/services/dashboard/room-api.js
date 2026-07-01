@@ -34,4 +34,9 @@ async function leaveRoom(roomCode) {
     });
 }
 
-export { createRoom, deleteRoom, joinRoom, leaveRoom };
+// Send "get room info for display" HTTP request to server, then receive an HTTP response from server
+async function getRoomInfoForDisplay(roomCode) {
+    return await apiFetch(`/rooms/${roomCode}/display`);
+}
+
+export { createRoom, deleteRoom, joinRoom, leaveRoom, getRoomInfoForDisplay };

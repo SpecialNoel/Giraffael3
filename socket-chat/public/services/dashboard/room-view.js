@@ -1,28 +1,59 @@
 // room-view.js
 
-// Update the room info and user info on Dashboard page UI
-function updateBasicGui() {
-    // Fetch room code from the url bar of the user's browser
-    const params = new URLSearchParams(window.location.search);
-    const roomCode = params.get("room");
-    if (!roomCode) return;
+import { getRoomInfoForDisplay } from "./room-api.js";
 
-    // TODO: Handle the issue where the room name cannot be obtained the same way as the room code
-    const roomName = "default_roomName";
-    // Fetch user public id
+// Update the room info and user info on Dashboard page UI, after user entering a room
+async function updateBasicGui() {
+    // Fetch user public id from local storage
     const userId = localStorage.getItem("userId");
 
-    // Update the name of the room on Dashboard page UI
-    const titleElement = document.getElementById("title");
-    if (titleElement)titleElement.textContent = roomName;
+    // Fetch room code from the url bar of the user's browser
+    const params = new URLSearchParams(window.location.search);
+    const roomCodeFromUrl = params.get("room");
+
+    /* 
+     * Fetch room code and room name of the current room from session storage
+     * Note that these information should be updated upon user firing an
+     * "enter room" event to server when they "enter" the room, and successfully 
+     * receiving these information from server 
+    */
+
+    let roomCode;
+    let roomName;
+
+    const currentRoom = JSON.parse(
+        sessionStorage.getItem("currentRoom")
+    );
+    if (currentRoom && currentRoom.roomCode === roomCodeFromUrl) {
+        // There is a record of this <roomCode-roomName> pair in session storage
+        // Use them directly
+        roomCode = roomCodeFromUrl;
+        roomName = currentRoom.roomName;
+    } else {
+        // Fallback: there is no record of the pair in session storage
+        // Fetch them from the server
+        const roomInfoForDisplay = await getRoomInfoForDisplay(roomCodeFromUrl);
+        console.log("Fetched room info for display from server");
+        roomCode = roomInfoForDisplay.roomCode;
+        roomName = roomInfoForDisplay.roomName;
+        // Record the pair by updating session storage
+        sessionStorage.setItem(
+            "currentRoom",
+            JSON.stringify(roomInfoForDisplay)
+        );
+    }
+
+    // Update the public id of this user on Dashboard page UI
+    const userIdInChatElement = document.getElementById("userIdInChat");
+    if (userIdInChatElement) userIdInChatElement.textContent = `User ID: ${userId}`;
 
     // Update the code of the room on Dashboard page UI
     const roomCodeInChatElement = document.getElementById("roomCodeInChat");
     if (roomCodeInChatElement) roomCodeInChatElement.textContent = `Room Code: ${roomCode}`;
 
-    // Update the public id of this user on Dashboard page UI
-    const userIdInChatElement = document.getElementById("userIdInChat");
-    if (userIdInChatElement) userIdInChatElement.textContent = `User ID: ${userId}`;
+    // Update the name of the room on Dashboard page UI
+    const titleElement = document.getElementById("title");
+    if (titleElement)titleElement.textContent = roomName;
 }
 
 // Update the list of current online users in the room on Dashboard page UI

@@ -2,10 +2,21 @@
 
 import { parseResponse } from "../utils/response-parser.js";
 import { createRoom, deleteRoom, joinRoom, leaveRoom } from "./room-api.js";
+import { openRoom } from "./room-navigation.js";
 import { appendRoomToRoomsContainer } from "./room-view.js";
 
 // Set up the rooms container
 function handleRoomsContainer(socket) {    
+    // Set up the enter-room logic
+    async function handleEnterRoom(roomBtn, socket) {
+        const roomCode = roomBtn.dataset.roomCode; // dataset.roomCode is dynamically parsed from "data-room-code" attribute in html
+        console.log("Clicked enter room:", roomCode);
+
+        // Modify the url of user browser, and fire an "enter room" socket event to server
+        openRoom(socket, roomCode);
+        // Room displaying info will be retrieved and updated to Dashboard page via socket events
+    }
+
     // Set up the leave-room logic
     async function handleLeaveRoom(leaveBtn, roomRow) {
         const roomCode = leaveBtn.dataset.roomCode;
@@ -42,6 +53,13 @@ function handleRoomsContainer(socket) {
         e.preventDefault();
         
         try {
+            // Handle user "enter room" request
+            const roomBtn = e.target.closest(".room-btn"); 
+            if (roomBtn) {
+                await handleEnterRoom(roomBtn, socket);
+                return;
+            }
+
             // Handle user "leave room" request
             const leaveBtn = e.target.closest(".leave-btn"); 
             if (leaveBtn) {

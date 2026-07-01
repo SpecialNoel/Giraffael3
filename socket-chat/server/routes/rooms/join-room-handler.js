@@ -1,7 +1,7 @@
 // join-room-handler.js
 
 import { joinRoom } from "../../services/db-services/membership/join-room-service.js";
-import { getRoomInfo } from "../../services/db-services/room/get-room-info-service.js";
+import { getRoomInfoForDisplay } from "../../services/db-services/room/get-room-info-for-display-service.js";
 import { isCreatorByRoomCode } from "../../services/db-services/membership/check-creator-service.js";
 
 async function handleJoinRoom(req, res) {
@@ -39,7 +39,8 @@ async function handleJoinRoom(req, res) {
 
         // Retrieve necessary info about this room
         const newMembership = joinRoomResult.membership;
-        const roomInfo = await getRoomInfo(newMembership.roomObjectId);
+        const roomInfoForDisplay = await getRoomInfoForDisplay(roomCode);
+        console.log("roomInfoForDisplay:", roomInfoForDisplay)
         const isCreatorOfRoom = isCreatorByRoomCode(userObjectId, roomCode);
 
         // Join-room success

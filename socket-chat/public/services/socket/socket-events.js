@@ -1,6 +1,8 @@
 // socket-events.js
 
-import { updateOnlineUserList, updateMessageHistoryList } from "../dashboard/room-view.js";
+import { updateBasicGui, 
+         updateOnlineUserList, 
+         updateMessageHistoryList } from "../dashboard/room-view.js";
 import { appendMessageToChatList } from "./message-view.js";
 import { handleSendMessage } from "./message-services.js";
 
@@ -16,7 +18,13 @@ function registerSocketEvents(socket, messagesElement, onlineUsersElement) {
     });
 
     // Handle user enter room event
-    socket.on("userEntered", ({ onlineUsers, messages }) => {
+    socket.on("userEntered", async ({ onlineUsers, messages, roomInfoForDisplay }) => {
+        // Update Dashboard page upon enter room success
+        sessionStorage.setItem(
+            "currentRoom",
+            JSON.stringify(roomInfoForDisplay)
+        );
+        await updateBasicGui();
         updateOnlineUserList(onlineUsersElement, onlineUsers);
         updateMessageHistoryList(messagesElement, messages);
     });

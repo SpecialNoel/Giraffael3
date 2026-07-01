@@ -45,8 +45,7 @@ function signIn() {
                 return;
             }
 
-            // Store necessary information to the local storage of user's browser
-            localStorage.setItem("email", email);        // user email
+            // Store necessary user information to the local storage of user's browser
             localStorage.setItem("userId", data.userId); // userId (user public id)
             localStorage.setItem("token", data.token);   // JWT token
 

@@ -4,6 +4,7 @@ import { enterRoom, enterRoomFromURL } from "../socket/room-services.js";
 
 // Atomically modify the url on user's browser, and fire an "enter room" socket event to server
 function openRoom(socket, roomCode) {
+    if (!roomCode) throw Error("User trying to open a room with empty room code");
     // Modify the url to reflect user entering this room without refreshing the page
     history.pushState({}, "", `/dashboard?room=${roomCode}`);
     // Send an "enter room" request to server via socket events
