@@ -3,6 +3,7 @@
 import { Room } from "../../../models/room-model.js";
 import { Membership } from "../../../models/membership-model.js";
 
+// Get all the active memberships in the room (users that are still in the room)
 async function getMembersInRoom(roomCode) {
     try {
         // Fetch the room
@@ -12,9 +13,10 @@ async function getMembersInRoom(roomCode) {
         }).select("_id");
         if (!room) return null;
 
-        // Fetch the memberships inside the room
+        // Fetch the active memberships inside the room
         const memberships = await Membership.find({
-            roomObjectId: room._id
+            roomObjectId: room._id,
+            active: true
         })
         .populate({
             path: "userObjectId",

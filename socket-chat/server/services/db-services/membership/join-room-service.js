@@ -23,7 +23,8 @@ async function joinRoom(userObjectId, roomCode, role) {
         const newMembership = await Membership.create({
             userObjectId,
             roomObjectId: room._id,
-            role
+            role,
+            active: true
         });
         return {
             success: true,

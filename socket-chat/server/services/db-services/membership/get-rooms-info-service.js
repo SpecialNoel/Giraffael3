@@ -6,7 +6,8 @@ import { Membership } from "../../../models/membership-model.js";
 async function getRoomsInfo(userObjectId) {
     try {
         const memberships = await Membership.find({
-            userObjectId
+            userObjectId,
+            active: true
         })
         .populate({
             path: "roomObjectId", // focusing on the room documents

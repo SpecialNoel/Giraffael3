@@ -87,7 +87,7 @@ function updateMessageHistoryList(messagesElement, messages) {
 }
 
 // Update the rooms container upon modification to the room list (create room, join room, etc.)
-function appendRoomToRoomsContainer(containerDiv, roomInfo, isCreatorOfRoom) {
+function appendRoomToRoomsContainer(containerDiv, roomInfo, role) {
     // A container that wraps around each roomBtn-leaveBtn pair
     const roomRow = document.createElement("div");
     roomRow.className = "room-row";
@@ -110,7 +110,7 @@ function appendRoomToRoomsContainer(containerDiv, roomInfo, isCreatorOfRoom) {
 
     // Delete button; enabled only for creator of the room
     // Delete the room from the database upon clicking
-    if (isCreatorOfRoom) {
+    if (role === "creator") {
         const deleteBtn = document.createElement("button");
         deleteBtn.className = "delete-btn";
         deleteBtn.dataset.roomCode = roomInfo.roomCode;

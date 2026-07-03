@@ -112,15 +112,22 @@ function handleCreateRoom(socket) {
             
             // Step 2: Emit the "join room" event to server via socket events
             // This step is needed to atomically join the user to the newly created room
-            socket.emit("joinRoom", data.roomInfo.roomCode);
+            socket.emit("joinRoom", data.roomInfoForDisplay.roomCode);
             
             // Update the rooms container by appending the new room to the list
             const containerDiv = document.getElementById("rooms-container");
-            appendRoomToRoomsContainer(containerDiv, data.roomInfo, true);
+            appendRoomToRoomsContainer(containerDiv, data.roomInfoForDisplay, data.role);
+
+            console.log("role:", data.role);
+
+            // Clear the room name field
+            document.querySelector("#roomNameInCreateRoom").value = "";
         } catch (err) {
             // Print error message to client side in case something went wrong during this process
             console.error(err);
-            alert("Something went wrong");        
+            alert("Something went wrong");     
+            // Clear the room name field 
+            document.querySelector("#roomCodeInJoinRoom").value = "";  
         }
     };
 
@@ -157,17 +164,26 @@ function handleJoinRoom(socket) {
 
             // Update the rooms container by appending the new room to the list
             const containerDiv = document.getElementById("rooms-container");
-            appendRoomToRoomsContainer(containerDiv, data.roomInfo, data.isCreatorOfRoom);
+            appendRoomToRoomsContainer(containerDiv, data.roomInfoForDisplay, data.role);
+
+            console.log("role:", data.role);
+
+            // Clear the room code field
+            document.querySelector("#roomCodeInJoinRoom").value = "";
         } catch (err) {
             // Print error message to client side in case something went wrong during this process
             switch (err.code) {
                 case "ALREADY_IN_ROOM":
                     alert("You have already joined this room");
+                    // Clear the room code field
+                    document.querySelector("#roomCodeInJoinRoom").value = "";
                     break;
 
                 default:
                     console.error(err);
                     alert("Something went wrong");
+                    // Clear the room code field
+                    document.querySelector("#roomCodeInJoinRoom").value = "";
             }   
         }
     };
