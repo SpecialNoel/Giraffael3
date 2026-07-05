@@ -1,24 +1,126 @@
 /* styles.css */
 
+/* HTML settings */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .dashboard {
+    flex-direction: column;
+    height: auto;
+  }
+  .left-panel {
+    width: 100%;
+  }
+  .right-panel {
+    min-width: 0;
+  }
+}
+
 /* Basic section divider */
 .card {
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 16px;
     margin-bottom: 16px;
+
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+.card h4 {
+    margin-top: 0;
+    margin-bottom: 12px;
+}
+
+/* Sign-up and Sign-in pages */
+.auth-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 /* Sign-up and sign-in forms */
-#sign-up-form {
-    justify-content: center;
-    align-items: center;
-}
+#sign-up-form,
 #sign-in-form {
-    justify-content: center;
-    align-items: center;
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #f5f5f5;
 }
 
-/* Rooms container */
+/* Navigation links in Sign-up and Sign-in pages */
+.link {
+    display: inline-flex;
+    width: fit-content;    
+    color: blue;
+    text-decoration: underline;
+}
+
+/* Dashboard page */
+.dashboard {
+    display: flex;
+    height: calc(100dvh - 50px);
+}
+.left-panel {
+    width: 250px;
+    flex-shrink: 0;
+    background-color: gainsboro;
+    padding: 20px;
+}
+.right-panel {
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    padding: 20px;
+    gap: 12px;
+
+    display: flex;
+    flex-direction: column;
+}
+.chat-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+}
+
+/* Navigation at top of Dashboard page */
+.top-nav {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+    padding: 10px;
+}
+.top-nav a {
+    padding: 6px 14px;
+    border: 1px solid gray;
+    border-radius: 6px;
+    text-decoration: none;
+    color: black;
+    background: white;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.top-nav a:hover {
+    background: #f3f3f3;
+}
+ /* Rooms container in Dashboard page */
 #rooms-container {
     display: flex;
     flex-direction: column;
@@ -28,10 +130,12 @@
 .room-row {
     display: flex;
     gap: 3px;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
-/* Room button */
-.room-btn, .leave-btn, .delete-btn {
+/* Room button in Dashboard page */
+.btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -50,14 +154,14 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
-.room-btn:hover, .leave-btn:hover, .delete-btn:hover {
-    background-color: orange;
+.btn:hover {
+    background: #ffb347;
 }
-.room-btn:active, .leave-btn:active, .delete-btn:active {
+.btn:active {
     transform: scale(0.95);
 }
 
-/* Room card */
+/* Room card in Dashboard page */
 .room-card { /* Used for displaying room information on a separate panel when hovering over the room icon/button */
     padding: 16px;
     margin-bottom: 10px;
@@ -67,5 +171,22 @@
     transition: background-color 0.2s;
 }
 .room-card:hover {
-    background-color: orange;
+    background-color: #fff3e0;
+}
+
+/* Message input in Dashboard page */
+#input {
+    width: 100%;
+}
+
+/* Messages in Dashboard page */
+#messages {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+    scrollbar-width: thin;
+
+    margin: 0;
+    padding: 0;
+    list-style: none;
 }

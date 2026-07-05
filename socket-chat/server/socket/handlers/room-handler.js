@@ -18,8 +18,8 @@ async function registerJoinRoomHandler(io, redis, socket, roomCode) {
     console.log(`Added user ${socket.user.userId} to room in Redis`);
 
     // Notify the user about join room success
-    const onlineUsers = await getMembersInRoom(roomCode);
-    socket.emit("userJoined", onlineUsers);
+    const memberList = await getMembersInRoom(roomCode);
+    socket.emit("userJoined", memberList);
 }
 
 async function registerEnterRoomHandler(socket, roomCode) {
@@ -30,15 +30,15 @@ async function registerEnterRoomHandler(socket, roomCode) {
     socket.currentRoomCode = roomCode;
     socket.join(roomCode);
 
-    // Fetch online users and message history of the room
-    const onlineUsers = await getMembersInRoom(roomCode);
+    // Fetch active users and message history of the room
+    const memberList = await getMembersInRoom(roomCode);
     const messages = await getMessages(roomCode);
     // Fetch room displaying info
     const roomInfoForDisplay = await getRoomInfoForDisplay(roomCode);
 
     // Send these information to the user
     socket.emit("userEntered", {
-        onlineUsers,
+        memberList,
         messages,
         roomInfoForDisplay
     });

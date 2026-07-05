@@ -4,7 +4,7 @@ import { appendMessageToChatList,
          markMessageFailed, 
          markMessageSent } from "./message-view.js";
 
-// Send the input message to server (for which server will then relay to other online users in the room)
+// Send the input message to server (for which server will then relay to other active users in the room)
 function handleSendMessage(userId, messagesElement, input, socket) {
     // Stop proceeding if user somehow passed an empty message (as this should be handled by form's "required" attribute already)
     if (!input.value) return;

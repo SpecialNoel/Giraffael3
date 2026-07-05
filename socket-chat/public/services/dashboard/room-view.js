@@ -56,19 +56,29 @@ async function updateBasicGui() {
     if (titleElement)titleElement.textContent = roomName;
 }
 
-// Update the list of current online users in the room on Dashboard page UI
-function updateOnlineUserList(onlineUsersElement, onlineUsers) {
-    // Empty the list first
-    onlineUsersElement.innerHTML = "";
+// Update the list of current active users in the room on Dashboard page UI
+function updateMemberList(memberListElement, emptyMessageElement, memberListHeadingElement, memberList) {
+    // Update the member list container on displaying the empty message or not
+    emptyMessageElement.hidden = memberList.length > 0;
+    memberListElement.hidden = memberList.length === 0;
 
-    // For each user that is currently online in the room, add info about the user to the list
-    onlineUsers.forEach(({ userId, username }) => {
-        const item = document.createElement("li");
-        item.textContent = `[${username}]: ${userId}`;
-        onlineUsersElement.appendChild(item);
-        // Scroll the browser window to the bottom of the page
-        window.scrollTo(0, document.body.scrollHeight);
-    });
+    // Update the member list by appending any user that is currently active
+    if (memberList.length > 0) {
+        // Update the header
+        memberListHeadingElement.textContent = `Members (${memberList.length})`;
+
+        // Empty the list first
+        memberListElement.innerHTML = "";
+
+        // For each user that is currently active in the room, add info about the user to the list
+        memberList.forEach(({ userId, username }) => {
+            const item = document.createElement("li");
+            item.textContent = `[${username}]: ${userId}`;
+            memberListElement.appendChild(item);
+            // Scroll the browser window to the bottom of the page
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+    }
 }
 
 // Update the message history in the room on Dashboard page UI
@@ -94,13 +104,13 @@ function appendRoomToRoomsContainer(containerDiv, roomInfo, role) {
 
     // Room button; enter the room upon clicking
     const roomBtn = document.createElement("button");
-    roomBtn.className = "room-btn";
+    roomBtn.className = ".btn room-btn";
     roomBtn.dataset.roomCode = roomInfo.roomCode;
     roomBtn.textContent = roomInfo.roomName;
 
     // Leave button; leave the room upon clicking
     const leaveBtn = document.createElement("button");
-    leaveBtn.className = "leave-btn";
+    leaveBtn.className = ".btn leave-btn";
     leaveBtn.dataset.roomCode = roomInfo.roomCode;
     leaveBtn.textContent = "Leave";
 
@@ -114,7 +124,7 @@ function appendRoomToRoomsContainer(containerDiv, roomInfo, role) {
     // Delete the room from the database upon clicking
     if (role === "creator") {
         const deleteBtn = document.createElement("button");
-        deleteBtn.className = "delete-btn";
+        deleteBtn.className = ".btn delete-btn";
         deleteBtn.dataset.roomCode = roomInfo.roomCode;
         deleteBtn.textContent = "Delete";
         roomRow.appendChild(deleteBtn);
@@ -125,6 +135,6 @@ function appendRoomToRoomsContainer(containerDiv, roomInfo, role) {
 }
 
 export { updateBasicGui, 
-         updateOnlineUserList, 
+         updateMemberList, 
          updateMessageHistoryList,
          appendRoomToRoomsContainer };
