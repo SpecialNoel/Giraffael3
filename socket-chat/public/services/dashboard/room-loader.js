@@ -19,7 +19,7 @@ function renderRooms(roomsInfo) {
         appendRoomToRoomsContainer(
             container,
             roomInfo,
-            roomInfo.role === "creator" // isCreator
+            roomInfo.role
         );
     });
 }

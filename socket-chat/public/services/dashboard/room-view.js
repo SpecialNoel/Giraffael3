@@ -108,6 +108,8 @@ function appendRoomToRoomsContainer(containerDiv, roomInfo, role) {
     roomRow.appendChild(roomBtn);
     roomRow.appendChild(leaveBtn);
 
+    console.log("User's role:", role);
+
     // Delete button; enabled only for creator of the room
     // Delete the room from the database upon clicking
     if (role === "creator") {
