@@ -2,7 +2,6 @@
 
 import { addUserToRoom } from "../../services/redis-services/user-services.js";
 import { getMembersInRoom } from "../../services/db-services/membership/get-members-service.js";
-import { enterRoom } from "../../services/db-services/membership/enter-room-service.js";
 import { getMessages } from "../../services/db-services/message/get-messages-service.js";
 import { getRoomInfoForDisplay } from "../../services/db-services/room/get-room-info-for-display-service.js";
 
@@ -30,9 +29,6 @@ async function registerEnterRoomHandler(socket, roomCode) {
     // Enter the user to the room
     socket.currentRoomCode = roomCode;
     socket.join(roomCode);
-
-    // Re-active the membership of the user in the room
-    await enterRoom(socket.user.userObjectId, roomCode);
 
     // Fetch online users and message history of the room
     const onlineUsers = await getMembersInRoom(roomCode);
