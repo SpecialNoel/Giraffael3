@@ -1,36 +1,40 @@
 // socket-events.js
 
 import { updateBasicGui, 
-         updateOnlineUserList, 
+         updateMemberList, 
          updateMessageHistoryList } from "../dashboard/room-view.js";
 import { appendMessageToChatList } from "./message-view.js";
 import { handleSendMessage } from "./message-services.js";
 
 // Set up socket events
-function registerSocketEvents(socket, messagesElement, onlineUsersElement) {
-    // Handle update on online users list upon user joining or leaving the room
-    socket.on("userJoined", (onlineUsers) => {
-        // onlineUsers is a list of { userId, username }
-        updateOnlineUserList(onlineUsersElement, onlineUsers);
+function registerSocketEvents(socket, 
+                              messagesElement, 
+                              memberListElement, 
+                              emptyMessageElement,
+                              memberListHeadingElement) {
+    // Handle update on active users list upon user joining or leaving the room
+    socket.on("userJoined", (memberList) => {
+        // memberList is a list of { userId, username }
+        updateMemberList(memberListElement, emptyMessageElement, memberListHeadingElement, memberList);
     });
-    socket.on("userLeft", (onlineUsers) => {
-        updateOnlineUserList(onlineUsersElement, onlineUsers);
+    socket.on("userLeft", (memberList) => {
+        updateMemberList(memberListElement, emptyMessageElement, memberListHeadingElement, memberList);
     });
 
     // Handle user enter room event
-    socket.on("userEntered", async ({ onlineUsers, messages, roomInfoForDisplay }) => {
+    socket.on("userEntered", async ({ memberList, messages, roomInfoForDisplay }) => {
         // Update Dashboard page upon enter room success
         sessionStorage.setItem(
             "currentRoom",
             JSON.stringify(roomInfoForDisplay)
         );
         await updateBasicGui();
-        updateOnlineUserList(onlineUsersElement, onlineUsers);
+        updateMemberList(memberListElement, emptyMessageElement, memberListHeadingElement, memberList);
         updateMessageHistoryList(messagesElement, messages);
     });
 
-    socket.on("userLeft", ({ onlineUsers, messages }) => {
-        updateOnlineUserList(onlineUsersElement, onlineUsers);
+    socket.on("userLeft", ({ memberList, messages }) => {
+        updateMemberList(memberListElement, emptyMessageElement, memberListHeadingElement, memberList);
         updateMessageHistoryList(messagesElement, messages);
     });
 
@@ -53,7 +57,9 @@ function startSession(socket) {
     const form = document.getElementById("form");
     const input = document.getElementById("input");
     const messagesElement = document.getElementById("messages");
-    const onlineUsersElement = document.getElementById("onlineUsers");
+    const memberListElement = document.getElementById("memberList");
+    const emptyMessageElement = document.getElementById("emptyMessage");
+    const memberListHeadingElement = document.getElementById("memberListHeading");
 
     const userId = localStorage.getItem("userId");
 
@@ -62,7 +68,7 @@ function startSession(socket) {
         // Prevent web page reloading upon form submission
         e.preventDefault();
 
-        // Send the input message to server (for which server will then relay to other online users in the room)
+        // Send the input message to server (for which server will then relay to other active users in the room)
         handleSendMessage(
             userId,
             messagesElement,
@@ -72,7 +78,7 @@ function startSession(socket) {
     });
 
     // Set up socket events
-    registerSocketEvents(socket, messagesElement, onlineUsersElement);
+    registerSocketEvents(socket, messagesElement, memberListElement, emptyMessageElement, memberListHeadingElement);
 }
 
 export { startSession };

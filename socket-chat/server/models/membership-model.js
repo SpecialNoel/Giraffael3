@@ -24,6 +24,13 @@ const membershipSchema = new Schema(
             type: String,
             enum: ["member", "creator"],
             default: "member"
+        },
+        // active indicates whether the membership is still effective (user still in the room) 
+        // or not (user left the room)
+        active: {
+            type: Boolean,
+            required: true,
+            default: true
         }
     }
 );

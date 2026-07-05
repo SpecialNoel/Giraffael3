@@ -9,71 +9,84 @@
 
   <body>
     <!-- Buttons to other pages -->
-    <div class="card">
-      <a href="/friends"><button>Friends</button></a>
-      <a href="/settings"><button>Settings</button></a>
-      <a href="/signin"><button>Quit</button></a>
+    <div class="top-nav">
+      <a href="/friends">Friends</a>
+      <a href="/settings">Settings</a>
+      <a href="/signin">Logout</a>
     </div>
 
-    <!-- Room selection -->
-    <div class="card">
-      <div>
-        <!-- Create a new room -->
-        <label>Room name: </label>
-        <input
-          type="text"
-          id="roomNameInCreateRoom"
-          placeholder="Enter room name"
-          maxlength="20"
-          autocomplete="off"
-        />
-        <button class="create-btn">Create room</button>
+    <div class="dashboard">
+      <!-- Left panel -->
+      <div class="left-panel">
+        <!-- Room selection -->
+        <div class="card">
+          <div>
+            <!-- Create a new room -->
+            <h4>Room name:</h4>
+            <input
+              type="text"
+              id="roomNameInCreateRoom"
+              placeholder="Enter room name"
+              maxlength="20"
+              autocomplete="off"
+            />
+            <button class="create-btn">Create room</button>
+          </div>
+          <label> OR: </label>
+          <!-- Join an existing room -->
+          <div>
+            <h4>Room code:</h4>
+            <input
+              type="text"
+              id="roomCodeInJoinRoom"
+              placeholder="Enter room code"
+              maxlength="20"
+              autocomplete="off"
+            />
+            <button class="join-btn">Join room</button>
+          </div>
+        </div>
+
+        <!-- Room list -->
+        <div class="card">
+          <div><h4>Room List:</h4></div>
+          <div id="rooms-container"></div>
+        </div>
       </div>
-      <label> OR: </label>
-      <!-- Join an existing room -->
-      <div>
-        <label>Room code: </label>
-        <input
-          type="text"
-          id="roomCodeInJoinRoom"
-          placeholder="Enter room code"
-          maxlength="20"
-          autocomplete="off"
-        />
-        <button class="join-btn">Join room</button>
+
+      <!-- Right panel -->
+      <div class="right-panel">
+        <!-- Chatroom info -->
+        <div class="card">
+          <div>
+            <label id="roomCodeInChat">Room Code: </label>
+          </div>
+          <div>
+            <label id="userIdInChat">User ID: </label>
+          </div>
+        </div>
+
+        <!-- Chat message list -->
+        <div class="card chat-card">
+          <h4>Message history:</h4>
+          <ul id="messages"></ul>
+        </div>
+
+        <!-- Input and send message -->
+        <div class="card">
+          <h4>Send Message:</h4>
+          <form id="form" action="">
+            <input id="input" autocomplete="off" /> <button>Send</button>
+          </form>
+        </div>
+
+        <!-- Member list -->
+        <div class="card">
+          <h4 id="memberListHeading">Members (0)</h4>
+          <ul id="memberList"></ul>
+          <p id="emptyMessage">No one is in the room.</p>
+        </div>
       </div>
-    </div>
-
-    <!-- Room list -->
-    <div class="card">
-      <div><label>Room List: </label></div>
-      <div id="rooms-container"></div>
-    </div>
-
-    <!-- Chatting room -->
-    <div class="card">
-      <div>
-        <label id="roomCodeInChat"></label>
-      </div>
-      <div>
-        <label id="userIdInChat"></label>
-      </div>
-      <label>Online User:</label>
-      <ul id="onlineUsers"></ul>
-    </div>
-
-    <!-- Chat list -->
-    <div class="card">
-      <label>Message history: </label>
-      <ul id="messages"></ul>
-    </div>
-
-    <!-- Input and send message -->
-    <div class="card">
-      <label>Send Message: </label>
-      <form id="form" action="">
-        <input id="input" autocomplete="off" /> <button>Send</button>
-      </form>
     </div>
 
     <!-- Create the SocketIO user -->

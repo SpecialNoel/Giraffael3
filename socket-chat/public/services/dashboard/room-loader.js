@@ -1,12 +1,12 @@
 // room-loader.js
 
 import { apiFetch } from "../utils/api-fetcher.js";
+import { parseResponse } from "../utils/response-parser.js";
 import { appendRoomToRoomsContainer } from "./room-view.js";
 
 // Retrieve info about all rooms the user has joined from server
 async function fetchRoomsInfo() {
-    const response = await apiFetch("/rooms");
-    const data = await response.json();
+    const data = await parseResponse(await apiFetch("/rooms"));
     return data.roomsInfo;
 }
 
@@ -19,7 +19,7 @@ function renderRooms(roomsInfo) {
         appendRoomToRoomsContainer(
             container,
             roomInfo,
-            roomInfo.role === "creator" // isCreator
+            roomInfo.role
         );
     });
 }

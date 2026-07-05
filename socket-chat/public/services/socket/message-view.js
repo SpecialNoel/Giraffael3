@@ -31,8 +31,8 @@ function appendMessageToChatList(messagesElement, tmpId, userId, msgContent, sta
     // Append the message element to the chat list element
     messagesElement.appendChild(msgElement);
     
-    // Scroll the browser window to the bottom of the page
-    window.scrollTo(0, document.body.scrollHeight);
+    // Scroll the messages to the very bottom
+    messagesElement.scrollTop = messagesElement.scrollHeight;
 }
 
 // Update the UI upon failing to send the message (indicated by tmpId)

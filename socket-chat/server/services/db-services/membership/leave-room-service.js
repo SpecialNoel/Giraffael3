@@ -3,9 +3,10 @@
 import { Membership } from "../../../models/membership-model.js";
 import { Room } from "../../../models/room-model.js";
 
-// Remove the user from the given room by deleting the existing membership
+// Set the user from the given room as inactive by updating the existing membership
 async function leaveRoom(userObjectId, roomCode) {
     try {
+        // Try to fetch the room from database
         const room = await Room.findOne({
             roomCode,
             deleted: false
@@ -17,17 +18,22 @@ async function leaveRoom(userObjectId, roomCode) {
             };
         }
 
-        const result = await Membership.deleteOne({
+        // Try to fetch the associated membership from database
+        const membership = await Membership.findOne({
             userObjectId,
-            roomObjectId: room._id
+            roomObjectId: room._id,
+            active: true
         });
-        if (result.deletedCount === 0) {
+        if (!membership) {
             return {
                 success: false, 
                 reason: "NOT_IN_ROOM"
             };    
         }
 
+        // Update the membership document to leave the user from the room
+        membership.active = false;
+        await membership.save();
         return {
             success: true
         };
