@@ -1,0 +1,26 @@
+/* message.css */
+
+/* Message input in Dashboard page */
+#input {
+    width: 100%;
+}
+
+/* Messages in Dashboard page */
+#messages {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+    scrollbar-width: thin;
+
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.chat-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+}

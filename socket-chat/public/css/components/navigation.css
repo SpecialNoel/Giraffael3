@@ -1,0 +1,24 @@
+/* navigation.css */
+
+/* Navigation at top of Dashboard page */
+.top-nav {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+    padding: 10px;
+}
+.top-nav a {
+    padding: 6px 14px;
+    border: 1px solid gray;
+    border-radius: 6px;
+    text-decoration: none;
+    color: black;
+    background: white;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.top-nav a:hover {
+    background: #f3f3f3;
+}

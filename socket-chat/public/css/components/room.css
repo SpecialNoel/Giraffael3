@@ -1,0 +1,55 @@
+/* room.css */
+
+/* Rooms container in Dashboard page */
+#rooms-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+}
+.room-row {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Room card in Dashboard page */
+.room-card { /* Used for displaying room information on a separate panel when hovering over the room icon/button */
+    padding: 16px;
+    margin-bottom: 10px;
+    border: 2px solid gray;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.room-card:hover {
+    background-color: #fff3e0;
+}
+
+/* Room button in Dashboard page */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 4px 16px;
+    font-size: 14px;
+
+    border: 1px solid gray;
+    border-radius: 6px;
+
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.btn:hover {
+    background: #ffb347;
+}
+.btn:active {
+    transform: scale(0.95);
+}

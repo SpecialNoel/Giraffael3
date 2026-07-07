@@ -1,0 +1,17 @@
+/* variables.css */
+
+/* Basic section divider */
+.card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+.card h4 {
+    margin-top: 0;
+    margin-bottom: 12px;
+}

@@ -1,0 +1,30 @@
+/* auth.css */
+
+/* Sign-up and Sign-in pages */
+.auth-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+/* Sign-up and Sign-in forms */
+#sign-up-form,
+#sign-in-form {
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #f5f5f5;
+}
+
+/* Navigation links in Sign-up and Sign-in pages */
+.link {
+    display: inline-flex;
+    width: fit-content;    
+    color: blue;
+    text-decoration: underline;
+}
