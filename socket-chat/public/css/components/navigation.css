@@ -2,23 +2,33 @@
 
 /* Navigation at top of Dashboard page */
 .top-nav {
+    /* Layout */
     display: flex;
-    gap: 10px;
     flex-shrink: 0;
+
+    /* Spacing */
+    gap: 10px;
     padding: 10px;
 }
 .top-nav a {
-    padding: 6px 14px;
-    border: 1px solid gray;
-    border-radius: 6px;
-    text-decoration: none;
-    color: black;
-    background: white;
-
+    /* Layout */
     display: inline-flex;
     align-items: center;
     justify-content: center;
+
+    /* Spacing */ 
+    padding: 6px 14px;
+
+    /* Border */
+    border: 1px solid gray;
+    border-radius: 6px;
+
+    /* Appearance */
+    text-decoration: none;
+    color: black;
+    background: white;
 }
 .top-nav a:hover {
+    /* Appearance */
     background: #f3f3f3;
 }

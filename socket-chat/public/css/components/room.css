@@ -2,54 +2,61 @@
 
 /* Rooms container in Dashboard page */
 #rooms-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: flex-start;
+    /* Layout */
+    display: flex; /* Make it easier to align elements */
+    flex-direction: column; /* Stack elements vertically; turns the main axis from horizontal (default) to vertical */
+
+    /* Spacing */
+    gap: 10px; /* Keep some spaces between each room container */
 }
 .room-row {
-    display: flex;
-    gap: 3px;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-/* Room card in Dashboard page */
-.room-card { /* Used for displaying room information on a separate panel when hovering over the room icon/button */
-    padding: 16px;
-    margin-bottom: 10px;
-    border: 2px solid gray;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-.room-card:hover {
-    background-color: #fff3e0;
+    /* Layout */
+    display: flex; /* Make it easier to align elements */
+    
+    /* Spacing */
+    gap: 3px; /* Keep some spaces between each buttons inside the room container */
 }
 
 /* Room button in Dashboard page */
 .btn {
-    display: inline-flex;
+    /* Layout */
+    display: flex; /* Allow flexible alignment of button contents */
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start; /* Align the text inside the button to the center */
 
-    padding: 4px 16px;
-    font-size: 14px;
+    /* Size */
+    width: 100%;
+    max-width: none;
+    min-width: 0;
 
-    border: 1px solid gray;
-    border-radius: 6px;
+    /* Spacing */
+    padding: 4px 16px; /* Keep distances between buttons */
 
-    cursor: pointer;
-    user-select: none;
-    transition: all 0.2s;
+    /* Border */
+    border: 1px solid gray; /* Control the thickness, style and color of the border */
+    border-radius: 8px; /* Control the roundness of the corners of the border */
 
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    /* Interaction */
+    cursor: pointer; /* Replace the cursor with the pointer, when hovered over */
+    user-select: none; /* Prevent the user from dragging and selecting texts inside the button */
+
+    /* Effect */
+    transition: transform 0.15s ease; /* Define the detail on transformation on the button */
+}
+.btn span {
+    /* Layout */
+    flex: 1; /* Unify the size of the buttons, rather than based on text inside the button */
+
+    /* Appearance */
+    overflow: hidden; /* Limit the size of the button to keep it inside the left panel */
+    white-space: nowrap; /* */
+    text-overflow: ellipsis; /* Limit the size of the button to keep it inside the left panel */
 }
 .btn:hover {
-    background: #ffb347;
+    /* Appearance */
+    background-color: #ffb347; /* Control the color of the background of this element */
 }
 .btn:active {
-    transform: scale(0.95);
+    /* Effect */
+    transform: scale(0.95); /* Shrink the size of the button */
 }

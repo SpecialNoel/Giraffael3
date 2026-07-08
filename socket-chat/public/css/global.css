@@ -1,10 +1,20 @@
 /* global.css */
 
 html, body {
+    /* 
+     * Make the page as tall as the parent html element 
+     * height: ~% requires the parent element to explicitly define their own height
+     * Setting this to both html and body creates a chain: viewport -> html -> body -> child_element,
+     * which makes child_element be able to use height: ~% to refer to the heights of body and html
+    */
+    /* Size */
     height: 100%;
-    margin: 0;
+
+    /* Spacing */
+    margin: 0; /* Remove the scroll bar of the page, making the content to "touch" the edge of the viewport */
 }
 body {
-    display: flex;
-    flex-direction: column;
+    /* Layout */
+    display: flex; /* Make it easier to align elements */
+    flex-direction: column; /* Stack elements vertically; turns the main axis from horizontal (default) to vertical */
 }

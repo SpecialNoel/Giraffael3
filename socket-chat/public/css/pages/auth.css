@@ -2,29 +2,44 @@
 
 /* Sign-up and Sign-in pages */
 .auth-page {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+    /* Layout */
+    display: flex; /* Make it easier to align elements */
+    flex-direction: column; /* Stack elements vertically; turns the main axis from horizontal (default) to vertical */
+    justify-content: center; /* Centers the elements vertically; controls the main axis (vertical in this case) */
+    align-items: center; /* Centers the element horizontally; controls the cross axis (horizontal in this case) */
+
+    /* Size */
+    height: 100%; /* Makes this element as tall as its parent (body in this case) */
 }
 
 /* Sign-up and Sign-in forms */
 #sign-up-form,
 #sign-in-form {
-    width: 320px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background: #f5f5f5;
+    /* Layout */
+    display: flex; /* Make it easier to align elements */
+    flex-direction: column; /* Stack elements vertically; turns the main axis from horizontal (default) to vertical */
+
+    /* Size */
+    width: 320px; /* Control the width of the element */
+
+    /* Spacing */
+    gap: 10px; /* Control the spacing between each component inside this element */
+    padding: 20px; /* Control the distance between the content and the border */
+
+    /* Border */
+    border: 1px solid #ddd; /* Control the thickness, style and color of the border */
+    border-radius: 8px; /* Control the roundness of the corners of the border */
+
+    /* Appearance */
+    background-color: #f5f5f5; /* Control the color of the background of this element */
 }
 
 /* Navigation links in Sign-up and Sign-in pages */
 .link {
-    display: inline-flex;
-    width: fit-content;    
-    color: blue;
-    text-decoration: underline;
+    /* Spacing */
+    margin-top: 4px; /* Lower the element from the element on its top */
+
+    /* Appearance */ 
+    color: blue; /* Control the color of the link */
+    text-decoration: underline; /* Add an underline to the link */
 }

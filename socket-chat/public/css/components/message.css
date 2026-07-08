@@ -2,25 +2,33 @@
 
 /* Message input in Dashboard page */
 #input {
-    width: 100%;
+    /* Size */
+    width: 100%; /* Make this element as wide as its parent (card in this case) */
 }
 
 /* Messages in Dashboard page */
 #messages {
-    flex: 1;
-    overflow-y: auto;
-    min-height: 0;
-    scrollbar-width: thin;
+    /* Spacing */
+    margin: 0; /* Remove the spaces at the top and bottom of the list */
+    padding: 0; /* Align the list items closer to the left border */
 
-    margin: 0;
-    padding: 0;
-    list-style: none;
+    /* Appearance */
+    list-style: none; /* Remove the bullet markers from the list items */
+
+    /* Browser UI */
+    scrollbar-width: thin; /* Control the thickness of the scroll bar */
 }
 
 .chat-card {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    overflow: hidden;
+    /* Layout */
+    display: flex; /* Make it easier to align elements */
+    flex-direction: column; /* Stack elements vertically; turns the main axis from horizontal (default) to vertical */
+    flex: 1; /* Take up the available space for the message history */
+
+    /* Appearance */
+    /* 
+     * Enable the scroll bar in the message history when necessary
+     * Allow the message history to grow indefinitely without stretching the page
+     */
+    overflow-y: auto;
 }

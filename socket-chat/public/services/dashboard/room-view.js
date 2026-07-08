@@ -104,15 +104,19 @@ function appendRoomToRoomsContainer(containerDiv, roomInfo, role) {
 
     // Room button; enter the room upon clicking
     const roomBtn = document.createElement("button");
-    roomBtn.className = ".btn room-btn";
+    roomBtn.className = "btn room-btn";
     roomBtn.dataset.roomCode = roomInfo.roomCode;
-    roomBtn.textContent = roomInfo.roomName;
+    const roomName = document.createElement("span");
+    roomName.textContent = roomInfo.roomName;
+    roomBtn.appendChild(roomName);
 
     // Leave button; leave the room upon clicking
     const leaveBtn = document.createElement("button");
-    leaveBtn.className = ".btn leave-btn";
+    leaveBtn.className = "btn leave-btn";
     leaveBtn.dataset.roomCode = roomInfo.roomCode;
-    leaveBtn.textContent = "Leave";
+    const leaveName = document.createElement("span");
+    leaveName.textContent = "Leave";
+    leaveBtn.appendChild(leaveName);
 
     // Append buttons to the wrapper
     roomRow.appendChild(roomBtn);
@@ -124,9 +128,11 @@ function appendRoomToRoomsContainer(containerDiv, roomInfo, role) {
     // Delete the room from the database upon clicking
     if (role === "creator") {
         const deleteBtn = document.createElement("button");
-        deleteBtn.className = ".btn delete-btn";
+        deleteBtn.className = "btn delete-btn";
         deleteBtn.dataset.roomCode = roomInfo.roomCode;
-        deleteBtn.textContent = "Delete";
+        const deleteName = document.createElement("span");
+        deleteName.textContent = "Delete";
+        deleteBtn.appendChild(deleteName);
         roomRow.appendChild(deleteBtn);
     }
 

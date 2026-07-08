@@ -2,16 +2,20 @@
 
 /* Basic section divider */
 .card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 16px;
-    margin-bottom: 16px;
+    /* Layout */
+    display: flex; /* Make it easier to align elements */
+    flex-direction: column; /* Stack elements vertically; turns the main axis from horizontal (default) to vertical */
 
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
+    /* Spacing */
+    padding: 16px; /* Control the distance between the content and the border */
+    margin-bottom: 16px; /* Control the distance outside the border */
+
+    /* Border */
+    border: 2px solid #ddd; /* Control the thickness, style and color of the border */
+    border-radius: 12px; /* Control the roundness of the corners of the border */
 }
 .card h4 {
-    margin-top: 0;
-    margin-bottom: 12px;
+    /* Spacing */
+    margin-top: 0; /* Remove the default margin (8) to keep each card element closer */
+    margin-bottom: 8px; /* Lower the gap between the card header and the card content */
 }
