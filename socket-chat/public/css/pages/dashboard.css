@@ -18,13 +18,13 @@
     flex-shrink: 0;
 
 	/* Size */
-    width: 220px;
+    width: 200px;
 
 	/* Spacing */
     padding: 20px;
 
 	/* Appearance */
-	background-color: gainsboro;
+	background-color: rgb(225, 225, 225);
 }
 .right-panel {
 	/* Layout */
@@ -33,12 +33,42 @@
     flex: 1;
 
 	/* Size */
+    width: 100%;
     min-width: 0;
     min-height: 0;
 
 	/* Spacing */
-    padding: 20px;
-    gap: 12px;
+    padding: 0px 10px 10px 10px; /* Padding for the whole right panel: top-right-bottom-left*/
+    gap: 10px; /* Gap between each component in right panel */
+}
+
+/* Components in the left panel of the Dashboard page */
+.divider {
+    /* Spacing */
+    margin: 10px;
+
+    /* Border */
+    border: none;
+    border-top: 2px solid rgb(200, 200, 200);
+}
+.room-input {
+    /* Layout */
+    display: flex;
+
+    /* Size */
+    width: 100%;
+
+    /* Spacing */
+    margin-bottom: 4px;
+}
+.create-btn,
+.join-btn,
+.send-btn {
+    /* Layout */
+    display: flex;
+
+    /* Spacing */
+    margin-left: auto;
 }
 
 /* Mobile responsive */
@@ -48,18 +78,22 @@
         flex-direction: column;
 
         /* Size */
-        height: auto;
+        height: calc(100dvh - var(--header-height));
+        min-height: 0;
     }
-    .left-panel {
+    .left-panel {    
         /* Size */
         width: 100%;
-        box-sizing: border-box;
 
         /* Appearance */
         overflow: hidden;
     }
     .right-panel {
         /* Size */
+        width: 100%;
         min-width: 0;
+
+        /* Spacing */
+        padding-top: 10px;
     }
 }

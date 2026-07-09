@@ -24,26 +24,28 @@
       <!-- Left panel -->
       <div class="left-panel">
         <!-- Room selection -->
-        <div class="card">
+        <div class="card card-left">
           <div>
             <!-- Create a new room -->
             <h4>Room name:</h4>
             <input
               type="text"
               id="roomNameInCreateRoom"
+              class="room-input"
               placeholder="Enter room name"
               maxlength="20"
               autocomplete="off"
             />
             <button class="create-btn">Create room</button>
           </div>
-          <label> OR: </label>
+          <hr class="divider" />
           <!-- Join an existing room -->
           <div>
             <h4>Room code:</h4>
             <input
               type="text"
               id="roomCodeInJoinRoom"
+              class="room-input"
               placeholder="Enter room code"
               maxlength="20"
               autocomplete="off"
@@ -53,7 +55,7 @@
         </div>
 
         <!-- Room list -->
-        <div class="card">
+        <div class="card card-left">
           <div><h4>Room List:</h4></div>
           <div id="rooms-container"></div>
         </div>
@@ -81,15 +83,16 @@
         <div class="card">
           <h4>Send Message:</h4>
           <form id="form" action="">
-            <input id="input" autocomplete="off" /> <button>Send</button>
+            <input id="input" autocomplete="off" />
+            <button class="send-btn">Send</button>
           </form>
         </div>
 
         <!-- Member list -->
         <div class="card">
           <h4 id="memberListHeading">Members (0)</h4>
-          <ul id="memberList"></ul>
           <p id="emptyMessage">No one is in the room.</p>
+          <ul id="memberList"></ul>
         </div>
       </div>
     </div>

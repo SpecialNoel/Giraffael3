@@ -7,15 +7,32 @@
     flex-direction: column; /* Stack elements vertically; turns the main axis from horizontal (default) to vertical */
 
     /* Spacing */
-    padding: 16px; /* Control the distance between the content and the border */
-    margin-bottom: 16px; /* Control the distance outside the border */
+    padding: 8px; /* Control the distance between the content and the border */
 
     /* Border */
-    border: 2px solid #ddd; /* Control the thickness, style and color of the border */
-    border-radius: 12px; /* Control the roundness of the corners of the border */
+    border: 1px solid #dadada; /* Control the thickness, style and color of the border */
+    border-radius: 8px; /* Control the roundness of the corners of the border */
 }
 .card h4 {
     /* Spacing */
     margin-top: 0; /* Remove the default margin (8) to keep each card element closer */
     margin-bottom: 8px; /* Lower the gap between the card header and the card content */
+}
+.card-left {
+    /* Border */
+    border: none; /* Remove the border for cards in the left panel */
+}
+.chat-card {
+    /* Layout */
+    flex: 1; /* Take up the available space for the message history */
+
+    /* Size */
+    min-height: 0;
+
+    /* Appearance */
+    /* 
+     * Enable the scroll bar in the message history when necessary
+     * Allow the message history to grow indefinitely without stretching the page
+     */
+    overflow: hidden;
 }
