@@ -6,24 +6,18 @@
     width: 100%; /* Make this element as wide as its parent (card in this case) */
 
     /* Spacing */
-    margin-bottom: 4px;
+    margin-bottom: 4px; /* Keep distance between the message input field and the send button */
 }
 
 /* Messages in Dashboard page */
 #messages {
-    /* Layout */
-    flex: 1;
-
-    /* Size */
-    min-height: 0;
-
     /* Spacing */
     margin: 0; /* Remove the spaces at the top and bottom of the list */
     padding: 0; /* Align the list items closer to the left border */
 
     /* Appearance */
     list-style: none; /* Remove the bullet markers from the list items */
-    overflow-y: auto;
+    overflow-y: auto; /* Enables the scroller when message list overflows the component */
 
     /* Browser UI */
     scrollbar-width: thin; /* Control the thickness of the scroll bar */

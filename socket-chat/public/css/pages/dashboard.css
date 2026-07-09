@@ -1,41 +1,33 @@
 /* dashboard.css */
 
-/* Reserved height for navigation */
+/* Root of the document */
 :root {
-    --header-height: 50px;
+    /* Size */
+    --header-height: 50px; /* Reserved height for navigation */
 }
 
 /* Dashboard page */
 .dashboard {
 	/* Layout */
-    display: flex;
+    display: flex; /* Make it easier to align elements */
 
 	/* Size */
-    height: calc(100dvh - var(--header-height));
+    height: calc(100dvh - var(--header-height)); /* Calculate the height for the component */
 }
 .left-panel {
-	/* Layout */
-    flex-shrink: 0;
-
-	/* Size */
-    width: 200px;
-
 	/* Spacing */
-    padding: 20px;
+    padding: 20px; /* Keep distance between the component and the parent */
 
 	/* Appearance */
-	background-color: rgb(225, 225, 225);
+	background-color: rgb(230, 230, 230); /* Control the color of the background of this element */
 }
 .right-panel {
 	/* Layout */
-    display: flex;
-    flex-direction: column;
-    flex: 1;
+    display: flex; /* Make it easier to align elements */
+    flex-direction: column; /* Stack elements vertically */
 
 	/* Size */
-    width: 100%;
-    min-width: 0;
-    min-height: 0;
+    width: 100%; /* Make this element as wide as its parent (dashboard in this case) */
 
 	/* Spacing */
     padding: 0px 10px 10px 10px; /* Padding for the whole right panel: top-right-bottom-left*/
@@ -45,55 +37,39 @@
 /* Components in the left panel of the Dashboard page */
 .divider {
     /* Spacing */
-    margin: 10px;
+    margin: 10px 0px 10px 0px; /* Control the distance between the divider and its surrounding components */
 
     /* Border */
-    border: none;
-    border-top: 2px solid rgb(200, 200, 200);
+    border: none; /* Remove the border from the horizontal line divider */
+    border-top: 2px solid rgb(200, 200, 200); /* Add and control the thickness, style and color of the top border */
 }
 .room-input {
-    /* Layout */
-    display: flex;
-
     /* Size */
-    width: 100%;
+    width: 100%; /* Make this element as wide as its parent (card-left in this case) */
 
     /* Spacing */
-    margin-bottom: 4px;
-}
-.create-btn,
-.join-btn,
-.send-btn {
-    /* Layout */
-    display: flex;
-
-    /* Spacing */
-    margin-left: auto;
+    margin-bottom: 4px; /* Keep distance between the room-related input field and the room-related button */
 }
 
 /* Mobile responsive */
 @media (max-width: 768px) {
     .dashboard {
         /* Layout */
-        flex-direction: column;
+        flex-direction: column; /* Stack elements vertically */
 
         /* Size */
-        height: calc(100dvh - var(--header-height));
-        min-height: 0;
+        height: calc(100dvh - var(--header-height)); /* Calculate the height for the component */
+        min-height: 0; /* Prevent the page from being able to be scrolled */
     }
     .left-panel {    
-        /* Size */
-        width: 100%;
-
-        /* Appearance */
-        overflow: hidden;
+        /* Layout */
+        flex: 0 0 auto; /* Prevent the left panel (located on top of the right panel) from shrinking due to the expand of the right panel */
     }
     .right-panel {
         /* Size */
-        width: 100%;
-        min-width: 0;
+        min-height: 0; /* Enables the scroller when message list overflows the component */
 
         /* Spacing */
-        padding-top: 10px;
+        padding-top: 10px; /* Add an offset between the left panel and the right panel */
     }
 }

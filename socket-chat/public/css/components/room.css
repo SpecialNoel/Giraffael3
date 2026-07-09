@@ -17,17 +17,16 @@
     gap: 3px; /* Keep some spaces between each buttons inside the room container */
 }
 
-/* Room button in Dashboard page */
+/* Room, leave and delete buttons in Dashboard page */
 .btn {
     /* Layout */
     display: flex; /* Allow flexible alignment of button contents */
-    align-items: center;
     justify-content: flex-start; /* Align the text inside the button to the center */
 
     /* Size */
-    width: 100%;
-    max-width: none;
-    min-width: 0;
+    width: 100%; /* Make this element as wide as its parent (room-row in this case) */
+    min-width: 0; /* Unify the size of the buttons, rather than based on text inside the button */
+    max-width: 100px; /* Limit the width of the buttons to prevent the left panel from expanding due to long room name */
 
     /* Spacing */
     padding: 4px 16px; /* Keep distances between buttons */
@@ -44,13 +43,9 @@
     transition: transform 0.15s ease; /* Define the detail on transformation on the button */
 }
 .btn span {
-    /* Layout */
-    flex: 1; /* Unify the size of the buttons, rather than based on text inside the button */
-
     /* Appearance */
-    overflow: hidden; /* Limit the size of the button to keep it inside the left panel */
-    white-space: nowrap; /* */
-    text-overflow: ellipsis; /* Limit the size of the button to keep it inside the left panel */
+    overflow: hidden; /* Truncate the room name to make it fit inside the room button */
+    text-overflow: ellipsis; /* Add overflow indicator (...) to truncate the room name */
 }
 .btn:hover {
     /* Appearance */

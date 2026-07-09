@@ -26,13 +26,14 @@
     /* Layout */
     flex: 1; /* Take up the available space for the message history */
 
-    /* Size */
-    min-height: 0;
-
     /* Appearance */
     /* 
      * Enable the scroll bar in the message history when necessary
      * Allow the message history to grow indefinitely without stretching the page
      */
     overflow: hidden;
+}
+.member-card {
+    /* Size */
+    min-height: 150px; /* Fix the min height to prevent the chat-card to expand due to member-card shrinking */
 }
