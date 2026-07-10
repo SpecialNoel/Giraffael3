@@ -3,8 +3,13 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title id="title">Dashboard</title>
-    <link rel="icon" type="image/png" href="giraffe-favicon.png" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" type="image/svg" href="/assets/favicon.svg" />
+    <link rel="stylesheet" href="/css/global.css" />
+    <link rel="stylesheet" href="/css/variables.css" />
+    <link rel="stylesheet" href="/css/pages/dashboard.css" />
+    <link rel="stylesheet" href="/css/components/navigation.css" />
+    <link rel="stylesheet" href="/css/components/room.css" />
+    <link rel="stylesheet" href="/css/components/message.css" />
   </head>
 
   <body>
@@ -19,26 +24,28 @@
       <!-- Left panel -->
       <div class="left-panel">
         <!-- Room selection -->
-        <div class="card">
-          <div>
-            <!-- Create a new room -->
-            <h4>Room name:</h4>
+        <div class="card card-left">
+          <h4>Room name:</h4>
+          <!-- Create a new room -->
+          <div class="room-input-group">
             <input
               type="text"
               id="roomNameInCreateRoom"
+              class="room-input"
               placeholder="Enter room name"
-              maxlength="20"
+              maxlength="50"
               autocomplete="off"
             />
             <button class="create-btn">Create room</button>
           </div>
-          <label> OR: </label>
+          <hr class="divider" />
+          <h4>Room code:</h4>
           <!-- Join an existing room -->
-          <div>
-            <h4>Room code:</h4>
+          <div class="room-input-group">
             <input
               type="text"
               id="roomCodeInJoinRoom"
+              class="room-input"
               placeholder="Enter room code"
               maxlength="20"
               autocomplete="off"
@@ -48,7 +55,7 @@
         </div>
 
         <!-- Room list -->
-        <div class="card">
+        <div class="card card-left">
           <div><h4>Room List:</h4></div>
           <div id="rooms-container"></div>
         </div>
@@ -75,16 +82,17 @@
         <!-- Input and send message -->
         <div class="card">
           <h4>Send Message:</h4>
-          <form id="form" action="">
-            <input id="input" autocomplete="off" /> <button>Send</button>
+          <form id="form" class="message-input-group" action="">
+            <input id="input" autocomplete="off" />
+            <button class="send-btn">Send</button>
           </form>
         </div>
 
         <!-- Member list -->
-        <div class="card">
+        <div class="card member-card">
           <h4 id="memberListHeading">Members (0)</h4>
-          <ul id="memberList"></ul>
           <p id="emptyMessage">No one is in the room.</p>
+          <ul id="memberList"></ul>
         </div>
       </div>
     </div>

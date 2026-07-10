@@ -1,0 +1,71 @@
+/* dashboard.css */
+
+/* Root of the document */
+:root {
+    /* Size */
+    --header-height: 50px; /* Reserved height for navigation */
+}
+
+/* Dashboard page */
+.dashboard {
+	/* Layout */
+    display: flex; /* Make it easier to align elements */
+
+	/* Size */
+    height: calc(100dvh - var(--header-height)); /* Calculate the height for the component */
+}
+.left-panel {
+    /* Size */
+    min-width: 300px;
+
+	/* Spacing */
+    padding: 20px; /* Keep distance between the component and the parent */
+
+	/* Appearance */
+	background-color: rgb(230, 230, 230); /* Control the color of the background of this element */
+}
+.right-panel {
+	/* Layout */
+    display: flex; /* Make it easier to align elements */
+    flex-direction: column; /* Stack elements vertically */
+
+	/* Size */
+    width: 100%; /* Make this element as wide as its parent (dashboard in this case) */
+
+	/* Spacing */
+    padding: 0px 10px 10px 10px; /* Padding for the whole right panel: top-right-bottom-left*/
+    gap: 10px; /* Gap between each component in right panel */
+}
+
+/* Components in the left panel of the Dashboard page */
+.divider {
+    /* Spacing */
+    margin: 10px 0px 10px 0px; /* Control the distance between the divider and its surrounding components */
+
+    /* Border */
+    border: none; /* Remove the border from the horizontal line divider */
+    border-top: 2px solid rgb(200, 200, 200); /* Add and control the thickness, style and color of the top border */
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .dashboard {
+        /* Layout */
+        flex-direction: column; /* Stack elements vertically */
+
+        /* Size */
+        height: calc(100dvh - var(--header-height)); /* Calculate the height for the component */
+        min-height: 0; /* Prevent the page from being able to be scrolled */
+    }
+    .left-panel {    
+        /* Layout */
+        flex: 0 0 auto; /* Prevent the left panel (located on top of the right panel) from shrinking due to the expand of the right panel */
+    }
+    .right-panel {
+        /* Size */
+        min-height: 0; /* Enables the scroller when message list overflows the component */
+
+        /* Spacing */
+        padding-top: 10px; /* Add an offset between the left panel and the right panel */
+    }
+}

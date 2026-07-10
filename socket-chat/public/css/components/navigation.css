@@ -1,0 +1,27 @@
+/* navigation.css */
+
+/* Navigation at top of Dashboard page */
+.top-nav {
+    /* Layout */
+    display: flex; /* Make it easier to align elements */
+
+    /* Spacing */
+    gap: 10px; /* Keep distance between each component in the top navigation section */
+    padding: 10px; /* Keep distance between the component and the parent */
+}
+.top-nav a {
+    /* Spacing */ 
+    padding: 6px 14px; /* Keep distance between the component and the parent */
+
+    /* Border */
+    border: 1px solid gray; /* Control the thickness, style and color of the border */
+    border-radius: 6px; /* Control the roundness of the corners of the border */
+
+    /* Appearance */
+    text-decoration: none; /* Remove the underline of the link */
+    color: black; /* Set the color of the text of the link */
+}
+.top-nav a:hover {
+    /* Appearance */
+    background-color: #f3f3f3; /* Control the color of the background of this element */
+}

@@ -118,8 +118,6 @@ function handleCreateRoom(socket) {
             const containerDiv = document.getElementById("rooms-container");
             appendRoomToRoomsContainer(containerDiv, data.roomInfoForDisplay, data.role);
 
-            console.log("role:", data.role);
-
             // Clear the room name field
             document.querySelector("#roomNameInCreateRoom").value = "";
         } catch (err) {
@@ -165,8 +163,6 @@ function handleJoinRoom(socket) {
             // Update the rooms container by appending the new room to the list
             const containerDiv = document.getElementById("rooms-container");
             appendRoomToRoomsContainer(containerDiv, data.roomInfoForDisplay, data.role);
-
-            console.log("role:", data.role);
 
             // Clear the room code field
             document.querySelector("#roomCodeInJoinRoom").value = "";

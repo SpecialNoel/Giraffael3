@@ -1,0 +1,39 @@
+/* variables.css */
+
+/* Basic section divider */
+.card {
+    /* Layout */
+    display: flex; /* Make it easier to align elements */
+    flex-direction: column; /* Stack elements vertically; turns the main axis from horizontal (default) to vertical */
+
+    /* Spacing */
+    padding: 8px; /* Control the distance between the content and the border */
+
+    /* Border */
+    border: 1px solid #dadada; /* Control the thickness, style and color of the border */
+    border-radius: 8px; /* Control the roundness of the corners of the border */
+}
+.card h4 {
+    /* Spacing */
+    margin-top: 0; /* Remove the default margin (8) to keep each card element closer */
+    margin-bottom: 8px; /* Lower the gap between the card header and the card content */
+}
+.card-left {
+    /* Border */
+    border: none; /* Remove the border for cards in the left panel */
+}
+.chat-card {
+    /* Layout */
+    flex: 1; /* Take up the available space for the message history */
+
+    /* Appearance */
+    /* 
+     * Enable the scroll bar in the message history when necessary
+     * Allow the message history to grow indefinitely without stretching the page
+     */
+    overflow: hidden;
+}
+.member-card {
+    /* Size */
+    min-height: 150px; /* Fix the min height to prevent the chat-card to expand due to member-card shrinking */
+}

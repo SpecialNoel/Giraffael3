@@ -2,8 +2,6 @@
 
 // Notify every user who joined the room about the room deletion
 function notifyUsersAboutRoomDeletion(io, roomCode) {
-    console.log(io.sockets.adapter.rooms.get(roomCode));
-
     io.to(roomCode).emit("roomDeleted", {
         roomCode,
         msg: "This room has been deleted."

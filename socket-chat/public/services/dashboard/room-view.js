@@ -104,15 +104,27 @@ function appendRoomToRoomsContainer(containerDiv, roomInfo, role) {
 
     // Room button; enter the room upon clicking
     const roomBtn = document.createElement("button");
-    roomBtn.className = ".btn room-btn";
+    roomBtn.className = "room-btn";
     roomBtn.dataset.roomCode = roomInfo.roomCode;
-    roomBtn.textContent = roomInfo.roomName;
+    roomBtn.title = "Enter room";
+    roomBtn.setAttribute("aria-label", "Enter room");
+
+    const roomName = document.createElement("span");
+    roomName.textContent = roomInfo.roomName;
+    roomBtn.appendChild(roomName);
 
     // Leave button; leave the room upon clicking
     const leaveBtn = document.createElement("button");
-    leaveBtn.className = ".btn leave-btn";
+    leaveBtn.className = "leave-btn";
     leaveBtn.dataset.roomCode = roomInfo.roomCode;
-    leaveBtn.textContent = "Leave";
+    leaveBtn.title = "Leave room";
+    leaveBtn.setAttribute("aria-label", "Leave room");
+
+    const leaveIcon = document.createElement("img");
+    leaveIcon.src = "/assets/leave.svg";
+    leaveIcon.alt = "Leave room";
+    leaveIcon.className = "leave-icon";
+    leaveBtn.appendChild(leaveIcon);
 
     // Append buttons to the wrapper
     roomRow.appendChild(roomBtn);
@@ -124,9 +136,17 @@ function appendRoomToRoomsContainer(containerDiv, roomInfo, role) {
     // Delete the room from the database upon clicking
     if (role === "creator") {
         const deleteBtn = document.createElement("button");
-        deleteBtn.className = ".btn delete-btn";
+        deleteBtn.className = "delete-btn";
         deleteBtn.dataset.roomCode = roomInfo.roomCode;
-        deleteBtn.textContent = "Delete";
+        deleteBtn.title = "Delete room";
+        deleteBtn.setAttribute("aria-label", "Delete room");
+
+        const deleteIcon = document.createElement("img");
+        deleteIcon.src = "/assets/delete.svg";
+        deleteIcon.alt = "Delete";
+        deleteIcon.className = "delete-icon";
+        deleteBtn.appendChild(deleteIcon);
+
         roomRow.appendChild(deleteBtn);
     }
 
