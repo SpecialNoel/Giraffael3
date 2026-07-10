@@ -15,6 +15,9 @@
     height: calc(100dvh - var(--header-height)); /* Calculate the height for the component */
 }
 .left-panel {
+    /* Size */
+    min-width: 300px;
+
 	/* Spacing */
     padding: 20px; /* Keep distance between the component and the parent */
 
@@ -42,13 +45,6 @@
     /* Border */
     border: none; /* Remove the border from the horizontal line divider */
     border-top: 2px solid rgb(200, 200, 200); /* Add and control the thickness, style and color of the top border */
-}
-.room-input {
-    /* Size */
-    width: 100%; /* Make this element as wide as its parent (card-left in this case) */
-
-    /* Spacing */
-    margin-bottom: 4px; /* Keep distance between the room-related input field and the room-related button */
 }
 
 /* Mobile responsive */

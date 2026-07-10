@@ -1,12 +1,25 @@
 /* message.css */
 
+/* Each message input group contains a input text field and a button (send) */
+.message-input-group {
+    /* Layout */
+    display: flex;
+}
+.send-btn {
+    height: 100%;
+}
+
 /* Message input in Dashboard page */
 #input {
+    /* Layout */
+    flex: 1;
+
     /* Size */
     width: 100%; /* Make this element as wide as its parent (card in this case) */
+    height: 100%; 
 
     /* Spacing */
-    margin-bottom: 4px; /* Keep distance between the message input field and the send button */
+    margin-right: 2px; /* Keep distance between the message input field and the send button */
 }
 
 /* Messages in Dashboard page */

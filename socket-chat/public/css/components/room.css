@@ -9,6 +9,7 @@
     /* Spacing */
     gap: 10px; /* Keep some spaces between each room container */
 }
+
 .room-row {
     /* Layout */
     display: flex; /* Make it easier to align elements */
@@ -17,16 +18,36 @@
     gap: 3px; /* Keep some spaces between each buttons inside the room container */
 }
 
-/* Room, leave and delete buttons in Dashboard page */
-.btn {
+/* Each room input group contains a input text field and a button (create or join) */
+.room-input-group {
+    /* Layout */
+    display: flex;
+}
+.room-input {
+    /* Layout */
+    flex: 1;
+
+    /* Size */
+    width: 100%; /* Make this element as wide as its parent (card-left in this case) */
+
+    /* Spacing */
+    margin-right: 2px; /* Keep distance between the room-related input field and the room-related button */
+}
+.create-btn,
+.join-btn {
+    height: 100%;
+}
+
+/* Room buttons in Dashboard page */
+.room-btn {
     /* Layout */
     display: flex; /* Allow flexible alignment of button contents */
-    justify-content: flex-start; /* Align the text inside the button to the center */
+    justify-content: center; /* Align the text inside the button to the center */
 
     /* Size */
     width: 100%; /* Make this element as wide as its parent (room-row in this case) */
     min-width: 0; /* Unify the size of the buttons, rather than based on text inside the button */
-    max-width: 100px; /* Limit the width of the buttons to prevent the left panel from expanding due to long room name */
+    max-width: 160px; /* Limit the width of the buttons to prevent the left panel from expanding due to long room name */
 
     /* Spacing */
     padding: 4px 16px; /* Keep distances between buttons */
@@ -42,16 +63,46 @@
     /* Effect */
     transition: transform 0.15s ease; /* Define the detail on transformation on the button */
 }
-.btn span {
+.room-btn span {
     /* Appearance */
     overflow: hidden; /* Truncate the room name to make it fit inside the room button */
     text-overflow: ellipsis; /* Add overflow indicator (...) to truncate the room name */
 }
-.btn:hover {
+
+.leave-btn,
+.delete-btn {
+    /* Layout */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Border */
+    border: 1px solid gray; /* Control the thickness, style and color of the border */
+    border-radius: 8px; /* Control the roundness of the corners of the border */
+
+    /* Interaction */
+    cursor: pointer;
+
+    /* Appearance */
+    background-color: #f5f5f5;
+}
+
+.room-btn:hover,
+.leave-btn:hover,
+.delete-btn:hover {
     /* Appearance */
     background-color: #ffb347; /* Control the color of the background of this element */
 }
-.btn:active {
+.room-btn:active,
+.leave-btn:active,
+.delete-btn:active {
     /* Effect */
     transform: scale(0.95); /* Shrink the size of the button */
+}
+
+.leave-icon,
+.delete-icon {
+    /* Size */
+    width: 15px;
+    height: 15px;
 }
