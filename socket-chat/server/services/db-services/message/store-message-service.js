@@ -4,7 +4,8 @@ import { User } from "../../../models/user-model.js";
 import { Message } from "../../../models/message-model.js";
 import { findRoom } from "../room/find-room-service.js";
 
-const MESSAGE_EXPIRATION_MS = 60 * 60 * 1000; // 1 hour
+const HOUR_BASE = 60 * 60; // 1 hour
+const MESSAGE_EXPIRATION_MS = HOUR_BASE * 1000; // 1 hour, in milliseconds
 
 // Store the chat message to the database
 async function storeMessage(roomCode, userObjectId, msgContent, type) {
