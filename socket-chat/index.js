@@ -87,7 +87,7 @@ io.on("connection", async (socket) => {
     });
     socket.on("chatMessage", async ({ msgContent, tmpId }, callback) => {
         // Register client disconnection socket event to the socket
-        await registerChatHandler(socket, msgContent, tmpId, callback);
+        await registerChatHandler(socket, tmpId, msgContent, callback);
     });
     socket.on("disconnect", async () => {
         // Register chat message socket event to the socket

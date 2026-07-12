@@ -9,8 +9,8 @@ function notifyUsersAboutRoomDeletion(io, roomCode) {
 }
 
 // Send the message to all connected users in the room (excluding the sender user)
-function notifyRoomAboutMessage(socket, roomCode, userObjectId, msgContent) {
-    socket.to(roomCode).emit("chatMessageReceived", userObjectId, msgContent);
+function notifyRoomAboutMessage(socket, roomCode, tmpId, msgContent) {
+    socket.to(roomCode).emit("chatMessageReceived", tmpId, msgContent);
 }
 
 export { notifyUsersAboutRoomDeletion,

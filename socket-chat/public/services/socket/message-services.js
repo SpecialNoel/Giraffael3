@@ -13,7 +13,7 @@ function handleSendMessage(userId, messagesElement, input, socket) {
     const tmpId = crypto.randomUUID();
 
     // Step 1: Append user message directly to the chat list (before receiving server confirmation on storing the message to database)
-    appendMessageToChatList(messagesElement, tmpId, userId, msgContent, "sending");
+    appendMessageToChatList(messagesElement, tmpId, msgContent, "sending");
     input.value = ""; // clear the message input field
 
     // Step 2: Emit the chat message to server, with a 5-second timeout
