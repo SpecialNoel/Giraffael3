@@ -8,7 +8,7 @@ async function deleteRoom(roomCode) {
     try {
         // await Room.deleteOne({ roomCode }); // Hard-delete
 
-        // Soft-delete: ”deleted” marked as true, but messages 
+        // Soft-delete: ”deleted” marked as true, but conversation 
         // still exist, and the room becomes inaccessible to everyone
         const date = new Date();
         const room = await Room.findOneAndUpdate(

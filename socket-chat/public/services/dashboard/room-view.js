@@ -81,16 +81,16 @@ function updateMemberList(memberListElement, emptyMessageElement, memberListHead
     }
 }
 
-// Update the message history in the room on Dashboard page UI
-function updateMessageHistoryList(messagesElement, messages) {
-    // Empty the history first
-    messagesElement.innerHTML = "";
+// Update the conversation in the room on Dashboard page UI
+function updateConversation(conversationElement, conversation) {
+    // Empty the current conversation first
+    conversationElement.innerHTML = "";
 
-    // For each message that was sent over the room, add info about the message to the history
-    messages.forEach(({ messageObjectId, userId, username, content, type }) => {
+    // For each message that was sent over the room, add info about the message to the conversation
+    conversation.forEach(({ messageObjectId, userId, username, content, type }) => {
         const item = document.createElement("li");
         item.textContent = `[${username}]: ${content}`;
-        messagesElement.appendChild(item);
+        conversationElement.appendChild(item);
         // Scroll the browser window to the bottom of the page
         window.scrollTo(0, document.body.scrollHeight);
     });
@@ -156,5 +156,5 @@ function appendRoomToRoomsContainer(containerDiv, roomInfo, role) {
 
 export { updateBasicGui, 
          updateMemberList, 
-         updateMessageHistoryList,
+         updateConversation,
          appendRoomToRoomsContainer };

@@ -1,7 +1,7 @@
 // message-view.js
 
 // Append the message to the message list
-function appendMessageToChatList(messagesElement, tmpId, msgContent, status) {
+function appendMessageToChatList(conversationElement, tmpId, msgContent, status) {
     // Each message contains two parts: content and status
     const msgElement = document.createElement("div");
     msgElement.classList.add("message");
@@ -31,14 +31,14 @@ function appendMessageToChatList(messagesElement, tmpId, msgContent, status) {
     msgElement.appendChild(statusElement);
 
     // Append the message element to the chat list element
-    messagesElement.appendChild(msgElement);
+    conversationElement.appendChild(msgElement);
     
-    // Scroll the messages to the very bottom
-    messagesElement.scrollTop = messagesElement.scrollHeight;
+    // Scroll the conversation to the very bottom
+    conversationElement.scrollTop = conversationElement.scrollHeight;
 
-    // If the message is sent or received successfully, immediately update the messages history
-    if (msgContent.status === "sent") {
-        statusElement.textContent = " - Sent";
+    // If the message is sent or received successfully, immediately update the conversation
+    if (msgContent.status === "sent" || msgContent.status === "received") {
+        
     }
 }
 
@@ -50,7 +50,10 @@ function markMessageFailed(tmpId) {
 
     // Update the message
     msgElement.classList.add("failed");
-    msgElement.querySelector(".status").textContent = " - Failed to send";
+
+    // Update the status of the message
+    const statusElement = msgElement.querySelector(".status");
+    if (statusElement) statusElement.textContent = " - Failed to send";
 }
 
 // Update the UI upon successfully sending the message (indicated by tmpId)

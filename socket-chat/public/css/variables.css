@@ -24,12 +24,12 @@
 }
 .chat-card {
     /* Layout */
-    flex: 1; /* Take up the available space for the message history */
+    flex: 1; /* Take up the available space for the conversation */
 
     /* Appearance */
     /* 
-     * Enable the scroll bar in the message history when necessary
-     * Allow the message history to grow indefinitely without stretching the page
+     * Enable the scroll bar in the conversation when necessary
+     * Allow the conversation to grow indefinitely without stretching the page
      */
     overflow: hidden;
 }
