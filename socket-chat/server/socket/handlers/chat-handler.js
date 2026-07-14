@@ -3,7 +3,7 @@
 import { notifyRoomAboutMessage } from "../emitters/room-notifier.js";
 import { storeUserMessage } from "../../services/chat-service.js";
 
-async function registerChatHandler(socket, tmpId, msgContent, callback) {
+async function registerChatHandler(socket, tmpId, content, callback) {
     // Handle the chat message event
     try {
         // If somehow the server received a message the user sent while the user is not currently inside a room,
@@ -18,12 +18,12 @@ async function registerChatHandler(socket, tmpId, msgContent, callback) {
         notifyRoomAboutMessage(socket, 
                                socket.currentRoomCode, 
                                tmpId, 
-                               msgContent);
+                               content);
 
         // Store the message to the database
         const message = await storeUserMessage(socket.currentRoomCode, 
                                                socket.user.userObjectId, 
-                                               msgContent,
+                                               content,
                                                "text");
 
         // The callback function will be called to mark the acknowledgement from server on this event

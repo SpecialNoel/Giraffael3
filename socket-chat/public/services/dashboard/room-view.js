@@ -96,6 +96,18 @@ function updateConversation(conversationElement, conversation) {
     });
 }
 
+// Append the message received from other users in the room to the existing conversation
+function appendReceivedMessage(conversationElement, content) {
+    // Fetch username from local storage
+    const username = localStorage.getItem("username");
+
+    const item = document.createElement("li");
+    item.textContent = `[${username}]: ${content}`;
+    conversationElement.appendChild(item);
+    // Scroll the browser window to the bottom of the page
+    window.scrollTo(0, document.body.scrollHeight);
+}
+
 // Update the rooms container upon modification to the room list (create room, join room, etc.)
 function appendRoomToRoomsContainer(containerDiv, roomInfo, role) {
     // A container that wraps around each roomBtn-leaveBtn pair
@@ -157,4 +169,5 @@ function appendRoomToRoomsContainer(containerDiv, roomInfo, role) {
 export { updateBasicGui, 
          updateMemberList, 
          updateConversation,
+         appendReceivedMessage,
          appendRoomToRoomsContainer };

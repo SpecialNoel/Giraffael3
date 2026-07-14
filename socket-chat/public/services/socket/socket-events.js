@@ -2,7 +2,8 @@
 
 import { updateBasicGui, 
          updateMemberList, 
-         updateConversation } from "../dashboard/room-view.js";
+         updateConversation,
+         appendReceivedMessage } from "../dashboard/room-view.js";
 import { appendMessageToChatList } from "./message-view.js";
 import { handleSendMessage } from "./message-services.js";
 
@@ -39,8 +40,8 @@ function registerSocketEvents(socket,
     });
 
     // Handle client socket receiving chat text messages sent by connected clients
-    socket.on("chatMessageReceived", (tmpId, msgContent) => {
-        appendMessageToChatList(conversationElement, tmpId, msgContent, "received");
+    socket.on("chatMessageReceived", (tmpId, content) => {
+        appendReceivedMessage(conversationElement, content);
     });
 
     // Handle room deletion event

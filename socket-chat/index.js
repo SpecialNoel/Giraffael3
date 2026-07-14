@@ -86,9 +86,9 @@ io.on("connection", async (socket) => {
         // Register "exit room" socket events to the socket
         await registerExitRoomHandler(socket, roomCode);
     });
-    socket.on("chatMessage", async ({ msgContent, tmpId }, callback) => {
+    socket.on("chatMessage", async ({ content, tmpId }, callback) => {
         // Register chat message socket event to the socket
-        await registerChatHandler(socket, tmpId, msgContent, callback);
+        await registerChatHandler(socket, tmpId, content, callback);
 
     });
     socket.on("disconnect", async () => {

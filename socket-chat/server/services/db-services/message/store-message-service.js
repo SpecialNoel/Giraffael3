@@ -7,9 +7,10 @@ import { getMessageWithNYTimezone } from "../../../utils/timezone-converter.js";
 
 const HOUR_BASE = 60 * 60; // 1 hour
 const MESSAGE_EXPIRATION_MS = HOUR_BASE * 1000; // 1 hour, in milliseconds
+const HOUR_SCALED_EXPIRATION = MESSAGE_EXPIRATION_MS / 12 // 5 minutes
 
 // Store the chat message to the database
-async function storeMessage(roomCode, userObjectId, msgContent, type) {
+async function storeMessage(roomCode, userObjectId, content, type) {
     try {
         // Check if the user exists in the database
         const user = await User.exists({ _id: userObjectId });
@@ -20,17 +21,19 @@ async function storeMessage(roomCode, userObjectId, msgContent, type) {
         if (!room) throw new Error("Room not found");
 
         // Auto-delete this message 1 hour after creation
-        const expiresAt = new Date(Date.now() + MESSAGE_EXPIRATION_MS);
+        const expiresAt = new Date(Date.now() + HOUR_SCALED_EXPIRATION);
 
         // Construct and store the message using the Message model
         const message = await Message.create({
             room: room._id,
             sender: userObjectId,
-            content: msgContent,
+            content: content,
             type,
             expiresAt
         });
-        console.log("Message saved to DB\n");
+
+        const convertedMessage = getMessageWithNYTimezone(message);
+        console.log(`Message saved to DB. Expires at ${convertedMessage.expiresAt}\n`);
         return message;
     } catch (err) {
         console.error("Failed to store message:", err);
