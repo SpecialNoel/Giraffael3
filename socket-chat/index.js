@@ -11,6 +11,7 @@ import { router as signUpRouter } from "./server/routes/sign-up/sign-up-routes.j
 import { router as dashboardRouter } from "./server/routes/dashboard/dashboard-routes.js";
 import { router as roomsRouter } from "./server/routes/rooms/rooms-routes.js";
 
+import { getPublicIPAddress } from "./server/utils/ip-address-getter.js";
 import { connectToDB } from "./server/utils/db-connector.js";
 import { connectToRedis } from "./server/utils/redis-connector.js";
 
@@ -97,9 +98,13 @@ io.on("connection", async (socket) => {
 })
 
 // HTTP server listens on port 3000 (default localhost server for Express)
+// const publicIP = await getPublicIPAddress();
+let hostname = "localhost";
+// hostname = publicIP
+// hostname = "192.168.1.216";
 const serverPort = process.env.PORT || 3000;
-server.listen(serverPort, () => {
-    console.log(`Server is running at http://localhost:${serverPort}/signin\n`)
+server.listen(serverPort, "0.0.0.0", () => {
+    console.log(`Server is running at http://${hostname}:${serverPort}/signin\n`)
 });
 // ==================== Server Socket ==================== 
 

@@ -3,6 +3,7 @@
 import { User } from "../../../models/user-model.js";
 import { Message } from "../../../models/message-model.js";
 import { findRoom } from "../room/find-room-service.js";
+import { getMessageWithNYTimezone } from "../../../utils/timezone-converter.js";
 
 const HOUR_BASE = 60 * 60; // 1 hour
 const MESSAGE_EXPIRATION_MS = HOUR_BASE * 1000; // 1 hour, in milliseconds
