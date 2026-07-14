@@ -62,8 +62,8 @@ const redis = await connectToRedis();
 
 // Authenticate the user for operations handled with socket events before proceeding the connection
 // Note that this comes after the client successfully signed in to the app
-io.use((socket, next) => {
-    authenticateSocket(socket, next);
+io.use(async (socket, next) => {
+    await authenticateSocket(socket, next);
 });
 
 // SocketIO server handles the connection event

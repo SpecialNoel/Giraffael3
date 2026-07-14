@@ -40,8 +40,8 @@ function registerSocketEvents(socket,
     });
 
     // Handle client socket receiving chat text messages sent by connected clients
-    socket.on("chatMessageReceived", (tmpId, content) => {
-        appendReceivedMessage(conversationElement, content);
+    socket.on("chatMessageReceived", (tmpId, content, senderUsername) => {
+        appendReceivedMessage(conversationElement, content, senderUsername);
     });
 
     // Handle room deletion event

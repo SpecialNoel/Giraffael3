@@ -9,7 +9,8 @@
         "jsonwebtoken": "^9.0.3",
         "mongoose": "^9.1.4",
         "redis": "^6.0.0",
-        "socket.io": "^4.8.3"
+        "socket.io": "^4.8.3",
+        "unique-names-generator": "^4.7.1"
     },
     "scripts": {
         "start": "node -r dotenv/config ./index.js"

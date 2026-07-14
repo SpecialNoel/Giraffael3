@@ -97,12 +97,10 @@ function updateConversation(conversationElement, conversation) {
 }
 
 // Append the message received from other users in the room to the existing conversation
-function appendReceivedMessage(conversationElement, content) {
-    // Fetch username from local storage
-    const username = localStorage.getItem("username");
-
+function appendReceivedMessage(conversationElement, content, senderUsername) {
+    // Append the message to the conversation
     const item = document.createElement("li");
-    item.textContent = `[${username}]: ${content}`;
+    item.textContent = `[${senderUsername}]: ${content}`;
     conversationElement.appendChild(item);
     // Scroll the browser window to the bottom of the page
     window.scrollTo(0, document.body.scrollHeight);

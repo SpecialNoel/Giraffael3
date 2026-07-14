@@ -2,17 +2,20 @@
 
 import { User } from "../../../models/user-model.js";
 import { generateUserId } from "../../../utils/crypto-value-generator.js";
+import { generateUniqueDefaultUsername } from "../../../utils/username-generator.js";
 
 // Create a new user, and store it to the database
 async function createUser(email, passwordHash) {
     try {
         // Create and store the user to DB. Repeat if failed due to userId duplication
         let user;
+        let username;
         while (!user) {
             try {
+                username = await generateUniqueDefaultUsername();
                 user = await User.create({
                     userId: generateUserId(),
-                    username: "default_username",
+                    username,
                     email,
                     passwordHash
                 });
