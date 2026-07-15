@@ -1,9 +1,7 @@
 // socket-events.js
 
-import { updateBasicGui, 
-         updateMemberList, 
-         updateConversation,
-         appendReceivedMessage } from "../dashboard/room-view.js";
+import { updateBasicGui, updateMemberList } from "../dashboard/room-view.js";
+import { renderConversation, appendMessage } from "../dashboard/conversation-services.js";
 import { appendMessageToChatList } from "./message-view.js";
 import { handleSendMessage } from "./message-services.js";
 
@@ -31,17 +29,17 @@ function registerSocketEvents(socket,
         );
         await updateBasicGui();
         updateMemberList(memberListElement, emptyMessageElement, memberListHeadingElement, memberList);
-        updateConversation(conversationElement, conversation);
+        renderConversation(conversationElement, conversation);
     });
 
     socket.on("userLeft", ({ memberList, conversation }) => {
         updateMemberList(memberListElement, emptyMessageElement, memberListHeadingElement, memberList);
-        updateConversation(conversationElement, conversation);
+        renderConversation(conversationElement, conversation);
     });
 
     // Handle client socket receiving chat text messages sent by connected clients
     socket.on("chatMessageReceived", (tmpId, content, senderUsername) => {
-        appendReceivedMessage(conversationElement, content, senderUsername);
+        appendMessage(conversationElement, content, senderUsername);
     });
 
     // Handle room deletion event

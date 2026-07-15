@@ -36,7 +36,8 @@ async function getConversation(roomCode) {
     }
 }
 
-async function getPaginatedConversation(roomCode, messageType, limit = 50, cursor = null) {
+// Retrieve part of the conversation (via pagination) sent to the room from the database
+async function getPaginatedConversation(roomCode, messageType, limit=50, cursor=null) {
     try {
         const room = await findRoom(roomCode).select("_id").lean();
         if (!room) throw new Error("Room not found");

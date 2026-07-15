@@ -75,35 +75,10 @@ function updateMemberList(memberListElement, emptyMessageElement, memberListHead
             const item = document.createElement("li");
             item.textContent = `[${username}]: ${userId}`;
             memberListElement.appendChild(item);
-            // Scroll the browser window to the bottom of the page
-            window.scrollTo(0, document.body.scrollHeight);
+            // Scroll the browser window to the bottom of the memberList element
+            memberListElement.scrollTop = memberListElement.scrollHeight;
         });
     }
-}
-
-// Update the conversation in the room on Dashboard page UI
-function updateConversation(conversationElement, conversation) {
-    // Empty the current conversation first
-    conversationElement.innerHTML = "";
-
-    // For each message that was sent over the room, add info about the message to the conversation
-    conversation.forEach(({ messageObjectId, userId, username, content, type }) => {
-        const item = document.createElement("li");
-        item.textContent = `[${username}]: ${content}`;
-        conversationElement.appendChild(item);
-        // Scroll the browser window to the bottom of the page
-        window.scrollTo(0, document.body.scrollHeight);
-    });
-}
-
-// Append the message received from other users in the room to the existing conversation
-function appendReceivedMessage(conversationElement, content, senderUsername) {
-    // Append the message to the conversation
-    const item = document.createElement("li");
-    item.textContent = `[${senderUsername}]: ${content}`;
-    conversationElement.appendChild(item);
-    // Scroll the browser window to the bottom of the page
-    window.scrollTo(0, document.body.scrollHeight);
 }
 
 // Update the rooms container upon modification to the room list (create room, join room, etc.)
@@ -166,6 +141,4 @@ function appendRoomToRoomsContainer(containerDiv, roomInfo, role) {
 
 export { updateBasicGui, 
          updateMemberList, 
-         updateConversation,
-         appendReceivedMessage,
          appendRoomToRoomsContainer };
