@@ -8,9 +8,9 @@ function broadcastRoomDeleted(io, roomCode) {
     });
 }
 
-// Notify every user who joined the room about an user leaving the room
-function broadcastUserLeft(io, roomCode, memberList) {
-    io.to(roomCode).emit("userLeft", {
+// Notify every user who joined the room (excluding the leaving user) about an user leaving the room
+function broadcastUserLeft(socket, roomCode, memberList) {
+    socket.to(roomCode).emit("userLeft", {
         roomCode,
         memberList,
         msg: "An user has left the room."

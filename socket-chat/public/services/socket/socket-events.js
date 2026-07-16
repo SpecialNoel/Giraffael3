@@ -1,7 +1,7 @@
 // socket-events.js
 
-import { updateBasicGui } from "../dashboard/room-view.js";
-import { updateMemberList } from "../dashboard/member-list-services.js";
+import { renderBasicGui } from "../dashboard/room-view.js";
+import { renderMemberList } from "../dashboard/member-list-services.js";
 import { renderConversation, appendMessage } from "../dashboard/conversation-services.js";
 import { appendMessageToChatList } from "./message-view.js";
 import { handleSendMessage } from "./message-services.js";
@@ -14,13 +14,14 @@ function registerSocketEvents(socket,
                               memberListHeadingElement) {
     // Handle update on active users list upon user joining or leaving the room
     socket.on("userJoined", (memberList) => {
+        console.log(`An user has joined room`);
         // memberList is a list of { userId, username }
-        updateMemberList(memberListElement, emptyMessageElement, memberListHeadingElement, memberList);
+        renderMemberList(memberListElement, emptyMessageElement, memberListHeadingElement, memberList);
     });
     socket.on("userLeft", ({ roomCode, memberList, msg }) => {
         alert(msg);
-        console.log(`An user has left room ${roomCode}.`)        
-        updateMemberList(memberListElement, emptyMessageElement, memberListHeadingElement, memberList);
+        console.log(`An user has left room ${roomCode}.`);
+        renderMemberList(memberListElement, emptyMessageElement, memberListHeadingElement, memberList);
     });
 
     // Handle user enter room event
@@ -30,8 +31,8 @@ function registerSocketEvents(socket,
             "currentRoom",
             JSON.stringify(roomInfoForDisplay)
         );
-        await updateBasicGui();
-        updateMemberList(memberListElement, emptyMessageElement, memberListHeadingElement, memberList);
+        await renderBasicGui();
+        renderMemberList(memberListElement, emptyMessageElement, memberListHeadingElement, memberList);
         renderConversation(conversationElement, conversation);
     });
     // Handle user exit room event
@@ -56,7 +57,7 @@ function registerSocketEvents(socket,
 // Start socket communication with server with the created socket by setting up the socket events
 function startSession(socket) {
     const form = document.getElementById("form");
-    const input = document.getElementById("input");
+    const inputElement = document.getElementById("message-input");
     const conversationElement = document.getElementById("conversation");
     const memberListElement = document.getElementById("memberList");
     const emptyMessageElement = document.getElementById("emptyMessage");
@@ -73,7 +74,7 @@ function startSession(socket) {
         handleSendMessage(
             userId,
             conversationElement,
-            input,
+            inputElement,
             socket,
         );
     });

@@ -41,4 +41,10 @@ async function storeMessage(roomCode, userObjectId, content, type) {
     }
 }
 
-export { storeMessage };
+// Store the chat message to the database
+async function storeTextMessage(roomCode, userObjectId, content) {
+    // Store the message to MongoDB
+    return await storeMessage(roomCode, userObjectId, content, "text");
+}
+
+export { storeMessage, storeTextMessage };

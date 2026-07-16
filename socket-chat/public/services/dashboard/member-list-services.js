@@ -1,12 +1,12 @@
 // member-list-services.js
 
-// Update the list of current active users in the room on Dashboard page UI
-function updateMemberList(memberListElement, emptyMessageElement, memberListHeadingElement, memberList) {
-    // Update the member list container on displaying the empty message or not
+// Render the list of current active users in the room on Dashboard page UI
+function renderMemberList(memberListElement, emptyMessageElement, memberListHeadingElement, memberList) {
+    // Render the member list container on displaying the empty message or not
     emptyMessageElement.hidden = memberList.length > 0;
     memberListElement.hidden = memberList.length === 0;
 
-    // Update the member list by appending any user that is currently active
+    // Render the member list by appending any user that is currently active
     if (memberList.length > 0) {
         // Update the header
         memberListHeadingElement.textContent = `Members (${memberList.length})`;
@@ -25,4 +25,4 @@ function updateMemberList(memberListElement, emptyMessageElement, memberListHead
     }
 }
 
-export { updateMemberList };
+export { renderMemberList };

@@ -3,6 +3,7 @@
 import { addUserToRoom } from "../../services/redis-services/user-services.js";
 import { getMembersInRoom } from "../../services/db-services/membership/get-members-service.js";
 import { getConversation } from "../../services/db-services/message/get-conversation-service.js";
+import { broadcastUserLeft } from "../emitters/room-broadcaster.js";
 import { getRoomInfoForDisplay } from "../../services/db-services/room/get-room-info-for-display-service.js";
 
 async function registerJoinRoomHandler(io, redis, socket, roomCode) {
@@ -20,6 +21,14 @@ async function registerJoinRoomHandler(io, redis, socket, roomCode) {
     // Notify the user about join room success
     const memberList = await getMembersInRoom(roomCode);
     socket.emit("userJoined", memberList);
+}
+
+async function registerLeaveRoomHandler(socket, roomCode) {
+    // Notify every user who joined the room (excluding the leaving user) 
+    // about an user leaving the room AFTER they had successfully done so
+    const memberList = await getMembersInRoom(roomCode);
+    broadcastUserLeft(socket, roomCode, memberList);
+    console.log(`Notified all users in room ${roomCode} about user left`);
 }
 
 async function registerEnterRoomHandler(socket, roomCode) {
@@ -49,5 +58,6 @@ async function registerExitRoomHandler(socket, roomCode) {
 }
 
 export { registerJoinRoomHandler,
+         registerLeaveRoomHandler,
          registerEnterRoomHandler,
          registerExitRoomHandler };

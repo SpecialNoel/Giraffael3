@@ -5,12 +5,8 @@
     /* Layout */
     display: flex;
 }
-.send-btn {
-    height: 100%;
-}
-
 /* Message input in Dashboard page */
-#input {
+#message-input {
     /* Layout */
     flex: 1;
 
@@ -20,6 +16,9 @@
 
     /* Spacing */
     margin-right: 2px; /* Keep distance between the message input field and the send button */
+}
+.send-btn {
+    height: 100%;
 }
 
 /* Conversation in Dashboard page */

@@ -2,8 +2,8 @@
 
 import { getRoomInfoForDisplay } from "./room-api.js";
 
-// Update the room info and user info on Dashboard page UI, after user entering a room
-async function updateBasicGui() {
+// Render the room info and user info on Dashboard page UI, after user entering a room
+async function renderBasicGui() {
     // Fetch user public id from local storage
     const userId = localStorage.getItem("userId");
 
@@ -114,5 +114,4 @@ function appendRoomToRoomsContainer(containerDiv, roomInfo, role) {
     containerDiv.appendChild(roomRow);
 }
 
-export { updateBasicGui, 
-         appendRoomToRoomsContainer };
+export { renderBasicGui, appendRoomToRoomsContainer };

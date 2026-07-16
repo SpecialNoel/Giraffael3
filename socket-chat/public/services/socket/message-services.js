@@ -5,16 +5,16 @@ import { appendMessageToChatList,
          markMessageSent } from "./message-view.js";
 
 // Send the input message to server (for which server will then relay to other active users in the room)
-function handleSendMessage(userId, conversationElement, input, socket) {
+function handleSendMessage(userId, conversationElement, inputElement, socket) {
     // Stop proceeding if user somehow passed an empty message (as this should be handled by form's "required" attribute already)
-    if (!input.value) return;
+    if (!inputElement.value) return;
 
-    const content = input.value;
+    const content = inputElement.value;
     const tmpId = crypto.randomUUID();
 
     // Step 1: Append user message directly to the chat list (before receiving server confirmation on storing the message to database)
     appendMessageToChatList(conversationElement, tmpId, content, "sending");
-    input.value = ""; // clear the message input field
+    inputElement.value = ""; // clear the message input field
 
     // Step 2: Emit the chat message to server, with a 5-second timeout
     // This reaches the same functionality as "emiWithAck()"

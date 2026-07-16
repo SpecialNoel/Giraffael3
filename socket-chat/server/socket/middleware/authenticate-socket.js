@@ -1,7 +1,7 @@
 // authenticate-socket.js
 
-import { verifyToken } from "../utils/jwt-token-handler.js";
-import { User } from "../models/user-model.js";
+import { verifyToken } from "../../utils/jwt-token-handler.js";
+import { User } from "../../models/user-model.js";
 
 // Authenticate the user for operations handled with socket events
 async function authenticateSocket(socket, next) {

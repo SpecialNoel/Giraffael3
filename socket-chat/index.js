@@ -6,8 +6,8 @@ import { createServer } from "node:http";
 import { join } from "node:path";
 import { Server } from "socket.io";
 
-import { router as signInRouter } from "./server/routes/sign-in/sign-in-routes.js";
-import { router as signUpRouter } from "./server/routes/sign-up/sign-up-routes.js";
+import { router as signInRouter } from "./server/routes/auth/sign-in-routes.js";
+import { router as signUpRouter } from "./server/routes/auth/sign-up-routes.js";
 import { router as dashboardRouter } from "./server/routes/dashboard/dashboard-routes.js";
 import { router as roomsRouter } from "./server/routes/rooms/rooms-routes.js";
 
@@ -15,8 +15,9 @@ import { getPublicIPAddress } from "./server/utils/ip-address-getter.js";
 import { connectToDB } from "./server/utils/db-connector.js";
 import { connectToRedis } from "./server/utils/redis-connector.js";
 
-import { authenticateSocket } from "./server/socket/authenticate-socket.js";
+import { authenticateSocket } from "./server/socket/middleware/authenticate-socket.js";
 import { registerJoinRoomHandler, 
+         registerLeaveRoomHandler,
          registerEnterRoomHandler, 
          registerExitRoomHandler } from "./server/socket/handlers/room-handler.js";
 import { registerDisconnectHandler } from "./server/socket/handlers/disconnect-handler.js";
@@ -78,6 +79,10 @@ io.on("connection", async (socket) => {
         // Register "join room" socket events to the socket
         await registerJoinRoomHandler(io, redis, socket, roomCode); 
     });
+    socket.on("leaveRoom", async (roomCode) => {
+        // Register "leave room" socket events to the socket
+        await registerLeaveRoomHandler(socket, roomCode); 
+    });
     socket.on("enterRoom", async (roomCode) => {
         // Register "enter room" socket events to the socket
         await registerEnterRoomHandler(socket, roomCode);
@@ -89,7 +94,6 @@ io.on("connection", async (socket) => {
     socket.on("chatMessage", async ({ content, tmpId }, callback) => {
         // Register chat message socket event to the socket
         await registerChatHandler(socket, tmpId, content, callback);
-
     });
     socket.on("disconnect", async () => {
         // Register client disconnection socket event to the socket

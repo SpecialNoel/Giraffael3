@@ -1,8 +1,8 @@
 // delete-room-handler.js
 
-import { deleteRoom } from "../../services/db-services/room/delete-room-service.js";
-import { isCreatorByRoomCode } from "../../services/db-services/membership/check-creator-service.js";
-import { broadcastRoomDeleted } from "../../socket/emitters/room-broadcaster.js";
+import { deleteRoom } from "../../../services/db-services/room/delete-room-service.js";
+import { isCreatorByRoomCode } from "../../../services/db-services/membership/check-creator-service.js";
+import { broadcastRoomDeleted } from "../../../socket/emitters/room-broadcaster.js";
 
 async function handleDeleteRoom(req, res, io) {
     try {

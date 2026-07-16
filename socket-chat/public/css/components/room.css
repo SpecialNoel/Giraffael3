@@ -1,6 +1,6 @@
 /* room.css */
 
-/* Rooms container in Dashboard page */
+/* Rooms container in Dashboard page. The Dashboard only has one container; the container has one room row per joined room */
 #rooms-container {
     /* Layout */
     display: flex; /* Make it easier to align elements */
@@ -9,7 +9,6 @@
     /* Spacing */
     gap: 10px; /* Keep some spaces between each room container */
 }
-
 .room-row {
     /* Layout */
     display: flex; /* Make it easier to align elements */
@@ -38,7 +37,7 @@
     height: 100%;
 }
 
-/* Room buttons in Dashboard page */
+/* Room buttons (enters the room upon clicking) in Dashboard page */
 .room-btn {
     /* Layout */
     display: flex; /* Allow flexible alignment of button contents */
@@ -68,7 +67,7 @@
     overflow: hidden; /* Truncate the room name to make it fit inside the room button */
     text-overflow: ellipsis; /* Add overflow indicator (...) to truncate the room name */
 }
-
+/* Other buttons (leave or delete) in Dashboard page */
 .leave-btn,
 .delete-btn {
     /* Layout */
@@ -100,6 +99,7 @@
     transform: scale(0.95); /* Shrink the size of the button */
 }
 
+/* Adjustments on icon-displaying buttons */
 .leave-icon,
 .delete-icon {
     /* Size */

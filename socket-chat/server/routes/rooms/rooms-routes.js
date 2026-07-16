@@ -6,10 +6,10 @@ import path from "node:path";
 import { authenticateHTTP } from "../../middleware/authenticate-http.js";
 import { handleFetchRoomInfo } from "./fetch-room-info-handler.js";
 import { handleFetchRoomInfoForDisplay } from "./fetch-room-info-for-display-handler.js";
-import { handleCreateRoom } from "./create-room-handler.js";
-import { handleDeleteRoom } from "./delete-room-handler.js";
-import { handleJoinRoom } from "./join-room-handler.js";
-import { handleLeaveRoom } from "./leave-room-handler.js";
+import { handleCreateRoom } from "./handlers/create-room-handler.js";
+import { handleDeleteRoom } from "./handlers/delete-room-handler.js";
+import { handleJoinRoom } from "./handlers/join-room-handler.js";
+import { handleLeaveRoom } from "./handlers/leave-room-handler.js";
 import { io } from "../../../index.js";
 
 const router = express.Router();
