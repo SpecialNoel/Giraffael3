@@ -1,8 +1,10 @@
 // leave-room-handler.js
 
 import { leaveRoom } from "../../services/db-services/membership/leave-room-service.js";
+import { getMembersInRoom } from "../../services/db-services/membership/get-members-service.js";
+import { broadcastUserLeft } from "../../socket/emitters/room-broadcaster.js";
 
-async function handleLeaveRoom(req, res) {
+async function handleLeaveRoom(req, res, io) {
     try {
         // Receive room code and user info
         const { roomCode } = req.body;
@@ -34,6 +36,11 @@ async function handleLeaveRoom(req, res) {
                     });
             }
         }
+
+        // Notify every user who joined the room about an user leaving the room AFTER they had successfully done so
+        const memberList = await getMembersInRoom(roomCode);
+        broadcastUserLeft(io, roomCode, memberList);
+        console.log(`Notified all users in room ${roomCode} about user left`);
 
         // Leave-room success
         return res.status(200).json({

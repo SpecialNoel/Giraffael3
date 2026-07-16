@@ -33,7 +33,7 @@ router.post("/join", authenticateHTTP, async (req, res) => {
     return await handleJoinRoom(req, res);
 });
 router.post("/leave", authenticateHTTP, async (req, res) => {
-    return await handleLeaveRoom(req, res);
+    return await handleLeaveRoom(req, res, io);
 });
 
 export { router };

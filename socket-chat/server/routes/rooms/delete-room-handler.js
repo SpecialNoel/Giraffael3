@@ -2,7 +2,7 @@
 
 import { deleteRoom } from "../../services/db-services/room/delete-room-service.js";
 import { isCreatorByRoomCode } from "../../services/db-services/membership/check-creator-service.js";
-import { notifyUsersAboutRoomDeletion } from "../../socket/emitters/room-notifier.js";
+import { broadcastRoomDeleted } from "../../socket/emitters/room-broadcaster.js";
 
 async function handleDeleteRoom(req, res, io) {
     try {
@@ -19,8 +19,8 @@ async function handleDeleteRoom(req, res, io) {
             });
         }
 
-        // Broadcast the room deletion to all users who joined this room via socket events
-        notifyUsersAboutRoomDeletion(io, roomCode);
+        // Broadcast the room deletion to all users who joined this room via socket events BEFORE actual room deletion
+        broadcastRoomDeleted(io, roomCode);
         console.log(`Notified all users in room ${roomCode} about room deletion`);
 
         // Delete the room from the database

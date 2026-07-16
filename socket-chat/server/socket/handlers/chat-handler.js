@@ -1,6 +1,6 @@
 // chat-handler.js
 
-import { notifyRoomAboutMessage } from "../emitters/room-notifier.js";
+import { broadcastChatMessage } from "../emitters/room-broadcaster.js";
 import { storeUserMessage } from "../../services/chat-service.js";
 
 async function registerChatHandler(socket, tmpId, content, callback) {
@@ -15,10 +15,7 @@ async function registerChatHandler(socket, tmpId, content, callback) {
         }
 
         // Notify the room about the message
-        notifyRoomAboutMessage(socket, 
-                               socket.currentRoomCode, 
-                               tmpId, 
-                               content);
+        broadcastChatMessage(socket, socket.currentRoomCode, tmpId, content);
 
         // Store the message to the database
         const message = await storeUserMessage(socket.currentRoomCode, 

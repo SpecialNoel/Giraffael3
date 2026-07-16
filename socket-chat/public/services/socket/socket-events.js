@@ -1,6 +1,7 @@
 // socket-events.js
 
-import { updateBasicGui, updateMemberList } from "../dashboard/room-view.js";
+import { updateBasicGui } from "../dashboard/room-view.js";
+import { updateMemberList } from "../dashboard/member-list-services.js";
 import { renderConversation, appendMessage } from "../dashboard/conversation-services.js";
 import { appendMessageToChatList } from "./message-view.js";
 import { handleSendMessage } from "./message-services.js";
@@ -16,7 +17,9 @@ function registerSocketEvents(socket,
         // memberList is a list of { userId, username }
         updateMemberList(memberListElement, emptyMessageElement, memberListHeadingElement, memberList);
     });
-    socket.on("userLeft", (memberList) => {
+    socket.on("userLeft", ({ roomCode, memberList, msg }) => {
+        alert(msg);
+        console.log(`An user has left room ${roomCode}.`)        
         updateMemberList(memberListElement, emptyMessageElement, memberListHeadingElement, memberList);
     });
 
@@ -31,10 +34,9 @@ function registerSocketEvents(socket,
         updateMemberList(memberListElement, emptyMessageElement, memberListHeadingElement, memberList);
         renderConversation(conversationElement, conversation);
     });
-
-    socket.on("userLeft", ({ memberList, conversation }) => {
-        updateMemberList(memberListElement, emptyMessageElement, memberListHeadingElement, memberList);
-        renderConversation(conversationElement, conversation);
+    // Handle user exit room event
+    socket.on("userExited", (memberList) => {
+        
     });
 
     // Handle client socket receiving chat text messages sent by connected clients

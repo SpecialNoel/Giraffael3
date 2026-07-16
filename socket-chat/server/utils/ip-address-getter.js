@@ -1,4 +1,4 @@
-// public-ip-address-getter.js
+// ip-address-getter.js
 
 // Call the external service (ipify) to get the public address of this running machine
 async function getPublicIPAddress() {

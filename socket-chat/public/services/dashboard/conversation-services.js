@@ -16,7 +16,7 @@ function renderConversation(conversationElement, conversation) {
 }
 
 // Load some latest messages of the whole conversation in the room on Dashboard page UI
-function loadInitConversation(amount=5) {
+function loadInitConversation(conversationElement, amount=5) {
 
 }
 
@@ -30,9 +30,9 @@ function appendMessage(conversationElement, content, senderUsername) {
     conversationElement.scrollTop = conversationElement.scrollHeight;
 }
 
-// Prepend some earlier messages of the whole conversation on top of existing messages
+// Prepend some older messages of the whole conversation on top of existing messages
 function prependMessages(amount=5) {
-
+    console.log("Hi, you just prepended some msg")
 }
 
 // Remove expired message from conversation UI
