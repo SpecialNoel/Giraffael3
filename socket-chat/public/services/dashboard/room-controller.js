@@ -25,8 +25,19 @@ function handleRoomsContainer(socket) {
         // Send roomCode to server, then retrieve data contained in response from server
         const data = await parseResponse(await leaveRoom(roomCode));
 
-        // Remove the roomBtn-leaveBtn pair from the rooms container
-        roomRow.remove();
+        if (data.success) {
+            // Notify other users in the room via socket event
+            socket.emit("leaveRoom", data.roomCode);
+
+            // Remove the roomBtn-leaveBtn pair from the rooms container
+            roomRow.remove();
+
+            // Redirect the user back to the dashboard
+            alert("Successfully left room")
+            window.location.href = "/dashboard";
+        } else {
+            alert("Error in leaving room")
+        }
     }
 
     // Set up the delete-room logic
@@ -45,7 +56,7 @@ function handleRoomsContainer(socket) {
         On the dashboard page, add functionality to each room icon/button such that
         a certain task will be executed whenever the user clicks on the room icon.
     */
-    const roomsContainer = document.querySelector("#rooms-container");
+    const containerDiv = document.getElementById("rooms-container");
 
     // Attach functionalities to each button associated with a room
     const handleClick = async (e) => {
@@ -83,7 +94,7 @@ function handleRoomsContainer(socket) {
     };
 
     // Add the functionality to roomContainer
-    roomsContainer.addEventListener("click", handleClick);
+    containerDiv.addEventListener("click", handleClick);
 }
 
 // Set up the create-room logic
@@ -114,7 +125,7 @@ function handleCreateRoom(socket) {
             // This step is needed to atomically join the user to the newly created room
             socket.emit("joinRoom", data.roomInfoForDisplay.roomCode);
             
-            // Update the rooms container by appending the new room to the list
+            // Render the rooms container by appending the new room to the list
             const containerDiv = document.getElementById("rooms-container");
             appendRoomToRoomsContainer(containerDiv, data.roomInfoForDisplay, data.role);
 
@@ -160,7 +171,7 @@ function handleJoinRoom(socket) {
             // Step 2: Emit the "join room" event to server via socket events
             socket.emit("joinRoom", roomCode);
 
-            // Update the rooms container by appending the new room to the list
+            // Render the rooms container by appending the new room to the list
             const containerDiv = document.getElementById("rooms-container");
             appendRoomToRoomsContainer(containerDiv, data.roomInfoForDisplay, data.role);
 

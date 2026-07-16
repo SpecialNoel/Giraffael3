@@ -1,23 +1,20 @@
-// join-room-handler.js
+// create-room-handler.js
 
-import { joinRoom } from "../../services/db-services/membership/join-room-service.js";
-import { getRoomInfoForDisplay } from "../../services/db-services/room/get-room-info-for-display-service.js";
-import { getMembership } from "../../services/db-services/membership/get-membership-service.js";
+import { createRoom } from "../../../services/db-services/room/create-room-service.js";
+import { joinRoom } from "../../../services/db-services/membership/join-room-service.js";
 
-async function handleJoinRoom(req, res) {
+async function handleCreateRoom(req, res) {
     try {
-        // Receive room code and user info
-        const { roomCode } = req.body;
+        // Receive room name and creator info
+        const { roomName } = req.body;
         const userObjectId = req.user.userObjectId;
 
-        // Fetch the membership associated with the user public id and room code, if exists
-        const membership = await getMembership(userObjectId, roomCode);
-        // Fetch the role of this user in the room; assign it as a member if the membership is not existed yet
-        const role = membership ? membership.role : "member";
+        // Create the room
+        const room = await createRoom(roomName, userObjectId);
 
-        // Send "join room" request to the server
-        const joinRoomResult = await joinRoom(userObjectId, roomCode, role);
-        
+        // Create membership by join to the room
+        const joinRoomResult = await joinRoom(userObjectId, room.roomCode, "creator");
+
         // Handle join-room failure
         if (!joinRoomResult.success) {
             switch (joinRoomResult.reason) {
@@ -42,16 +39,16 @@ async function handleJoinRoom(req, res) {
             }
         }
 
-        // Retrieve necessary info about this room
-        const roomInfoForDisplay = await getRoomInfoForDisplay(roomCode);
-        console.log("roomInfoForDisplay:", roomInfoForDisplay)
+        // Retrieve necessary info about this new room
+        const roomInfoForDisplay = { roomName: room.roomName, 
+                                     roomCode: room.roomCode } ;
 
-        // Join-room success
+        // Create-room success
         return res.status(200).json({
             success: true,
-            message: "Join room success",
+            message: "Create room success",
             roomInfoForDisplay: roomInfoForDisplay,
-            role: role
+            role: "creator"
         });
     } catch (err) {
         console.error(err);
@@ -63,4 +60,4 @@ async function handleJoinRoom(req, res) {
     }
 }
 
-export { handleJoinRoom };
+export { handleCreateRoom };

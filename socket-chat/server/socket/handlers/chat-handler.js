@@ -1,9 +1,9 @@
 // chat-handler.js
 
-import { notifyRoomAboutMessage } from "../emitters/room-notifier.js";
-import { storeUserMessage } from "../../services/chat-service.js";
+import { broadcastChatMessage } from "../emitters/room-broadcaster.js";
+import { storeTextMessage } from "../../services/db-services/message/store-message-service.js";
 
-async function registerChatHandler(socket, msgContent, tmpId, callback) {
+async function registerChatHandler(socket, tmpId, content, callback) {
     // Handle the chat message event
     try {
         // If somehow the server received a message the user sent while the user is not currently inside a room,
@@ -15,15 +15,13 @@ async function registerChatHandler(socket, msgContent, tmpId, callback) {
         }
 
         // Notify the room about the message
-        notifyRoomAboutMessage(socket, 
-                               socket.currentRoomCode, 
-                               socket.user.userObjectId, 
-                               msgContent);
+        broadcastChatMessage(socket, socket.currentRoomCode, tmpId, content);
 
-        // Store the message to the database
-        const message = await storeUserMessage(socket.currentRoomCode, 
+        // Store the chat message to the database
+        const message = await storeTextMessage(socket.currentRoomCode, 
                                                socket.user.userObjectId, 
-                                               msgContent);
+                                               content,
+                                               "text");
 
         // The callback function will be called to mark the acknowledgement from server on this event
         callback({

@@ -48,6 +48,7 @@ async function handleSignIn(req, res) {
             success: true,
             message: "Sign in success",
             userId: user.userId,
+            username: user.username,
             token: token
         });
     } catch (err) {

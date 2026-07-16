@@ -6,16 +6,18 @@ import { createServer } from "node:http";
 import { join } from "node:path";
 import { Server } from "socket.io";
 
-import { router as signInRouter } from "./server/routes/sign-in/sign-in-routes.js";
-import { router as signUpRouter } from "./server/routes/sign-up/sign-up-routes.js";
+import { router as signInRouter } from "./server/routes/auth/sign-in-routes.js";
+import { router as signUpRouter } from "./server/routes/auth/sign-up-routes.js";
 import { router as dashboardRouter } from "./server/routes/dashboard/dashboard-routes.js";
 import { router as roomsRouter } from "./server/routes/rooms/rooms-routes.js";
 
+import { getPublicIPAddress } from "./server/utils/ip-address-getter.js";
 import { connectToDB } from "./server/utils/db-connector.js";
 import { connectToRedis } from "./server/utils/redis-connector.js";
 
-import { authenticateSocket } from "./server/socket/authenticate-socket.js";
+import { authenticateSocket } from "./server/socket/middleware/authenticate-socket.js";
 import { registerJoinRoomHandler, 
+         registerLeaveRoomHandler,
          registerEnterRoomHandler, 
          registerExitRoomHandler } from "./server/socket/handlers/room-handler.js";
 import { registerDisconnectHandler } from "./server/socket/handlers/disconnect-handler.js";
@@ -61,8 +63,8 @@ const redis = await connectToRedis();
 
 // Authenticate the user for operations handled with socket events before proceeding the connection
 // Note that this comes after the client successfully signed in to the app
-io.use((socket, next) => {
-    authenticateSocket(socket, next);
+io.use(async (socket, next) => {
+    await authenticateSocket(socket, next);
 });
 
 // SocketIO server handles the connection event
@@ -77,6 +79,10 @@ io.on("connection", async (socket) => {
         // Register "join room" socket events to the socket
         await registerJoinRoomHandler(io, redis, socket, roomCode); 
     });
+    socket.on("leaveRoom", async (roomCode) => {
+        // Register "leave room" socket events to the socket
+        await registerLeaveRoomHandler(socket, roomCode); 
+    });
     socket.on("enterRoom", async (roomCode) => {
         // Register "enter room" socket events to the socket
         await registerEnterRoomHandler(socket, roomCode);
@@ -85,20 +91,24 @@ io.on("connection", async (socket) => {
         // Register "exit room" socket events to the socket
         await registerExitRoomHandler(socket, roomCode);
     });
-    socket.on("chatMessage", async ({ msgContent, tmpId }, callback) => {
-        // Register client disconnection socket event to the socket
-        await registerChatHandler(socket, msgContent, tmpId, callback);
+    socket.on("chatMessage", async ({ content, tmpId }, callback) => {
+        // Register chat message socket event to the socket
+        await registerChatHandler(socket, tmpId, content, callback);
     });
     socket.on("disconnect", async () => {
-        // Register chat message socket event to the socket
+        // Register client disconnection socket event to the socket
         await registerDisconnectHandler(redis, socket);
     });
 })
 
 // HTTP server listens on port 3000 (default localhost server for Express)
+// const publicIP = await getPublicIPAddress();
+let hostname = "localhost";
+// hostname = publicIP
+// hostname = "192.168.1.216";
 const serverPort = process.env.PORT || 3000;
-server.listen(serverPort, () => {
-    console.log(`Server is running at http://localhost:${serverPort}/signin\n`)
+server.listen(serverPort, "0.0.0.0", () => {
+    console.log(`Server is running at http://${hostname}:${serverPort}/signin\n`)
 });
 // ==================== Server Socket ==================== 
 

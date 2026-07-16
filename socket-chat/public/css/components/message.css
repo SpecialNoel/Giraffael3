@@ -5,12 +5,8 @@
     /* Layout */
     display: flex;
 }
-.send-btn {
-    height: 100%;
-}
-
 /* Message input in Dashboard page */
-#input {
+#message-input {
     /* Layout */
     flex: 1;
 
@@ -21,9 +17,12 @@
     /* Spacing */
     margin-right: 2px; /* Keep distance between the message input field and the send button */
 }
+.send-btn {
+    height: 100%;
+}
 
-/* Messages in Dashboard page */
-#messages {
+/* Conversation in Dashboard page */
+#conversation {
     /* Spacing */
     margin: 0; /* Remove the spaces at the top and bottom of the list */
     padding: 0; /* Align the list items closer to the left border */

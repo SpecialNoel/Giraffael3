@@ -2,6 +2,7 @@
 
 import { createAuthenticatedSocket } from "../services/socket/socket-client.js";
 import { initializeDashboard } from "../services/dashboard/dashboard-initializer.js";
+import { setupConversationScroller } from "../services/socket/conversation-scroller-setter.js";
 import { startSession } from "../services/socket/socket-events.js";
 
 // Initialize the socket used to communicate with server, and add event listeners for dashboard services
@@ -23,6 +24,9 @@ window.addEventListener("DOMContentLoaded", async () => {
         // Set up event listeners for user dashboard services (HTTP endpoints operations)
         initializeDashboard(socket);
         console.log("Initialized dashboard");
+
+        // Set up scroller in the conversation element to fetch and display more older messages upon user scrolling upwards
+        await setupConversationScroller();
 
         // Start socket communication with server with the created socket by setting up the socket events
         startSession(socket);

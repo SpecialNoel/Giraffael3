@@ -1,8 +1,8 @@
 // leave-room-handler.js
 
-import { leaveRoom } from "../../services/db-services/membership/leave-room-service.js";
+import { leaveRoom } from "../../../services/db-services/membership/leave-room-service.js";
 
-async function handleLeaveRoom(req, res) {
+async function handleLeaveRoom(req, res, io) {
     try {
         // Receive room code and user info
         const { roomCode } = req.body;
@@ -38,6 +38,7 @@ async function handleLeaveRoom(req, res) {
         // Leave-room success
         return res.status(200).json({
             success: true,
+            roomCode: roomCode,
             message: "Leave room success",
         });
     } catch (err) {

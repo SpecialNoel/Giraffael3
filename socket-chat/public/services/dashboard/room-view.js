@@ -2,8 +2,8 @@
 
 import { getRoomInfoForDisplay } from "./room-api.js";
 
-// Update the room info and user info on Dashboard page UI, after user entering a room
-async function updateBasicGui() {
+// Render the room info and user info on Dashboard page UI, after user entering a room
+async function renderBasicGui() {
     // Fetch user public id from local storage
     const userId = localStorage.getItem("userId");
 
@@ -54,46 +54,6 @@ async function updateBasicGui() {
     // Update the name of the room on Dashboard page UI
     const titleElement = document.getElementById("title");
     if (titleElement)titleElement.textContent = roomName;
-}
-
-// Update the list of current active users in the room on Dashboard page UI
-function updateMemberList(memberListElement, emptyMessageElement, memberListHeadingElement, memberList) {
-    // Update the member list container on displaying the empty message or not
-    emptyMessageElement.hidden = memberList.length > 0;
-    memberListElement.hidden = memberList.length === 0;
-
-    // Update the member list by appending any user that is currently active
-    if (memberList.length > 0) {
-        // Update the header
-        memberListHeadingElement.textContent = `Members (${memberList.length})`;
-
-        // Empty the list first
-        memberListElement.innerHTML = "";
-
-        // For each user that is currently active in the room, add info about the user to the list
-        memberList.forEach(({ userId, username }) => {
-            const item = document.createElement("li");
-            item.textContent = `[${username}]: ${userId}`;
-            memberListElement.appendChild(item);
-            // Scroll the browser window to the bottom of the page
-            window.scrollTo(0, document.body.scrollHeight);
-        });
-    }
-}
-
-// Update the message history in the room on Dashboard page UI
-function updateMessageHistoryList(messagesElement, messages) {
-    // Empty the history first
-    messagesElement.innerHTML = "";
-
-    // For each message that was sent over the room, add info about the message to the history
-    messages.forEach(({ messageObjectId, userId, username, content, type }) => {
-        const item = document.createElement("li");
-        item.textContent = `[${username}]: ${content}`;
-        messagesElement.appendChild(item);
-        // Scroll the browser window to the bottom of the page
-        window.scrollTo(0, document.body.scrollHeight);
-    });
 }
 
 // Update the rooms container upon modification to the room list (create room, join room, etc.)
@@ -154,7 +114,4 @@ function appendRoomToRoomsContainer(containerDiv, roomInfo, role) {
     containerDiv.appendChild(roomRow);
 }
 
-export { updateBasicGui, 
-         updateMemberList, 
-         updateMessageHistoryList,
-         appendRoomToRoomsContainer };
+export { renderBasicGui, appendRoomToRoomsContainer };
