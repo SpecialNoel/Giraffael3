@@ -1,6 +1,6 @@
 // fetch-room-info-for-display-handler.js
 
-import { getRoomInfoForDisplay } from "../../services/db-services/room/get-room-info-for-display-service.js";
+import { getRoomInfoForDisplay } from "../../../services/db-services/room/get-room-info-for-display-service.js";
 
 async function handleFetchRoomInfoForDisplay(req, res) {
     try {

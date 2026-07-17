@@ -17,6 +17,15 @@ function broadcastUserLeft(socket, roomCode, memberList) {
     });
 }
 
+// Notify every user who joined the room (excluding the joining user) about an user joining the room
+function broadcastUserJoined(socket, roomCode, memberList) {
+    socket.to(roomCode).emit("userJoined", {
+        roomCode,
+        memberList,
+        msg: "An user has joined the room."
+    });
+}
+
 // Send the message to all connected users in the room (excluding the sender user)
 function broadcastChatMessage(socket, roomCode, tmpId, content) {
     const senderUsername = socket.user.username;
@@ -25,4 +34,5 @@ function broadcastChatMessage(socket, roomCode, tmpId, content) {
 
 export { broadcastRoomDeleted,
          broadcastUserLeft,
+         broadcastUserJoined,
          broadcastChatMessage };

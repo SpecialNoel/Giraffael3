@@ -77,7 +77,7 @@ io.on("connection", async (socket) => {
 
     socket.on("joinRoom", async (roomCode) => {
         // Register "join room" socket events to the socket
-        await registerJoinRoomHandler(io, redis, socket, roomCode); 
+        await registerJoinRoomHandler(redis, socket, roomCode); 
     });
     socket.on("leaveRoom", async (roomCode) => {
         // Register "leave room" socket events to the socket

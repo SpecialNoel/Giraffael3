@@ -3,10 +3,10 @@
 import { addUserToRoom } from "../../services/redis-services/user-services.js";
 import { getMembersInRoom } from "../../services/db-services/membership/get-members-service.js";
 import { getConversation } from "../../services/db-services/message/get-conversation-service.js";
-import { broadcastUserLeft } from "../emitters/room-broadcaster.js";
+import { broadcastUserJoined, broadcastUserLeft } from "../emitters/room-broadcaster.js";
 import { getRoomInfoForDisplay } from "../../services/db-services/room/get-room-info-for-display-service.js";
 
-async function registerJoinRoomHandler(io, redis, socket, roomCode) {
+async function registerJoinRoomHandler(redis, socket, roomCode) {
     // Leave the user from the room if they are already in the room to prevent duplicated join
     if (socket.currentRoomCode) socket.leave(socket.currentRoomCode);
 
@@ -20,7 +20,8 @@ async function registerJoinRoomHandler(io, redis, socket, roomCode) {
 
     // Notify the user about join room success
     const memberList = await getMembersInRoom(roomCode);
-    socket.emit("userJoined", memberList);
+    broadcastUserJoined(socket, roomCode, memberList);
+    console.log(`Notified all users in room ${roomCode} about user joined`);
 }
 
 async function registerLeaveRoomHandler(socket, roomCode) {

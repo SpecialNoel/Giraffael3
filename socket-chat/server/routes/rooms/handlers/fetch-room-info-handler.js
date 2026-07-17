@@ -1,6 +1,6 @@
 // fetch-room-info-handler.js
 
-import { getRoomsInfo } from "../../services/db-services/membership/get-rooms-info-service.js";
+import { getRoomsInfo } from "../../../services/db-services/membership/get-rooms-info-service.js";
 
 async function handleFetchRoomInfo(req, res) {
     try {

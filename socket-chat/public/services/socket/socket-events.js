@@ -13,8 +13,9 @@ function registerSocketEvents(socket,
                               emptyMessageElement,
                               memberListHeadingElement) {
     // Handle update on active users list upon user joining or leaving the room
-    socket.on("userJoined", (memberList) => {
-        console.log(`An user has joined room`);
+    socket.on("userJoined", ({ roomCode, memberList, msg }) => {
+        alert(msg);
+        console.log(`An user has joined room ${roomCode}.`);        
         // memberList is a list of { userId, username }
         renderMemberList(memberListElement, emptyMessageElement, memberListHeadingElement, memberList);
     });
