@@ -11,7 +11,8 @@ function registerSocketEvents(socket,
                               conversationElement, 
                               memberListElement, 
                               emptyMessageElement,
-                              memberListHeadingElement) {
+                              memberListHeadingElement,
+                              conversationCursors) {
     // Handle update on active users list upon user joining or leaving the room
     socket.on("userJoined", ({ roomCode, memberList, msg }) => {
         alert(msg);
@@ -26,15 +27,16 @@ function registerSocketEvents(socket,
     });
 
     // Handle user enter room event
-    socket.on("userEntered", async ({ memberList, conversation, roomInfoForDisplay }) => {
+    socket.on("userEntered", async ({ memberList, messages, nextCursor, roomInfoForDisplay }) => {
         // Update Dashboard page upon enter room success
         sessionStorage.setItem(
             "currentRoom",
             JSON.stringify(roomInfoForDisplay)
         );
+        conversationCursors.set(roomInfoForDisplay.roomCode, nextCursor); // update the cursor for next message-fetching
         await renderBasicGui();
         renderMemberList(memberListElement, emptyMessageElement, memberListHeadingElement, memberList);
-        renderConversation(conversationElement, conversation);
+        renderConversation(conversationElement, messages, nextCursor);
     });
     // Handle user exit room event
     socket.on("userExited", (memberList) => {
@@ -56,7 +58,7 @@ function registerSocketEvents(socket,
 }
 
 // Start socket communication with server with the created socket by setting up the socket events
-function startSession(socket) {
+function startSession(socket, conversationCursors) {
     const form = document.getElementById("form");
     const inputElement = document.getElementById("message-input");
     const conversationElement = document.getElementById("conversation");
@@ -81,7 +83,12 @@ function startSession(socket) {
     });
 
     // Set up socket events
-    registerSocketEvents(socket, conversationElement, memberListElement, emptyMessageElement, memberListHeadingElement);
+    registerSocketEvents(socket, 
+                         conversationElement, 
+                         memberListElement, 
+                         emptyMessageElement, 
+                         memberListHeadingElement,
+                         conversationCursors);
 }
 
 export { startSession };

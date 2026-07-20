@@ -2,7 +2,7 @@
 
 import { addUserToRoom } from "../../services/redis-services/user-services.js";
 import { getMembersInRoom } from "../../services/db-services/membership/get-members-service.js";
-import { getConversation } from "../../services/db-services/message/get-conversation-service.js";
+import { getPaginatedConversation } from "../../services/db-services/message/get-conversation-service.js";
 import { broadcastUserJoined, broadcastUserLeft } from "../emitters/room-broadcaster.js";
 import { getRoomInfoForDisplay } from "../../services/db-services/room/get-room-info-for-display-service.js";
 
@@ -32,7 +32,7 @@ async function registerLeaveRoomHandler(socket, roomCode) {
     console.log(`Notified all users in room ${roomCode} about user left`);
 }
 
-async function registerEnterRoomHandler(socket, roomCode) {
+async function registerEnterRoomHandler(socket, roomCode, conversationCursor) {
     // Leave the user from the room if they are already in the room to prevent duplicated join
     if (socket.currentRoomCode) socket.leave(socket.currentRoomCode);
 
@@ -42,14 +42,18 @@ async function registerEnterRoomHandler(socket, roomCode) {
 
     // Fetch active users and conversation of the room
     const memberList = await getMembersInRoom(roomCode);
-    const conversation = await getConversation(roomCode);
+    const getConversationResponse = await getPaginatedConversation(roomCode, conversationCursor);
+    const messages = getConversationResponse.messages;
+    const nextCursor = getConversationResponse.nextCursor;
+
     // Fetch room displaying info
     const roomInfoForDisplay = await getRoomInfoForDisplay(roomCode);
 
     // Send these information to the user
     socket.emit("userEntered", {
         memberList,
-        conversation,
+        messages,
+        nextCursor,
         roomInfoForDisplay
     });
 }

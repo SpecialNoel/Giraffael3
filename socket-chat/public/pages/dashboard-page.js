@@ -2,7 +2,7 @@
 
 import { createAuthenticatedSocket } from "../services/socket/socket-client.js";
 import { initializeDashboard } from "../services/dashboard/dashboard-initializer.js";
-import { setupConversationScroller } from "../services/socket/conversation-scroller-setter.js";
+import { setupConversationScroller } from "../services/dashboard/conversation-scroller-setter.js";
 import { startSession } from "../services/socket/socket-events.js";
 
 // Initialize the socket used to communicate with server, and add event listeners for dashboard services
@@ -21,15 +21,18 @@ window.addEventListener("DOMContentLoaded", async () => {
         */
         const socket = await createAuthenticatedSocket();
 
+        // A mapping between room codes and their conversation cursors to keep track of the next batch of messages to fetch
+        const conversationCursors = new Map();
+
         // Set up event listeners for user dashboard services (HTTP endpoints operations)
-        initializeDashboard(socket);
+        initializeDashboard(socket, conversationCursors);
         console.log("Initialized dashboard");
 
         // Set up scroller in the conversation element to fetch and display more older messages upon user scrolling upwards
-        await setupConversationScroller();
+        await setupConversationScroller(conversationCursors);
 
         // Start socket communication with server with the created socket by setting up the socket events
-        startSession(socket);
+        startSession(socket, conversationCursors);
         console.log("Started session");
     } catch (err) {
         // If any error occurs, alert the error message to user and redirect them back to the sign in page

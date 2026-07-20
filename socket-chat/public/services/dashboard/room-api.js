@@ -39,4 +39,8 @@ async function getRoomInfoForDisplay(roomCode) {
     return await apiFetch(`/rooms/${roomCode}/display`);
 }
 
-export { createRoom, deleteRoom, joinRoom, leaveRoom, getRoomInfoForDisplay };
+async function fetchMoreMessages(roomCode, cursor) {
+    return await apiFetch(`/rooms/${roomCode}/messages?cursor=${cursor}`);
+}
+
+export { createRoom, deleteRoom, joinRoom, leaveRoom, getRoomInfoForDisplay, fetchMoreMessages };

@@ -6,6 +6,7 @@ import path from "node:path";
 import { authenticateHTTP } from "../../middleware/authenticate-http.js";
 import { handleFetchRoomInfo } from "./handlers/fetch-room-info-handler.js";
 import { handleFetchRoomInfoForDisplay } from "./handlers/fetch-room-info-for-display-handler.js";
+import { handleFetchMoreMessages } from "./handlers/fetch-more-messages-handler.js";
 import { handleCreateRoom } from "./handlers/create-room-handler.js";
 import { handleDeleteRoom } from "./handlers/delete-room-handler.js";
 import { handleJoinRoom } from "./handlers/join-room-handler.js";
@@ -22,6 +23,9 @@ router.get("/", authenticateHTTP, async (req, res) => {
 });
 router.get("/:roomCode", authenticateHTTP, async (req, res) => {
     return await handleFetchRoomInfoForDisplay(req, res);
+});
+router.get("/:roomCode/messages", authenticateHTTP, async (req, res) => {
+    return await handleFetchMoreMessages(req, res);
 });
 router.post("/create", authenticateHTTP, async (req, res) => {
     return await handleCreateRoom(req, res);

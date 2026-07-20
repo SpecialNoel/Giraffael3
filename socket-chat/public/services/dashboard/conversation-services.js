@@ -1,12 +1,14 @@
 // conversation-services.js
 
+import { fetchMoreMessages } from "./room-api.js";
+
 // Render the whole conversation in the room on Dashboard page UI
-function renderConversation(conversationElement, conversation) {
+function renderConversation(conversationElement, messages, nextCursor) {
     // Empty the current conversation first
     conversationElement.innerHTML = "";
 
     // For each message that was sent over the room, add info about the message to the conversation
-    conversation.forEach(({ messageObjectId, userId, username, content, type }) => {
+    messages.forEach(({ messageObjectId, userId, username, content, type }) => {
         const item = document.createElement("li");
         item.textContent = `[${username}]: ${content}`;
         conversationElement.appendChild(item);
@@ -16,7 +18,7 @@ function renderConversation(conversationElement, conversation) {
 }
 
 // Load some latest messages of the whole conversation in the room on Dashboard page UI
-function loadInitConversation(conversationElement, amount=5) {
+function loadInitConversation(conversationElement) {
 
 }
 
@@ -31,7 +33,9 @@ function appendMessage(conversationElement, content, senderUsername) {
 }
 
 // Prepend some older messages of the whole conversation on top of existing messages
-function prependMessages(amount=5) {
+async function prependMessages(conversationCursors) {
+    const cursor = conversationCursors.get(roomCode);
+    const data = await parseResponse(await fetchMoreMessages(roomCode, cursor));
     console.log("Hi, you just prepended some msg")
 }
 
