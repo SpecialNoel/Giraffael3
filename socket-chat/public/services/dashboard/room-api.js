@@ -39,6 +39,7 @@ async function getRoomInfoForDisplay(roomCode) {
     return await apiFetch(`/rooms/${roomCode}/display`);
 }
 
+// Send "fetch some messages" HTTP request to server, then receive an HTTP response from server
 async function fetchMoreMessages(roomCode, cursor) {
     return await apiFetch(`/rooms/${roomCode}/messages?cursor=${cursor}`);
 }

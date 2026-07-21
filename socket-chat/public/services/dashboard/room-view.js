@@ -17,7 +17,6 @@ async function renderBasicGui() {
      * "enter room" event to server when they "enter" the room, and successfully 
      * receiving these information from server 
     */
-
     let roomCode;
     let roomName;
 
@@ -89,8 +88,6 @@ function appendRoomToRoomsContainer(containerDiv, roomInfo, role) {
     // Append buttons to the wrapper
     roomRow.appendChild(roomBtn);
     roomRow.appendChild(leaveBtn);
-
-    console.log("User's role:", role);
 
     // Delete button; enabled only for creator of the room
     // Delete the room from the database upon clicking

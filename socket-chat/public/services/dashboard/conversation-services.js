@@ -17,11 +17,6 @@ function renderConversation(conversationElement, messages, nextCursor) {
     });
 }
 
-// Load some latest messages of the whole conversation in the room on Dashboard page UI
-function loadInitConversation(conversationElement) {
-
-}
-
 // Append the message received from other users in the room to the existing conversation
 function appendMessage(conversationElement, content, senderUsername) {
     // Append the message to the conversation
@@ -39,13 +34,6 @@ async function prependMessages(conversationCursors) {
     console.log("Hi, you just prepended some msg")
 }
 
-// Remove expired message from conversation UI
-function removeMessage() {
-
-}
-
 export { renderConversation, 
-         loadInitConversation,
          appendMessage,
-         prependMessages,
-         removeMessage };
+         prependMessages };
