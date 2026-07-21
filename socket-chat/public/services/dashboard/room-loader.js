@@ -19,6 +19,7 @@ async function loadRooms() {
             roomInfo,
             roomInfo.role
         );
-    });}
+    });
+}
 
 export { loadRooms };

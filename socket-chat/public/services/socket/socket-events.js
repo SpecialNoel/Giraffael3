@@ -36,7 +36,7 @@ function registerSocketEvents(socket,
         conversationCursors.set(roomInfoForDisplay.roomCode, nextCursor); // update the cursor for next message-fetching
         await renderBasicGui();
         renderMemberList(memberListElement, emptyMessageElement, memberListHeadingElement, memberList);
-        renderConversation(conversationElement, messages, nextCursor);
+        renderConversation(conversationElement, messages);
     });
     // Handle user exit room event
     socket.on("userExited", (memberList) => {

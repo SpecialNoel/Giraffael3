@@ -8,7 +8,7 @@ async function handleFetchMoreMessages(req, res) {
         const roomCode = req.params.roomCode;
         const { cursor } = req.query;
 
-        const result = await getPaginatedConversation(roomCode, conversationCursor);
+        const result = await getPaginatedConversation(roomCode, cursor);
         
         return res.status(200).json({
             success: true,

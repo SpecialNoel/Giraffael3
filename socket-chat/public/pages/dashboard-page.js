@@ -29,7 +29,8 @@ window.addEventListener("DOMContentLoaded", async () => {
         console.log("Initialized dashboard");
 
         // Set up scroller in the conversation element to fetch and display more older messages upon user scrolling upwards
-        await setupConversationScroller(conversationCursors);
+        const conversationElement = document.getElementById("conversation");
+        await setupConversationScroller(conversationElement, conversationCursors);
 
         // Start socket communication with server with the created socket by setting up the socket events
         startSession(socket, conversationCursors);
@@ -37,6 +38,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     } catch (err) {
         // If any error occurs, alert the error message to user and redirect them back to the sign in page
         alert("Failed to enter dashboard page. Return to sign-in page.");
+        console.error(err);
         window.location.href = "/signin";
     }
 });

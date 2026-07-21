@@ -6,12 +6,13 @@ import { openRoom } from "./room-navigation.js";
 import { appendRoomToRoomsContainer } from "./room-view.js";
 
 // Set up the enter-room logic
-async function handleEnterRoom(roomBtn, socket) {
+async function handleEnterRoom(roomBtn, socket, conversationCursors) {
     const roomCode = roomBtn.dataset.roomCode; // dataset.roomCode is dynamically parsed from "data-room-code" attribute in html
     console.log("Clicked enter room:", roomCode);
 
     // Modify the url of user browser, and fire an "enter room" socket event to server
-    openRoom(socket, roomCode);
+    const conversationCursor = conversationCursors.get(roomCode) ?? null;
+    openRoom(socket, roomCode, conversationCursor);
     // Room displaying info will be retrieved and updated to Dashboard page via socket events
 }
 
