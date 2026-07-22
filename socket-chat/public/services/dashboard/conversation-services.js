@@ -32,7 +32,7 @@ function appendMessage(conversationElement, content, senderUsername) {
 async function prependMessages(conversationElement, conversationCursors) {
     const params = new URLSearchParams(window.location.search);
     const roomCode = params.get("room");
-    const conversationCursor = conversationCursors.get(roomCode) ?? null;
+    const conversationCursor = conversationCursors.get(roomCode) ?? null; // TODO: update conversationCursors to contain hasMore
     if (!conversationCursor) {
         console.log("No more messages to load");
         return;
@@ -41,6 +41,7 @@ async function prependMessages(conversationElement, conversationCursors) {
     const data = await parseResponse(await fetchMoreMessages(roomCode, conversationCursor));
     const messages = data.messages;
     const nextCursor = data.nextCursor;
+    const hasMore = data.hasMore;
     console.log(`conversationCursor: ${conversationCursor}`);
     console.log(`nextCursor: ${nextCursor}`);
     conversationCursors.set(roomCode, nextCursor);

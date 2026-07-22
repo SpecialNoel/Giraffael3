@@ -57,12 +57,17 @@ async function getPaginatedConversation(roomCode, conversationCursor, limit=5) {
         const messages = await Message.find(query)
             .select("sender content type createdAt")
             .sort({ createdAt: -1 }) // newest messages first
-            .limit(limit)
+            .limit(limit+1) // fetch one more message document than requested to indicate whether there are more messages to fetch or not
             .populate({
                 path: "sender",
                 select: "userId username -_id" 
             }) // convert user object id to user public id
             .lean();
+
+        // Indicate whether there are more messages to fetch or not
+        const hasMore = messages.length > limit;
+        // If there are, pop the extra message fetched before formatting the rest
+        if (hasMore) messages.pop();
 
         // Used reverse() to sort the fetched messages by oldest messages first for easier access for UI
         const formattedMessages = messages
@@ -76,12 +81,13 @@ async function getPaginatedConversation(roomCode, conversationCursor, limit=5) {
                 createdAt: msg.createdAt,
             }));
 
-        // Return both the requested messages and the cursor for the next message-fetching
+        // Return the requested messages, the cursor for the next message-fetching, and the hasMore indicator
         return {
-            messages: formattedMessages,
-            nextCursor: formattedMessages.length > 0
+            messages: formattedMessages, // messages with oldest first, newest last,
+            nextCursor: formattedMessages.length > 0 // the "createdAt" field of the oldest msg in this batch
                 ? formattedMessages[0].createdAt
-                : null
+                : null,
+            hasMore // whether there are messages of the room to be fetched
         };
     } catch (err) {
         console.error("Failed to retrieve message conversation with pagination:", err);

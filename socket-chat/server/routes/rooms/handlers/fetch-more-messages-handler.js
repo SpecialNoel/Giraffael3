@@ -14,7 +14,8 @@ async function handleFetchMoreMessages(req, res) {
             success: true,
             message: "Fetch more messages success",
             messages: result.messages,
-            nextCursor: result.nextCursor
+            nextCursor: result.nextCursor,
+            hasMore: result.hasMore
         });
     } catch (err) {
         console.error(err);
