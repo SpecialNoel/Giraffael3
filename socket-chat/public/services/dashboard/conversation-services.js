@@ -29,22 +29,27 @@ function appendMessage(conversationElement, content, senderUsername) {
 }
 
 // Prepend some older messages of the whole conversation on top of existing messages
-async function prependMessages(conversationElement, conversationCursors) {
+async function prependMessages(conversationElement, roomPaginationStates) {
     const params = new URLSearchParams(window.location.search);
     const roomCode = params.get("room");
-    const conversationCursor = conversationCursors.get(roomCode) ?? null; // TODO: update conversationCursors to contain hasMore
-    if (!conversationCursor) {
+    const state = roomPaginationStates.get(roomCode) ?? null;
+    const hasMore = state ? state.hasMore : false;
+    if (!hasMore) {
         console.log("No more messages to load");
         return;
     }
 
-    const data = await parseResponse(await fetchMoreMessages(roomCode, conversationCursor));
+    const cursor = state ? state.cursor : null;
+    const data = await parseResponse(await fetchMoreMessages(roomCode, cursor));
     const messages = data.messages;
     const nextCursor = data.nextCursor;
-    const hasMore = data.hasMore;
-    console.log(`conversationCursor: ${conversationCursor}`);
+    console.log(`cursor: ${cursor}`);
     console.log(`nextCursor: ${nextCursor}`);
-    conversationCursors.set(roomCode, nextCursor);
+    const newState = {
+        cursor: nextCursor,
+        hasMore: data.hasMore
+    }
+    roomPaginationStates.set(roomCode, newState);
     console.log("Prepending:");
     messages.forEach(m => console.log(m.content, m.createdAt));
 }

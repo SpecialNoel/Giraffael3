@@ -40,8 +40,8 @@ async function getRoomInfoForDisplay(roomCode) {
 }
 
 // Send "fetch some messages" HTTP request to server, then receive an HTTP response from server
-async function fetchMoreMessages(roomCode, conversationCursor) {
-    return await apiFetch(`/rooms/${roomCode}/messages?cursor=${conversationCursor}`);
+async function fetchMoreMessages(roomCode, cursor) {
+    return await apiFetch(`/rooms/${roomCode}/messages?cursor=${cursor}`);
 }
 
 export { createRoom, deleteRoom, joinRoom, leaveRoom, getRoomInfoForDisplay, fetchMoreMessages };

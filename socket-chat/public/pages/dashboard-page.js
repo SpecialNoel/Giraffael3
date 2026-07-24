@@ -21,19 +21,22 @@ window.addEventListener("DOMContentLoaded", async () => {
         */
         const socket = await createAuthenticatedSocket();
 
-        // A mapping between room codes and their conversation cursors to keep track of the next batch of messages to fetch
-        const conversationCursors = new Map();
+        // roomPaginationStates: { roomCode: { cursor, hasMore } }
+        // A mapping of room codes to cursor and hasMore fields to keep track of the next batch of messages to fetch
+        // A cursor indicates where the last fetched message was located in the database
+        // A hasMore field indicates whether there are more messages from the room to fetch
+        const roomPaginationStates = new Map();
 
         // Set up event listeners for user dashboard services (HTTP endpoints operations)
-        initializeDashboard(socket, conversationCursors);
+        initializeDashboard(socket, roomPaginationStates);
         console.log("Initialized dashboard");
 
         // Set up scroller in the conversation element to fetch and display more older messages upon user scrolling upwards
         const conversationElement = document.getElementById("conversation");
-        await setupConversationScroller(conversationElement, conversationCursors);
+        await setupConversationScroller(conversationElement, roomPaginationStates);
 
         // Start socket communication with server with the created socket by setting up the socket events
-        startSession(socket, conversationCursors);
+        startSession(socket, roomPaginationStates);
         console.log("Started session");
     } catch (err) {
         // If any error occurs, alert the error message to user and redirect them back to the sign in page

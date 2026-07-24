@@ -83,9 +83,9 @@ io.on("connection", async (socket) => {
         // Register "leave room" socket events to the socket
         await registerLeaveRoomHandler(socket, roomCode); 
     });
-    socket.on("enterRoom", async (roomCode, conversationCursor) => {
+    socket.on("enterRoom", async (roomCode, cursor) => {
         // Register "enter room" socket events to the socket
-        await registerEnterRoomHandler(socket, roomCode, conversationCursor);
+        await registerEnterRoomHandler(socket, roomCode, cursor);
     });
     socket.on("exitRoom", async (roomCode) => {
         // Register "exit room" socket events to the socket

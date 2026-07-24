@@ -37,7 +37,7 @@ async function getWholeConversation(roomCode) {
 }
 
 // Retrieve part of the conversation (via pagination) sent to the room from the database
-async function getPaginatedConversation(roomCode, conversationCursor, limit=5) {
+async function getPaginatedConversation(roomCode, cursor, limit=5) {
     try {
         // Fetch the target room
         const room = await findRoom(roomCode).select("_id").lean();
@@ -51,7 +51,7 @@ async function getPaginatedConversation(roomCode, conversationCursor, limit=5) {
         // Pagination (i.e. resume from where the message-fetching ended last time) using createdAt cursor
         // If cursor is null, it means that the conversation retrieval is called the first time
         // If cursor is not null, it means that the conversation retrieval is called again later
-        if (conversationCursor) query.createdAt = { $lt: new Date(conversationCursor) };
+        if (cursor) query.createdAt = { $lt: new Date(cursor) };
 
         // Fetch some of the conversation sent over the target room using the Message model
         const messages = await Message.find(query)

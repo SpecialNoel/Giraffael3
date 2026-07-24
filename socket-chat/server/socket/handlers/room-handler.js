@@ -32,7 +32,7 @@ async function registerLeaveRoomHandler(socket, roomCode) {
     console.log(`Notified all users in room ${roomCode} about user left`);
 }
 
-async function registerEnterRoomHandler(socket, roomCode, conversationCursor) {
+async function registerEnterRoomHandler(socket, roomCode, cursor) {
     // Leave the user from the room if they are already in the room to prevent duplicated join
     if (socket.currentRoomCode) socket.leave(socket.currentRoomCode);
 
@@ -42,9 +42,10 @@ async function registerEnterRoomHandler(socket, roomCode, conversationCursor) {
 
     // Fetch active users and conversation of the room
     const memberList = await getMembersInRoom(roomCode);
-    const getConversationResponse = await getPaginatedConversation(roomCode, conversationCursor);
+    const getConversationResponse = await getPaginatedConversation(roomCode, cursor);
     const messages = getConversationResponse.messages;
     const nextCursor = getConversationResponse.nextCursor;
+    const hasMore = getConversationResponse.hasMore;
 
     // Fetch room displaying info
     const roomInfoForDisplay = await getRoomInfoForDisplay(roomCode);
@@ -54,6 +55,7 @@ async function registerEnterRoomHandler(socket, roomCode, conversationCursor) {
         memberList,
         messages,
         nextCursor,
+        hasMore,
         roomInfoForDisplay
     });
 }

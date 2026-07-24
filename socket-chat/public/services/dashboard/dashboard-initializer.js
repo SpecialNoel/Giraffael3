@@ -5,11 +5,11 @@ import { initializeHistoryNavigation } from "./room-navigation.js";
 import { loadRooms } from "./room-loader.js";
 
 // Set up event listeners for user dashboard services (HTTP endpoints operations)
-function initializeDashboard(socket, conversationCursors) {
+function initializeDashboard(socket, roomPaginationStates) {
     // Set up the room logics (via http endpoints, socket events, or both)
-    setupRoomEvents(socket, conversationCursors);
+    setupRoomEvents(socket, roomPaginationStates);
     // Set up the application so that it navigates when the user uses the browser's Back and Forward buttons
-    initializeHistoryNavigation(socket, conversationCursors);
+    initializeHistoryNavigation(socket, roomPaginationStates);
     // Fetch rooms information from server, and render them to Dashboard page UI
     loadRooms();
 }

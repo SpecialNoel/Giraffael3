@@ -7,7 +7,7 @@ import { handleEnterRoom,
          handleJoinRoom } from "./room-handler.js";
 
 // Set up the rooms container
-function handleRoomsContainer(socket, conversationCursors) {    
+function handleRoomsContainer(socket, roomPaginationStates) {    
     /*
         On the dashboard page, add functionality to each room icon/button such that
         a certain task will be executed whenever the user clicks on the room icon.
@@ -23,7 +23,7 @@ function handleRoomsContainer(socket, conversationCursors) {
             // Handle user "enter room" request
             const roomBtn = e.target.closest(".room-btn"); 
             if (roomBtn) {
-                await handleEnterRoom(roomBtn, socket, conversationCursors);
+                await handleEnterRoom(roomBtn, socket, roomPaginationStates);
                 return;
             }
 
@@ -54,9 +54,9 @@ function handleRoomsContainer(socket, conversationCursors) {
 }
 
 // Set up the room logics (via http endpoints, socket events, or both)
-function setupRoomEvents(socket, conversationCursors) {
+function setupRoomEvents(socket, roomPaginationStates) {
     // Set up the events attached to each room container ("leave room", "delete room")
-    handleRoomsContainer(socket, conversationCursors);
+    handleRoomsContainer(socket, roomPaginationStates);
     // Set up the "create room" event
     handleCreateRoom(socket);
     // Set up the "join room" event
