@@ -43,15 +43,19 @@ async function prependMessages(conversationElement, roomPaginationStates) {
     const data = await parseResponse(await fetchMoreMessages(roomCode, cursor));
     const messages = data.messages;
     const nextCursor = data.nextCursor;
-    console.log(`cursor: ${cursor}`);
-    console.log(`nextCursor: ${nextCursor}`);
     const newState = {
         cursor: nextCursor,
         hasMore: data.hasMore
     }
     roomPaginationStates.set(roomCode, newState);
     console.log("Prepending:");
-    messages.forEach(m => console.log(m.content, m.createdAt));
+    // Reverse the messages again due to the property of HTML element prepending
+    messages.reverse().forEach(m => {
+        const item = document.createElement("li");
+        item.textContent = `[${m.username}]: ${m.content}`;
+        conversationElement.prepend(item);
+        console.log(m.content, m.createdAt);
+    });
 }
 
 export { renderConversation, 

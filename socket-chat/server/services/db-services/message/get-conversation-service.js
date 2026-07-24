@@ -69,9 +69,9 @@ async function getPaginatedConversation(roomCode, cursor, limit=5) {
         // If there are, pop the extra message fetched before formatting the rest
         if (hasMore) messages.pop();
 
-        // Used reverse() to sort the fetched messages by oldest messages first for easier access for UI
+        // Format the messages to access attributes easier on client side
         const formattedMessages = messages
-            .reverse()
+            .reverse() // Reverse the message so that oldest messages first, and newest messages last
             .map(msg => ({
                 messageObjectId: msg._id,
                 userId: msg.sender.userId,
@@ -83,7 +83,7 @@ async function getPaginatedConversation(roomCode, cursor, limit=5) {
 
         // Return the requested messages, the cursor for the next message-fetching, and the hasMore indicator
         return {
-            messages: formattedMessages, // messages with oldest first, newest last,
+            messages: formattedMessages, // messages with oldest first, newest last
             nextCursor: formattedMessages.length > 0 // the "createdAt" field of the oldest msg in this batch
                 ? formattedMessages[0].createdAt
                 : null,
