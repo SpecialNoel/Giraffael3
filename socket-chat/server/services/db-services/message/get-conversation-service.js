@@ -3,39 +3,6 @@
 import { Message } from "../../../models/message-model.js";
 import { findRoom } from "../room/find-room-service.js";
 
-// Retrieve the whole conversation sent to the room from the database
-async function getWholeConversation(roomCode) {
-    try {
-        // Fetch the target room
-        const room = await findRoom(roomCode).select("_id").lean();
-        if (!room) throw new Error("Room not found");
-
-        // Fetch the whole conversation sent over the target room using the Message model
-        const conversation = await Message.find({
-            room: room._id,
-        })
-        .select("sender content type")
-        .sort({ createdAt: 1 })
-        .populate({
-            path: "sender",
-            select: "userId username -_id" 
-        }) // convert user object id to user public id
-        .lean();
-
-        // Return whole conversation sent over the room
-        return conversation.map(msg => ({
-            messageObjectId: msg._id,
-            userId: msg.sender.userId,
-            username: msg.sender.username,
-            content: msg.content,
-            type: msg.type,
-        }));
-    } catch (err) {
-        console.error("Failed to retrieve whole conversation:", err);
-        throw err;
-    }
-}
-
 // Retrieve part of the conversation (via pagination) sent to the room from the database
 async function getPaginatedConversation(roomCode, cursor, limit=5) {
     try {
@@ -95,4 +62,4 @@ async function getPaginatedConversation(roomCode, cursor, limit=5) {
     }
 }
 
-export { getWholeConversation, getPaginatedConversation };
+export { getPaginatedConversation };

@@ -28,8 +28,9 @@ function appendMessage(conversationElement, content, senderUsername) {
     conversationElement.scrollTop = conversationElement.scrollHeight;
 }
 
-// Prepend some older messages of the whole conversation on top of existing messages
+// Prepend some older messages of the conversation on top of existing messages
 async function prependMessages(conversationElement, roomPaginationStates) {
+    // Check the existing mapping of room code to { cursor, hasMore }, if any
     const params = new URLSearchParams(window.location.search);
     const roomCode = params.get("room");
     const state = roomPaginationStates.get(roomCode) ?? null;
@@ -39,6 +40,7 @@ async function prependMessages(conversationElement, roomPaginationStates) {
         return;
     }
 
+    // Fetching more messages
     const cursor = state ? state.cursor : null;
     const data = await parseResponse(await fetchMoreMessages(roomCode, cursor));
     const messages = data.messages;
@@ -47,7 +49,11 @@ async function prependMessages(conversationElement, roomPaginationStates) {
         cursor: nextCursor,
         hasMore: data.hasMore
     }
+    // Update the mapping
     roomPaginationStates.set(roomCode, newState);
+
+    // Prepend the fetch messages to the conversation element
+    const prevHeight = conversation.scrollHeight;
     console.log("Prepending:");
     // Reverse the messages again due to the property of HTML element prepending
     messages.reverse().forEach(m => {
@@ -56,6 +62,11 @@ async function prependMessages(conversationElement, roomPaginationStates) {
         conversationElement.prepend(item);
         console.log(m.content, m.createdAt);
     });
+    const newHeight = conversation.scrollHeight;
+    // Update the current location of the conversation element to provide smoother, more natural user scroll action
+    // Without this step, prepending messages will immediately locate the user to the top of the conversation element
+    // i.e. the user sees the older messages (located at top) first than the newer messages (located at bottom)
+    conversation.scrollTop = newHeight - prevHeight;
 }
 
 export { renderConversation, 
