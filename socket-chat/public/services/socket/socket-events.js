@@ -14,48 +14,51 @@ function registerSocketEvents(socket,
                               memberListHeadingElement,
                               roomPaginationStates) {
     // Handle update on active users list upon user joining or leaving the room
-    socket.on("userJoined", ({ roomCode, memberList, msg }) => {
-        alert(msg);
-        console.log(`An user has joined room ${roomCode}.`);        
+    socket.on("userJoined", (data) => {
+        alert(data.msg);
+        console.log(`An user has joined room ${data.roomCode}.`);        
         // memberList is a list of { userId, username }
-        renderMemberList(memberListElement, emptyMessageElement, memberListHeadingElement, memberList);
+        renderMemberList(memberListElement, emptyMessageElement, memberListHeadingElement, data.memberList);
     });
-    socket.on("userLeft", ({ roomCode, memberList, msg }) => {
-        alert(msg);
-        console.log(`An user has left room ${roomCode}.`);
-        renderMemberList(memberListElement, emptyMessageElement, memberListHeadingElement, memberList);
+    socket.on("userLeft", (data) => {
+        alert(data.msg);
+        console.log(`An user has left room ${data.roomCode}.`);
+        renderMemberList(memberListElement, emptyMessageElement, memberListHeadingElement, data.memberList);
     });
 
     // Handle user enter room event
-    socket.on("userEntered", async ({ memberList, messages, nextCursor, hasMore, roomInfoForDisplay }) => {
+    socket.on("userEntered", async (data) => {
+        const currentRoom = new URLSearchParams(window.location.search).get("room");
+        // Stop proceeding, as this room code is a stale data from a room the user has already left.
+        if (currentRoom !== data.roomInfoForDisplay.roomCode) return;
+
         // Update Dashboard page upon enter room success
         sessionStorage.setItem(
             "currentRoom",
-            JSON.stringify(roomInfoForDisplay)
+            JSON.stringify(data.roomInfoForDisplay)
         );
-        const state = {
-            cursor: nextCursor,
-            hasMore: hasMore
-        }
-        roomPaginationStates.set(roomInfoForDisplay.roomCode, state); // update the state for next message-fetching
+        roomPaginationStates.set(data.roomInfoForDisplay.roomCode, {
+            cursor: data.nextCursor,
+            hasMore: data.hasMore        
+        }); // update the state for next message-fetching
         await renderBasicGui();
-        renderMemberList(memberListElement, emptyMessageElement, memberListHeadingElement, memberList);
-        renderConversation(conversationElement, messages);
+        renderMemberList(memberListElement, emptyMessageElement, memberListHeadingElement, data.memberList);
+        renderConversation(conversationElement, data.messages);
     });
     // Handle user exit room event
-    socket.on("userExited", (memberList) => {
-        
+    socket.on("userExited", (data) => {
+        console.log("Members: ", data.memberList);
     });
 
     // Handle client socket receiving chat text messages sent by connected clients
-    socket.on("chatMessageReceived", (tmpId, content, senderUsername) => {
-        appendMessage(conversationElement, content, senderUsername);
+    socket.on("chatMessageReceived", (data) => {
+        appendMessage(conversationElement, data.content, data.senderUsername);
     });
 
     // Handle room deletion event
-    socket.on("roomDeleted", ({ roomCode, msg }) => {
-        alert(msg);
-        console.log(`Room ${roomCode} has been deleted.`)        
+    socket.on("roomDeleted", (data) => {
+        alert(data.msg);
+        console.log(`Room ${data.roomCode} has been deleted.`)        
         // Navigate to the dashboard after receiving the room deletion notification
         window.location.href = "/dashboard";
     });

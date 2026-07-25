@@ -53,7 +53,7 @@ async function prependMessages(conversationElement, roomPaginationStates) {
     roomPaginationStates.set(roomCode, newState);
 
     // Prepend the fetch messages to the conversation element
-    const prevHeight = conversation.scrollHeight;
+    const prevHeight = conversationElement.scrollHeight;
     console.log("Prepending:");
     // Reverse the messages again due to the property of HTML element prepending
     messages.reverse().forEach(m => {
@@ -62,11 +62,11 @@ async function prependMessages(conversationElement, roomPaginationStates) {
         conversationElement.prepend(item);
         console.log(m.content, m.createdAt);
     });
-    const newHeight = conversation.scrollHeight;
+    const newHeight = conversationElement.scrollHeight;
     // Update the current location of the conversation element to provide smoother, more natural user scroll action
     // Without this step, prepending messages will immediately locate the user to the top of the conversation element
     // i.e. the user sees the older messages (located at top) first than the newer messages (located at bottom)
-    conversation.scrollTop = newHeight - prevHeight;
+    conversationElement.scrollTop = newHeight - prevHeight;
 }
 
 export { renderConversation, 

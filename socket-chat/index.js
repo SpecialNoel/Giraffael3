@@ -73,7 +73,9 @@ io.on("connection", async (socket) => {
     // given the socket connection is established successfully between the user and server
     console.log(`User ${socket.user.userId} connected\n`);
     // Store the room code of the current visiting room to the connecting socket
-    socket.currentRoomCode = null;
+    // Storing this info to the socket enables the user to have multiple tabs opened, which
+    // would 
+    socket.activeRoomCode = null;
 
     socket.on("joinRoom", async (roomCode) => {
         // Register "join room" socket events to the socket
