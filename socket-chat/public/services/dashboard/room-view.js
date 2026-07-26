@@ -31,7 +31,7 @@ async function renderBasicGui() {
     } else {
         // Fallback: there is no record of the pair in session storage
         // Fetch them from the server
-        const roomInfoForDisplay = await getRoomInfoForDisplay(roomCodeFromUrl);
+        const roomInfoForDisplay = await getRoomInfoForDisplay(roomCodeFromUrl); // roomCode and roomName
         console.log("Fetched room info for display from server");
         roomCode = roomInfoForDisplay.roomCode;
         roomName = roomInfoForDisplay.roomName;

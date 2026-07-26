@@ -71,7 +71,7 @@ io.use(async (socket, next) => {
 io.on("connection", async (socket) => {
     // Note that the server has already authenticated the user,
     // given the socket connection is established successfully between the user and server
-    console.log(`User ${socket.user.userId} connected\n`);
+    console.log(`User ${socket.user.userId} (SocketID: ${socket.id}) connected\n`);
     // Store the room code of the current visiting room to the connecting socket
     // Storing this info to the socket enables the user to have multiple tabs opened, which
     // would 

@@ -4,10 +4,7 @@ import { User } from "../../../models/user-model.js";
 import { Message } from "../../../models/message-model.js";
 import { findRoom } from "../room/find-room-service.js";
 import { getMessageWithNYTimezone } from "../../../utils/timezone-converter.js";
-
-const HOUR_BASE = 60 * 60; // 1 hour
-const MESSAGE_EXPIRATION_MS = HOUR_BASE * 1000; // 1 hour, in milliseconds
-const HOUR_SCALED_EXPIRATION = MESSAGE_EXPIRATION_MS / 12 // 5 minutes
+import { MESSAGE_EXPIRATION_MS, MESSAGE_CLEANUP_INTERVAL_MS} from "../../../config/constants.js";
 
 // Store the chat message to the database
 async function storeMessage(roomCode, userObjectId, content, type) {
@@ -21,7 +18,7 @@ async function storeMessage(roomCode, userObjectId, content, type) {
         if (!room) throw new Error("Room not found");
 
         // Auto-delete this message 1 hour after creation
-        const expiresAt = new Date(Date.now() + HOUR_SCALED_EXPIRATION);
+        const expiresAt = new Date(Date.now() + MESSAGE_EXPIRATION_MS);
 
         // Construct and store the message using the Message model
         const message = await Message.create({
