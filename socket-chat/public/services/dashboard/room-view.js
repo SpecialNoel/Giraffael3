@@ -1,6 +1,7 @@
 // room-view.js
 
 import { getRoomInfoForDisplay } from "./room-api.js";
+import { dashboardState } from "../states/dashboard-state.js";
 
 // Render the room info and user info on Dashboard page UI, after user entering a room
 async function renderBasicGui() {
@@ -20,9 +21,7 @@ async function renderBasicGui() {
     let roomCode;
     let roomName;
 
-    const currentRoom = JSON.parse(
-        sessionStorage.getItem("currentRoom")
-    );
+    const currentRoom = dashboardState.currentRoom;
     if (currentRoom && currentRoom.roomCode === roomCodeFromUrl) {
         // There is a record of this <roomCode-roomName> pair in session storage
         // Use them directly
@@ -36,10 +35,7 @@ async function renderBasicGui() {
         roomCode = roomInfoForDisplay.roomCode;
         roomName = roomInfoForDisplay.roomName;
         // Record the pair by updating session storage
-        sessionStorage.setItem(
-            "currentRoom",
-            JSON.stringify(roomInfoForDisplay)
-        );
+        dashboardState.currentRoom = JSON.stringify(roomInfoForDisplay);
     }
 
     // Update the public id of this user on Dashboard page UI

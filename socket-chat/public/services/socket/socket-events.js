@@ -5,14 +5,14 @@ import { renderMemberList } from "../dashboard/member-list-services.js";
 import { renderConversation, appendMessage } from "../dashboard/conversation-services.js";
 import { appendMessageToChatList } from "./message-view.js";
 import { handleSendMessage } from "./message-services.js";
+import { dashboardState } from "../states/dashboard-state.js";
 
 // Set up socket events
 function registerSocketEvents(socket, 
                               conversationElement, 
                               memberListElement, 
                               emptyMessageElement,
-                              memberListHeadingElement,
-                              roomPaginationStates) {
+                              memberListHeadingElement) {
     // Handle update on active users list upon user joining or leaving the room
     socket.on("userJoined", (data) => {
         alert(data.msg);
@@ -28,16 +28,12 @@ function registerSocketEvents(socket,
 
     // Handle user enter room event
     socket.on("userEntered", async (data) => {
-        const currentRoom = new URLSearchParams(window.location.search).get("room");
-        // Stop proceeding, as this room code is a stale data from a room the user has already left.
-        if (currentRoom !== data.roomInfoForDisplay.roomCode) return;
+        // Ignore this received response (data) if the room code inside it is a stale data
+        if (data.roomInfoForDisplay.roomCode !== dashboardState.pendingRoomCode) return;
 
         // Update Dashboard page upon enter room success
-        sessionStorage.setItem(
-            "currentRoom",
-            JSON.stringify(data.roomInfoForDisplay)
-        );
-        roomPaginationStates.set(data.roomInfoForDisplay.roomCode, {
+        dashboardState.currentRoom = JSON.stringify(roomInfoForDisplay);
+        dashboardState.roomPaginationStates.set(data.roomInfoForDisplay.roomCode, {
             cursor: data.nextCursor,
             hasMore: data.hasMore        
         }); // update the state for next message-fetching
@@ -65,7 +61,7 @@ function registerSocketEvents(socket,
 }
 
 // Start socket communication with server with the created socket by setting up the socket events
-function startSession(socket, roomPaginationStates) {
+function startSession(socket) {
     const form = document.getElementById("form");
     const inputElement = document.getElementById("message-input");
     const conversationElement = document.getElementById("conversation");
@@ -94,8 +90,7 @@ function startSession(socket, roomPaginationStates) {
                          conversationElement, 
                          memberListElement, 
                          emptyMessageElement, 
-                         memberListHeadingElement,
-                         roomPaginationStates);
+                         memberListHeadingElement);
 }
 
 export { startSession };

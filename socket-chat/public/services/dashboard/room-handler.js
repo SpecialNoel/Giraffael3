@@ -4,14 +4,21 @@ import { parseResponse } from "../utils/response-parser.js";
 import { createRoom, deleteRoom, joinRoom, leaveRoom } from "./room-api.js";
 import { openRoom } from "./room-navigation.js";
 import { appendRoomToRoomsContainer } from "./room-view.js";
+import { dashboardState } from "../states/dashboard-state.js";
 
 // Set up the enter-room logic
-async function handleEnterRoom(roomBtn, socket, roomPaginationStates) {
+async function handleEnterRoom(roomBtn, socket) {
     const roomCode = roomBtn.dataset.roomCode; // dataset.roomCode is dynamically parsed from "data-room-code" attribute in html
     console.log("Clicked enter room:", roomCode);
 
+    // Prevent the user from entering the same room
+    if (dashboardState.pendingRoomCode === roomCode) return;
+
+    // Update the pending room code recorded in dashboard states
+    dashboardState.pendingRoomCode = roomCode;
+
     // Modify the url of user browser, and fire an "enter room" socket event to server
-    const state = roomPaginationStates.get(roomCode) ?? null;
+    const state = dashboardState.roomPaginationStates.get(roomCode) ?? null;
     const cursor = state ? state.cursor : null;
     openRoom(socket, roomCode, cursor);
     // Room displaying info will be retrieved and updated to Dashboard page via socket events

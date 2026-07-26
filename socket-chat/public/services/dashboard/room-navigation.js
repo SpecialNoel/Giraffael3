@@ -12,11 +12,11 @@ function openRoom(socket, roomCode, cursor) {
 }
 
 // Set up the application so that it navigates when the user uses the browser's Back and Forward buttons
-function initializeHistoryNavigation(socket, roomPaginationStates) {
+function initializeHistoryNavigation(socket) {
     // popstate is fired whenever the active history entry changes (Back/Forward button clicked)
     window.addEventListener("popstate", () => {
         // Atomically fetch the room code from url bar, and fire the "enter room" socket event
-        enterRoomFromURL(socket, roomPaginationStates);
+        enterRoomFromURL(socket);
     });
 }
 

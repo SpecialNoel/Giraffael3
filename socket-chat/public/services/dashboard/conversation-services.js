@@ -2,6 +2,7 @@
 
 import { fetchMoreMessages } from "./room-api.js";
 import { parseResponse } from "../utils/response-parser.js";
+import { dashboardState } from "../states/dashboard-state.js";
 
 // Render the received messages on the conversation element in the room on Dashboard page UI
 function renderConversation(conversationElement, messages) {
@@ -29,11 +30,11 @@ function appendMessage(conversationElement, content, senderUsername) {
 }
 
 // Prepend some older messages of the conversation on top of existing messages
-async function prependMessages(conversationElement, roomPaginationStates) {
+async function prependMessages(conversationElement) {
     // Check the existing mapping of room code to { cursor, hasMore }, if any
     const params = new URLSearchParams(window.location.search);
     const roomCode = params.get("room");
-    const state = roomPaginationStates.get(roomCode) ?? null;
+    const state = dashboardState.roomPaginationStates.get(roomCode) ?? null;
     const hasMore = state ? state.hasMore : false;
     if (!hasMore) {
         console.log("No more messages to load");
@@ -50,7 +51,7 @@ async function prependMessages(conversationElement, roomPaginationStates) {
         hasMore: data.hasMore
     }
     // Update the mapping
-    roomPaginationStates.set(roomCode, newState);
+    dashboardState.roomPaginationStates.set(roomCode, newState);
 
     // Prepend the fetch messages to the conversation element
     const prevHeight = conversationElement.scrollHeight;
