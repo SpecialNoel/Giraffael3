@@ -1,6 +1,6 @@
 // room-services.js
 
-import { dashboardState } from "../states/dashboard-state";
+import { dashboardState } from "../states/dashboard-state.js";
 
 // Fire the "enter room" socket event to server (used in room-navigation.js)
 function enterRoom(socket, roomCode, cursor) {

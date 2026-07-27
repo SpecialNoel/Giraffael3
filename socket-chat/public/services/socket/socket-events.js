@@ -32,7 +32,7 @@ function registerSocketEvents(socket,
         if (data.roomInfoForDisplay.roomCode !== dashboardState.pendingRoomCode) return;
 
         // Update Dashboard page upon enter room success
-        dashboardState.currentRoom = JSON.stringify(roomInfoForDisplay);
+        dashboardState.currentRoom = JSON.stringify(data.roomInfoForDisplay);
         dashboardState.roomPaginationStates.set(data.roomInfoForDisplay.roomCode, {
             cursor: data.nextCursor,
             hasMore: data.hasMore        

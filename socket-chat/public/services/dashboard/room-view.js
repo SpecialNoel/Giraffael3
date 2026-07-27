@@ -1,5 +1,6 @@
 // room-view.js
 
+import { parseResponse } from "../utils/response-parser.js";
 import { getRoomInfoForDisplay } from "./room-api.js";
 import { dashboardState } from "../states/dashboard-state.js";
 
@@ -30,12 +31,12 @@ async function renderBasicGui() {
     } else {
         // Fallback: there is no record of the pair in session storage
         // Fetch them from the server
-        const roomInfoForDisplay = await getRoomInfoForDisplay(roomCodeFromUrl); // roomCode and roomName
+        const data = await parseResponse(await getRoomInfoForDisplay(roomCodeFromUrl)); // roomCode and roomName
         console.log("Fetched room info for display from server");
-        roomCode = roomInfoForDisplay.roomCode;
-        roomName = roomInfoForDisplay.roomName;
+        roomCode = data.roomInfoForDisplay.roomCode;
+        roomName = data.roomInfoForDisplay.roomName;
         // Record the pair by updating session storage
-        dashboardState.currentRoom = JSON.stringify(roomInfoForDisplay);
+        dashboardState.currentRoom = JSON.stringify(data.roomInfoForDisplay);
     }
 
     // Update the public id of this user on Dashboard page UI

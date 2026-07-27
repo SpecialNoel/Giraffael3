@@ -21,7 +21,7 @@ const router = express.Router();
 router.get("/", authenticateHTTP, async (req, res) => {
     return await handleFetchRoomInfo(req, res);
 });
-router.get("/:roomCode", authenticateHTTP, async (req, res) => {
+router.get("/:roomCode/display", authenticateHTTP, async (req, res) => {
     return await handleFetchRoomInfoForDisplay(req, res);
 });
 router.get("/:roomCode/messages", authenticateHTTP, async (req, res) => {
