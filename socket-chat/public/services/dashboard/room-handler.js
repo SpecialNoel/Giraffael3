@@ -2,7 +2,7 @@
 
 import { parseResponse } from "../utils/response-parser.js";
 import { createRoom, deleteRoom, joinRoom, leaveRoom } from "./room-api.js";
-import { openRoom } from "./room-navigation.js";
+import { enterRoom } from "./room-navigation.js";
 import { appendRoomToRoomsContainer } from "./room-view.js";
 import { dashboardState } from "../states/dashboard-state.js";
 
@@ -20,7 +20,7 @@ async function handleEnterRoom(roomBtn, socket) {
     // Modify the url of user browser, and fire an "enter room" socket event to server
     const state = dashboardState.roomPaginationStates.get(roomCode) ?? null;
     const cursor = state ? state.cursor : null;
-    openRoom(socket, roomCode, cursor);
+    enterRoom(socket, roomCode, cursor);
     // Room displaying info will be retrieved and updated to Dashboard page via socket events
 }
 
