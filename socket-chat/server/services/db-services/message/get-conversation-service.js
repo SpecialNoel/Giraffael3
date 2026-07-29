@@ -2,9 +2,10 @@
 
 import { Message } from "../../../models/message-model.js";
 import { findRoom } from "../room/find-room-service.js";
+import { INITIAL_MESSAGE_LIMIT, MESSAGE_FETCH_LIMIT } from "../../../config/constants.js";
 
 // Retrieve part of the conversation (via pagination) sent to the room from the database
-async function getPaginatedConversation(roomCode, cursor, limit=5) {
+async function getPaginatedConversation(roomCode, cursor) {
     try {
         // Fetch the target room
         const room = await findRoom(roomCode).select("_id").lean();
@@ -19,6 +20,10 @@ async function getPaginatedConversation(roomCode, cursor, limit=5) {
         // If cursor is null, it means that the conversation retrieval is called the first time
         // If cursor is not null, it means that the conversation retrieval is called again later
         if (cursor) query.createdAt = { $lt: new Date(cursor) };
+
+        // The limit amount for message fetching should be the initial limit if the cursor is null,
+        // and it should be the fetching limit if the cursor is not null (cursor explained above).
+        const limit = cursor ? MESSAGE_FETCH_LIMIT : INITIAL_MESSAGE_LIMIT;
 
         // Fetch some of the conversation sent over the target room using the Message model
         const messages = await Message.find(query)

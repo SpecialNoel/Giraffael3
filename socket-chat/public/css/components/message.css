@@ -37,7 +37,21 @@
     /* Browser UI */
     scrollbar-width: thin; /* Control the thickness of the scroll bar */
 }
-/* 
-#conversation li {
-    height: 70px;
-} */
+
+#conversation li.message {
+    padding: 4px 4px;
+    margin-bottom: 4px;
+}
+#conversation::-webkit-scrollbar {
+    width: 8px;
+}
+#conversation::-webkit-scrollbar-track {
+    background: transparent;
+}
+#conversation::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+#conversation::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

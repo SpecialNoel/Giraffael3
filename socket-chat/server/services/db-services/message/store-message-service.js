@@ -4,7 +4,7 @@ import { User } from "../../../models/user-model.js";
 import { Message } from "../../../models/message-model.js";
 import { findRoom } from "../room/find-room-service.js";
 import { getMessageWithNYTimezone } from "../../../utils/timezone-converter.js";
-import { MESSAGE_EXPIRATION_MS, MESSAGE_CLEANUP_INTERVAL_MS} from "../../../config/constants.js";
+import { MESSAGE_EXPIRATION_MS, MESSAGE_CLEANUP_INTERVAL_MS } from "../../../config/constants.js";
 
 // Store the chat message to the database
 async function storeMessage(roomCode, userObjectId, content, type) {

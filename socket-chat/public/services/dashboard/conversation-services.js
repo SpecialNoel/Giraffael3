@@ -13,6 +13,7 @@ function renderConversation(conversationElement, messages) {
     messages.forEach(({ messageObjectId, userId, username, content, type }) => {
         const item = document.createElement("li");
         item.textContent = `[${username}]: ${content}`;
+        item.classList.add("message");
         conversationElement.appendChild(item);
         // Scroll the browser window to the bottom of the conversation element
         conversationElement.scrollTop = conversationElement.scrollHeight;
@@ -24,6 +25,7 @@ function appendMessage(conversationElement, content, senderUsername) {
     // Append the message to the conversation
     const item = document.createElement("li");
     item.textContent = `[${senderUsername}]: ${content}`;
+    item.classList.add("message");
     conversationElement.appendChild(item);
     // Scroll the browser window to the bottom of the conversation element
     conversationElement.scrollTop = conversationElement.scrollHeight;
@@ -60,6 +62,7 @@ async function prependMessages(conversationElement) {
     messages.reverse().forEach(m => {
         const item = document.createElement("li");
         item.textContent = `[${m.username}]: ${m.content}`;
+        item.classList.add("message");
         conversationElement.prepend(item);
         console.log(m.content, m.createdAt);
     });
