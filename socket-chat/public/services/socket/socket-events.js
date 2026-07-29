@@ -29,10 +29,13 @@ function registerSocketEvents(socket,
     // Handle user enter room event
     socket.on("userEntered", async (data) => {
         // Ignore this received response (data) if the room code inside it is a stale data
-        if (data.roomInfoForDisplay.roomCode !== dashboardState.pendingRoomCode) return;
+        if (data.roomInfoForDisplay.roomCode !== dashboardState.pendingRoomCode) {
+            await renderBasicGui();
+            return;
+        }
 
         // Update Dashboard page upon enter room success
-        dashboardState.currentRoom = JSON.stringify(data.roomInfoForDisplay);
+        dashboardState.currentRoom = data.roomInfoForDisplay;
         dashboardState.roomPaginationStates.set(data.roomInfoForDisplay.roomCode, {
             cursor: data.nextCursor,
             hasMore: data.hasMore        

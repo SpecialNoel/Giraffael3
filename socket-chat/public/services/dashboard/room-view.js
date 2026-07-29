@@ -14,29 +14,30 @@ async function renderBasicGui() {
     const roomCodeFromUrl = params.get("room");
 
     /* 
-     * Fetch room code and room name of the current room from session storage
+     * Fetch room code and room name of the current room from dashboardState
      * Note that these information should be updated upon user firing an
      * "enter room" event to server when they "enter" the room, and successfully 
      * receiving these information from server 
     */
     let roomCode;
     let roomName;
-
+    
     const currentRoom = dashboardState.currentRoom;
     if (currentRoom && currentRoom.roomCode === roomCodeFromUrl) {
-        // There is a record of this <roomCode-roomName> pair in session storage
+        // There is a record of this <roomCode-roomName> pair in dashboardState
         // Use them directly
         roomCode = roomCodeFromUrl;
         roomName = currentRoom.roomName;
+        console.log("Loaded existing room info");
     } else {
-        // Fallback: there is no record of the pair in session storage
+        // Fallback: there is no record of the pair in dashboardState
         // Fetch them from the server
         const data = await parseResponse(await getRoomInfoForDisplay(roomCodeFromUrl)); // roomCode and roomName
-        console.log("Fetched room info for display from server");
         roomCode = data.roomInfoForDisplay.roomCode;
         roomName = data.roomInfoForDisplay.roomName;
-        // Record the pair by updating session storage
-        dashboardState.currentRoom = JSON.stringify(data.roomInfoForDisplay);
+        // Record the pair by updating dashboardState
+        dashboardState.currentRoom = data.roomInfoForDisplay;
+        console.log("Fetched room info for display from server");
     }
 
     // Update the public id of this user on Dashboard page UI

@@ -22,12 +22,8 @@ window.addEventListener("DOMContentLoaded", async () => {
         const socket = await createAuthenticatedSocket();
 
         // Set up event listeners for user dashboard services (HTTP endpoints operations)
-        initializeDashboard(socket);
+        await initializeDashboard(socket);
         console.log("Initialized dashboard");
-
-        // Set up scroller in the conversation element to fetch and display more older messages upon user scrolling upwards
-        const conversationElement = document.getElementById("conversation");
-        await setupConversationScroller(conversationElement);
 
         // Start socket communication with server with the created socket by setting up the socket events
         startSession(socket);
