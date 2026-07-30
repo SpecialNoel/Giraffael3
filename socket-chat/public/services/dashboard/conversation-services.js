@@ -13,7 +13,7 @@ function appendMessage(conversationElement, content, senderUsername) {
     item.classList.add("message");
     conversationElement.appendChild(item);
     // Scroll the browser window to the bottom of the conversation element
-    conversationElement.scrollTop = conversationElement.scrollHeight;
+    // conversationElement.scrollTop = conversationElement.scrollHeight;
 }
 
 // Prepend the message exchanged over the room to the existing conversation
