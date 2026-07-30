@@ -1,24 +1,9 @@
 // conversation-services.js
 
-import { fetchMoreMessages } from "./room-api.js";
-import { parseResponse } from "../utils/response-parser.js";
-import { dashboardState } from "../states/dashboard-state.js";
-
-// Render the received messages on the conversation element in the room on Dashboard page UI
-function renderConversation(conversationElement, messages) {
-    // Empty the current conversation first
-    conversationElement.innerHTML = "";
-
-    // For each received message, add info about the message to the conversation
-    messages.forEach(({ messageObjectId, userId, username, content, type }) => {
-        const item = document.createElement("li");
-        item.textContent = `[${username}]: ${content}`;
-        item.classList.add("message");
-        conversationElement.appendChild(item);
-        // Scroll the browser window to the bottom of the conversation element
-        conversationElement.scrollTop = conversationElement.scrollHeight;
-    });
-}
+import { retrieveRoomCodeAndPaginationState, 
+         fetchMoreMessagesAndUpdatePaginationState, 
+         prependMessagesToConversation,
+         loadMoreMessages } from "./conversation-services-helpers.js";
 
 // Append the message received from other users in the room to the existing conversation
 function appendMessage(conversationElement, content, senderUsername) {
@@ -31,39 +16,50 @@ function appendMessage(conversationElement, content, senderUsername) {
     conversationElement.scrollTop = conversationElement.scrollHeight;
 }
 
+// Prepend the message exchanged over the room to the existing conversation
+function prependMessage(conversationElement, content, senderUsername) {
+    const item = document.createElement("li");
+    item.textContent = `[${senderUsername}]: ${content}`;
+    item.classList.add("message");
+    conversationElement.prepend(item);
+}
+
+// Render the received messages on the conversation element in the room on Dashboard page UI
+async function renderConversation(conversationElement, messages) {
+    // Empty the current conversation first
+    conversationElement.innerHTML = "";
+
+    // For each received message, add info about the message to the conversation
+    messages.forEach(({ messageObjectId, userId, username, content, type }) => {
+        appendMessage(conversationElement, content, username);
+    });
+
+    // Send requests to fetch more messages from server, and prepend them to conversation element, 
+    // until conversation element is filled
+    while (conversationElement.scrollHeight <= conversationElement.clientHeight) {
+        const loaded = await loadMoreMessages(conversationElement);
+        if (!loaded) break;
+    }
+}
+
 // Prepend some older messages of the conversation on top of existing messages
-async function prependMessages(conversationElement) {
+async function fetchAndRenderMoreMessages(conversationElement) {
     // Check the existing mapping of room code to { cursor, hasMore }, if any
-    const params = new URLSearchParams(window.location.search);
-    const roomCode = params.get("room");
-    const state = dashboardState.roomPaginationStates.get(roomCode) ?? null;
-    const hasMore = state ? state.hasMore : false;
+    const { roomCode, state, hasMore } = retrieveRoomCodeAndPaginationState();
     if (!hasMore) {
         console.log("No more messages to load");
         return;
     }
 
-    // Fetching more messages
-    const cursor = state ? state.cursor : null;
-    const data = await parseResponse(await fetchMoreMessages(roomCode, cursor));
-    const messages = data.messages;
-    const nextCursor = data.nextCursor;
-    const newState = {
-        cursor: nextCursor,
-        hasMore: data.hasMore
-    }
-    // Update the mapping
-    dashboardState.roomPaginationStates.set(roomCode, newState);
+    // Fetch more messages
+    const messages = await fetchMoreMessagesAndUpdatePaginationState(roomCode, state);
 
     // Prepend the fetch messages to the conversation element
     const prevHeight = conversationElement.scrollHeight;
     console.log("Prepending:");
     // Reverse the messages again due to the property of HTML element prepending
     messages.reverse().forEach(m => {
-        const item = document.createElement("li");
-        item.textContent = `[${m.username}]: ${m.content}`;
-        item.classList.add("message");
-        conversationElement.prepend(item);
+        prependMessage(conversationElement, m.content, m.username);
         console.log(m.content, m.createdAt);
     });
     const newHeight = conversationElement.scrollHeight;
@@ -73,6 +69,6 @@ async function prependMessages(conversationElement) {
     conversationElement.scrollTop = newHeight - prevHeight;
 }
 
-export { renderConversation, 
-         appendMessage,
-         prependMessages };
+export { appendMessage,
+         renderConversation, 
+         fetchAndRenderMoreMessages };

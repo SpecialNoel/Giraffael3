@@ -23,8 +23,12 @@
 
 /* Conversation in Dashboard page */
 #conversation {
+    /* Layout */
+    flex: 1;
+
     /* Size */
     height: 400px;
+    min-height: 0;
 
     /* Spacing */
     margin: 0; /* Remove the spaces at the top and bottom of the list */
@@ -32,7 +36,7 @@
 
     /* Appearance */
     list-style: none; /* Remove the bullet markers from the list items */
-    overflow-y: scroll; /* Enables the scroller when message list overflows the component */
+    overflow-y: auto; /* Enables the scroller when message list overflows the component */
 
     /* Browser UI */
     scrollbar-width: thin; /* Control the thickness of the scroll bar */

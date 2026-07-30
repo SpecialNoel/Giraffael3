@@ -42,7 +42,7 @@ function registerSocketEvents(socket,
         }); // update the state for next message-fetching
         await renderBasicGui();
         renderMemberList(memberListElement, emptyMessageElement, memberListHeadingElement, data.memberList);
-        renderConversation(conversationElement, data.messages);
+        await renderConversation(conversationElement, data.messages);
     });
     // Handle user exit room event
     socket.on("userExited", (data) => {

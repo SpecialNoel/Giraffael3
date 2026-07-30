@@ -8,5 +8,5 @@ export const MESSAGE_EXPIRATION_MS = 1 * HOUR; // 1 hour
 export const MESSAGE_CLEANUP_INTERVAL_MS = 5 * MINUTE // 5 minutes
 
 // Message quantity
-export const INITIAL_MESSAGE_LIMIT = 10; // 10 messages were fetched and shown upon user entering the room
-export const MESSAGE_FETCH_LIMIT = 10; // 10 more messages were fetched and shown upon user scrolling to the top of conversation element
+export const INITIAL_MESSAGE_LIMIT = 10; // fetch 10 messages upon user entering the room
+export const MESSAGE_FETCH_LIMIT = 10; // fetch 10 more messages user scrolling to the top of conversation element
