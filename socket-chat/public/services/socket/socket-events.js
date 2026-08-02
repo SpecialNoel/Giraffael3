@@ -2,7 +2,8 @@
 
 import { renderBasicGui } from "../dashboard/room-view.js";
 import { renderMemberList } from "../dashboard/member-list-services.js";
-import { renderConversation, appendMessage } from "../dashboard/conversation-services.js";
+import { appendMessage } from "../dashboard/conversation/services.js";
+import { renderConversation } from "../dashboard/conversation/enter-room-services.js";
 import { appendMessageToChatList } from "./message-view.js";
 import { handleSendMessage } from "./message-services.js";
 import { dashboardState } from "../states/dashboard-state.js";
@@ -36,7 +37,8 @@ function registerSocketEvents(socket,
 
         // Update Dashboard page upon enter room success
         dashboardState.currentRoom = data.roomInfoForDisplay;
-        dashboardState.roomPaginationStates.set(data.roomInfoForDisplay.roomCode, {
+        dashboardState.roomStates.set(data.roomInfoForDisplay.roomCode, {
+            messages: [...[], ...data.messages],
             cursor: data.nextCursor,
             hasMore: data.hasMore        
         }); // update the state for next message-fetching

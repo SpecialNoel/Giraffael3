@@ -3,6 +3,7 @@
 import { parseResponse } from "../utils/response-parser.js";
 import { getRoomInfoForDisplay } from "./room-api.js";
 import { dashboardState } from "../states/dashboard-state.js";
+import { getRoomCodeFromParams } from "../dashboard/conversation/services.js";
 
 // Render the room info and user info on Dashboard page UI, after user entering a room
 async function renderBasicGui() {
@@ -10,8 +11,7 @@ async function renderBasicGui() {
     const userId = localStorage.getItem("userId");
 
     // Fetch room code from the url bar of the user's browser
-    const params = new URLSearchParams(window.location.search);
-    const roomCodeFromUrl = params.get("room");
+    const roomCodeFromUrl = getRoomCodeFromParams();
 
     /* 
      * Fetch room code and room name of the current room from dashboardState

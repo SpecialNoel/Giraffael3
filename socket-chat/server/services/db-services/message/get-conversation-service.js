@@ -29,14 +29,14 @@ async function getPaginatedConversation(roomCode, cursor) {
         const messages = await Message.find(query)
             .select("sender content type createdAt")
             .sort({ createdAt: -1 }) // newest messages first
-            .limit(limit+1) // fetch one more message document than requested to indicate whether there are more messages to fetch or not
+            .limit(limit+1) // fetch one extra message document than requested to indicate whether there are older messages to fetch or not
             .populate({
                 path: "sender",
                 select: "userId username -_id" 
             }) // convert user object id to user public id
             .lean();
 
-        // Indicate whether there are more messages to fetch or not
+        // Indicate whether there are older messages to fetch or not
         const hasMore = messages.length > limit;
         // If there are, pop the extra message fetched before formatting the rest
         if (hasMore) messages.pop();

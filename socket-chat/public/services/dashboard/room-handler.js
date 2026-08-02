@@ -18,7 +18,7 @@ async function handleEnterRoom(roomBtn, socket) {
     dashboardState.pendingRoomCode = roomCode;
 
     // Check for the cursor on existing state
-    const state = dashboardState.roomPaginationStates.get(roomCode) ?? null;
+    const state = dashboardState.roomStates.get(roomCode) ?? null;
     const cursor = state ? state.cursor : null;
     // Modify the url of user browser, and fire an "enter room" socket event to server
     enterRoom(socket, roomCode, cursor);

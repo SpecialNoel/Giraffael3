@@ -1,8 +1,8 @@
-// fetch-more-messages-handler.js
+// fetch-older-messages-handler.js
 
 import { getPaginatedConversation } from "../../../services/db-services/message/get-conversation-service.js";
 
-async function handleFetchMoreMessages(req, res) {
+async function handleFetchOlderMessages(req, res) {
     try {
         // Retrieve room code of the requesting room
         const roomCode = req.params.roomCode;
@@ -27,4 +27,4 @@ async function handleFetchMoreMessages(req, res) {
     }
 }
 
-export { handleFetchMoreMessages };
+export { handleFetchOlderMessages };
