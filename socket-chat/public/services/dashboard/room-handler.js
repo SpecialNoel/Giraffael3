@@ -17,9 +17,10 @@ async function handleEnterRoom(roomBtn, socket) {
     // Update the pending room code recorded in dashboard states
     dashboardState.pendingRoomCode = roomCode;
 
-    // Modify the url of user browser, and fire an "enter room" socket event to server
+    // Check for the cursor on existing state
     const state = dashboardState.roomPaginationStates.get(roomCode) ?? null;
     const cursor = state ? state.cursor : null;
+    // Modify the url of user browser, and fire an "enter room" socket event to server
     enterRoom(socket, roomCode, cursor);
     // Room displaying info will be retrieved and updated to Dashboard page via socket events
 }

@@ -2,6 +2,17 @@
 
 import { dashboardState } from "../states/dashboard-state.js";
 
+// Atomically modify the url on user's browser, and fire an "enter room" socket event to server
+function enterRoom(socket, roomCode, cursor) {
+    if (!roomCode) throw Error("User trying to open a room with empty room code");
+    
+    // Modify the url to reflect user entering this room without refreshing the page
+    history.pushState({}, "", `/dashboard?room=${roomCode}`);
+
+    // Send an "enter room" request to server via socket events
+    socket.emit("enterRoom", roomCode, cursor);
+}
+
 // Atomically fetch the room code from url bar, and fire the "enter room" socket event (used in room-navigation.js)
 function enterRoomFromURL(socket) {
     // Fetch the room code encoded in user's browser url bar
@@ -13,17 +24,6 @@ function enterRoomFromURL(socket) {
     const cursor = state ? state.cursor : null;
 
     // Fire the "enter room" event to server
-    socket.emit("enterRoom", roomCode, cursor);
-}
-
-// Atomically modify the url on user's browser, and fire an "enter room" socket event to server
-function enterRoom(socket, roomCode, cursor) {
-    if (!roomCode) throw Error("User trying to open a room with empty room code");
-    
-    // Modify the url to reflect user entering this room without refreshing the page
-    history.pushState({}, "", `/dashboard?room=${roomCode}`);
-
-    // Send an "enter room" request to server via socket events
     socket.emit("enterRoom", roomCode, cursor);
 }
 
