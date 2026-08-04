@@ -13,7 +13,7 @@ async function initializeDashboard(socket) {
     initializeHistoryNavigation(socket);
     // Fetch rooms information from server, and render them to Dashboard page UI
     loadRooms();
-    // Set up scroller in the conversation element to fetch and display older messages upon user scrolling upwards
+    // Set up scroller in the conversation element to fetch and load older messages upon user scrolling upwards
     await setupConversationScroller();
 }
 

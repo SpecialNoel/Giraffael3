@@ -1,9 +1,9 @@
-// get-room-info-for-display-service.js
+// get-room-info-service.js
 
 import { Room } from "../../../models/room-model.js"
 
-// Retrieve the displaying info about the target room
-async function getRoomInfoForDisplay(roomCode) {
+// Retrieve the target room info
+async function getRoomInfo(roomCode) {
     try {
         const room = await Room.findOne(
             { roomCode, deleted: false},
@@ -16,9 +16,9 @@ async function getRoomInfoForDisplay(roomCode) {
             roomName: room.roomName,
         };
     } catch (err) {
-        console.error("Failed to get room info for display:", err);
+        console.error("Failed to get room info:", err);
         throw err;
     }
 }
 
-export { getRoomInfoForDisplay };
+export { getRoomInfo };

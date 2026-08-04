@@ -1,20 +1,20 @@
 // fetch-room-info-handler.js
 
-import { getRoomsInfo } from "../../../services/db-services/membership/get-rooms-info-service.js";
+import { getRoomInfo } from "../../../services/db-services/room/get-room-info-service.js";
 
 async function handleFetchRoomInfo(req, res) {
     try {
-        // Retrieve userObjectId of the requesting user 
-        const userObjectId = req.user.userObjectId;
+        // Retrieve room code of the requesting room
+        const roomCode = req.params.roomCode;
 
-        // Retrieve the info about all existing rooms this user has joined
-        const roomsInfo = await getRoomsInfo(userObjectId);
+        // Retrieve room info
+        const roomInfo = await getRoomInfo(roomCode);
         
-        // Return the list of room info
+        // Return the room info
         return res.status(200).json({
             success: true,
-            message: "Fetch rooms success",
-            roomsInfo
+            message: "Fetch room info success",
+            roomInfo
         });
     } catch (err) {
         console.error(err);

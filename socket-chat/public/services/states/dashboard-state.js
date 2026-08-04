@@ -12,18 +12,37 @@ export const dashboardState = {
     */
     currentRoom: null,
     /*
-    * roomStates: { roomCode: { messages, cursor, hasMore } }
+    * roomStates: { roomCode: { members, messages, cursor, hasMore } }
     * A mapping of room codes the user has entered to other fields to keep track of the fetched messages and the next batch of messages
-    * "messages": [string], a list of messages the user has received and cached from server
+    * "members": [{userId, username}], a list of users who joined the room
+    * "messages": [{username, content}], a list of cached messages sent over the room
     * "cursor": string, the location where last fetched message was located in the database
     * "hasMore": boolean, indicating whether there are more messages from the room to fetch
     */
     roomStates: new Map()
 };
 
+function getCurrentRoomState(roomCode) {
+    // Get the corresponding existing room state, if any
+    return dashboardState.roomStates.get(roomCode) ?? null;
+}
+
 function updateRoomState(roomCode, updates) {
-    const roomState = dashboardState.roomStates.get(roomCode);
+    // Get the room state that that corresponds to room code; it is guaranteed at least initialized
+    function ensureRoomState(roomCode) {
+        if (!dashboardState.roomStates.has(roomCode)) {
+            // Initialize the mapping pair for current room code
+            dashboardState.roomStates.set(roomCode, {
+                members: [],
+                messages: [],
+                cursor: null,
+                hasMore: true
+            });
+        }
+        return dashboardState.roomStates.get(roomCode);
+    }
+    const roomState = ensureRoomState(roomCode);
     Object.assign(roomState, updates);
 }
 
-export { updateRoomState }
+export { getCurrentRoomState, updateRoomState }

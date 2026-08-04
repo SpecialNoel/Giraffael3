@@ -1,10 +1,13 @@
 // room-handler.js
 
+import { getCachedMessages, getCachedMembers } from "./conversation/enter-room-services.js";
 import { parseResponse } from "../utils/response-parser.js";
 import { createRoom, deleteRoom, joinRoom, leaveRoom } from "./room-api.js";
 import { enterRoom } from "./room-navigation.js";
-import { appendRoomToRoomsContainer } from "./room-view.js";
+import { renderBasicGui, appendRoomToRoomsContainer, updateRoomCodeInURL } from "./room-view.js";
+import { renderMembers } from "./members-services.js";
 import { dashboardState } from "../states/dashboard-state.js";
+import { renderOlderMessages } from "./conversation/services.js";
 
 // Set up the enter-room logic
 async function handleEnterRoom(roomBtn, socket) {
@@ -17,12 +20,37 @@ async function handleEnterRoom(roomBtn, socket) {
     // Update the pending room code recorded in dashboard states
     dashboardState.pendingRoomCode = roomCode;
 
-    // Check for the cursor on existing state
-    const state = dashboardState.roomStates.get(roomCode) ?? null;
-    const cursor = state ? state.cursor : null;
-    // Modify the url of user browser, and fire an "enter room" socket event to server
-    enterRoom(socket, roomCode, cursor);
-    // Room displaying info will be retrieved and updated to Dashboard page via socket events
+    // Modify the url to reflect user entering this room without refreshing the page
+    updateRoomCodeInURL(roomCode);
+
+    // Check if there are any cached messages (which were fetched and loaded prior to the user re-entering the room)
+    const cachedMessages = getCachedMessages(roomCode);
+    if (cachedMessages) {
+        // If there are cached messages existed, update the dashboard with information stored inside dashboard state
+        const conversationElement = document.getElementById("conversation");
+        const membersElement = document.getElementById("members");
+        const emptyMessageElement = document.getElementById("emptyMessage");
+        const membersHeadingElement = document.getElementById("membersHeading");
+
+        // Empty the current conversation first
+        conversationElement.innerHTML = "";
+
+        await renderBasicGui();
+        const members = getCachedMembers(roomCode);
+        renderMembers(membersElement, emptyMessageElement, membersHeadingElement, members);
+        const messages = cachedMessages.toReversed();
+        renderOlderMessages(conversationElement, messages);
+        console.log("Rendered cached messages");
+        return;
+    } else {
+        // Otherwise, send request to server to fetch the initial messages, store them into dashboard state, and update the dashboard accordingly
+        console.log("No cached messages found");
+    }
+
+    // Fire an "enter room" socket event to server
+    enterRoom(socket, roomCode);
+
+    // Room info will be retrieved and updated to Dashboard page via socket events
 }
 
 // Set up the leave-room logic
@@ -86,11 +114,11 @@ function handleCreateRoom(socket) {
             
             // Step 2: Emit the "join room" event to server via socket events
             // This step is needed to atomically join the user to the newly created room
-            socket.emit("joinRoom", data.roomInfoForDisplay.roomCode);
+            socket.emit("joinRoom", data.roomInfo.roomCode);
             
             // Render the rooms container by appending the new room to the list
             const containerDiv = document.getElementById("rooms-container");
-            appendRoomToRoomsContainer(containerDiv, data.roomInfoForDisplay, data.role);
+            appendRoomToRoomsContainer(containerDiv, data.roomInfo, data.role);
 
             // Clear the room name field
             document.querySelector("#roomNameInCreateRoom").value = "";
@@ -136,7 +164,7 @@ function handleJoinRoom(socket) {
 
             // Render the rooms container by appending the new room to the list
             const containerDiv = document.getElementById("rooms-container");
-            appendRoomToRoomsContainer(containerDiv, data.roomInfoForDisplay, data.role);
+            appendRoomToRoomsContainer(containerDiv, data.roomInfo, data.role);
 
             // Clear the room code field
             document.querySelector("#roomCodeInJoinRoom").value = "";

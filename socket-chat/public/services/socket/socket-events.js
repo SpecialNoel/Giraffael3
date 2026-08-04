@@ -1,59 +1,65 @@
 // socket-events.js
 
 import { renderBasicGui } from "../dashboard/room-view.js";
-import { renderMemberList } from "../dashboard/member-list-services.js";
+import { renderMembers } from "../dashboard/members-services.js";
 import { appendMessage } from "../dashboard/conversation/services.js";
-import { renderConversation } from "../dashboard/conversation/enter-room-services.js";
-import { appendMessageToChatList } from "./message-view.js";
+import { storeMessageToState, renderConversation } from "../dashboard/conversation/enter-room-services.js";
 import { handleSendMessage } from "./message-services.js";
-import { dashboardState } from "../states/dashboard-state.js";
+import { dashboardState, updateRoomState } from "../states/dashboard-state.js";
 
 // Set up socket events
 function registerSocketEvents(socket, 
                               conversationElement, 
-                              memberListElement, 
+                              membersElement, 
                               emptyMessageElement,
-                              memberListHeadingElement) {
+                              membersHeadingElement) {
     // Handle update on active users list upon user joining or leaving the room
     socket.on("userJoined", (data) => {
         alert(data.msg);
         console.log(`An user has joined room ${data.roomCode}.`);        
-        // memberList is a list of { userId, username }
-        renderMemberList(memberListElement, emptyMessageElement, memberListHeadingElement, data.memberList);
+        // members is a list of { userId, username }
+        renderMembers(membersElement, emptyMessageElement, membersHeadingElement, data.members);
     });
     socket.on("userLeft", (data) => {
         alert(data.msg);
         console.log(`An user has left room ${data.roomCode}.`);
-        renderMemberList(memberListElement, emptyMessageElement, memberListHeadingElement, data.memberList);
+        renderMembers(membersElement, emptyMessageElement, membersHeadingElement, data.members);
     });
 
     // Handle user enter room event
-    socket.on("userEntered", async (data) => {
+    socket.on("roomEntered", async (data) => {
         // Ignore this received response (data) if the room code inside it is a stale data
-        if (data.roomInfoForDisplay.roomCode !== dashboardState.pendingRoomCode) {
+        if (data.roomInfo.roomCode !== dashboardState.pendingRoomCode) {
             await renderBasicGui();
             return;
         }
 
         // Update Dashboard page upon enter room success
-        dashboardState.currentRoom = data.roomInfoForDisplay;
-        dashboardState.roomStates.set(data.roomInfoForDisplay.roomCode, {
+        dashboardState.currentRoom = data.roomInfo;
+        updateRoomState(data.roomInfo.roomCode, {
+            members: data.members,
             messages: [...[], ...data.messages],
             cursor: data.nextCursor,
             hasMore: data.hasMore        
         }); // update the state for next message-fetching
         await renderBasicGui();
-        renderMemberList(memberListElement, emptyMessageElement, memberListHeadingElement, data.memberList);
+        renderMembers(membersElement, emptyMessageElement, membersHeadingElement, data.members);
         await renderConversation(conversationElement, data.messages);
     });
     // Handle user exit room event
     socket.on("userExited", (data) => {
-        console.log("Members: ", data.memberList);
+        console.log("Members: ", data.members);
     });
 
     // Handle client socket receiving chat text messages sent by connected clients
     socket.on("chatMessageReceived", (data) => {
-        appendMessage(conversationElement, data.content, data.senderUsername);
+        const username = data.senderUsername;
+        const content = data.content;
+        const message = { username, content };
+        // Update the messages list of the room in the dashboard state
+        storeMessageToState(data.roomCode, message);
+        // Update the conversation element by appending the received message to it
+        appendMessage(conversationElement, content, username);
     });
 
     // Handle room deletion event
@@ -70,9 +76,9 @@ function startSession(socket) {
     const form = document.getElementById("form");
     const inputElement = document.getElementById("message-input");
     const conversationElement = document.getElementById("conversation");
-    const memberListElement = document.getElementById("memberList");
+    const membersElement = document.getElementById("members");
     const emptyMessageElement = document.getElementById("emptyMessage");
-    const memberListHeadingElement = document.getElementById("memberListHeading");
+    const membersHeadingElement = document.getElementById("membersHeading");
 
     const userId = localStorage.getItem("userId");
 
@@ -93,9 +99,9 @@ function startSession(socket) {
     // Set up socket events
     registerSocketEvents(socket, 
                          conversationElement, 
-                         memberListElement, 
+                         membersElement, 
                          emptyMessageElement, 
-                         memberListHeadingElement);
+                         membersHeadingElement);
 }
 
 export { startSession };

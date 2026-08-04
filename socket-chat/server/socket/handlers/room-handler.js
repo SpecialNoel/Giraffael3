@@ -4,7 +4,7 @@ import { addUserToRoom } from "../../services/redis-services/user-services.js";
 import { getMembersInRoom } from "../../services/db-services/membership/get-members-service.js";
 import { getPaginatedConversation } from "../../services/db-services/message/get-conversation-service.js";
 import { broadcastUserJoined, broadcastUserLeft } from "../emitters/room-broadcaster.js";
-import { getRoomInfoForDisplay } from "../../services/db-services/room/get-room-info-for-display-service.js";
+import { getRoomInfo } from "../../services/db-services/room/get-room-info-service.js";
 
 async function registerJoinRoomHandler(redis, socket, roomCode) {
     // Leave the user from the room if they are already in the room to prevent duplicated join
@@ -19,16 +19,16 @@ async function registerJoinRoomHandler(redis, socket, roomCode) {
     console.log(`Added user ${socket.user.userId} to room in Redis`);
 
     // Notify the user about join room success
-    const memberList = await getMembersInRoom(roomCode);
-    broadcastUserJoined(socket, roomCode, memberList);
+    const members = await getMembersInRoom(roomCode);
+    broadcastUserJoined(socket, roomCode, members);
     console.log(`Notified all users in room ${roomCode} about user joined`);
 }
 
 async function registerLeaveRoomHandler(socket, roomCode) {
     // Notify every user who joined the room (excluding the leaving user) 
     // about an user leaving the room AFTER they had successfully done so
-    const memberList = await getMembersInRoom(roomCode);
-    broadcastUserLeft(socket, roomCode, memberList);
+    const members = await getMembersInRoom(roomCode);
+    broadcastUserLeft(socket, roomCode, members);
     console.log(`Notified all users in room ${roomCode} about user left`);
 }
 
@@ -45,25 +45,25 @@ async function registerEnterRoomHandler(socket, roomCode, cursor) {
     socket.join(roomCode);
 
     // Fetch active users and conversation of the room
-    const memberList = await getMembersInRoom(roomCode);
+    const members = await getMembersInRoom(roomCode);
     const getConversationResponse = await getPaginatedConversation(roomCode, cursor);
     const messages = getConversationResponse.messages;
     const nextCursor = getConversationResponse.nextCursor;
     const hasMore = getConversationResponse.hasMore;
 
-    // Fetch room displaying info
-    const roomInfoForDisplay = await getRoomInfoForDisplay(roomCode);
+    // Fetch room info
+    const roomInfo = await getRoomInfo(roomCode);
 
     const data = {
-        memberList,
+        members,
         messages,
         nextCursor,
         hasMore,
-        roomInfoForDisplay
+        roomInfo
     }
 
     // Send these information to the user
-    socket.emit("userEntered", data);
+    socket.emit("roomEntered", data);
 }
 
 async function registerExitRoomHandler(socket, roomCode) {

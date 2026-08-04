@@ -1,7 +1,7 @@
 // room-view.js
 
 import { parseResponse } from "../utils/response-parser.js";
-import { getRoomInfoForDisplay } from "./room-api.js";
+import { getRoomInfo } from "./room-api.js";
 import { dashboardState } from "../states/dashboard-state.js";
 import { getRoomCodeFromParams } from "../dashboard/conversation/services.js";
 
@@ -32,12 +32,12 @@ async function renderBasicGui() {
     } else {
         // Fallback: there is no record of the pair in dashboardState
         // Fetch them from the server
-        const data = await parseResponse(await getRoomInfoForDisplay(roomCodeFromUrl)); // roomCode and roomName
-        roomCode = data.roomInfoForDisplay.roomCode;
-        roomName = data.roomInfoForDisplay.roomName;
+        const data = await parseResponse(await getRoomInfo(roomCodeFromUrl)); // roomCode and roomName
+        roomCode = data.roomInfo.roomCode;
+        roomName = data.roomInfo.roomName;
         // Record the pair by updating dashboardState
-        dashboardState.currentRoom = data.roomInfoForDisplay;
-        console.log("Fetched room info for display from server");
+        dashboardState.currentRoom = data.roomInfo;
+        console.log("Fetched room info from server");
     }
 
     // Update the public id of this user on Dashboard page UI
@@ -109,4 +109,9 @@ function appendRoomToRoomsContainer(containerDiv, roomInfo, role) {
     containerDiv.appendChild(roomRow);
 }
 
-export { renderBasicGui, appendRoomToRoomsContainer };
+function updateRoomCodeInURL(roomCode) {
+    // Modify the url to reflect user entering this room without refreshing the page
+    history.pushState({}, "", `/dashboard?room=${roomCode}`);
+}
+
+export { renderBasicGui, appendRoomToRoomsContainer, updateRoomCodeInURL };

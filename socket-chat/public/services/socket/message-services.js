@@ -3,6 +3,8 @@
 import { appendMessageToChatList, 
          markMessageFailed, 
          markMessageSent } from "./message-view.js";
+import { getRoomCodeFromParams } from "../dashboard/conversation/services.js";
+import { storeMessageToState } from "../dashboard/conversation/enter-room-services.js";
 
 // Send the input message to server (for which server will then relay to other active users in the room)
 function handleSendMessage(userId, conversationElement, inputElement, socket) {
@@ -32,6 +34,12 @@ function handleSendMessage(userId, conversationElement, inputElement, socket) {
         // Step 3: Update the message with its id piggybacked from server after successfully sent the message
         markMessageSent(tmpId, content, res.message._id);
         console.log(`Server acknowledgement: ${res.status}`);
+
+        // Step 4: Update the message list in the dashboard state
+        const roomCode = getRoomCodeFromParams();
+        const username = localStorage.getItem("username");
+        const message = { username, content }
+        storeMessageToState(roomCode, message);
     });
 }
 
