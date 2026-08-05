@@ -38,8 +38,7 @@ async function handleEnterRoom(roomBtn, socket) {
         await renderBasicGui();
         const members = getCachedMembers(roomCode);
         renderMembers(membersElement, emptyMessageElement, membersHeadingElement, members);
-        const messages = cachedMessages.toReversed();
-        renderOlderMessages(conversationElement, messages);
+        renderOlderMessages(conversationElement, cachedMessages);
         console.log("Rendered cached messages");
         return;
     } else {

@@ -72,7 +72,7 @@ function renderOlderMessages(conversationElement, messages) {
     const prevHeight = conversationElement.scrollHeight;
     console.log("Prepending:");
     // Reverse the messages again due to the property of HTML element prepending
-    messages.forEach(m => {
+    messages.toReversed().forEach(m => {
         prependMessage(conversationElement, m.content, m.username);
         console.log(m.content, m.createdAt);
     });

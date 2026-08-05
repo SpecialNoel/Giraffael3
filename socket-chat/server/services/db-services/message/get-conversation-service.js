@@ -53,6 +53,11 @@ async function getPaginatedConversation(roomCode, cursor) {
                 createdAt: msg.createdAt,
             }));
 
+        console.log("Fetched the following paginated messages:");
+        formattedMessages.map(msg => {
+            console.log(`${msg.createdAt}: ${msg.content}`);            
+        });
+
         // Return the requested messages, the cursor for the next message-fetching, and the hasMore indicator
         return {
             messages: formattedMessages, // messages with oldest first, newest last
