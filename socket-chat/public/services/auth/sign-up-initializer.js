@@ -7,7 +7,7 @@ function signUpTraditional() {
         send them to the server for account creation result.
 
         If the input credentials already exist, prompt the user about this.
-        Otherwise, receive the session cookie sent by the server and 
+        Otherwise, receive the response sent by the server and 
         redirect user to sign-in page.
     */
     const signUpForm = document.querySelector("#sign-up-form");

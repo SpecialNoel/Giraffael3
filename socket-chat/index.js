@@ -71,21 +71,23 @@ io.use(async (socket, next) => {
 io.on("connection", async (socket) => {
     // Note that the server has already authenticated the user,
     // given the socket connection is established successfully between the user and server
-    console.log(`User ${socket.user.userId} connected\n`);
+    console.log(`User ${socket.user.userId} (SocketID: ${socket.id}) connected\n`);
     // Store the room code of the current visiting room to the connecting socket
-    socket.currentRoomCode = null;
+    // Storing this info to the socket enables the user to have multiple tabs opened, which
+    // would 
+    socket.activeRoomCode = null;
 
     socket.on("joinRoom", async (roomCode) => {
         // Register "join room" socket events to the socket
-        await registerJoinRoomHandler(io, redis, socket, roomCode); 
+        await registerJoinRoomHandler(redis, socket, roomCode); 
     });
     socket.on("leaveRoom", async (roomCode) => {
         // Register "leave room" socket events to the socket
         await registerLeaveRoomHandler(socket, roomCode); 
     });
-    socket.on("enterRoom", async (roomCode) => {
+    socket.on("enterRoom", async (roomCode, cursor) => {
         // Register "enter room" socket events to the socket
-        await registerEnterRoomHandler(socket, roomCode);
+        await registerEnterRoomHandler(socket, roomCode, cursor);
     });
     socket.on("exitRoom", async (roomCode) => {
         // Register "exit room" socket events to the socket

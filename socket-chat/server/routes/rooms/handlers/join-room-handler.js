@@ -1,7 +1,7 @@
 // join-room-handler.js
 
 import { joinRoom } from "../../../services/db-services/membership/join-room-service.js";
-import { getRoomInfoForDisplay } from "../../../services/db-services/room/get-room-info-for-display-service.js";
+import { getRoomInfo } from "../../../services/db-services/room/get-room-info-service.js";
 import { getMembership } from "../../../services/db-services/membership/get-membership-service.js";
 
 async function handleJoinRoom(req, res) {
@@ -43,14 +43,14 @@ async function handleJoinRoom(req, res) {
         }
 
         // Retrieve necessary info about this room
-        const roomInfoForDisplay = await getRoomInfoForDisplay(roomCode);
-        console.log("roomInfoForDisplay:", roomInfoForDisplay)
+        const roomInfo = await getRoomInfo(roomCode);
+        console.log("roomInfo:", roomInfo)
 
         // Join-room success
         return res.status(200).json({
             success: true,
             message: "Join room success",
-            roomInfoForDisplay: roomInfoForDisplay,
+            roomInfo: roomInfo,
             role: role
         });
     } catch (err) {

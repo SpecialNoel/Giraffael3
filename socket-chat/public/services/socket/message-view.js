@@ -3,7 +3,7 @@
 // Append the message to the message list
 function appendMessageToChatList(conversationElement, tmpId, content, status) {
     // Each message contains two parts: content and status
-    const msgElement = document.createElement("div");
+    const msgElement = document.createElement("li");
     msgElement.classList.add("message");
     msgElement.classList.add(status); // should be either "sending", or "failed"
     msgElement.dataset.id = tmpId; // this can be accessed with `data-id="${tmpId}"`

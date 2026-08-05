@@ -40,14 +40,14 @@ async function handleCreateRoom(req, res) {
         }
 
         // Retrieve necessary info about this new room
-        const roomInfoForDisplay = { roomName: room.roomName, 
-                                     roomCode: room.roomCode } ;
+        const roomInfo = { roomName: room.roomName, 
+                           roomCode: room.roomCode } ;
 
         // Create-room success
         return res.status(200).json({
             success: true,
             message: "Create room success",
-            roomInfoForDisplay: roomInfoForDisplay,
+            roomInfo: roomInfo,
             role: "creator"
         });
     } catch (err) {

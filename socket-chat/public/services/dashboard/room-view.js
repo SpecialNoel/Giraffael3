@@ -1,6 +1,9 @@
 // room-view.js
 
-import { getRoomInfoForDisplay } from "./room-api.js";
+import { parseResponse } from "../utils/response-parser.js";
+import { getRoomInfo } from "./room-api.js";
+import { dashboardState } from "../states/dashboard-state.js";
+import { getRoomCodeFromParams } from "../dashboard/conversation/services.js";
 
 // Render the room info and user info on Dashboard page UI, after user entering a room
 async function renderBasicGui() {
@@ -8,39 +11,33 @@ async function renderBasicGui() {
     const userId = localStorage.getItem("userId");
 
     // Fetch room code from the url bar of the user's browser
-    const params = new URLSearchParams(window.location.search);
-    const roomCodeFromUrl = params.get("room");
+    const roomCodeFromUrl = getRoomCodeFromParams();
 
     /* 
-     * Fetch room code and room name of the current room from session storage
+     * Fetch room code and room name of the current room from dashboardState
      * Note that these information should be updated upon user firing an
      * "enter room" event to server when they "enter" the room, and successfully 
      * receiving these information from server 
     */
-
     let roomCode;
     let roomName;
-
-    const currentRoom = JSON.parse(
-        sessionStorage.getItem("currentRoom")
-    );
+    
+    const currentRoom = dashboardState.currentRoom;
     if (currentRoom && currentRoom.roomCode === roomCodeFromUrl) {
-        // There is a record of this <roomCode-roomName> pair in session storage
+        // There is a record of this <roomCode-roomName> pair in dashboardState
         // Use them directly
         roomCode = roomCodeFromUrl;
         roomName = currentRoom.roomName;
+        console.log("Loaded existing room info");
     } else {
-        // Fallback: there is no record of the pair in session storage
+        // Fallback: there is no record of the pair in dashboardState
         // Fetch them from the server
-        const roomInfoForDisplay = await getRoomInfoForDisplay(roomCodeFromUrl);
-        console.log("Fetched room info for display from server");
-        roomCode = roomInfoForDisplay.roomCode;
-        roomName = roomInfoForDisplay.roomName;
-        // Record the pair by updating session storage
-        sessionStorage.setItem(
-            "currentRoom",
-            JSON.stringify(roomInfoForDisplay)
-        );
+        const data = await parseResponse(await getRoomInfo(roomCodeFromUrl)); // roomCode and roomName
+        roomCode = data.roomInfo.roomCode;
+        roomName = data.roomInfo.roomName;
+        // Record the pair by updating dashboardState
+        dashboardState.currentRoom = data.roomInfo;
+        console.log("Fetched room info from server");
     }
 
     // Update the public id of this user on Dashboard page UI
@@ -90,8 +87,6 @@ function appendRoomToRoomsContainer(containerDiv, roomInfo, role) {
     roomRow.appendChild(roomBtn);
     roomRow.appendChild(leaveBtn);
 
-    console.log("User's role:", role);
-
     // Delete button; enabled only for creator of the room
     // Delete the room from the database upon clicking
     if (role === "creator") {
@@ -114,4 +109,9 @@ function appendRoomToRoomsContainer(containerDiv, roomInfo, role) {
     containerDiv.appendChild(roomRow);
 }
 
-export { renderBasicGui, appendRoomToRoomsContainer };
+function updateRoomCodeInURL(roomCode) {
+    // Modify the url to reflect user entering this room without refreshing the page
+    history.pushState({}, "", `/dashboard?room=${roomCode}`);
+}
+
+export { renderBasicGui, appendRoomToRoomsContainer, updateRoomCodeInURL };

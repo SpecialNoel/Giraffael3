@@ -23,6 +23,13 @@
 
 /* Conversation in Dashboard page */
 #conversation {
+    /* Layout */
+    flex: 1;
+
+    /* Size */
+    height: 400px;
+    min-height: 0;
+
     /* Spacing */
     margin: 0; /* Remove the spaces at the top and bottom of the list */
     padding: 0; /* Align the list items closer to the left border */
@@ -33,4 +40,22 @@
 
     /* Browser UI */
     scrollbar-width: thin; /* Control the thickness of the scroll bar */
+}
+
+#conversation li.message {
+    padding: 4px 4px;
+    margin-bottom: 4px;
+}
+#conversation::-webkit-scrollbar {
+    width: 8px;
+}
+#conversation::-webkit-scrollbar-track {
+    background: transparent;
+}
+#conversation::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+#conversation::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }

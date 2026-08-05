@@ -34,9 +34,14 @@ async function leaveRoom(roomCode) {
     });
 }
 
-// Send "get room info for display" HTTP request to server, then receive an HTTP response from server
-async function getRoomInfoForDisplay(roomCode) {
-    return await apiFetch(`/rooms/${roomCode}/display`);
+// Send "get room info" HTTP request to server, then receive an HTTP response from server
+async function getRoomInfo(roomCode) {
+    return await apiFetch(`/rooms/${roomCode}/room-info`);
 }
 
-export { createRoom, deleteRoom, joinRoom, leaveRoom, getRoomInfoForDisplay };
+// Send "fetch some messages" HTTP request to server, then receive an HTTP response from server
+async function fetchOlderMessages(roomCode, cursor) {
+    return await apiFetch(`/rooms/${roomCode}/messages?cursor=${cursor}`);
+}
+
+export { createRoom, deleteRoom, joinRoom, leaveRoom, getRoomInfo, fetchOlderMessages };
