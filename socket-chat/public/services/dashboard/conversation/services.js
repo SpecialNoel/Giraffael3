@@ -70,11 +70,9 @@ function renderOlderMessages(conversationElement, messages) {
 
     // Prepend the fetch messages to the conversation element
     const prevHeight = conversationElement.scrollHeight;
-    console.log("Prepending:");
     // Reverse the messages again due to the property of HTML element prepending
     messages.toReversed().forEach(m => {
         prependMessage(conversationElement, m.content, m.username);
-        console.log(m.content, m.createdAt);
     });
     const newHeight = conversationElement.scrollHeight;
     // Update the current location of the conversation element to provide smoother, more natural user scroll action

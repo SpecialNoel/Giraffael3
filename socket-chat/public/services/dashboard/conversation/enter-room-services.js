@@ -11,13 +11,6 @@ function getCachedMessages(roomCode) {
         console.log("Failed to fetch older messages due to state being null");
         return null;
     }
-
-    console.log("Cached Messages:");
-    state.messages.map(msg => {
-        console.log(msg.content);
-    })
-    console.log(`Cached Messages: ${state.messages.content}`);
-
     return state.messages;
 }
 
