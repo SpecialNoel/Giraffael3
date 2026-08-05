@@ -38,7 +38,7 @@ async function getOlderMessages(conversationElement) {
         const data = await parseResponse(await fetchOlderMessages(roomCode, state.cursor));
         // Update the mapping
         updateRoomState(roomCode, {
-            messages: [...state.messages, ...data.messages],
+            messages: [...data.messages, ...state.messages], // here we prepend new messages to existing messages
             cursor: data.nextCursor,
             hasMore: data.hasMore,
         });

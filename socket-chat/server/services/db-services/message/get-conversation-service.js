@@ -43,7 +43,7 @@ async function getPaginatedConversation(roomCode, cursor) {
 
         // Format the messages to access attributes easier on client side
         const formattedMessages = messages
-            .reverse() // Reverse the message so that oldest messages first, and newest messages last
+            .toReversed() // Reverse the message so that oldest messages first, and newest messages last
             .map(msg => ({
                 messageObjectId: msg._id,
                 userId: msg.sender.userId,
@@ -52,11 +52,6 @@ async function getPaginatedConversation(roomCode, cursor) {
                 type: msg.type,
                 createdAt: msg.createdAt,
             }));
-
-        console.log("Fetched the following paginated messages:");
-        formattedMessages.map(msg => {
-            console.log(`${msg.createdAt}: ${msg.content}`);            
-        });
 
         // Return the requested messages, the cursor for the next message-fetching, and the hasMore indicator
         return {
