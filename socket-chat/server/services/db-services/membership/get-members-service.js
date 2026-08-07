@@ -3,7 +3,7 @@
 import { Room } from "../../../models/room-model.js";
 import { Membership } from "../../../models/membership-model.js";
 
-// Get all the active memberships in the room (users that are still in the room)
+// Get all the active memberships in the room (inactive memberships means that the user has left the room)
 async function getMembersInRoom(roomCode) {
     try {
         // Fetch the room
@@ -29,7 +29,7 @@ async function getMembersInRoom(roomCode) {
             username: membership.userObjectId.username
         }));
     } catch (err) {
-        console.error("Failed to get all members in room:", err);
+        console.error("Failed to get all members with active membership in room:", err);
         throw err;
     }
 }

@@ -44,12 +44,12 @@ async function registerEnterRoomHandler(socket, roomCode, cursor) {
     socket.activeRoomCode = roomCode;
     socket.join(roomCode);
 
-    // Fetch active users and conversation of the room
+    // Fetch users with active membership and conversation of the room
     const members = await getMembersInRoom(roomCode);
-    const getConversationResponse = await getPaginatedConversation(roomCode, cursor);
-    const messages = getConversationResponse.messages;
-    const nextCursor = getConversationResponse.nextCursor;
-    const hasMore = getConversationResponse.hasMore;
+    const conversationResponse = await getPaginatedConversation(roomCode, cursor);
+    const messages = conversationResponse.messages;
+    const nextCursor = conversationResponse.nextCursor;
+    const hasMore = conversationResponse.hasMore;
 
     // Fetch room info
     const roomInfo = await getRoomInfo(roomCode);

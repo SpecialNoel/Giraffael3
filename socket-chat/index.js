@@ -69,24 +69,38 @@ io.use(async (socket, next) => {
 
 // SocketIO server handles the connection event
 io.on("connection", async (socket) => {
-    // Note that the server has already authenticated the user,
-    // given the socket connection is established successfully between the user and server
+    // Note that the server has already authenticated the user at this point,
+    // given that the socket connection between the user and server is established successfully
     console.log(`User ${socket.user.userId} (SocketID: ${socket.id}) connected\n`);
-    // Store the room code of the current visiting room to the connecting socket
-    // Storing this info to the socket enables the user to have multiple tabs opened, which
-    // would 
+    /* 
+    * Store the room code of the current visiting room to the connecting socket
+    * For each separate tab opened, the user logging in with the same credentials essentially
+    * creates different, individual sockets, for which each of these sockets can only handle 
+    * one communication from one room at a time. 
+    * This enables the user to handle communications from multiple rooms via these sockets.
+    */ 
     socket.activeRoomCode = null;
 
     socket.on("joinRoom", async (roomCode) => {
         // Register "join room" socket events to the socket
+        /* 
+        * Join the user to the room inside the rooms managed with SocketIO,
+        * add the user to the room in Redis, and broadcast all other users in the room about this
+        */
         await registerJoinRoomHandler(redis, socket, roomCode); 
     });
     socket.on("leaveRoom", async (roomCode) => {
         // Register "leave room" socket events to the socket
+        // Broadcast all other users in the room about this
         await registerLeaveRoomHandler(socket, roomCode); 
     });
     socket.on("enterRoom", async (roomCode, cursor) => {
         // Register "enter room" socket events to the socket
+        /* 
+        * Join the user to the room inside the rooms managed with SocketIO,
+        * fetch users with active membership and paginated conversation, and 
+        * send them to this user (this socket)
+        */
         await registerEnterRoomHandler(socket, roomCode, cursor);
     });
     socket.on("exitRoom", async (roomCode) => {
@@ -95,10 +109,19 @@ io.on("connection", async (socket) => {
     });
     socket.on("chatMessage", async ({ content, tmpId }, callback) => {
         // Register chat message socket event to the socket
+        /*
+        * Notify all other users about this, store this message to the database,
+        * and notify this user about the status of this operation
+        */
         await registerChatHandler(socket, tmpId, content, callback);
+
     });
     socket.on("disconnect", async () => {
         // Register client disconnection socket event to the socket
+        /*
+        * Remove the user from the room in Redis, and leave the user from the room 
+        * inside the rooms managed with SocketIO
+        */
         await registerDisconnectHandler(redis, socket);
     });
 })

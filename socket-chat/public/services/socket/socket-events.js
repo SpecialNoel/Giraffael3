@@ -15,21 +15,27 @@ function registerSocketEvents(socket,
                               membersHeadingElement) {
     // Handle update on active users list upon user joining or leaving the room
     socket.on("userJoined", (data) => {
+        // Display "user join room" message to this user
         alert(data.msg);
-        console.log(`An user has joined room ${data.roomCode}.`);        
+        console.log(`An user has joined room ${data.roomCode}.`);    
+        // Update the members field on the dashboard    
         // members is a list of { userId, username }
         renderMembers(membersElement, emptyMessageElement, membersHeadingElement, data.members);
     });
     socket.on("userLeft", (data) => {
+        // Display "user left room" message to this user
         alert(data.msg);
         console.log(`An user has left room ${data.roomCode}.`);
+        // Update the members field on the dashboard    
+        // members is a list of { userId, username }
         renderMembers(membersElement, emptyMessageElement, membersHeadingElement, data.members);
     });
 
     // Handle user enter room event
     socket.on("roomEntered", async (data) => {
-        // Ignore this received response (data) if the room code inside it is a stale data
+        // Ignore this received response (data) if the room code in it is stale/old
         if (data.roomInfo.roomCode !== dashboardState.pendingRoomCode) {
+            // Render only the basics (room name, room code, user id) to the dashboard
             await renderBasicGui();
             return;
         }
