@@ -35,6 +35,9 @@
 .create-btn,
 .join-btn {
     height: 100%;
+
+    /* Interaction */
+    cursor: pointer; /* Replace the cursor with the pointer, when hovered over */
 }
 
 /* Room buttons (enters the room upon clicking) in Dashboard page */
@@ -67,7 +70,21 @@
     overflow: hidden; /* Truncate the room name to make it fit inside the room button */
     text-overflow: ellipsis; /* Add overflow indicator (...) to truncate the room name */
 }
-/* Other buttons (leave or delete) in Dashboard page */
+
+/* Other buttons in Dashboard page */
+.back-btn {
+    /* Layout */
+    display: flex; /* Allow flexible alignment of button contents */
+    justify-content: center; /* Align the text inside the button to the center */
+
+    /* Spacing */
+    padding: 4px 16px; /* Keep distances between buttons */
+    margin-bottom: 4px;
+
+    /* Interaction */
+    cursor: pointer; /* Replace the cursor with the pointer, when hovered over */
+}
+
 .leave-btn,
 .delete-btn {
     /* Layout */

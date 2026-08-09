@@ -1,5 +1,6 @@
 // room-view.js
 
+import { enableBackBtn } from "./back-to-dashboard-btn-handler.js";
 import { parseResponse } from "../utils/response-parser.js";
 import { getRoomInfo } from "./room-api.js";
 import { dashboardState } from "../states/dashboard-state.js";
@@ -7,6 +8,9 @@ import { getRoomCodeFromParams } from "../dashboard/conversation/services.js";
 
 // Render the room info and user info on Dashboard page UI, after user entering a room
 async function renderBasicGui() {
+    // Render the back-to-dashboard button, since the user is currently inside a room
+    enableBackBtn();
+
     // Fetch user public id from local storage
     const userId = localStorage.getItem("userId");
 
