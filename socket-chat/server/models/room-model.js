@@ -28,6 +28,12 @@ const roomSchema = new Schema(
         deletedAt: {
             type: Date,
             default: null
+        },
+        // messageExpiration controls the interval between message creation and auto deletion
+        messageExpiration: {
+            type: String,
+            enum: ["1_hour", "1_day", "1_week", "1_month", "never"],
+            default: "never"
         }
     },
     { timestamps: true } // Adds the createdAt and the updatedAt fields to each document

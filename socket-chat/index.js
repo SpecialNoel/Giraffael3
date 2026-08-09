@@ -114,7 +114,6 @@ io.on("connection", async (socket) => {
         * and notify this user about the status of this operation
         */
         await registerChatHandler(socket, tmpId, content, callback);
-
     });
     socket.on("disconnect", async () => {
         // Register client disconnection socket event to the socket

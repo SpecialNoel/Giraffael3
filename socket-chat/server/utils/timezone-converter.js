@@ -10,9 +10,14 @@ function getMessageWithNYTimezone(message) {
         timeZone: "America/New_York"
     });
     const expiresAtTimestamp = message.expiresAt;
-    const nyExpiresAtTimestamp = expiresAtTimestamp.toLocaleString("en-US", {
-        timeZone: "America/New_York"
-    });
+    let nyExpiresAtTimestamp;
+    if (expiresAtTimestamp) {
+        nyExpiresAtTimestamp = expiresAtTimestamp.toLocaleString("en-US", {
+            timeZone: "America/New_York"
+        });
+    } else {
+        nyExpiresAtTimestamp = null;
+    }
 
     // Note that convertedMessage is only for readability purpose (i.e. it
     // is not really a message, and it does not follow the "Message" model)
