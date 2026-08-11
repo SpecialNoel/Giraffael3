@@ -68,6 +68,11 @@ function registerSocketEvents(socket,
         appendMessage(conversationElement, content, username);
     });
 
+    // Handle user sending a message without being inside a room first
+    socket.on("messageRejectedNoActiveRoom", () => {
+        alert("Failed to send the message. You are not currently inside a room.");
+    });
+
     // Handle room deletion event
     socket.on("roomDeleted", (data) => {
         alert(data.msg);

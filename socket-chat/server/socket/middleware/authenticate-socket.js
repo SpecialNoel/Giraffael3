@@ -22,7 +22,7 @@ async function authenticateSocket(socket, next) {
             username: user.username,
             userId: userId,
         };
-        console.log(`Authenticated user ${userId} for socket events.`);
+        console.log(`Authenticated user ${userId} (SocketID: ${socket.id}) for socket events.`);
 
         // "next()" continues the connection by invocating "io.on("connection")"
         next();

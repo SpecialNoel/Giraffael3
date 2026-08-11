@@ -10,11 +10,18 @@ async function registerChatHandler(socket, tmpId, content, callback) {
         // abandon the received message
         if (!socket.activeRoomCode) {
             console.log("Received a message from user while they are not inside a room yet");
+            // Alert the user that they are currently not in a room
+            socket.emit("messageRejectedNoActiveRoom");
+            callback({
+                status: "error" // return "error" (i.e. not success) back to client
+            });       
             return;
         }
 
         // Notify the room about the message
         broadcastChatMessage(socket, socket.activeRoomCode, tmpId, content);
+
+        console.log(`Received a message from SocketID: ${socket.id}`);
 
         // Store the chat message to the database
         const message = await storeTextMessage(socket.activeRoomCode, 

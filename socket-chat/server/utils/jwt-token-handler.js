@@ -7,7 +7,7 @@ function generateToken(userObjectId, userId, expiresIn = "1h") {
     // Construct the payload
     const payload = {
         sub: userObjectId.toString(), // subject is the Objective Id of the user document (private)
-        userId               // userId is the public user id
+        userId                        // userId is the public user id
     };
 
     // Fetch the secret for JWT generation

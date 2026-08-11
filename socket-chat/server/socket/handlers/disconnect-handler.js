@@ -15,9 +15,9 @@ async function registerDisconnectHandler(redis, socket) {
         socket.leave(socket.activeRoomCode);
         console.log(`User ${socket.user.userId} (SocketID: ${socket.id}) left room ${socket.activeRoomCode}`);
         socket.activeRoomCode = null;
-        console.log(`User ${socket.user.userId} (SocketID: ${socket.id}) disconnected`);
+        console.log(`User ${socket.user.userId} (SocketID: ${socket.id}) disconnected\n`);
     } else {
-        console.log(`User ${socket.user.userId} (SocketID: ${socket.id}) disconnected without being in a room`);
+        console.log(`User ${socket.user.userId} (SocketID: ${socket.id}) disconnected without being in a room\n`);
     }
 }
 
