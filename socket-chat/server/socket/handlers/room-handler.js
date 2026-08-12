@@ -63,7 +63,7 @@ async function registerEnterRoomHandler(socket, roomCode, cursor) {
     }
 
     // Send these information to the user
-    socket.emit("roomEntered", data);
+    socket.emit("userEntered", data);
 }
 
 async function registerExitRoomHandler(socket, roomCode) {

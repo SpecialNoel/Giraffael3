@@ -126,12 +126,17 @@ io.on("connection", async (socket) => {
 })
 
 // HTTP server listens on port 3000 (default localhost server for Express)
-// const publicIP = await getPublicIPAddress();
 let hostname = "localhost";
-// hostname = publicIP
-// hostname = "192.168.1.216";
+// const publicIP = await getPublicIPAddress();
+// hostname = publicIP; // public Ip of this device
+// hostname = "192.168.1.216"; // private IP of this device
+
+// Server port to listen on
 const serverPort = process.env.PORT || 3000;
-server.listen(serverPort, "0.0.0.0", () => {
+
+// Listen only on this computer for local testing (via "127.0.0.1").
+// Use "0.0.0.0" to enable other devices on the local network to connect to this server.
+server.listen(serverPort, "127.0.0.1", () => {
     console.log(`Server is running at http://${hostname}:${serverPort}/signin\n`)
 });
 // ==================== Server Socket ==================== 

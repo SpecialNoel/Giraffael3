@@ -37,18 +37,19 @@ function signIn() {
             });
 
             // Retrieve response sent from server
-            const data = await response.json();
+            const result = await response.json();
 
             // If the credentials are invalid, display the error message to the user
-            if (!response.ok) {
-                alert(data.error);
+            if (!result.success) {
+                alert(result.error.message);
+                console.log(result.error.code);
                 return;
             }
 
             // Store necessary user information to the local storage of user's browser
-            localStorage.setItem("userId", data.userId);     // userId (user public id)
-            localStorage.setItem("username", data.username); // username recorded in database 
-            localStorage.setItem("token", data.token);       // JWT token
+            localStorage.setItem("userId", result.data.userId);     // userId (user public id)
+            localStorage.setItem("username", result.data.username); // username recorded in database 
+            localStorage.setItem("token", result.data.token);       // JWT token
 
             // The credentials are verified by server to be valid, proceed to the Dashboard page.
             setTimeout(() => {

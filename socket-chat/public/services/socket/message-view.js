@@ -1,7 +1,7 @@
 // message-view.js
 
 // Append the message to the message list
-function appendMessageToChatList(conversationElement, tmpId, content, status) {
+function appendMessageToMessageList(conversationElement, tmpId, content, status) {
     // Each message contains two parts: content and status
     const msgElement = document.createElement("li");
     msgElement.classList.add("message");
@@ -39,7 +39,7 @@ function appendMessageToChatList(conversationElement, tmpId, content, status) {
 }
 
 // Update the UI upon failing to send the message (indicated by tmpId)
-function markMessageFailed(tmpId) {
+function markMessageAsFailed(tmpId) {
     // Fetch the target message
     const msgElement = document.querySelector(`[data-id="${tmpId}"]`);
     if (!msgElement) return;
@@ -53,7 +53,7 @@ function markMessageFailed(tmpId) {
 }
 
 // Update the UI upon successfully sending the message (indicated by tmpId)
-function markMessageSent(tmpId, content, _id) {
+function markMessageAsSent(tmpId, content, _id) {
     // Fetch the target message
     const msgElement = document.querySelector(`[data-id="${tmpId}"]`);
     if (!msgElement) return;
@@ -70,4 +70,4 @@ function markMessageSent(tmpId, content, _id) {
     msgElement.textContent = `[${username}]: ${content}`;
 }
 
-export { appendMessageToChatList, markMessageFailed, markMessageSent };
+export { appendMessageToMessageList, markMessageAsFailed, markMessageAsSent };

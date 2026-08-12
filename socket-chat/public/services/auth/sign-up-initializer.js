@@ -38,11 +38,12 @@ function signUpTraditional() {
             });
 
             // Retrieve response sent from server
-            const data = await response.json();
+            const result = await response.json();
 
             // If the sign up failed, display the error message to the user
-            if (!response.ok) {
-                alert(data.error);
+            if (!result.success) {
+                alert(result.error.message);
+                console.log(result.error.code);
                 return;
             }
 

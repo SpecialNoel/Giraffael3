@@ -1,6 +1,7 @@
 // fetch-rooms-info-handler.js
 
 import { getRoomsInfo } from "../../../services/db-services/membership/get-rooms-info-service.js";
+import { successResponse, errorResponse } from "../../../utils/api-response.js";
 
 async function handleFetchRoomsInfo(req, res) {
     try {
@@ -11,18 +12,22 @@ async function handleFetchRoomsInfo(req, res) {
         const roomsInfo = await getRoomsInfo(userObjectId);
         
         // Return the list of room info
-        return res.status(200).json({
-            success: true,
-            message: "Fetch rooms success",
-            roomsInfo
-        });
+        return res.status(200).json(
+            successResponse(
+                {
+                    roomsInfo
+                },
+                "Fetch rooms success"
+            )
+        );
     } catch (err) {
         console.error(err);
-        return res.status(500).json({
-            success: false,
-            code: "OTHER",
-            error: "Internal server error"
-        });
+        return res.status(500).json(
+            errorResponse(
+                "OTHER",
+                "Internal server error"
+            )
+        );
     }
 }
 

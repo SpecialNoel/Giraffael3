@@ -109,15 +109,15 @@ function handleCreateRoom(socket) {
 
             // Step 1: Send room name to server via HTTP endpoints, 
             // then retrieve data contained in response from server
-            const data = await parseResponse(await createRoom(roomName));
+            const result = await parseResponse(await createRoom(roomName));
             
             // Step 2: Emit the "join room" event to server via socket events
             // This step is needed to atomically join the user to the newly created room
-            socket.emit("joinRoom", data.roomInfo.roomCode);
+            socket.emit("joinRoom", result.data.roomInfo.roomCode);
             
             // Render the rooms container by appending the new room to the list
             const containerDiv = document.getElementById("rooms-container");
-            appendRoomToRoomsContainer(containerDiv, data.roomInfo, data.role);
+            appendRoomToRoomsContainer(containerDiv, result.data.roomInfo, result.data.role);
 
             // Clear the room name field
             document.querySelector("#roomNameInCreateRoom").value = "";

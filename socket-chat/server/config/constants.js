@@ -1,5 +1,8 @@
 // constants.js
 
+// Min length for a valid user password
+export const PASSWORD_MIN_LENGTH = 8;
+
 // Message expiration interval
 // ["1_hour", "1_day", "1_week", "1_month", "never"]
 export const MESSAGE_EXPIRATION_TYPE = "1_hour"; // options are included in "messageExpiration", room-model.js

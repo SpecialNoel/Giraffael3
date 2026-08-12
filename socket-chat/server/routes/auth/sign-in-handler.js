@@ -3,6 +3,7 @@
 import { findUserByEmail } from "../../services/db-services/user/find-user-service.js";
 import { comparePassword } from "../../utils/password-handler.js";
 import { generateToken } from "../../utils/jwt-token-handler.js";
+import { successResponse, errorResponse } from "../../utils/api-response.js";
 
 async function handleSignIn(req, res) {
     try {
@@ -20,11 +21,12 @@ async function handleSignIn(req, res) {
         // Handle error where the account associated with the received email does not exist in DB
         if (!user) {
             console.log(`Email does not exist in DB: ${email}`);
-            return res.status(401).json({ 
-                success: false,
-                code: "USER_NOT_FOUND",
-                error: "User not found"
-            });
+            return res.status(401).json(
+                errorResponse(
+                    "INVALID_CREDENTIALS",
+                    "Invalid email or password"
+                )
+            );
         }
         
         // Compare the received plain password with the record found in DB
@@ -33,31 +35,36 @@ async function handleSignIn(req, res) {
         // Handle error where the password does not match the one stored in DB
         if (!isPasswordValid) {
             console.log(`Invalid login attempt for email: ${email}`);
-            return res.status(401).json({ 
-                success: false,
-                code: "INVALID_CREDENTIALS",
-                error: "Invalid credentials"
-            });
+            return res.status(401).json(
+                errorResponse(
+                    "INVALID_CREDENTIALS",
+                    "Invalid email or password"
+                )
+            );
         }
 
         // Generate a JWT (JSON Web Token) for this user for both authentication and authorization
         const token = generateToken(user._id, user.userId);
 
         // Signin success
-        return res.status(200).json({
-            success: true,
-            message: "Sign in success",
-            userId: user.userId,
-            username: user.username,
-            token: token
-        });
+        return res.status(200).json(
+            successResponse(
+                {
+                    userId: user.userId,
+                    username: user.username,
+                    token
+                },
+                "Sign in success"
+            )
+        );
     } catch (err) {
         console.error(err);
-        return res.status(500).json({
-            success: false,
-            code: "OTHER",
-            error: "Internal server error"
-        });    
+        return res.status(500).json(
+            errorResponse(
+                "OTHER",
+                "Internal server error"
+            )
+        );
     }
 }
 

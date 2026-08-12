@@ -4,7 +4,7 @@ import { renderBasicGui } from "../dashboard/room-view.js";
 import { renderMembers } from "../dashboard/members-services.js";
 import { appendMessage } from "../dashboard/conversation/services.js";
 import { storeMessageToState, renderConversation } from "../dashboard/conversation/enter-room-services.js";
-import { handleSendMessage } from "./message-services.js";
+import { sendMessage } from "./message-services.js";
 import { dashboardState, updateRoomState } from "../states/dashboard-state.js";
 
 // Set up socket events
@@ -32,7 +32,7 @@ function registerSocketEvents(socket,
     });
 
     // Handle user enter room event
-    socket.on("roomEntered", async (data) => {
+    socket.on("userEntered", async (data) => {
         // Ignore this received response (data) if the room code in it is stale/old
         if (data.roomInfo.roomCode !== dashboardState.pendingRoomCode) {
             // Render only the basics (room name, room code, user id) to the dashboard
@@ -99,7 +99,7 @@ function startSession(socket) {
         e.preventDefault();
 
         // Send the input message to server (for which server will then relay to other active users in the room)
-        handleSendMessage(
+        sendMessage(
             userId,
             conversationElement,
             inputElement,

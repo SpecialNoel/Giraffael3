@@ -6,11 +6,12 @@ import { startSession } from "../services/socket/socket-events.js";
 
 function requireAuthentication() {
     const token = localStorage.getItem("token");
-
     if (!token) {
         alert("Please sign in to access this page.");
-        window.location.replace("/signin?error=authentication_required");
+        window.location.href = "/signin";
+        return false;
     }
+    return true;
 }
 
 // Initialize the socket used to communicate with server, and add event listeners for dashboard services
@@ -20,7 +21,8 @@ window.addEventListener("DOMContentLoaded", async () => {
         // Preventing the user from navigating to the Dashboard page directly without validating their credentials
         // by modifying the url.
         // Note that this only prevents the first-time user from misbehaving, since it depends on the existence of "token"
-        requireAuthentication();
+        // TODO: Update this part with page authentication for better protection
+        if (!requireAuthentication()) return;
 
         /* 
         * Create a socket and send the JWT token to server for authentication for socket events.

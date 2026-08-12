@@ -2,6 +2,7 @@
 
 import { createRoom } from "../../../services/db-services/room/create-room-service.js";
 import { joinRoom } from "../../../services/db-services/membership/join-room-service.js";
+import { successResponse, errorResponse } from "../../../utils/api-response.js";
 
 async function handleCreateRoom(req, res) {
     try {
@@ -19,23 +20,26 @@ async function handleCreateRoom(req, res) {
         if (!joinRoomResult.success) {
             switch (joinRoomResult.reason) {
                 case "ALREADY_IN_ROOM":
-                    return res.status(409).json({
-                        success: false,
-                        code: "ALREADY_IN_ROOM",
-                        error: "User already in room",
-                    });
+                    return res.status(409).json(
+                        errorResponse(
+                            "ALREADY_IN_ROOM",
+                            "User already in room"
+                        )
+                    );
                 case "ROOM_NOT_FOUND":
-                    return res.status(404).json({
-                        success: false,
-                        code: "ROOM_NOT_FOUND",
-                        error: "Room not found",
-                    });
+                    return res.status(404).json(
+                        errorResponse(
+                            "ROOM_NOT_FOUND",
+                            "Room not found"
+                        )
+                    );
                 default: 
-                    return res.status(500).json({
-                        success: false,
-                        code: "OTHER",
-                        error: "Join room failure",
-                    });
+                    return res.status(500).json(
+                        errorResponse(
+                            "OTHER",
+                            "Join room failure"
+                        )
+                    );
             }
         }
 
@@ -44,19 +48,23 @@ async function handleCreateRoom(req, res) {
                            roomCode: room.roomCode } ;
 
         // Create-room success
-        return res.status(200).json({
-            success: true,
-            message: "Create room success",
-            roomInfo: roomInfo,
-            role: "creator"
-        });
+        return res.status(200).json(
+            successResponse(
+                {
+                    roomInfo,
+                    role: "creator"
+                },
+                "Create room success"
+            )
+        );
     } catch (err) {
         console.error(err);
-        return res.status(500).json({
-            success: false,
-            code: "OTHER",
-            error: "Internal server error"
-        });    
+        return res.status(500).json(
+            errorResponse(
+                "OTHER",
+                "Internal server error"
+            )
+        );  
     }
 }
 

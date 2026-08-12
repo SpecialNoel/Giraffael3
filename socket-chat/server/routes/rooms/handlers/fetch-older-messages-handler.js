@@ -1,6 +1,7 @@
 // fetch-older-messages-handler.js
 
 import { getPaginatedConversation } from "../../../services/db-services/message/get-conversation-service.js";
+import { successResponse, errorResponse } from "../../../utils/api-response.js";
 
 async function handleFetchOlderMessages(req, res) {
     try {
@@ -10,20 +11,24 @@ async function handleFetchOlderMessages(req, res) {
 
         const result = await getPaginatedConversation(roomCode, cursor);
         
-        return res.status(200).json({
-            success: true,
-            message: "Fetch more messages success",
-            messages: result.messages,
-            nextCursor: result.nextCursor,
-            hasMore: result.hasMore
-        });
+        return res.status(200).json(
+            successResponse(
+                {
+                    messages: result.messages,
+                    nextCursor: result.nextCursor,
+                    hasMore: result.hasMore      
+                },
+                "Fetch more messages success"
+            )
+        );
     } catch (err) {
         console.error(err);
-        return res.status(500).json({
-            success: false,
-            code: "OTHER",
-            error: "Internal server error"
-        });
+        return res.status(500).json(
+            errorResponse(
+                "OTHER",
+                "Internal server error"
+            )
+        );
     }
 }
 

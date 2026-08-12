@@ -1,6 +1,7 @@
 // leave-room-handler.js
 
 import { leaveRoom } from "../../../services/db-services/membership/leave-room-service.js";
+import { successResponse, errorResponse } from "../../../utils/api-response.js";
 
 async function handleLeaveRoom(req, res, io) {
     try {
@@ -15,39 +16,46 @@ async function handleLeaveRoom(req, res, io) {
         if (!leaveRoomResult.success) {
             switch (leaveRoomResult.reason) {
                 case "NOT_IN_ROOM":
-                    return res.status(400).json({
-                        success: false,
-                        code: "NOT_IN_ROOM",
-                        error: "User already in room",
-                    });
+                    return res.status(400).json(
+                        errorResponse(
+                            "NOT_IN_ROOM",
+                            "User already in room"
+                        )
+                    );
                 case "ROOM_NOT_FOUND":
-                    return res.status(404).json({
-                        success: false,
-                        code: "ROOM_NOT_FOUND",
-                        error: "Room not found",
-                    });
+                    return res.status(404).json(
+                        errorResponse(
+                            "ROOM_NOT_FOUND",
+                            "Room not found"
+                        )
+                    );
                 default: 
-                    return res.status(500).json({
-                        success: false,
-                        code: "OTHER",
-                        error: "Leave room failure",
-                    });
+                    return res.status(500).json(
+                        errorResponse(
+                            "OTHER",
+                            "Leave room failure"
+                        )
+                    );
             }
         }
 
         // Leave-room success
-        return res.status(200).json({
-            success: true,
-            roomCode: roomCode,
-            message: "Leave room success",
-        });
+        return res.status(200).json(
+            successResponse(
+                {
+                    roomCode
+                },
+                "Leave room success"
+            )
+        );
     } catch (err) {
         console.error(err);
-        return res.status(500).json({
-            success: false,
-            code: "OTHER",
-            error: "Internal server error"
-        });    
+        return res.status(500).json(
+            errorResponse(
+                "OTHER",
+                "Internal server error"
+            )
+        );
     }
 }
 
