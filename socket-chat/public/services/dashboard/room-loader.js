@@ -7,8 +7,8 @@ import { appendRoomToRoomsContainer } from "./room-view.js";
 // Fetch rooms information from server, and render them to Dashboard page UI
 async function loadRooms() {
     // Retrieve info about all rooms the user has joined from server
-    const data = await parseResponse(await apiFetch("/rooms"));
-    const roomsInfo = data.roomsInfo;
+    const result = await parseResponse(await apiFetch("/rooms"));
+    const roomsInfo = result.data.roomsInfo;
 
     // Render rooms info to Dashboard page UI
     const container = document.getElementById("rooms-container");

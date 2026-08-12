@@ -36,11 +36,11 @@ async function renderBasicGui() {
     } else {
         // Fallback: there is no record of the pair in dashboardState
         // Fetch them from the server
-        const data = await parseResponse(await getRoomInfo(roomCodeFromUrl)); // roomCode and roomName
-        roomCode = data.roomInfo.roomCode;
-        roomName = data.roomInfo.roomName;
+        const result = await parseResponse(await getRoomInfo(roomCodeFromUrl)); // roomCode and roomName
+        roomCode = result.data.roomInfo.roomCode;
+        roomName = result.data.roomInfo.roomName;
         // Record the pair by updating dashboardState
-        dashboardState.currentRoom = data.roomInfo;
+        dashboardState.currentRoom = result.data.roomInfo;
         console.log("Fetched room info from server");
     }
 

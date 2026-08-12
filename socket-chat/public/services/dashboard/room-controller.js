@@ -31,7 +31,7 @@ function handleRoomsContainer(socket) {
             const leaveBtn = e.target.closest(".leave-btn"); 
             if (leaveBtn) {
                 const roomRow = leaveBtn.closest(".room-row");
-                await handleLeaveRoom(leaveBtn, roomRow);
+                await handleLeaveRoom(leaveBtn, socket, roomRow);
                 return;
             }
 

@@ -53,25 +53,25 @@ async function handleEnterRoom(roomBtn, socket) {
 }
 
 // Set up the leave-room logic
-async function handleLeaveRoom(leaveBtn, roomRow) {
+async function handleLeaveRoom(leaveBtn, socket, roomRow) {
     const roomCode = leaveBtn.dataset.roomCode;
     console.log("Clicked leave room:", roomCode);
 
-    // Send roomCode to server, then retrieve data contained in response from server
-    const data = await parseResponse(await leaveRoom(roomCode));
+    // Send roomCode to server, then retrieve result contained in response from server
+    const result = await parseResponse(await leaveRoom(roomCode));
 
-    if (data.success) {
+    if (result.success) {
         // Notify other users in the room via socket event
-        socket.emit("leaveRoom", data.roomCode);
+        socket.emit("leaveRoom", result.data.roomCode);
 
         // Remove the roomBtn-leaveBtn pair from the rooms container
         roomRow.remove();
 
         // Redirect the user back to the dashboard
-        alert("Successfully left room")
+        alert("Successfully left room");
         window.location.href = "/dashboard";
     } else {
-        alert("Error in leaving room")
+        alert("Error in leaving room");
     }
 }
 
@@ -80,11 +80,18 @@ async function handleDeleteRoom(deleteBtn, roomRow) {
     const roomCode = deleteBtn.dataset.roomCode;
     console.log("Clicked delete room:", roomCode);
 
-    // Send roomCode to server, then retrieve data contained in response from server
-    const data = await parseResponse(await deleteRoom(roomCode));
+    // Send roomCode to server, then retrieve result contained in response from server
+    const result = await parseResponse(await deleteRoom(roomCode));
 
-    // Remove the roomBtn-leaveBtn pair from the rooms container
-    roomRow.remove();
+    if (result.success) {
+        // Remove the roomBtn-leaveBtn pair from the rooms container
+        roomRow.remove();
+
+        alert("Successfully deleted room");
+        window.location.href = "/dashboard";
+    } else {
+        alert("Error in deleting room");
+    }
 }
 
 // Set up the create-room logic
@@ -108,7 +115,7 @@ function handleCreateRoom(socket) {
             }
 
             // Step 1: Send room name to server via HTTP endpoints, 
-            // then retrieve data contained in response from server
+            // then retrieve result contained in response from server
             const result = await parseResponse(await createRoom(roomName));
             
             // Step 2: Emit the "join room" event to server via socket events
@@ -155,15 +162,15 @@ function handleJoinRoom(socket) {
             }
 
             // Step 1: Send room code to server via HTTP endpoints,
-            // then retrieve data contained in response from server
-            const data = await parseResponse(await joinRoom(roomCode));
+            // then retrieve result contained in response from server
+            const result = await parseResponse(await joinRoom(roomCode));
 
             // Step 2: Emit the "join room" event to server via socket events
             socket.emit("joinRoom", roomCode);
 
             // Render the rooms container by appending the new room to the list
             const containerDiv = document.getElementById("rooms-container");
-            appendRoomToRoomsContainer(containerDiv, data.roomInfo, data.role);
+            appendRoomToRoomsContainer(containerDiv, result.data.roomInfo, result.data.role);
 
             // Clear the room code field
             document.querySelector("#roomCodeInJoinRoom").value = "";

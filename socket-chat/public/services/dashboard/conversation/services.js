@@ -35,12 +35,12 @@ function appendMessage(conversationElement, content, senderUsername) {
 async function getOlderMessages(conversationElement) {
     async function fetchOlderMessagesHelper(roomCode, state) {
         // Fetch older messages
-        const data = await parseResponse(await fetchOlderMessages(roomCode, state.cursor));
+        const result = await parseResponse(await fetchOlderMessages(roomCode, state.cursor));
         // Update the mapping
         updateRoomState(roomCode, {
-            messages: [...data.messages, ...state.messages], // here we prepend new messages to existing messages
-            cursor: data.nextCursor,
-            hasMore: data.hasMore,
+            messages: [...result.data.messages, ...state.messages], // here we prepend new messages to existing messages
+            cursor: result.data.nextCursor,
+            hasMore: result.data.hasMore,
         });
         return data.messages;
     }
