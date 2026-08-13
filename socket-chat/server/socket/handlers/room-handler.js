@@ -3,7 +3,7 @@
 import { addUserToRoom } from "../../services/redis-services/user-services.js";
 import { getMembersInRoom } from "../../services/db-services/membership/get-members-service.js";
 import { getPaginatedConversation } from "../../services/db-services/message/get-conversation-service.js";
-import { broadcastUserJoined, broadcastUserLeft } from "../emitters/room-broadcaster.js";
+import { broadcastUserJoined } from "../emitters/room-broadcaster.js";
 import { getRoomInfo } from "../../services/db-services/room/get-room-info-service.js";
 
 async function registerJoinRoomHandler(redis, socket, roomCode) {
@@ -22,14 +22,6 @@ async function registerJoinRoomHandler(redis, socket, roomCode) {
     const members = await getMembersInRoom(roomCode);
     broadcastUserJoined(socket, roomCode, members);
     console.log(`Notified all users in room ${roomCode} about user joined`);
-}
-
-async function registerLeaveRoomHandler(socket, roomCode) {
-    // Notify every user who joined the room (excluding the leaving user) 
-    // about an user leaving the room AFTER they had successfully done so
-    const members = await getMembersInRoom(roomCode);
-    broadcastUserLeft(socket, roomCode, members);
-    console.log(`Notified all users in room ${roomCode} about user left`);
 }
 
 async function registerEnterRoomHandler(socket, roomCode, cursor) {
@@ -71,6 +63,5 @@ async function registerExitRoomHandler(socket, roomCode) {
 }
 
 export { registerJoinRoomHandler,
-         registerLeaveRoomHandler,
          registerEnterRoomHandler,
          registerExitRoomHandler };

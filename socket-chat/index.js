@@ -16,8 +16,7 @@ import { connectToDB } from "./server/utils/db-connector.js";
 import { connectToRedis } from "./server/utils/redis-connector.js";
 
 import { authenticateSocket } from "./server/socket/middleware/authenticate-socket.js";
-import { registerJoinRoomHandler, 
-         registerLeaveRoomHandler,
+import { registerJoinRoomHandler,
          registerEnterRoomHandler, 
          registerExitRoomHandler } from "./server/socket/handlers/room-handler.js";
 import { registerDisconnectHandler } from "./server/socket/handlers/disconnect-handler.js";
@@ -88,11 +87,6 @@ io.on("connection", async (socket) => {
         * add the user to the room in Redis, and broadcast all other users in the room about this
         */
         await registerJoinRoomHandler(redis, socket, roomCode); 
-    });
-    socket.on("leaveRoom", async (roomCode) => {
-        // Register "leave room" socket events to the socket
-        // Broadcast all other users in the room about this
-        await registerLeaveRoomHandler(socket, roomCode); 
     });
     socket.on("enterRoom", async (roomCode, cursor) => {
         // Register "enter room" socket events to the socket

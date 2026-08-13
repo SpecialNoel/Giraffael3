@@ -17,7 +17,7 @@ function registerSocketEvents(socket,
     socket.on("userJoined", (data) => {
         // Display "user join room" message to this user
         alert(data.msg);
-        console.log(`An user has joined room ${data.roomCode}.`);    
+        console.log(`A user has joined room ${data.roomCode}.`);    
         // Update the members field on the dashboard    
         // members is a list of { userId, username }
         renderMembers(membersElement, emptyMessageElement, membersHeadingElement, data.members);
@@ -25,7 +25,7 @@ function registerSocketEvents(socket,
     socket.on("userLeft", (data) => {
         // Display "user left room" message to this user
         alert(data.msg);
-        console.log(`An user has left room ${data.roomCode}.`);
+        console.log(`A user has left room ${data.roomCode}.`);
         // Update the members field on the dashboard    
         // members is a list of { userId, username }
         renderMembers(membersElement, emptyMessageElement, membersHeadingElement, data.members);

@@ -53,26 +53,24 @@ async function handleEnterRoom(roomBtn, socket) {
 }
 
 // Set up the leave-room logic
-async function handleLeaveRoom(leaveBtn, socket, roomRow) {
+async function handleLeaveRoom(leaveBtn, roomRow) {
     const roomCode = leaveBtn.dataset.roomCode;
     console.log("Clicked leave room:", roomCode);
 
     // Send roomCode to server, then retrieve result contained in response from server
     const result = await parseResponse(await leaveRoom(roomCode));
 
-    if (result.success) {
-        // Notify other users in the room via socket event
-        socket.emit("leaveRoom", result.data.roomCode);
-
-        // Remove the roomBtn-leaveBtn pair from the rooms container
-        roomRow.remove();
-
-        // Redirect the user back to the dashboard
-        alert("Successfully left room");
-        window.location.href = "/dashboard";
-    } else {
+    if (!result.success) {
         alert("Error in leaving room");
+        return;
     }
+
+    // Remove the roomBtn-leaveBtn pair from the rooms container
+    roomRow.remove();
+
+    // Redirect the user back to the dashboard
+    alert("Successfully left room");
+    window.location.href = "/dashboard";
 }
 
 // Set up the delete-room logic
@@ -83,15 +81,16 @@ async function handleDeleteRoom(deleteBtn, roomRow) {
     // Send roomCode to server, then retrieve result contained in response from server
     const result = await parseResponse(await deleteRoom(roomCode));
 
-    if (result.success) {
-        // Remove the roomBtn-leaveBtn pair from the rooms container
-        roomRow.remove();
-
-        alert("Successfully deleted room");
-        window.location.href = "/dashboard";
-    } else {
+    if (!result.success) {
         alert("Error in deleting room");
+        return;
     }
+
+    // Remove the roomBtn-leaveBtn pair from the rooms container
+    roomRow.remove();
+
+    alert("Successfully deleted room");
+    window.location.href = "/dashboard";
 }
 
 // Set up the create-room logic
