@@ -4,12 +4,28 @@ import { joinRoom } from "../../../services/db-services/membership/join-room-ser
 import { getRoomInfo } from "../../../services/db-services/room/get-room-info-service.js";
 import { getMembership } from "../../../services/db-services/membership/get-membership-service.js";
 import { successResponse, errorResponse } from "../../../utils/api-response.js";
+import { getMembersInRoom } from "../../../services/db-services/membership/get-members-service.js"
+import { broadcastUserJoined } from "../../../socket/emitters/room-broadcaster.js";
 
-async function handleJoinRoom(req, res) {
+async function handleRoomMembershipAdded(io, roomCode) {
+    // Retrieve necessary info about this room
+    const roomInfo = await getRoomInfo(roomCode);
+    console.log("roomInfo:", roomInfo);
+
+    // Get every user who joined the room (excluding the leaving user) 
+    const members = await getMembersInRoom(roomCode);
+    
+    // Notify these users about this event
+    broadcastUserJoined(io, roomCode, members);
+    return roomInfo
+}
+
+async function handleJoinRoom(req, res, redis, io) {
     try {
         // Receive room code and user info
         const { roomCode } = req.body;
         const userObjectId = req.user.userObjectId;
+        const userId = req.user.userId;
 
         // Fetch the membership associated with the user public id and room code, if exists
         const membership = await getMembership(userObjectId, roomCode);
@@ -46,9 +62,8 @@ async function handleJoinRoom(req, res) {
             }
         }
 
-        // Retrieve necessary info about this room
-        const roomInfo = await getRoomInfo(roomCode);
-        console.log("roomInfo:", roomInfo)
+        // Retrieve necessary info about this room, then notify users in the room about this event
+        const roomInfo = await handleRoomMembershipAdded(io, roomCode);
 
         // Join-room success
         return res.status(200).json(
@@ -71,4 +86,4 @@ async function handleJoinRoom(req, res) {
     }
 }
 
-export { handleJoinRoom };
+export { handleJoinRoom, handleRoomMembershipAdded };

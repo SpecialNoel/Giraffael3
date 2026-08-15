@@ -9,7 +9,7 @@ function broadcastRoomDeleted(io, roomCode) {
     io.to(roomCode).emit("roomDeleted", data);
 }
 
-// Notify every user who joined the room (including the leaving user) about a user leaving the room
+// Notify every user who left the room (including the leaving user) about a user leaving the room
 function broadcastUserLeft(io, roomCode, members) {
     const data = {
         roomCode,
@@ -20,13 +20,13 @@ function broadcastUserLeft(io, roomCode, members) {
 }
 
 // Notify every user who joined the room (excluding the joining user) about a user joining the room
-function broadcastUserJoined(socket, roomCode, members) {
+function broadcastUserJoined(io, roomCode, members) {
     const data = {
         roomCode,
         members,
         msg: "A user has joined the room."
     };
-    socket.to(roomCode).emit("userJoined", data);
+    io.to(roomCode).emit("userJoined", data);
 }
 
 // Send the message to all connected users in the room (excluding the sender user)

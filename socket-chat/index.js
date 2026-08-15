@@ -16,8 +16,7 @@ import { connectToDB } from "./server/utils/db-connector.js";
 import { connectToRedis } from "./server/utils/redis-connector.js";
 
 import { authenticateSocket } from "./server/socket/middleware/authenticate-socket.js";
-import { registerJoinRoomHandler,
-         registerEnterRoomHandler, 
+import { registerEnterRoomHandler, 
          registerExitRoomHandler } from "./server/socket/handlers/room-handler.js";
 import { registerDisconnectHandler } from "./server/socket/handlers/disconnect-handler.js";
 import { registerChatHandler } from "./server/socket/handlers/chat-handler.js";
@@ -80,14 +79,6 @@ io.on("connection", async (socket) => {
     */ 
     socket.activeRoomCode = null;
 
-    socket.on("joinRoom", async (roomCode) => {
-        // Register "join room" socket events to the socket
-        /* 
-        * Join the user to the room inside the rooms managed with SocketIO,
-        * add the user to the room in Redis, and broadcast all other users in the room about this
-        */
-        await registerJoinRoomHandler(redis, socket, roomCode); 
-    });
     socket.on("enterRoom", async (roomCode, cursor) => {
         // Register "enter room" socket events to the socket
         /* 
@@ -135,4 +126,4 @@ server.listen(serverPort, "127.0.0.1", () => {
 });
 // ==================== Server Socket ==================== 
 
-export { io };
+export { io, redis };

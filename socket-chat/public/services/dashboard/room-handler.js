@@ -113,13 +113,9 @@ function handleCreateRoom(socket) {
                 return;
             }
 
-            // Step 1: Send room name to server via HTTP endpoints, 
+            // Send room name to server via HTTP endpoints, 
             // then retrieve result contained in response from server
             const result = await parseResponse(await createRoom(roomName));
-            
-            // Step 2: Emit the "join room" event to server via socket events
-            // This step is needed to atomically join the user to the newly created room
-            socket.emit("joinRoom", result.data.roomInfo.roomCode);
             
             // Render the rooms container by appending the new room to the list
             const containerDiv = document.getElementById("rooms-container");
@@ -160,12 +156,13 @@ function handleJoinRoom(socket) {
                 return;
             }
 
-            // Step 1: Send room code to server via HTTP endpoints,
+            // Send room code to server via HTTP endpoints,
             // then retrieve result contained in response from server
             const result = await parseResponse(await joinRoom(roomCode));
-
-            // Step 2: Emit the "join room" event to server via socket events
-            socket.emit("joinRoom", roomCode);
+            if (!result.success) {
+                alert("Error in joining room");
+                return;
+            }
 
             // Render the rooms container by appending the new room to the list
             const containerDiv = document.getElementById("rooms-container");

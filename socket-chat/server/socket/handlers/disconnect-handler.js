@@ -1,14 +1,11 @@
 // disconnect-handler.js
 
-import { removeUserFromRoom } from "../../services/redis-services/user-services.js";
-
 // Handle the disconnection event
 async function registerDisconnectHandler(redis, socket) {
     // Remove the user from Redis, and disconnect them from SocketIO, if they are currently in a room
     if (socket.activeRoomCode) {
         // Remove the user from the room in Redis
         const userId = socket.user.userId;
-        await removeUserFromRoom(redis, socket.activeRoomCode, userId);
         console.log(`Removed user ${socket.user.userId} (SocketID: ${socket.id} from room in Redis`);
 
         // Disconnect the user from SocketIO

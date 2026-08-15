@@ -3,8 +3,9 @@
 import { createRoom } from "../../../services/db-services/room/create-room-service.js";
 import { joinRoom } from "../../../services/db-services/membership/join-room-service.js";
 import { successResponse, errorResponse } from "../../../utils/api-response.js";
+import { handleRoomMembershipAdded } from "./join-room-handler.js";
 
-async function handleCreateRoom(req, res) {
+async function handleCreateRoom(req, res, io) {
     try {
         // Receive room name and creator info
         const { roomName } = req.body;
@@ -42,6 +43,8 @@ async function handleCreateRoom(req, res) {
                     );
             }
         }
+
+        await handleRoomMembershipAdded(io, room.roomCode);
 
         // Retrieve necessary info about this new room
         const roomInfo = { roomName: room.roomName, 
