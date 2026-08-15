@@ -103,10 +103,9 @@ io.on("connection", async (socket) => {
     socket.on("disconnect", async () => {
         // Register client disconnection socket event to the socket
         /*
-        * Remove the user from the room in Redis, and leave the user from the room 
-        * inside the rooms managed with SocketIO
+        * Leave the user from the room inside the rooms managed with SocketIO
         */
-        await registerDisconnectHandler(redis, socket);
+        await registerDisconnectHandler(socket);
     });
 })
 

@@ -59,7 +59,6 @@ async function handleLeaveRoom(leaveBtn, roomRow) {
 
     // Send roomCode to server, then retrieve result contained in response from server
     const result = await parseResponse(await leaveRoom(roomCode));
-
     if (!result.success) {
         alert("Error in leaving room");
         return;
@@ -80,7 +79,6 @@ async function handleDeleteRoom(deleteBtn, roomRow) {
 
     // Send roomCode to server, then retrieve result contained in response from server
     const result = await parseResponse(await deleteRoom(roomCode));
-
     if (!result.success) {
         alert("Error in deleting room");
         return;
@@ -116,10 +114,17 @@ function handleCreateRoom(socket) {
             // Send room name to server via HTTP endpoints, 
             // then retrieve result contained in response from server
             const result = await parseResponse(await createRoom(roomName));
+            if (!result.success) {
+                alert("Error in creating room");
+                return;
+            }
             
             // Render the rooms container by appending the new room to the list
             const containerDiv = document.getElementById("rooms-container");
             appendRoomToRoomsContainer(containerDiv, result.data.roomInfo, result.data.role);
+
+            // Notify the user about create room success
+            alert("Created room successfully.");
 
             // Clear the room name field
             document.querySelector("#roomNameInCreateRoom").value = "";
@@ -167,6 +172,9 @@ function handleJoinRoom(socket) {
             // Render the rooms container by appending the new room to the list
             const containerDiv = document.getElementById("rooms-container");
             appendRoomToRoomsContainer(containerDiv, result.data.roomInfo, result.data.role);
+
+            // Notify the user about join room success
+            alert("Joined room successfully");
 
             // Clear the room code field
             document.querySelector("#roomCodeInJoinRoom").value = "";

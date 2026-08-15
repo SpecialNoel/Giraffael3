@@ -10,7 +10,6 @@ async function registerEnterRoomHandler(socket, roomCode, cursor) {
         // Stop the user entering the same room if they are currently inside the target room
         if (socket.activeRoomCode == roomCode) return;
         socket.leave(socket.activeRoomCode);
-        // TODO: need to remove the user from the redis room as well
     }
 
     // Enter the user to the room

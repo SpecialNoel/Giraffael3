@@ -16,8 +16,6 @@ import { io, redis } from "../../../index.js";
 const router = express.Router();
 
 // Rooms API endpoints
-// Note that only "CreateRoom", "DeleteRoom", "JoinRoom", and "LeaveRoom" use HTTP API endpoints
-// "EnterRoom" and "ExitRoom" uses socket events only
 router.get("/", authenticateHTTP, async (req, res) => {
     return await handleFetchRoomsInfo(req, res);
 });
