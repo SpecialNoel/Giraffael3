@@ -42,7 +42,7 @@ async function getOlderMessages(conversationElement) {
             cursor: result.data.nextCursor,
             hasMore: result.data.hasMore,
         });
-        return data.messages;
+        return result.data.messages;
     }
 
     // Get the corresponding existing room state, if any
