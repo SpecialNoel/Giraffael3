@@ -1,7 +1,7 @@
 // create-user-service.js
 
 import { User } from "../../../models/user-model.js";
-import { generateUserId } from "../../../utils/crypto-value-generator.js";
+import { generateIdentifier } from "../../../utils/id-generator.js";
 import { generateUniqueDefaultUsername } from "../../../utils/username-generator.js";
 
 // Create a new user, and store it to the database
@@ -14,7 +14,7 @@ async function createUser(email, passwordHash) {
             try {
                 username = await generateUniqueDefaultUsername();
                 user = await User.create({
-                    userId: generateUserId(),
+                    userId: generateIdentifier(),
                     username,
                     email,
                     passwordHash

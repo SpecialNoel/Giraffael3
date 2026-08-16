@@ -2,7 +2,7 @@
 
 import { User } from "../../../models/user-model.js"
 import { Room } from "../../../models/room-model.js"
-import { generateRoomCode } from "../../../utils/crypto-value-generator.js";
+import { generateIdentifier } from "../../../utils/id-generator.js";
 
 // Create a new room with the given room name, and store it to the database
 async function createRoom(roomName, userObjectId) {
@@ -16,7 +16,7 @@ async function createRoom(roomName, userObjectId) {
         while (!room) {
             try {
                 room = await Room.create({
-                    roomCode: generateRoomCode(),
+                    roomCode: generateIdentifier(),
                     roomName
                 });
             } catch (err) {

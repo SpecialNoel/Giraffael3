@@ -1,5 +1,6 @@
 // message-services.js
 
+import { generateTemporaryId } from "../utils/tmp-id-generator.js";
 import { appendMessageToMessageList, 
          markMessageAsFailed, 
          markMessageAsSent } from "./message-view.js";
@@ -12,7 +13,7 @@ function sendMessage(userId, conversationElement, inputElement, socket) {
     if (!inputElement.value) return;
 
     const content = inputElement.value;
-    const tmpId = crypto.randomUUID();
+    const tmpId = generateTemporaryId();
 
     // Step 1: Append user message directly to the chat list (before receiving server confirmation on storing the message to database)
     appendMessageToMessageList(conversationElement, tmpId, content, "sending");
