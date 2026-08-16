@@ -113,7 +113,7 @@ io.on("connection", async (socket) => {
 let hostname = "localhost";
 // const publicIP = await getPublicIPAddress();
 // hostname = publicIP; // public Ip of this device
-hostname = "192.168.1.216"; // private IP of this device
+hostname = process.env.HOSTNAME || "localhost"; // private IP of this device
 
 // Server port to listen on
 const serverPort = process.env.PORT || 3000;
