@@ -9,6 +9,7 @@ import { Server } from "socket.io";
 import { router as signInRouter } from "./server/routes/auth/sign-in-routes.js";
 import { router as signUpRouter } from "./server/routes/auth/sign-up-routes.js";
 import { router as dashboardRouter } from "./server/routes/dashboard/dashboard-routes.js";
+import { router as settingsRouter } from "./server/routes/settings/settings-routes.js";
 import { router as roomsRouter } from "./server/routes/rooms/rooms-routes.js";
 
 import { getPublicIPAddress } from "./server/utils/ip-address-getter.js";
@@ -39,6 +40,7 @@ app.use(express.json());
 app.use("/signin", signInRouter);
 app.use("/signup", signUpRouter); 
 app.use("/dashboard", dashboardRouter);
+app.use("/settings", settingsRouter);
 app.use("/rooms", roomsRouter);
 app.get("/", (req, res) => {
     // Set the default displaying page to be the sign-in page
