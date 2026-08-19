@@ -1,2 +1,7 @@
 /* settings.css */
 
+/* Settings page */
+.settings-page {
+	/* Layout */
+    display: flex; /* Make it easier to align elements */
+}
