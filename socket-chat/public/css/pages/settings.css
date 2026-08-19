@@ -4,4 +4,6 @@
 .settings-page {
 	/* Layout */
     display: flex; /* Make it easier to align elements */
+
+    position: relative;
 }

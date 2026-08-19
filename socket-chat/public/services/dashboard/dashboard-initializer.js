@@ -3,7 +3,7 @@
 import { setupRoomEvents } from "./room-controller.js";
 import { initializeHistoryNavigation } from "./room-navigation.js";
 import { loadRooms } from "./room-loader.js";
-import { setUpBackBtn } from "./back-to-dashboard-btn-handler.js";
+import { setUpRoomBackBtn } from "./room-back-btn-handler.js";
 import { setupConversationScroller } from "../../services/dashboard/conversation/scroller-setter.js";
 
 // Set up event listeners for user dashboard services (HTTP endpoints operations)
@@ -14,8 +14,8 @@ async function initializeDashboard(socket) {
     initializeHistoryNavigation(socket);
     // Fetch rooms information from server, and render them to Dashboard page UI
     loadRooms();
-    // Set up the back-to-dashboard button
-    setUpBackBtn();
+    // Set up the room-back button
+    setUpRoomBackBtn();
     // Set up scroller in the conversation element to fetch and load older messages upon user scrolling upwards
     await setupConversationScroller();
 }

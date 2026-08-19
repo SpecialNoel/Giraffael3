@@ -1,8 +1,15 @@
 // settings-initializer.js
 
+import { setUpBackToDashboardButton } from "../utils/back-to-dashboard-btn-handler.js";
+
 // Initialize the Settings page by setting up the page for displaying user
 // related information, as well as event listeners to handle user requests
 function initSettingsPage() {
+    // Set up the back-to-dashboard button
+    setUpBackToDashboardButton();
+
+    // TODO: set up the logout button here
+
     // Get information panel, which displays user-related information
     const infoPanel = document.querySelector(".info-panel"); // TODO: make the panel more "panel-like" (e.g. left-panel of Dashboard)
     
@@ -16,16 +23,12 @@ function initSettingsPage() {
     userIdDiv.appendChild(userIdText);
     userIdDiv.appendChild(userIdValue);
 
-
     // User email section (immutable) // TODO: fetch user's email and load it here
-
 
     // Username section (mutable) // TODO: fetch user's username and load it here
 
-
     // Password section (mutable; unviewable) 
     // TODO: dig more into the best design for the password section
-
 
     // Add every section onto the information panel
     infoPanel.appendChild(userIdDiv);

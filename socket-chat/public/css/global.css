@@ -25,6 +25,20 @@ body {
     overflow: hidden; /* Prevent the page from scrolling */
 }
 
+.back-to-dashboard-btn {
+    /* Position */
+    position: absolute;
+    top: 16px;
+    left: 16px;
+
+    /* Spacing */
+    padding: 4px 16px; /* Keep distances between buttons */
+    margin-bottom: 16px;
+
+    /* Interaction */
+    cursor: pointer; /* Replace the cursor with the pointer, when hovered over */
+}
+
 /* Mobile responsive */
 @media (max-width: 768px) {
     body {
