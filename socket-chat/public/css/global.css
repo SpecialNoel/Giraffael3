@@ -25,18 +25,29 @@ body {
     overflow: hidden; /* Prevent the page from scrolling */
 }
 
-.back-to-dashboard-btn {
-    /* Position */
-    position: absolute;
-    top: 16px;
-    left: 16px;
-
+.back-to-dashboard-btn, .logout-btn {
     /* Spacing */
-    padding: 4px 16px; /* Keep distances between buttons */
-    margin-bottom: 16px;
+    padding: 6px 12px;
+
+    /* Appearance */
+    background: none;
+
+    /* Font */
+    font-size: 14px;
 
     /* Interaction */
     cursor: pointer; /* Replace the cursor with the pointer, when hovered over */
+}
+.back-to-dashboard-btn {
+    /* Border */
+    border: none;
+}
+.logout-btn {
+    /* Spacing */
+    margin-top: 12px;
+}
+.back-to-dashboard-btn:hover, .logout-btn {
+    text-decoration: underline;
 }
 
 /* Mobile responsive */

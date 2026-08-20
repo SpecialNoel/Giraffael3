@@ -4,6 +4,12 @@
 .settings-page {
 	/* Layout */
     display: flex; /* Make it easier to align elements */
+}
 
-    position: relative;
+.settings-header {
+    /* Size */
+    width: 100%;
+
+    /* Spacing */
+    margin-bottom: 20px;
 }

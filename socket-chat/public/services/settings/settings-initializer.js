@@ -1,6 +1,9 @@
 // settings-initializer.js
 
-import { setUpBackToDashboardButton } from "../utils/back-to-dashboard-btn-handler.js";
+import { 
+    setUpBackToDashboardButton,
+    setUpLogoutButton
+ } from "../utils/button-handlers.js";
 
 // Initialize the Settings page by setting up the page for displaying user
 // related information, as well as event listeners to handle user requests
@@ -8,7 +11,8 @@ function initSettingsPage() {
     // Set up the back-to-dashboard button
     setUpBackToDashboardButton();
 
-    // TODO: set up the logout button here
+    // Set up the logout button
+    setUpLogoutButton();
 
     // Get information panel, which displays user-related information
     const infoPanel = document.querySelector(".info-panel"); // TODO: make the panel more "panel-like" (e.g. left-panel of Dashboard)

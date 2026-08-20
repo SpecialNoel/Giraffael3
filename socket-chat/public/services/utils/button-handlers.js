@@ -1,4 +1,4 @@
-// back-to-dashboard-btn-handler.js
+// button-handlers.js
 
 // Add this function on any page that contains a page-specific back-to-dashboard button
 function setUpBackToDashboardButton() {
@@ -10,4 +10,13 @@ function setUpBackToDashboardButton() {
     });
 }
 
-export { setUpBackToDashboardButton };
+function setUpLogoutButton() {
+    const logoutButton = document.querySelector(".logout-btn");
+    if (!logoutButton) return;
+
+    logoutButton.addEventListener("click", () => {
+        window.location.href = "/signin";
+    });
+}
+
+export { setUpBackToDashboardButton, setUpLogoutButton };
