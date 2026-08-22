@@ -4,6 +4,11 @@
 .settings-page {
 	/* Layout */
     display: flex; /* Make it easier to align elements */
+    flex-direction: column;
+
+    /* Size */
+    /* 100vh: Set the page at least as tall as the viewport */
+    min-height: 100dvh; /* Extra handling the mobile view with dynamic view height (dvh) */
 }
 
 .settings-header {
@@ -11,5 +16,30 @@
     width: 100%;
 
     /* Spacing */
-    margin-bottom: 20px;
+    margin-top: 30px;
+}
+
+.info-panel {
+    /* Layout */
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    
+    /* Size */
+    width: min(90%, 500px); /* Resizable, but only up to 500px; it takes 90% width on mobile view */
+
+    /* Spacing */
+    margin: 20px auto; /* Giving spaces between the panel and other elements, while center-aligning it */
+
+    /* Decoration */
+    border: 1px solid #ccc;
+}
+h1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.info-panel h2 {
+    text-decoration: underline;
 }

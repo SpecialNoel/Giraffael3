@@ -25,6 +25,20 @@ body {
     overflow: hidden; /* Prevent the page from scrolling */
 }
 
+.logout-btn-container {
+    /* Layout */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Size */
+    width: 100%;
+
+    /* Spacing */
+    margin-top: auto; /* Pushes the container toward the bottom */
+    padding-bottom: 40px;
+}
+
 .back-to-dashboard-btn, .logout-btn {
     /* Spacing */
     padding: 6px 12px;
@@ -43,11 +57,21 @@ body {
     border: none;
 }
 .logout-btn {
+    /* Layout */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     /* Spacing */
-    margin-top: 12px;
+    margin-top: 20px;
 }
-.back-to-dashboard-btn:hover, .logout-btn {
+.back-to-dashboard-btn:hover, .logout-btn:hover {
+    /* Decoration */
     text-decoration: underline;
+}
+.logout-btn:hover {
+    /* Appearance */
+    background-color: #ffb347;
 }
 
 /* Mobile responsive */
