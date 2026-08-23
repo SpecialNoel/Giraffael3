@@ -10,7 +10,6 @@
     /* 100vh: Set the page at least as tall as the viewport */
     min-height: 100dvh; /* Extra handling the mobile view with dynamic view height (dvh) */
 }
-
 .settings-header {
     /* Size */
     width: 100%;
@@ -19,6 +18,56 @@
     margin-top: 30px;
 }
 
+/* Back to dashboard button and Logout button */
+.back-to-dashboard-btn, .logout-btn {
+    /* Spacing */
+    padding: 6px 12px;
+
+    /* Appearance */
+    background: none;
+
+    /* Font */
+    font-size: 14px;
+
+    /* Interaction */
+    cursor: pointer; /* Replace the cursor with the pointer, when hovered over */
+}
+.back-to-dashboard-btn {
+    /* Border */
+    border: none;
+}
+.logout-btn-container {
+    /* Layout */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Size */
+    width: 100%;
+
+    /* Spacing */
+    margin-top: auto; /* Pushes the container toward the bottom */
+    padding-bottom: 80px;
+}
+.logout-btn {
+    /* Layout */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Spacing */
+    margin-top: 20px;
+}
+.back-to-dashboard-btn:hover, .logout-btn:hover {
+    /* Decoration */
+    text-decoration: underline;
+}
+.logout-btn:hover {
+    /* Appearance */
+    background-color: #ffb347;
+}
+
+/* Information panel */
 .info-panel {
     /* Layout */
     display: flex;
@@ -31,7 +80,7 @@
     /* Spacing */
     margin: 20px auto; /* Giving spaces between the panel and other elements, while center-aligning it */
 
-    /* Decoration */
+    /* Border */
     border: 1px solid #ccc;
 }
 h1 {
@@ -41,5 +90,46 @@ h1 {
     flex-direction: column;
 }
 .info-panel h2 {
+    /* Decoration */
     text-decoration: underline;
+}
+
+/* Elements inside the information panel */
+.user-id-container,
+.user-email-container,
+.username-container,
+.password-container {
+    /* Layout */
+    display: flex;
+    flex-direction: column; /* Align each container vertically */
+    align-items: center;
+
+    /* Spacing */
+    margin-bottom: 20px;
+}
+.user-id-value, 
+.user-email-value, 
+.password-value {
+    /* Layout */
+    display: block;
+
+    /* Size */
+    width: 250px;
+
+    /* Spacing */
+    padding: 6px 12px;
+
+    /* Border */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+
+    /* Decoration */
+    color: rgb(145, 145, 145);
+}
+.username-value {
+    /* Size */
+    width: 250px;
+
+    /* Spacing */
+    padding: 6px 12px;
 }

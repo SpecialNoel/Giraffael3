@@ -3,12 +3,13 @@
 import { 
     setUpBackToDashboardButton,
     setUpLogoutButton
- } from "../utils/button-handlers.js";
+ } from "./button-handlers.js";
 
 import { 
     setUpUserIdContainer,
     setUpUserEmailContainer,
-    setUpUsernameContainer
+    setUpUsernameContainer,
+    setUpPasswordContainer
 } from "./info-panel-handler.js";
 
 // Initialize the Settings page by setting up the page for displaying user
@@ -32,12 +33,20 @@ function initSettingsPage() {
     // Username section (mutable)
     const usernameContainer = setUpUsernameContainer();
 
-    // Password section (mutable; unviewable) 
+    // Change username section
+
+
+    // Password section (immutable; unviewable) 
+    const passwordContainer = setUpPasswordContainer();
+
+    // Change password section (mutable)
+
 
     // Add every section onto the information panel
     infoPanel.appendChild(userIdContainer);
     infoPanel.appendChild(userEmailContainer);
     infoPanel.appendChild(usernameContainer);
+    infoPanel.appendChild(passwordContainer);
 }
 
 export { initSettingsPage };

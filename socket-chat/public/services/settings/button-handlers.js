@@ -1,6 +1,5 @@
 // button-handlers.js
 
-// Add this function on any page that contains a page-specific back-to-dashboard button
 function setUpBackToDashboardButton() {
     const backButton = document.querySelector(".back-to-dashboard-btn");
     if (!backButton) return;
@@ -19,4 +18,7 @@ function setUpLogoutButton() {
     });
 }
 
-export { setUpBackToDashboardButton, setUpLogoutButton };
+
+
+export { setUpBackToDashboardButton, 
+         setUpLogoutButton };
