@@ -1,8 +1,5 @@
 // message-view.js
 
-import { parseResponse } from "../utils/response-parser.js";
-import { getUsernameRequest } from "../settings/setting-services.js";
-
 // Append the message to the message list
 function appendMessageToMessageList(conversationElement, tmpId, content, status) {
     // Each message contains two parts: content and status

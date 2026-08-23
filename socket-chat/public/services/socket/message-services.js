@@ -7,7 +7,7 @@ import { appendMessageToMessageList,
 import { getRoomCodeFromParams } from "../dashboard/conversation/services.js";
 import { storeMessageToState } from "../dashboard/conversation/enter-room-services.js";
 import { parseResponse } from "../utils/response-parser.js";
-import { getUsernameRequest } from "../settings/setting-services.js";
+import { getUserInfoRequest } from "../settings/setting-services.js";
 
 // Send the input message to server (for which server will then relay to other active users in the room)
 function sendMessage(userId, conversationElement, inputElement, socket) {
@@ -35,7 +35,7 @@ function sendMessage(userId, conversationElement, inputElement, socket) {
         }
 
         // Step 3: Update the message with its id piggybacked from server after successfully sent the message
-        const usernameResult = await parseResponse(await getUsernameRequest());
+        const usernameResult = await parseResponse(await getUserInfoRequest("username"));
         if (!usernameResult.success) {
             alert("Error in fetching username");
             return;

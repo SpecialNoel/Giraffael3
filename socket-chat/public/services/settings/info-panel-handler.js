@@ -2,20 +2,26 @@
 
 import { setUpUpdateUsernameBtn } from "./button-handlers.js";
 import { parseResponse } from "../utils/response-parser.js";
-import { getUsernameRequest, 
+import { getUserInfoRequest, 
          handleUpdateUsernameRequest } from "./setting-services.js";
 
 // Set up the userId container; userId should be read-only
-function setUpUserIdContainer() {
+async function setUpUserIdContainer() {
     const userIdContainer = document.createElement("div");
     userIdContainer.className = "user-id-container";
 
     const userIdLabel = document.createElement("label");
     userIdLabel.textContent = "User ID";
 
-    const userIdValue = document.createElement("span"); // TODO: fetch user's userId and load it here
+    const userIdValue = document.createElement("span");
     userIdValue.className = "user-id-value";
-    userIdValue.textContent = "ID 1";
+
+    const userIdResult = await parseResponse(await getUserInfoRequest("user-id"));
+    if (!userIdResult.success) {
+        alert("Error in fetching user id");
+        return;
+    }
+    userIdValue.textContent = userIdResult.data.userId;
 
     userIdContainer.appendChild(userIdLabel);
     userIdContainer.appendChild(userIdValue);
@@ -23,16 +29,23 @@ function setUpUserIdContainer() {
 }
 
 // Set up the user email container; user email should be read-only
-function setUpUserEmailContainer() {
+async function setUpUserEmailContainer() {
     const userEmailContainer = document.createElement("div");
     userEmailContainer.className = "user-email-container";
 
     const userEmailLabel = document.createElement("label");
     userEmailLabel.textContent = "Email";
 
-    const userEmailValue = document.createElement("span"); // TODO: fetch user's email and load it here
+    const userEmailValue = document.createElement("span");
     userEmailValue.className = "user-email-value";
     userEmailValue.textContent = "Email address";
+
+    const userEmailResult = await parseResponse(await getUserInfoRequest("user-email"));
+    if (!userEmailResult.success) {
+        alert("Error in fetching user email");
+        return;
+    }
+    userEmailValue.textContent = userEmailResult.data.userEmail;
 
     userEmailContainer.appendChild(userEmailLabel);
     userEmailContainer.appendChild(userEmailValue);
@@ -51,7 +64,7 @@ async function setUpUsernameContainer() {
     usernameValue.className = "username-value";
     usernameValue.type = "text";
 
-    const usernameResult = await parseResponse(await getUsernameRequest());
+    const usernameResult = await parseResponse(await getUserInfoRequest("username"));
     if (!usernameResult.success) {
         alert("Error in fetching username");
         return;
@@ -87,6 +100,8 @@ async function setUpUsernameContainer() {
             alert("Error in changing name");
             return;
         }
+
+        // TODO: Indicate the user about the result of changing username
     });
     return usernameContainer;
 }

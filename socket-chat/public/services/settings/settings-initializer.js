@@ -25,10 +25,10 @@ async function initSettingsPage() {
     const infoPanel = document.querySelector(".info-panel");
     
     // UserId section (immutable)
-    const userIdContainer = setUpUserIdContainer();
+    const userIdContainer = await setUpUserIdContainer();
 
     // User email section (immutable)
-    const userEmailContainer = setUpUserEmailContainer();
+    const userEmailContainer = await setUpUserEmailContainer();
 
     // Username section (mutable)
     const usernameContainer = await setUpUsernameContainer();

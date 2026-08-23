@@ -2,8 +2,10 @@
 
 import { apiFetch } from "../utils/api-fetcher.js";
 
-async function getUsernameRequest() {
-    return await apiFetch("/settings/username");
+// Send a request to server to fetch the corresponding information about user
+// endpoint can be: [user-id, user-email, username] 
+async function getUserInfoRequest(endpoint) {
+    return await apiFetch(`/settings/${endpoint}`);
 }
 
 // Send the new username to server
@@ -16,5 +18,5 @@ async function handleUpdateUsernameRequest(newUsername) {
     });
 }
 
-export { getUsernameRequest, 
+export { getUserInfoRequest, 
          handleUpdateUsernameRequest };
