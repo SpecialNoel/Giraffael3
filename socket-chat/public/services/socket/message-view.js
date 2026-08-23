@@ -1,5 +1,8 @@
 // message-view.js
 
+import { parseResponse } from "../utils/response-parser.js";
+import { getUsernameRequest } from "../settings/setting-services.js";
+
 // Append the message to the message list
 function appendMessageToMessageList(conversationElement, tmpId, content, status) {
     // Each message contains two parts: content and status
@@ -53,7 +56,7 @@ function markMessageAsFailed(tmpId) {
 }
 
 // Update the UI upon successfully sending the message (indicated by tmpId)
-function markMessageAsSent(tmpId, content, _id) {
+function markMessageAsSent(tmpId, username, content, _id) {
     // Fetch the target message
     const msgElement = document.querySelector(`[data-id="${tmpId}"]`);
     if (!msgElement) return;
@@ -62,9 +65,6 @@ function markMessageAsSent(tmpId, content, _id) {
     msgElement.dataset.id = _id;
     msgElement.classList.remove("sending");
     msgElement.classList.add("sent");
-
-    // Fetch username from local storage
-    const username = localStorage.getItem("username");
 
     // Update the message directly on the UI of conversation
     msgElement.textContent = `[${username}]: ${content}`;

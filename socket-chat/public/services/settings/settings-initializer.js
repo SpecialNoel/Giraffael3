@@ -14,7 +14,7 @@ import {
 
 // Initialize the Settings page by setting up the page for displaying user
 // related information, as well as event listeners to handle user requests
-function initSettingsPage() {
+async function initSettingsPage() {
     // Set up the back-to-dashboard button
     setUpBackToDashboardButton();
 
@@ -31,15 +31,12 @@ function initSettingsPage() {
     const userEmailContainer = setUpUserEmailContainer();
 
     // Username section (mutable)
-    const usernameContainer = setUpUsernameContainer();
-
-    // Change username section
-
+    const usernameContainer = await setUpUsernameContainer();
 
     // Password section (immutable; unviewable) 
     const passwordContainer = setUpPasswordContainer();
 
-    // Change password section (mutable)
+    // Update password section (mutable)
 
 
     // Add every section onto the information panel

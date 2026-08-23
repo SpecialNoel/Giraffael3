@@ -18,8 +18,8 @@
     margin-top: 30px;
 }
 
-/* Back to dashboard button and Logout button */
-.back-to-dashboard-btn, .logout-btn {
+/* Buttons */
+.back-to-dashboard-btn, .logout-btn, .update-username-btn {
     /* Spacing */
     padding: 6px 12px;
 
@@ -49,7 +49,7 @@
     margin-top: auto; /* Pushes the container toward the bottom */
     padding-bottom: 80px;
 }
-.logout-btn {
+.logout-btn, .update-username-btn {
     /* Layout */
     display: flex;
     align-items: center;
@@ -58,11 +58,20 @@
     /* Spacing */
     margin-top: 20px;
 }
-.back-to-dashboard-btn:hover, .logout-btn:hover {
+.update-username-btn {
+    /* Spacing */
+    margin-top: 5px;
+    padding: 4px 8px;
+
+    /* Border */
+    border: 1px solid #959595;
+    border-radius: 2px;
+}
+.back-to-dashboard-btn:hover, .logout-btn:hover, .update-username-btn:hover {
     /* Decoration */
     text-decoration: underline;
 }
-.logout-btn:hover {
+.logout-btn:hover, .update-username-btn:hover {
     /* Appearance */
     background-color: #ffb347;
 }

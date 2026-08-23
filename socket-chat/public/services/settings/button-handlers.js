@@ -18,7 +18,14 @@ function setUpLogoutButton() {
     });
 }
 
-
+function setUpUpdateUsernameBtn() {
+    const updateUsernameBtn = document.createElement("button");
+    updateUsernameBtn.type = "submit";
+    updateUsernameBtn.className = "update-username-btn";
+    updateUsernameBtn.textContent = "Save";
+    return updateUsernameBtn;
+}
 
 export { setUpBackToDashboardButton, 
-         setUpLogoutButton };
+         setUpLogoutButton,
+         setUpUpdateUsernameBtn };
