@@ -19,7 +19,9 @@
 }
 
 /* Buttons */
-.back-to-dashboard-btn, .logout-btn, .update-username-btn {
+.back-to-dashboard-btn, 
+.logout-btn, 
+.update-username-btn {
     /* Spacing */
     padding: 6px 12px;
 
@@ -49,7 +51,8 @@
     margin-top: auto; /* Pushes the container toward the bottom */
     padding-bottom: 80px;
 }
-.logout-btn, .update-username-btn {
+.logout-btn, 
+.update-username-btn {
     /* Layout */
     display: flex;
     align-items: center;
@@ -67,11 +70,14 @@
     border: 1px solid #959595;
     border-radius: 2px;
 }
-.back-to-dashboard-btn:hover, .logout-btn:hover, .update-username-btn:hover {
+.back-to-dashboard-btn:hover, 
+.logout-btn:hover, 
+.update-username-btn:hover {
     /* Decoration */
     text-decoration: underline;
 }
-.logout-btn:hover, .update-username-btn:hover {
+.logout-btn:hover, 
+.update-username-btn:hover {
     /* Appearance */
     background-color: #ffb347;
 }
@@ -141,4 +147,11 @@ h1 {
 
     /* Spacing */
     padding: 6px 12px;
+}
+.username-status {
+    /* Spacing */
+    margin-top: 6px;
+
+    /* Decoration */
+    font-size: 12px;
 }

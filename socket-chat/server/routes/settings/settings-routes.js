@@ -79,7 +79,7 @@ router.patch("/username", authenticateHTTP, async (req, res) => {
                 {
                     username: updatedUsername.username
                 },
-                "Update username success"
+                "Username updated successfully."
             )
         );       
     } catch (err) {

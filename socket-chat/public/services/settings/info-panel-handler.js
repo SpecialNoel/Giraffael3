@@ -77,10 +77,15 @@ async function setUpUsernameContainer() {
     // Update-username button
     const updateUsernameBtn = setUpUpdateUsernameBtn();
 
+    // The status of user's username-update operation
+    const usernameStatus = document.createElement("span");
+    usernameStatus.className = "username-status";
+
     // Add components to the username container
     usernameContainer.appendChild(usernameLabel);
     usernameContainer.appendChild(usernameValue);
     usernameContainer.appendChild(updateUsernameBtn);
+    usernameContainer.appendChild(usernameStatus);
 
     // Add functionality to the username container such that it receives and handles update-username requests
     // upon the updateUsernameBtn clicks
@@ -89,19 +94,25 @@ async function setUpUsernameContainer() {
 
         const newUsername = usernameValue.value;
         // Omit the request if the received input username is the same as the current username
-        if (newUsername === currUsernameValue) return;
-
-        // Update the current username
-        currUsernameValue = newUsername;
-
-        // Send the username to server
-        const result = await parseResponse(await handleUpdateUsernameRequest(newUsername));
-        if (!result.success) {
-            alert("Error in changing name");
+        if (newUsername === currUsernameValue) {
+            usernameStatus.textContent = "No changes to save.";
             return;
         }
 
-        // TODO: Indicate the user about the result of changing username
+        try {
+            // Send the username to server, and receive a response from server
+            const result = await parseResponse(await handleUpdateUsernameRequest(newUsername));
+            
+            // Display the success message if the operation succeeded
+            usernameStatus.textContent = result.message;
+        
+            // Update the current username
+            currUsernameValue = newUsername;
+        } catch (err) {
+            // Display the error message if the operation failed
+            console.error(err);
+            usernameStatus.textContent = err.message;
+        }
     });
     return usernameContainer;
 }
