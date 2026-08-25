@@ -1,9 +1,15 @@
 // info-panel-handler.js
 
-import { setUpUpdateUsernameBtn } from "./button-handlers.js";
+import { 
+    createUpdateUsernameBtn,
+    createOpenPasswordUpdatePanelBtn
+} from "./button-creators.js";
 import { parseResponse } from "../utils/response-parser.js";
-import { getUserInfoRequest, 
-         handleUpdateUsernameRequest } from "./setting-services.js";
+import { getUserInfoRequest } from "./setting-services.js";
+import { 
+    addUsernameUpdateListener,
+    setUpOpenPasswordUpdatePanelBtn
+} from "./action-handlers.js";
 
 // Set up the userId container; userId should be read-only
 async function setUpUserIdContainer() {
@@ -71,11 +77,8 @@ async function setUpUsernameContainer() {
     }
     usernameValue.value = usernameResult.data.username;
 
-    // Keep a record of the current username
-    let currUsernameValue = usernameValue.value;
-
     // Update-username button
-    const updateUsernameBtn = setUpUpdateUsernameBtn();
+    const updateUsernameBtn = createUpdateUsernameBtn();
 
     // The status of user's username-update operation
     const usernameStatus = document.createElement("span");
@@ -89,31 +92,10 @@ async function setUpUsernameContainer() {
 
     // Add functionality to the username container such that it receives and handles update-username requests
     // upon the updateUsernameBtn clicks
-    usernameContainer.addEventListener("submit", async (event) => {
-        event.preventDefault();
-
-        const newUsername = usernameValue.value;
-        // Omit the request if the received input username is the same as the current username
-        if (newUsername === currUsernameValue) {
-            usernameStatus.textContent = "No changes to save.";
-            return;
-        }
-
-        try {
-            // Send the username to server, and receive a response from server
-            const result = await parseResponse(await handleUpdateUsernameRequest(newUsername));
-            
-            // Display the success message if the operation succeeded
-            usernameStatus.textContent = result.message;
-        
-            // Update the current username
-            currUsernameValue = newUsername;
-        } catch (err) {
-            // Display the error message if the operation failed
-            console.error(err);
-            usernameStatus.textContent = err.message;
-        }
-    });
+    addUsernameUpdateListener(usernameContainer, 
+                              usernameStatus, 
+                              usernameValue, 
+                              usernameValue.value);
     return usernameContainer;
 }
 
@@ -129,12 +111,21 @@ function setUpPasswordContainer() {
     passwordValue.className = "password-value";
     passwordValue.textContent = "••••••••••••";
 
+    // Open-password-update-panel button, which opens a separate panel upon clicking
+    const openPasswordUpdatePanelBtn = createOpenPasswordUpdatePanelBtn();
+
     passwordContainer.appendChild(passwordLabel);
     passwordContainer.appendChild(passwordValue);
+    passwordContainer.appendChild(openPasswordUpdatePanelBtn);
+
+    // Add functionality to the openPasswordUpdatePanelBtn such that it opens the password update panel upon clicking
+    setUpOpenPasswordUpdatePanelBtn()
     return passwordContainer;
 }
 
-export { setUpUserIdContainer, 
-         setUpUserEmailContainer, 
-         setUpUsernameContainer,
-         setUpPasswordContainer };
+export { 
+    setUpUserIdContainer, 
+    setUpUserEmailContainer, 
+    setUpUsernameContainer,
+    setUpPasswordContainer
+};

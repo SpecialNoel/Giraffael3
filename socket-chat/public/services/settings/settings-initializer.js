@@ -3,7 +3,7 @@
 import { 
     setUpBackToDashboardButton,
     setUpLogoutButton
- } from "./button-handlers.js";
+} from "./action-handlers.js";
 
 import { 
     setUpUserIdContainer,

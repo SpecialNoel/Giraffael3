@@ -81,8 +81,10 @@ function renderOlderMessages(conversationElement, messages) {
     conversationElement.scrollTop = newHeight - prevHeight;
 } 
 
-export { getRoomCodeFromParams, 
-         prependMessage,
-         appendMessage,
-         getOlderMessages,
-         renderOlderMessages };
+export { 
+    getRoomCodeFromParams, 
+    prependMessage,
+    appendMessage,
+    getOlderMessages,
+    renderOlderMessages 
+};

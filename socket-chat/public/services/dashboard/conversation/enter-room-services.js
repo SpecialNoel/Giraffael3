@@ -58,7 +58,9 @@ async function renderConversation(conversationElement, messages) {
     console.log("Loaded older messages to fill conversation element");
 }
 
-export { getCachedMessages, 
-         getCachedMembers,
-         storeMessageToState, 
-         renderConversation };
+export { 
+    getCachedMessages, 
+    getCachedMembers,
+    storeMessageToState, 
+    renderConversation 
+};

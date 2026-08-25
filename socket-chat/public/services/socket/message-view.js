@@ -67,4 +67,8 @@ function markMessageAsSent(tmpId, username, content, _id) {
     msgElement.textContent = `[${username}]: ${content}`;
 }
 
-export { appendMessageToMessageList, markMessageAsFailed, markMessageAsSent };
+export { 
+    appendMessageToMessageList, 
+    markMessageAsFailed,
+    markMessageAsSent
+};

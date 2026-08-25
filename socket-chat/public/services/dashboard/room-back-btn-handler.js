@@ -31,4 +31,8 @@ function disableRoomBackBtn() {
     backButton.style.display = "none";
 }
 
-export { setUpRoomBackBtn, enableRoomBackBtn, disableRoomBackBtn }
+export { 
+    setUpRoomBackBtn, 
+    enableRoomBackBtn, 
+    disableRoomBackBtn 
+}

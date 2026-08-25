@@ -200,8 +200,10 @@ function handleJoinRoom(socket) {
     joinRoomBtn.addEventListener("click", handleClick);
 }
 
-export { handleEnterRoom, 
-         handleLeaveRoom, 
-         handleDeleteRoom,
-         handleCreateRoom,
-         handleJoinRoom };
+export { 
+    handleEnterRoom,   
+    handleLeaveRoom, 
+    handleDeleteRoom,
+    handleCreateRoom,
+    handleJoinRoom
+};

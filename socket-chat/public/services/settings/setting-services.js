@@ -18,5 +18,7 @@ async function handleUpdateUsernameRequest(newUsername) {
     });
 }
 
-export { getUserInfoRequest, 
-         handleUpdateUsernameRequest };
+export {
+    getUserInfoRequest, 
+    handleUpdateUsernameRequest
+};

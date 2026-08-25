@@ -21,7 +21,8 @@
 /* Buttons */
 .back-to-dashboard-btn, 
 .logout-btn, 
-.update-username-btn {
+.update-username-btn,
+.open-password-update-panel-btn {
     /* Spacing */
     padding: 6px 12px;
 
@@ -61,7 +62,8 @@
     /* Spacing */
     margin-top: 20px;
 }
-.update-username-btn {
+.update-username-btn,
+.open-password-update-panel-btn {
     /* Spacing */
     margin-top: 5px;
     padding: 4px 8px;
@@ -72,12 +74,14 @@
 }
 .back-to-dashboard-btn:hover, 
 .logout-btn:hover, 
-.update-username-btn:hover {
+.update-username-btn:hover,
+.open-password-update-panel-btn:hover {
     /* Decoration */
     text-decoration: underline;
 }
 .logout-btn:hover, 
-.update-username-btn:hover {
+.update-username-btn:hover,
+.open-password-update-panel-btn:hover {
     /* Appearance */
     background-color: #ffb347;
 }
@@ -121,6 +125,10 @@ h1 {
 
     /* Spacing */
     margin-bottom: 20px;
+}
+.username-container {
+    /* Spacing */
+    margin-bottom: 14px;
 }
 .user-id-value, 
 .user-email-value, 
