@@ -5,6 +5,7 @@
 	/* Layout */
     display: flex; /* Make it easier to align elements */
     flex-direction: column;
+    position: relative;
 
     /* Size */
     /* 100vh: Set the page at least as tall as the viewport */
@@ -16,6 +17,12 @@
 
     /* Spacing */
     margin-top: 30px;
+}
+h1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
 }
 
 /* Buttons */
@@ -86,31 +93,76 @@
     background-color: #ffb347;
 }
 
-/* Information panel */
-.info-panel {
-    /* Layout */
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    
-    /* Size */
-    width: min(90%, 500px); /* Resizable, but only up to 500px; it takes 90% width on mobile view */
+/* Overlay between info panel and edit password panel */
+.overlay {
+    /* Style */
+    display: none;
+    position: absolute;
 
     /* Spacing */
-    margin: 20px auto; /* Giving spaces between the panel and other elements, while center-aligning it */
+    top: 0;
+    left: 0;
+
+    /* Size */
+    width: 100%;
+    height: 100%;
+
+    /* Decoration */
+    background-color: rgba(0, 0, 0, 0.3);
+
+    /* Composition */
+    z-index: 10;
+}
+.overlay.visible {
+    /* Style */
+    display: block;
+}
+
+/* Information panel, edit password panel */
+.info-panel, .edit-password-panel {
+    /* Layout */
+    align-items: center;
+    flex-direction: column;
 
     /* Border */
     border: 1px solid #ccc;
 }
-h1 {
+.info-panel {
+    /* Layout */
     display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+
+    /* Spacing */
+    margin: 20px auto; /* Giving spaces between the panel and other elements, while center-aligning it */
+
+    /* Size */
+    width: min(90%, 500px); /* Resizable, but only up to 500px; it takes 90% width on mobile view */
 }
 .info-panel h2 {
     /* Decoration */
     text-decoration: underline;
+}
+.edit-password-panel {
+    /* Layout */
+    display: none;
+    position: absolute;
+
+    /* Spacing */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Along with top and left 50%, locating the panel to the center of screen */
+
+    /* Size */
+    width: min(72%, 400px);
+
+    /* Composition */
+    z-index: 20; /* z-index is higher than the one in overlay, meaning that it will be displayed on top of overlay when visible */
+
+    /* Decoration */
+    background-color: white;
+}
+.edit-password-panel.visible {
+    /* Layout */
+    display: flex;
 }
 
 /* Elements inside the information panel */

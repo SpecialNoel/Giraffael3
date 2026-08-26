@@ -8,7 +8,9 @@ import { parseResponse } from "../utils/response-parser.js";
 import { getUserInfoRequest } from "./setting-services.js";
 import { 
     addUsernameUpdateListener,
-    setUpOpenPasswordUpdatePanelBtn
+    setUpOpenEditPasswordPanelBtn,
+    setUpCloseEditPasswordPanelBtn,
+    setUpOverlay
 } from "./action-handlers.js";
 
 // Set up the userId container; userId should be read-only
@@ -112,14 +114,20 @@ function setUpPasswordContainer() {
     passwordValue.textContent = "••••••••••••";
 
     // Open-password-update-panel button, which opens a separate panel upon clicking
-    const openPasswordUpdatePanelBtn = createOpenPasswordUpdatePanelBtn();
+    const openEditPasswordPanelBtn = createOpenPasswordUpdatePanelBtn();
 
     passwordContainer.appendChild(passwordLabel);
     passwordContainer.appendChild(passwordValue);
-    passwordContainer.appendChild(openPasswordUpdatePanelBtn);
+    passwordContainer.appendChild(openEditPasswordPanelBtn);
 
-    // Add functionality to the openPasswordUpdatePanelBtn such that it opens the password update panel upon clicking
-    setUpOpenPasswordUpdatePanelBtn()
+    // Add functionality to the button such that it opens the edit password panel upon clicking
+    setUpOpenEditPasswordPanelBtn(openEditPasswordPanelBtn);
+
+    // Add functionality to the button such that it closes the edit password panel upon clicking
+    setUpCloseEditPasswordPanelBtn();
+
+    // Set up the overlay such that it closes upon clicking
+    setUpOverlay();
     return passwordContainer;
 }
 

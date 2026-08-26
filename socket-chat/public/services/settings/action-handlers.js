@@ -56,13 +56,47 @@ function addUsernameUpdateListener(usernameContainer,
 }
 
 // Add functionality to the openPasswordUpdatePanelBtn such that it opens the password update panel upon clicking
-function setUpOpenPasswordUpdatePanelBtn() {
+function setUpOpenEditPasswordPanelBtn(openEditPasswordPanelBtn) {
+    const editPasswordPanel = document.querySelector(".edit-password-panel");
+    const overlay = document.querySelector(".overlay");
 
+    openEditPasswordPanelBtn.addEventListener("click", () => {
+        editPasswordPanel.classList.add("visible");
+        overlay.classList.add("visible");
+    });
+}
+
+function closeEditPasswordPanel() {
+    const editPasswordPanel = document.querySelector(".edit-password-panel");
+    const overlay = document.querySelector(".overlay");
+
+    editPasswordPanel.classList.remove("visible");
+    overlay.classList.remove("visible");
+}
+
+
+function setUpCloseEditPasswordPanelBtn() {
+    const closeBtn = document.querySelector(".close-edit-password-panel-btn");
+
+    closeBtn.addEventListener("click", () => {
+        closeEditPasswordPanel();
+    });
+}
+
+// Close the overlay when the user clicks on it while it is visible
+function setUpOverlay() {
+    const overlay = document.querySelector(".overlay");
+
+    overlay.addEventListener("click", () => {
+        closeEditPasswordPanel();
+    });
 }
 
 export { 
     setUpBackToDashboardButton, 
     setUpLogoutButton,
     addUsernameUpdateListener,
-    setUpOpenPasswordUpdatePanelBtn
+    setUpOpenEditPasswordPanelBtn,
+    setUpCloseEditPasswordPanelBtn,
+    setUpOverlay
 };
