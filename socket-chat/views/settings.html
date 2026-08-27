@@ -20,12 +20,39 @@
     <!-- User information -->
     <div class="info-panel">
       <h2>User Information</h2>
+      <div class="user-id-container">
+        <label>User ID</label>
+        <span class="user-id-value"></span>
+      </div>
+
+      <div class="user-email-container">
+        <label>Email</label>
+        <span class="user-email-value"></span>
+      </div>
+
+      <form class="username-container">
+        <label>Username</label>
+        <input class="username-value" type="text" />
+        <button class="update-username-btn" type="submit">Save</button>
+        <span class="username-status"></span>
+      </form>
+
+      <div class="password-container">
+        <label>Password</label>
+        <span class="password-value">••••••••••••</span>
+        <button class="open-password-update-panel-btn" type="button">
+          Edit Password
+        </button>
+      </div>
     </div>
 
     <div class="overlay"></div>
 
     <div class="edit-password-panel">
-      <button class="close-edit-password-panel-btn">Cancel</button>
+      <div class="edit-password-panel-btn-container">
+        <button class="close-edit-password-panel-btn">Cancel</button>
+        <button class="save-password-change-btn">Save Changes</button>
+      </div>
     </div>
 
     <!-- Button to Sign-in page -->

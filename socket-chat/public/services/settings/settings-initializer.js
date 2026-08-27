@@ -6,8 +6,8 @@ import {
 } from "./action-handlers.js";
 
 import { 
-    setUpUserIdContainer,
-    setUpUserEmailContainer,
+    fetchAndUpdateUserId,
+    fetchAndUpdateUserEmail,
     setUpUsernameContainer,
     setUpPasswordContainer
 } from "./info-panel-handler.js";
@@ -25,25 +25,19 @@ async function initSettingsPage() {
     const infoPanel = document.querySelector(".info-panel");
     
     // UserId section (immutable)
-    const userIdContainer = await setUpUserIdContainer();
+    await fetchAndUpdateUserId();
 
     // User email section (immutable)
-    const userEmailContainer = await setUpUserEmailContainer();
+    await fetchAndUpdateUserEmail();
 
     // Username section (mutable)
-    const usernameContainer = await setUpUsernameContainer();
+    await setUpUsernameContainer();
 
     // Password section (immutable; unviewable) 
-    const passwordContainer = setUpPasswordContainer();
+    setUpPasswordContainer();
 
     // Update password section (mutable)
 
-
-    // Add every section onto the information panel
-    infoPanel.appendChild(userIdContainer);
-    infoPanel.appendChild(userEmailContainer);
-    infoPanel.appendChild(usernameContainer);
-    infoPanel.appendChild(passwordContainer);
 }
 
 export { initSettingsPage };

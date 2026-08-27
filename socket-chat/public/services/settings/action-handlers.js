@@ -23,10 +23,11 @@ function setUpLogoutButton() {
 
 // Add functionality to the username container such that it receives and handles update-username requests
 // upon the updateUsernameBtn clicks
-function addUsernameUpdateListener(usernameContainer, 
-                                   usernameStatus,
-                                   usernameValue,
-                                   currUsernameValue) {
+function setUpUsernameUpdateListener(currUsernameValue) {
+    const usernameContainer = document.querySelector(".username-container");
+    const usernameStatus = document.querySelector(".username-status");
+    const usernameValue = document.querySelector(".username-value");
+    
     usernameContainer.addEventListener("submit", async (event) => {
         event.preventDefault();
 
@@ -55,12 +56,13 @@ function addUsernameUpdateListener(usernameContainer,
     });
 }
 
-// Add functionality to the openPasswordUpdatePanelBtn such that it opens the password update panel upon clicking
-function setUpOpenEditPasswordPanelBtn(openEditPasswordPanelBtn) {
+// Add functionality to the button such that it opens the password update panel upon clicking
+function setUpOpenEditPasswordPanelBtn() {
     const editPasswordPanel = document.querySelector(".edit-password-panel");
     const overlay = document.querySelector(".overlay");
+    const openBtn = document.querySelector(".open-password-update-panel-btn");
 
-    openEditPasswordPanelBtn.addEventListener("click", () => {
+    openBtn.addEventListener("click", () => {
         editPasswordPanel.classList.add("visible");
         overlay.classList.add("visible");
     });
@@ -73,7 +75,6 @@ function closeEditPasswordPanel() {
     editPasswordPanel.classList.remove("visible");
     overlay.classList.remove("visible");
 }
-
 
 function setUpCloseEditPasswordPanelBtn() {
     const closeBtn = document.querySelector(".close-edit-password-panel-btn");
@@ -95,7 +96,7 @@ function setUpOverlay() {
 export { 
     setUpBackToDashboardButton, 
     setUpLogoutButton,
-    addUsernameUpdateListener,
+    setUpUsernameUpdateListener,
     setUpOpenEditPasswordPanelBtn,
     setUpCloseEditPasswordPanelBtn,
     setUpOverlay

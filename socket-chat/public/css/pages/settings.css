@@ -92,6 +92,14 @@ h1 {
     /* Appearance */
     background-color: #ffb347;
 }
+.edit-password-panel-btn-container {
+    /* Style */
+    display: flex;
+    justify-content: center; /* Horizontal positioning */
+
+    /* Spacing */
+    gap: 32px;
+}
 
 /* Overlay between info panel and edit password panel */
 .overlay {

@@ -1,139 +1,65 @@
 // info-panel-handler.js
 
-import { 
-    createUpdateUsernameBtn,
-    createOpenPasswordUpdatePanelBtn
-} from "./button-creators.js";
 import { parseResponse } from "../utils/response-parser.js";
 import { getUserInfoRequest } from "./setting-services.js";
 import { 
-    addUsernameUpdateListener,
+    setUpUsernameUpdateListener,
     setUpOpenEditPasswordPanelBtn,
     setUpCloseEditPasswordPanelBtn,
     setUpOverlay
 } from "./action-handlers.js";
 
-// Set up the userId container; userId should be read-only
-async function setUpUserIdContainer() {
-    const userIdContainer = document.createElement("div");
-    userIdContainer.className = "user-id-container";
-
-    const userIdLabel = document.createElement("label");
-    userIdLabel.textContent = "User ID";
-
-    const userIdValue = document.createElement("span");
-    userIdValue.className = "user-id-value";
-
+// Fetch userId from server, then update the value on Settings page; userId should be read-only
+async function fetchAndUpdateUserId() {
     const userIdResult = await parseResponse(await getUserInfoRequest("user-id"));
     if (!userIdResult.success) {
         alert("Error in fetching user id");
         return;
     }
+    const userIdValue = document.querySelector(".user-id-value");
     userIdValue.textContent = userIdResult.data.userId;
-
-    userIdContainer.appendChild(userIdLabel);
-    userIdContainer.appendChild(userIdValue);
-    return userIdContainer;
 }
 
-// Set up the user email container; user email should be read-only
-async function setUpUserEmailContainer() {
-    const userEmailContainer = document.createElement("div");
-    userEmailContainer.className = "user-email-container";
-
-    const userEmailLabel = document.createElement("label");
-    userEmailLabel.textContent = "Email";
-
-    const userEmailValue = document.createElement("span");
-    userEmailValue.className = "user-email-value";
-    userEmailValue.textContent = "Email address";
-
+// Fetch user email from server, then update the value on Settings page; user email should be read-only
+async function fetchAndUpdateUserEmail() {
     const userEmailResult = await parseResponse(await getUserInfoRequest("user-email"));
     if (!userEmailResult.success) {
         alert("Error in fetching user email");
         return;
     }
+    const userEmailValue = document.querySelector(".user-email-value");
     userEmailValue.textContent = userEmailResult.data.userEmail;
-
-    userEmailContainer.appendChild(userEmailLabel);
-    userEmailContainer.appendChild(userEmailValue);
-    return userEmailContainer;
 }
 
 // Set up the username container; username should be editable
 async function setUpUsernameContainer() {
-    const usernameContainer = document.createElement("form");
-    usernameContainer.className = "username-container";
-
-    const usernameLabel = document.createElement("label");
-    usernameLabel.textContent = "Username";
-
-    const usernameValue = document.createElement("input");
-    usernameValue.className = "username-value";
-    usernameValue.type = "text";
-
     const usernameResult = await parseResponse(await getUserInfoRequest("username"));
     if (!usernameResult.success) {
         alert("Error in fetching username");
         return;
     }
+    const usernameValue = document.querySelector(".username-value");
     usernameValue.value = usernameResult.data.username;
 
-    // Update-username button
-    const updateUsernameBtn = createUpdateUsernameBtn();
-
-    // The status of user's username-update operation
-    const usernameStatus = document.createElement("span");
-    usernameStatus.className = "username-status";
-
-    // Add components to the username container
-    usernameContainer.appendChild(usernameLabel);
-    usernameContainer.appendChild(usernameValue);
-    usernameContainer.appendChild(updateUsernameBtn);
-    usernameContainer.appendChild(usernameStatus);
-
-    // Add functionality to the username container such that it receives and handles update-username requests
-    // upon the updateUsernameBtn clicks
-    addUsernameUpdateListener(usernameContainer, 
-                              usernameStatus, 
-                              usernameValue, 
-                              usernameValue.value);
-    return usernameContainer;
+    // Handle username-update requests upon the updateUsernameBtn clicks
+    setUpUsernameUpdateListener(usernameValue.value);
 }
 
 // Set up the password container; password should be read-only
 function setUpPasswordContainer() {
-    const passwordContainer = document.createElement("div");
-    passwordContainer.className = "password-container";
-
-    const passwordLabel = document.createElement("label");
-    passwordLabel.textContent = "Password";
-
-    const passwordValue = document.createElement("span");
-    passwordValue.className = "password-value";
-    passwordValue.textContent = "••••••••••••";
-
-    // Open-password-update-panel button, which opens a separate panel upon clicking
-    const openEditPasswordPanelBtn = createOpenPasswordUpdatePanelBtn();
-
-    passwordContainer.appendChild(passwordLabel);
-    passwordContainer.appendChild(passwordValue);
-    passwordContainer.appendChild(openEditPasswordPanelBtn);
-
     // Add functionality to the button such that it opens the edit password panel upon clicking
-    setUpOpenEditPasswordPanelBtn(openEditPasswordPanelBtn);
+    setUpOpenEditPasswordPanelBtn();
 
     // Add functionality to the button such that it closes the edit password panel upon clicking
     setUpCloseEditPasswordPanelBtn();
 
     // Set up the overlay such that it closes upon clicking
     setUpOverlay();
-    return passwordContainer;
 }
 
 export { 
-    setUpUserIdContainer, 
-    setUpUserEmailContainer, 
+    fetchAndUpdateUserId, 
+    fetchAndUpdateUserEmail, 
     setUpUsernameContainer,
     setUpPasswordContainer
 };
