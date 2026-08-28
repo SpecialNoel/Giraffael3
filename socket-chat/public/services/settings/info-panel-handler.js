@@ -4,8 +4,8 @@ import { parseResponse } from "../utils/response-parser.js";
 import { getUserInfoRequest } from "./setting-services.js";
 import { 
     setUpUsernameUpdateListener,
-    setUpOpenEditPasswordPanelBtn,
-    setUpCloseEditPasswordPanelBtn,
+    setUpOpenChangePasswordPanelBtn,
+    setUpCloseChangePasswordPanelBtn,
     setUpOverlay
 } from "./action-handlers.js";
 
@@ -31,7 +31,7 @@ async function fetchAndUpdateUserEmail() {
     userEmailValue.textContent = userEmailResult.data.userEmail;
 }
 
-// Set up the username container; username should be editable
+// Set up the username container; username should be mutable
 async function setUpUsernameContainer() {
     const usernameResult = await parseResponse(await getUserInfoRequest("username"));
     if (!usernameResult.success) {
@@ -40,26 +40,23 @@ async function setUpUsernameContainer() {
     }
     const usernameValue = document.querySelector(".username-value");
     usernameValue.value = usernameResult.data.username;
-
     // Handle username-update requests upon the updateUsernameBtn clicks
     setUpUsernameUpdateListener(usernameValue.value);
 }
 
-// Set up the password container; password should be read-only
-function setUpPasswordContainer() {
-    // Add functionality to the button such that it opens the edit password panel upon clicking
-    setUpOpenEditPasswordPanelBtn();
-
-    // Add functionality to the button such that it closes the edit password panel upon clicking
-    setUpCloseEditPasswordPanelBtn();
-
-    // Set up the overlay such that it closes upon clicking
-    setUpOverlay();
+// Set up the change password panel container
+function setUpChangePasswordPanelContainer() {
+    // Opens the change password panel when clicked
+    setUpOpenChangePasswordPanelBtn();
+    // Closes the change password panel when clicked
+    setUpCloseChangePasswordPanelBtn();
+    // Set up the overlay such that it closes when clicked
+    setUpOverlay(); // overlay activates when change password panel is opened; it deactivates when the panel is closed
 }
 
 export { 
     fetchAndUpdateUserId, 
     fetchAndUpdateUserEmail, 
     setUpUsernameContainer,
-    setUpPasswordContainer
+    setUpChangePasswordPanelContainer
 };

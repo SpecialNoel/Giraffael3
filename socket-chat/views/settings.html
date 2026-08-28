@@ -13,9 +13,8 @@
     <!-- Button to Dashboard page -->
     <div class="settings-header">
       <button class="back-to-dashboard-btn">← Back to Dashboard</button>
+      <h1>Settings</h1>
     </div>
-
-    <h1>Settings</h1>
 
     <!-- User information -->
     <div class="info-panel">
@@ -33,24 +32,32 @@
       <form class="username-container">
         <label>Username</label>
         <input class="username-value" type="text" />
-        <button class="update-username-btn" type="submit">Save</button>
+        <button class="update-username-btn" type="submit">Save Username</button>
         <span class="username-status"></span>
       </form>
 
       <div class="password-container">
         <label>Password</label>
         <span class="password-value">••••••••••••</span>
-        <button class="open-password-update-panel-btn" type="button">
-          Edit Password
+        <button class="open-change-password-panel-btn" type="button">
+          Change Password
         </button>
       </div>
     </div>
 
     <div class="overlay"></div>
 
-    <div class="edit-password-panel">
-      <div class="edit-password-panel-btn-container">
-        <button class="close-edit-password-panel-btn">Cancel</button>
+    <div class="change-password-panel">
+      <div class="change-password-panel-input-container">
+        <label>Current Password</label>
+        <input class="current-password-value" type="password" />
+        <label>New Password</label>
+        <input class="new-password-value" type="password" />
+        <label>Confirm New Password</label>
+        <input class="confirm-new-password-value" type="password" />
+      </div>
+      <div class="change-password-panel-btn-container">
+        <button class="close-change-password-panel-btn">Cancel</button>
         <button class="save-password-change-btn">Save Changes</button>
       </div>
     </div>

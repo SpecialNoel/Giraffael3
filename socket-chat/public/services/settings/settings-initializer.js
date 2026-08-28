@@ -9,35 +9,24 @@ import {
     fetchAndUpdateUserId,
     fetchAndUpdateUserEmail,
     setUpUsernameContainer,
-    setUpPasswordContainer
+    setUpChangePasswordPanelContainer
 } from "./info-panel-handler.js";
 
-// Initialize the Settings page by setting up the page for displaying user
-// related information, as well as event listeners to handle user requests
+// Initialize the Settings page by setting up the page with fetched user
+// information, as well as event listeners to handle user requests
 async function initSettingsPage() {
     // Set up the back-to-dashboard button
     setUpBackToDashboardButton();
-
     // Set up the logout button
     setUpLogoutButton();
-
-    // Get information panel, which displays user-related information
-    const infoPanel = document.querySelector(".info-panel");
-    
-    // UserId section (immutable)
+    // Set up the userId section (immutable)
     await fetchAndUpdateUserId();
-
-    // User email section (immutable)
+    // Set up the user email section (immutable)
     await fetchAndUpdateUserEmail();
-
-    // Username section (mutable)
+    // Set up the username section (mutable)
     await setUpUsernameContainer();
-
-    // Password section (immutable; unviewable) 
-    setUpPasswordContainer();
-
-    // Update password section (mutable)
-
+    // Set up the change password panel section (mutable) 
+    setUpChangePasswordPanelContainer();
 }
 
 export { initSettingsPage };

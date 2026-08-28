@@ -6,7 +6,7 @@ function setUpRoomBackBtn() {
     const backButton = document.querySelector(".room-back-btn");
     if (!backButton) return;
 
-    // Redirect the user back to the Dashboard page (while they are inside a room) upon clicking
+    // Redirect the user back to the Dashboard page (while they are inside a room) when clicked
     backButton.addEventListener("click", () => {
         window.location.href = "/dashboard";
     });

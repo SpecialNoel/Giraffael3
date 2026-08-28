@@ -94,8 +94,7 @@ async function handleDeleteRoom(deleteBtn, roomRow) {
 // Set up the create-room logic
 function handleCreateRoom(socket) {
     /*
-        On the dashboard page, add functionality to the create room button such that
-        user will submit the inputted room name to server to create a room upon clicking the button.
+        Submit user inputted room name to server to create a room when clicked
     */
     const createRoomBtn = document.querySelector(".create-btn");
 
@@ -144,8 +143,7 @@ function handleCreateRoom(socket) {
 // Set up the join-room logic
 function handleJoinRoom(socket) {
     /*
-        On the dashboard page, add functionality to the join room button such that
-        user will submit the inputted room code to server to join a room upon clicking the button.
+        Submit user inputted room code to server to join a room when clicked
     */
     const joinRoomBtn = document.querySelector(".join-btn");
 

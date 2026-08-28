@@ -40,7 +40,7 @@
     cursor: pointer; /* Replace the cursor with the pointer, when hovered over */
 }
 
-/* Room buttons (enters the room upon clicking) in Dashboard page */
+/* Room buttons (enters the room when clicked) in Dashboard page */
 .room-btn {
     /* Layout */
     display: flex; /* Allow flexible alignment of button contents */

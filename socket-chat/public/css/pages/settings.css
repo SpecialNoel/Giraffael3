@@ -18,20 +18,20 @@
     /* Spacing */
     margin-top: 30px;
 }
-h1 {
+.settings-header h1 {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
 }
 
 /* Buttons */
-.back-to-dashboard-btn, 
-.logout-btn, 
 .update-username-btn,
-.open-password-update-panel-btn {
+.open-change-password-panel-btn,
+.close-change-password-panel-btn,
+.save-password-change-btn {
     /* Spacing */
-    padding: 6px 12px;
+    padding: 4px 8px;
 
     /* Appearance */
     background: none;
@@ -39,27 +39,13 @@ h1 {
     /* Font */
     font-size: 14px;
 
+    /* Border */
+    border: 1px solid #959595;
+    border-radius: 4px;
+
     /* Interaction */
     cursor: pointer; /* Replace the cursor with the pointer, when hovered over */
 }
-.back-to-dashboard-btn {
-    /* Border */
-    border: none;
-}
-.logout-btn-container {
-    /* Layout */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    /* Size */
-    width: 100%;
-
-    /* Spacing */
-    margin-top: auto; /* Pushes the container toward the bottom */
-    padding-bottom: 80px;
-}
-.logout-btn, 
 .update-username-btn {
     /* Layout */
     display: flex;
@@ -70,110 +56,22 @@ h1 {
     margin-top: 20px;
 }
 .update-username-btn,
-.open-password-update-panel-btn {
+.open-change-password-panel-btn {
     /* Spacing */
     margin-top: 5px;
-    padding: 4px 8px;
-
-    /* Border */
-    border: 1px solid #959595;
-    border-radius: 2px;
 }
-.back-to-dashboard-btn:hover, 
-.logout-btn:hover, 
 .update-username-btn:hover,
-.open-password-update-panel-btn:hover {
+.open-change-password-panel-btn:hover,
+.close-change-password-panel-btn:hover,
+.save-password-change-btn:hover {
     /* Decoration */
     text-decoration: underline;
-}
-.logout-btn:hover, 
-.update-username-btn:hover,
-.open-password-update-panel-btn:hover {
+
     /* Appearance */
     background-color: #ffb347;
 }
-.edit-password-panel-btn-container {
-    /* Style */
-    display: flex;
-    justify-content: center; /* Horizontal positioning */
 
-    /* Spacing */
-    gap: 32px;
-}
-
-/* Overlay between info panel and edit password panel */
-.overlay {
-    /* Style */
-    display: none;
-    position: absolute;
-
-    /* Spacing */
-    top: 0;
-    left: 0;
-
-    /* Size */
-    width: 100%;
-    height: 100%;
-
-    /* Decoration */
-    background-color: rgba(0, 0, 0, 0.3);
-
-    /* Composition */
-    z-index: 10;
-}
-.overlay.visible {
-    /* Style */
-    display: block;
-}
-
-/* Information panel, edit password panel */
-.info-panel, .edit-password-panel {
-    /* Layout */
-    align-items: center;
-    flex-direction: column;
-
-    /* Border */
-    border: 1px solid #ccc;
-}
-.info-panel {
-    /* Layout */
-    display: flex;
-
-    /* Spacing */
-    margin: 20px auto; /* Giving spaces between the panel and other elements, while center-aligning it */
-
-    /* Size */
-    width: min(90%, 500px); /* Resizable, but only up to 500px; it takes 90% width on mobile view */
-}
-.info-panel h2 {
-    /* Decoration */
-    text-decoration: underline;
-}
-.edit-password-panel {
-    /* Layout */
-    display: none;
-    position: absolute;
-
-    /* Spacing */
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); /* Along with top and left 50%, locating the panel to the center of screen */
-
-    /* Size */
-    width: min(72%, 400px);
-
-    /* Composition */
-    z-index: 20; /* z-index is higher than the one in overlay, meaning that it will be displayed on top of overlay when visible */
-
-    /* Decoration */
-    background-color: white;
-}
-.edit-password-panel.visible {
-    /* Layout */
-    display: flex;
-}
-
-/* Elements inside the information panel */
+/* User information containers */
 .user-id-container,
 .user-email-container,
 .username-container,
@@ -190,6 +88,8 @@ h1 {
     /* Spacing */
     margin-bottom: 14px;
 }
+
+/* User information values */
 .user-id-value, 
 .user-email-value, 
 .password-value {
@@ -203,12 +103,14 @@ h1 {
     padding: 6px 12px;
 
     /* Border */
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border: 1px solid #959595;
+    border-radius: 2px;
 
     /* Decoration */
-    color: rgb(145, 145, 145);
+    color: #959595;
 }
+
+/* Change username related */
 .username-value {
     /* Size */
     width: 250px;
@@ -222,4 +124,211 @@ h1 {
 
     /* Decoration */
     font-size: 12px;
+}
+
+/* Change password related */
+.current-password-value, 
+.new-password-value,
+.confirm-new-password-value {
+    /* Layout */
+    display: block;
+
+    /* Size */
+    width: 250px;
+
+    /* Spacing */
+    padding: 6px 12px;
+    margin-bottom: 20px;
+
+    /* Border */
+    border: 1px solid #959595;
+    border-radius: 2px;
+
+    /* Decoration */
+    color: black;
+}
+
+/* Back to Dashboard button */
+.back-to-dashboard-btn {
+    /* Spacing */
+    padding: 6px 12px;
+
+    /* Appearance */
+    background: none;
+
+    /* Font */
+    font-size: 14px;
+
+    /* Border */
+    border: none;
+
+    /* Interaction */
+    cursor: pointer; /* Replace the cursor with the pointer, when hovered over */
+}
+.back-to-dashboard-btn:hover {
+    /* Decoration */
+    text-decoration: underline;
+}
+
+/* Logout button */
+.logout-btn {
+    /* Layout */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Spacing */
+    padding: 6px 12px;
+    margin-top: 20px;
+
+    /* Appearance */
+    background: none;
+
+    /* Font */
+    font-size: 14px;
+
+    /* Interaction */
+    cursor: pointer; /* Replace the cursor with the pointer, when hovered over */
+}
+.logout-btn:hover {
+    /* Decoration */
+    text-decoration: underline;
+
+    /* Appearance */
+    background-color: #ffb347;
+}
+.logout-btn-container {
+    /* Layout */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Size */
+    width: 100%;
+
+    /* Spacing */
+    margin-top: auto; /* Pushes the container toward the bottom */
+    padding-bottom: 80px;
+}
+
+/* Information panel */
+.info-panel {
+    /* Layout */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    /* Spacing */
+    margin: 20px auto; /* Giving spaces between the panel and other elements, while center-aligning it */
+
+    /* Size */
+    width: min(90%, 500px); /* Resizable, but only up to 500px; it takes 90% width on mobile view */
+
+    /* Border */
+    border: 1px solid #959595;
+
+    /* Appearance */
+    background-color: white;
+}
+.info-panel h2 {
+    /* Decoration */
+    text-decoration: underline;
+}
+
+/* Change password panel */
+.change-password-panel {
+    /* Layout */
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+
+    /* Spacing */
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Along with top and left 50%, locating the panel to the center of screen */
+
+    /* Size */
+    width: min(75%, 450px);
+
+    /* Border */
+    border: 1px solid #959595;
+
+    /* Composition */
+    z-index: 20; /* z-index is higher than the one in overlay, meaning that it will be displayed on top of overlay when visible */
+
+    /* Appearance */
+    background-color: white;
+}
+.change-password-panel.visible {
+    /* Layout */
+    display: flex;
+}
+.change-password-panel-input-container {
+    /* Layout */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    /* Size */
+    width: 100%;
+    max-width: 400px;
+
+    /* Spacing */
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+.change-password-panel-input-container input {
+    /* Size */
+    width: 80%;
+}
+.change-password-panel-btn-container {
+    /* Style */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* Size */
+    width: 100%;
+    max-width: 300px;
+
+    /* Spacing */
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+/* Overlay between information panel and change password panel */
+.overlay {
+    /* Style */
+    display: none;
+    position: absolute;
+
+    /* Spacing */
+    top: 0;
+    left: 0;
+
+    /* Size */
+    width: 100%;
+    height: 100%;
+
+    /* Appearance */
+    background-color: rgba(0, 0, 0, 0.3);
+
+    /* Composition */
+    z-index: 10;
+}
+.overlay.visible {
+    /* Style */
+    display: block;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .change-password-panel-btn-container {
+        flex-direction: column;
+    }
+
+    .change-password-panel-btn-container button {
+        width: 80%;
+    }
 }

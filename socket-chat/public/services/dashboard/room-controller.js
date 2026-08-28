@@ -9,8 +9,7 @@ import { handleEnterRoom,
 // Set up the rooms container
 function handleRoomsContainer(socket) {    
     /*
-        On the dashboard page, add functionality to each room icon/button such that
-        a certain task will be executed whenever the user clicks on the room icon.
+        A certain task will be executed whenever the user clicks on the room icon.
     */
     const containerDiv = document.getElementById("rooms-container");
 
