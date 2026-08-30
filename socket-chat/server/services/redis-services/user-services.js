@@ -69,9 +69,11 @@ async function isUserInRoom(redis, roomCode, userId) {
     };
 }
 
-export { addUserToRoom, 
-         removeUserFromRoom, 
-         getUserRooms,
-         addSocketToUser,
-         removeSocketFromUser,
-         isUserInRoom };
+export {
+    addUserToRoom, 
+    removeUserFromRoom, 
+    getUserRooms,
+    addSocketToUser,
+    removeSocketFromUser,
+    isUserInRoom
+};

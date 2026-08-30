@@ -53,7 +53,7 @@ function markMessageAsFailed(tmpId) {
 }
 
 // Update the UI upon successfully sending the message (indicated by tmpId)
-function markMessageAsSent(tmpId, content, _id) {
+function markMessageAsSent(tmpId, username, content, _id) {
     // Fetch the target message
     const msgElement = document.querySelector(`[data-id="${tmpId}"]`);
     if (!msgElement) return;
@@ -63,11 +63,12 @@ function markMessageAsSent(tmpId, content, _id) {
     msgElement.classList.remove("sending");
     msgElement.classList.add("sent");
 
-    // Fetch username from local storage
-    const username = localStorage.getItem("username");
-
     // Update the message directly on the UI of conversation
     msgElement.textContent = `[${username}]: ${content}`;
 }
 
-export { appendMessageToMessageList, markMessageAsFailed, markMessageAsSent };
+export { 
+    appendMessageToMessageList, 
+    markMessageAsFailed,
+    markMessageAsSent
+};

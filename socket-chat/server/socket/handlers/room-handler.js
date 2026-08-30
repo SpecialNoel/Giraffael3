@@ -8,7 +8,7 @@ async function registerEnterRoomHandler(socket, roomCode, cursor) {
     // Leave the user from the room if they are already in the room to prevent duplicated enter
     if (socket.activeRoomCode) {
         // Stop the user entering the same room if they are currently inside the target room
-        if (socket.activeRoomCode == roomCode) return;
+        if (socket.activeRoomCode === roomCode) return;
         socket.leave(socket.activeRoomCode);
     }
 

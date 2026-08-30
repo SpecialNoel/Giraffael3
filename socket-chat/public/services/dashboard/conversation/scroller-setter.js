@@ -3,7 +3,7 @@
 import { getOlderMessages, renderOlderMessages } from "./services.js";
 
 // Set up scroller in the conversation element to fetch and load older messages upon user scrolling to the very top
-async function setupConversationScroller() {
+async function setUpConversationScroller() {
     // isLoading is used to guard from the case where the user fires multiple requests just to prepend/fulfill the a single request 
     // (i.e. scroll to top multiple times before the actual loading action is completed)
     const conversationElement = document.getElementById("conversation");
@@ -19,4 +19,4 @@ async function setupConversationScroller() {
     });
 }
 
-export { setupConversationScroller };
+export { setUpConversationScroller };

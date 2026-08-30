@@ -48,7 +48,6 @@ function signIn() {
 
             // Store necessary user information to the local storage of user's browser
             localStorage.setItem("userId", result.data.userId);     // userId (user public id)
-            localStorage.setItem("username", result.data.username); // username recorded in database 
             localStorage.setItem("token", result.data.token);       // JWT token
 
             // The credentials are verified by server to be valid, proceed to the Dashboard page.

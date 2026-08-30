@@ -41,7 +41,9 @@ function broadcastChatMessage(socket, roomCode, tmpId, content) {
     socket.to(roomCode).emit("chatMessageReceived", data);
 }
 
-export { broadcastRoomDeleted,
-         broadcastUserLeft,
-         broadcastUserJoined,
-         broadcastChatMessage };
+export { 
+    broadcastRoomDeleted,
+    broadcastUserLeft,
+    broadcastUserJoined,
+    broadcastChatMessage 
+};

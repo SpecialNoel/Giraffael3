@@ -1,7 +1,6 @@
 // rooms-routes.js
 
 import express from "express";
-import path from "node:path";
 
 import { authenticateHTTP } from "../../middleware/authenticate-http.js";
 import { handleFetchRoomsInfo } from "./handlers/fetch-rooms-info-handler.js";

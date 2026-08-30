@@ -1,6 +1,6 @@
 // room-view.js
 
-import { enableBackBtn } from "./back-to-dashboard-btn-handler.js";
+import { enableRoomBackBtn } from "./room-back-btn-handler.js";
 import { parseResponse } from "../utils/response-parser.js";
 import { getRoomInfo } from "./room-api.js";
 import { dashboardState } from "../states/dashboard-state.js";
@@ -9,7 +9,7 @@ import { getRoomCodeFromParams } from "../dashboard/conversation/services.js";
 // Render the room info and user info on Dashboard page UI, after user entering a room
 async function renderBasicGui() {
     // Render the back-to-dashboard button, since the user is currently inside a room
-    enableBackBtn();
+    enableRoomBackBtn();
 
     // Fetch user public id from local storage
     const userId = localStorage.getItem("userId");
@@ -63,7 +63,7 @@ function appendRoomToRoomsContainer(containerDiv, roomInfo, role) {
     const roomRow = document.createElement("div");
     roomRow.className = "room-row";
 
-    // Room button; enter the room upon clicking
+    // Room button; enter the room when clicked
     const roomBtn = document.createElement("button");
     roomBtn.className = "room-btn";
     roomBtn.dataset.roomCode = roomInfo.roomCode;
@@ -74,7 +74,7 @@ function appendRoomToRoomsContainer(containerDiv, roomInfo, role) {
     roomName.textContent = roomInfo.roomName;
     roomBtn.appendChild(roomName);
 
-    // Leave button; leave the room upon clicking
+    // Leave button; leave the room when clicked
     const leaveBtn = document.createElement("button");
     leaveBtn.className = "leave-btn";
     leaveBtn.dataset.roomCode = roomInfo.roomCode;
@@ -92,7 +92,7 @@ function appendRoomToRoomsContainer(containerDiv, roomInfo, role) {
     roomRow.appendChild(leaveBtn);
 
     // Delete button; enabled only for creator of the room
-    // Delete the room from the database upon clicking
+    // Delete the room from the database when clicked
     if (role === "creator") {
         const deleteBtn = document.createElement("button");
         deleteBtn.className = "delete-btn";

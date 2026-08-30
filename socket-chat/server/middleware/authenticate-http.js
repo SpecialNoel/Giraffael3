@@ -1,7 +1,7 @@
 // authenticate-http.js
 
 import { verifyToken } from "../utils/jwt-token-handler.js";
-import { successResponse, errorResponse } from "../utils/api-response.js";
+import { errorResponse } from "../utils/api-response.js";
 
 // Authenticate the user for operations handled with http api endpoints
 function authenticateHTTP(req, res, next) {

@@ -9,8 +9,7 @@ import { handleEnterRoom,
 // Set up the rooms container
 function handleRoomsContainer(socket) {    
     /*
-        On the dashboard page, add functionality to each room icon/button such that
-        a certain task will be executed whenever the user clicks on the room icon.
+        A certain task will be executed whenever the user clicks on the room icon.
     */
     const containerDiv = document.getElementById("rooms-container");
 
@@ -54,7 +53,7 @@ function handleRoomsContainer(socket) {
 }
 
 // Set up the room logics (via http endpoints, socket events, or both)
-function setupRoomEvents(socket) {
+function setUpRoomEvents(socket) {
     // Set up the events attached to each room container ("leave room", "delete room")
     handleRoomsContainer(socket);
     // Set up the "create room" event
@@ -63,4 +62,4 @@ function setupRoomEvents(socket) {
     handleJoinRoom(socket);
 }
 
-export { setupRoomEvents };
+export { setUpRoomEvents };

@@ -44,4 +44,11 @@ async function fetchOlderMessages(roomCode, cursor) {
     return await apiFetch(`/rooms/${roomCode}/messages?cursor=${cursor}`);
 }
 
-export { createRoom, deleteRoom, joinRoom, leaveRoom, getRoomInfo, fetchOlderMessages };
+export { 
+    createRoom, 
+    deleteRoom, 
+    joinRoom, 
+    leaveRoom, 
+    getRoomInfo, 
+    fetchOlderMessages 
+};

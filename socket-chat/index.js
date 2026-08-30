@@ -9,6 +9,7 @@ import { Server } from "socket.io";
 import { router as signInRouter } from "./server/routes/auth/sign-in-routes.js";
 import { router as signUpRouter } from "./server/routes/auth/sign-up-routes.js";
 import { router as dashboardRouter } from "./server/routes/dashboard/dashboard-routes.js";
+import { router as settingsRouter } from "./server/routes/settings/settings-routes.js";
 import { router as roomsRouter } from "./server/routes/rooms/rooms-routes.js";
 
 import { getPublicIPAddress } from "./server/utils/ip-address-getter.js";
@@ -39,6 +40,7 @@ app.use(express.json());
 app.use("/signin", signInRouter);
 app.use("/signup", signUpRouter); 
 app.use("/dashboard", dashboardRouter);
+app.use("/settings", settingsRouter);
 app.use("/rooms", roomsRouter);
 app.get("/", (req, res) => {
     // Set the default displaying page to be the sign-in page
@@ -113,14 +115,14 @@ io.on("connection", async (socket) => {
 let hostname = "localhost";
 // const publicIP = await getPublicIPAddress();
 // hostname = publicIP; // public Ip of this device
-hostname = process.env.HOSTNAME || "localhost"; // private IP of this device
+// hostname = process.env.HOSTNAME || "localhost"; // private IP of this device
 
 // Server port to listen on
 const serverPort = process.env.PORT || 3000;
 
 // Listen only on this computer for local testing (via "127.0.0.1").
 // Use "0.0.0.0" to enable other devices on the local network to connect to this server.
-server.listen(serverPort, "0.0.0.0", () => {
+server.listen(serverPort, "127.0.0.1", () => {
     console.log(`Server is running at http://${hostname}:${serverPort}/signin\n`)
 });
 // ==================== Server Socket ==================== 
