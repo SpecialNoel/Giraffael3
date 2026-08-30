@@ -18,7 +18,19 @@ async function handleUpdateUsernameRequest(newUsername) {
     });
 }
 
+async function handleUpdatePasswordRequest(currentPassword, newPassword, confirmNewPassword) {
+    return await apiFetch("/settings/password", {
+        method: "PATCH",
+        body: JSON.stringify({ 
+            currentPassword,
+            newPassword,
+            confirmNewPassword
+        })
+    });
+}
+
 export {
     getUserInfoRequest, 
-    handleUpdateUsernameRequest
+    handleUpdateUsernameRequest,
+    handleUpdatePasswordRequest
 };

@@ -26,7 +26,7 @@
 }
 
 /* Buttons */
-.update-username-btn,
+.change-username-btn,
 .open-change-password-panel-btn,
 .close-change-password-panel-btn,
 .save-password-change-btn {
@@ -46,7 +46,7 @@
     /* Interaction */
     cursor: pointer; /* Replace the cursor with the pointer, when hovered over */
 }
-.update-username-btn {
+.change-username-btn {
     /* Layout */
     display: flex;
     align-items: center;
@@ -55,12 +55,12 @@
     /* Spacing */
     margin-top: 20px;
 }
-.update-username-btn,
+.change-username-btn,
 .open-change-password-panel-btn {
     /* Spacing */
     margin-top: 5px;
 }
-.update-username-btn:hover,
+.change-username-btn:hover,
 .open-change-password-panel-btn:hover,
 .close-change-password-panel-btn:hover,
 .save-password-change-btn:hover {
@@ -146,6 +146,18 @@
 
     /* Decoration */
     color: black;
+}
+.confirm-new-password-value {
+    /* Spacing */
+    padding: 6px 12px;
+    margin-bottom: 12px;
+}
+.password-status {
+    /* Spacing */
+    margin: 0 0 20px;
+
+    /* Decoration */
+    font-size: 12px;
 }
 
 /* Back to Dashboard button */
@@ -264,6 +276,15 @@
     /* Layout */
     display: flex;
 }
+.change-password-container {
+    /* Layout */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    /* Size */
+    width: 100%;
+}
 .change-password-panel-input-container {
     /* Layout */
     display: flex;
@@ -280,7 +301,7 @@
 }
 .change-password-panel-input-container input {
     /* Size */
-    width: 80%;
+    width: 70%;
 }
 .change-password-panel-btn-container {
     /* Style */
@@ -294,7 +315,7 @@
 
     /* Spacing */
     gap: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 6px;
 }
 
 /* Overlay between information panel and change password panel */
@@ -326,9 +347,12 @@
 @media (max-width: 768px) {
     .change-password-panel-btn-container {
         flex-direction: column;
+        align-items: center;
+        gap: 8px;
     }
 
     .change-password-panel-btn-container button {
-        width: 80%;
+        width: auto;
+        max-width: 200px;
     }
 }

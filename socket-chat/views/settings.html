@@ -32,7 +32,7 @@
       <form class="username-container">
         <label>Username</label>
         <input class="username-value" type="text" />
-        <button class="update-username-btn" type="submit">Save Username</button>
+        <button class="change-username-btn" type="submit">Save Username</button>
         <span class="username-status"></span>
       </form>
 
@@ -48,18 +48,25 @@
     <div class="overlay"></div>
 
     <div class="change-password-panel">
-      <div class="change-password-panel-input-container">
-        <label>Current Password</label>
-        <input class="current-password-value" type="password" />
-        <label>New Password</label>
-        <input class="new-password-value" type="password" />
-        <label>Confirm New Password</label>
-        <input class="confirm-new-password-value" type="password" />
-      </div>
-      <div class="change-password-panel-btn-container">
-        <button class="close-change-password-panel-btn">Cancel</button>
-        <button class="save-password-change-btn">Save Changes</button>
-      </div>
+      <form class="change-password-container">
+        <div class="change-password-panel-input-container">
+          <label>Current Password</label>
+          <input class="current-password-value" type="password" />
+          <label>New Password</label>
+          <input class="new-password-value" type="password" />
+          <label>Confirm New Password</label>
+          <input class="confirm-new-password-value" type="password" />
+        </div>
+        <div class="change-password-panel-btn-container">
+          <button class="close-change-password-panel-btn" type="button">
+            Cancel
+          </button>
+          <button class="save-password-change-btn" type="submit">
+            Save Changes
+          </button>
+        </div>
+        <span class="password-status"></span>
+      </form>
     </div>
 
     <!-- Button to Sign-in page -->

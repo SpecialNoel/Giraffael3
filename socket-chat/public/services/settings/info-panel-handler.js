@@ -3,10 +3,11 @@
 import { parseResponse } from "../utils/response-parser.js";
 import { getUserInfoRequest } from "./setting-services.js";
 import { 
-    setUpUsernameUpdateListener,
+    setUpChangeUsernameListener,
     setUpOpenChangePasswordPanelBtn,
     setUpCloseChangePasswordPanelBtn,
-    setUpOverlay
+    setUpOverlay,
+    setUpChangePasswordListener,
 } from "./action-handlers.js";
 
 // Fetch userId from server, then update the value on Settings page; userId should be read-only
@@ -16,6 +17,7 @@ async function fetchAndUpdateUserId() {
         alert("Error in fetching user id");
         return;
     }
+
     const userIdValue = document.querySelector(".user-id-value");
     userIdValue.textContent = userIdResult.data.userId;
 }
@@ -27,6 +29,7 @@ async function fetchAndUpdateUserEmail() {
         alert("Error in fetching user email");
         return;
     }
+
     const userEmailValue = document.querySelector(".user-email-value");
     userEmailValue.textContent = userEmailResult.data.userEmail;
 }
@@ -38,10 +41,11 @@ async function setUpUsernameContainer() {
         alert("Error in fetching username");
         return;
     }
+    
     const usernameValue = document.querySelector(".username-value");
     usernameValue.value = usernameResult.data.username;
-    // Handle username-update requests upon the updateUsernameBtn clicks
-    setUpUsernameUpdateListener(usernameValue.value);
+    // Handle change-username requests upon submission
+    setUpChangeUsernameListener(usernameValue.value);
 }
 
 // Set up the change password panel container
@@ -52,6 +56,8 @@ function setUpChangePasswordPanelContainer() {
     setUpCloseChangePasswordPanelBtn();
     // Set up the overlay such that it closes when clicked
     setUpOverlay(); // overlay activates when change password panel is opened; it deactivates when the panel is closed
+    // Save the changes made to the password by sending received input to server
+    setUpChangePasswordListener();
 }
 
 export { 
