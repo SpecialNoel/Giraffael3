@@ -74,6 +74,21 @@ function appendRoomToRoomsContainer(containerDiv, roomInfo, role) {
     roomName.textContent = roomInfo.roomName;
     roomBtn.appendChild(roomName);
 
+    // Hover panel; display brief room info upon hovering
+    const roomContainer = document.createElement("div");
+    roomContainer.classList.add("room-container");
+    const hoverPanel = document.createElement("div");
+    hoverPanel.classList.add("room-hover-panel");
+    const roomCodeElement = document.createElement("p");
+    roomCodeElement.textContent = `Room Code: ${roomInfo.roomCode}`;
+    const roomNameElement = document.createElement("p");
+    roomNameElement.textContent = `Room Name: ${roomInfo.roomName}`;
+    hoverPanel.appendChild(roomCodeElement);
+    hoverPanel.appendChild(roomNameElement);
+
+    roomContainer.appendChild(roomBtn);
+    roomContainer.appendChild(hoverPanel);
+
     // Leave button; leave the room when clicked
     const leaveBtn = document.createElement("button");
     leaveBtn.className = "leave-btn";
@@ -88,7 +103,7 @@ function appendRoomToRoomsContainer(containerDiv, roomInfo, role) {
     leaveBtn.appendChild(leaveIcon);
 
     // Append buttons to the wrapper
-    roomRow.appendChild(roomBtn);
+    roomRow.appendChild(roomContainer);
     roomRow.appendChild(leaveBtn);
 
     // Delete button; enabled only for creator of the room
