@@ -97,7 +97,7 @@ function appendRoomToRoomsContainer(containerDiv, roomInfo, role) {
     leaveBtn.setAttribute("aria-label", "Leave room");
 
     const leaveIcon = document.createElement("img");
-    leaveIcon.src = "/assets/leave.svg";
+    leaveIcon.src = "/assets/leave_icon.svg";
     leaveIcon.alt = "Leave room";
     leaveIcon.className = "leave-icon";
     leaveBtn.appendChild(leaveIcon);
@@ -116,7 +116,7 @@ function appendRoomToRoomsContainer(containerDiv, roomInfo, role) {
         deleteBtn.setAttribute("aria-label", "Delete room");
 
         const deleteIcon = document.createElement("img");
-        deleteIcon.src = "/assets/delete.svg";
+        deleteIcon.src = "/assets/delete_icon.svg";
         deleteIcon.alt = "Delete";
         deleteIcon.className = "delete-icon";
         deleteBtn.appendChild(deleteIcon);

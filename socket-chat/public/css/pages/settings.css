@@ -2,7 +2,7 @@
 
 /* Settings page */
 .settings-page {
-	/* Layout */
+    /* Layout */
     display: flex; /* Make it easier to align elements */
     flex-direction: column;
     position: relative;
@@ -90,8 +90,8 @@
 }
 
 /* User information values */
-.user-id-value, 
-.user-email-value, 
+.user-id-value,
+.user-email-value,
 .password-value {
     /* Layout */
     display: block;
@@ -127,7 +127,7 @@
 }
 
 /* Change password related */
-.current-password-value, 
+.current-password-value,
 .new-password-value,
 .confirm-new-password-value {
     /* Layout */
@@ -234,7 +234,10 @@
     margin: 20px auto; /* Giving spaces between the panel and other elements, while center-aligning it */
 
     /* Size */
-    width: min(90%, 500px); /* Resizable, but only up to 500px; it takes 90% width on mobile view */
+    width: min(
+        90%,
+        500px
+    ); /* Resizable, but only up to 500px; it takes 90% width on mobile view */
 
     /* Border */
     border: 1px solid #959595;
@@ -258,7 +261,10 @@
     /* Spacing */
     top: 40%;
     left: 50%;
-    transform: translate(-50%, -50%); /* Along with top and left 50%, locating the panel to the center of screen */
+    transform: translate(
+        -50%,
+        -50%
+    ); /* Along with top and left 50%, locating the panel to the center of screen */
 
     /* Size */
     width: min(75%, 450px);

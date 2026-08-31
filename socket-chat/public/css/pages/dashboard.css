@@ -8,31 +8,31 @@
 
 /* Dashboard page */
 .dashboard {
-	/* Layout */
+    /* Layout */
     display: flex; /* Make it easier to align elements */
 
-	/* Size */
+    /* Size */
     height: calc(100dvh - var(--header-height)); /* Calculate the height for the component */
 }
 .left-panel {
     /* Size */
     min-width: 300px;
 
-	/* Spacing */
+    /* Spacing */
     padding: 20px; /* Keep distance between the component and the parent */
 
-	/* Appearance */
-	background-color: rgb(230, 230, 230); /* Control the color of the background of this element */
+    /* Appearance */
+    background-color: rgb(230, 230, 230); /* Control the color of the background of this element */
 }
 .right-panel {
-	/* Layout */
+    /* Layout */
     display: flex; /* Make it easier to align elements */
     flex-direction: column; /* Stack elements vertically */
 
-	/* Size */
+    /* Size */
     width: 100%; /* Make this element as wide as its parent (dashboard in this case) */
 
-	/* Spacing */
+    /* Spacing */
     padding: 0px 10px 10px 10px; /* Padding for the whole right panel: top-right-bottom-left*/
     gap: 10px; /* Gap between each component in right panel */
 }
@@ -57,7 +57,7 @@
         height: calc(100dvh - var(--header-height)); /* Calculate the height for the component */
         min-height: 0; /* Prevent the page from being able to be scrolled */
     }
-    .left-panel {    
+    .left-panel {
         /* Layout */
         flex: 0 0 auto; /* Prevent the left panel (located on top of the right panel) from shrinking due to the expand of the right panel */
     }

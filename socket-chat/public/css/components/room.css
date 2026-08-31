@@ -12,7 +12,7 @@
 .room-row {
     /* Layout */
     display: flex; /* Make it easier to align elements */
-    
+
     /* Spacing */
     gap: 3px; /* Keep some spaces between each buttons inside the room container */
 }

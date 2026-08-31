@@ -12,7 +12,7 @@
 
     /* Size */
     width: 100%; /* Make this element as wide as its parent (card in this case) */
-    height: 100%; 
+    height: 100%;
 
     /* Spacing */
     margin-right: 2px; /* Keep distance between the message input field and the send button */

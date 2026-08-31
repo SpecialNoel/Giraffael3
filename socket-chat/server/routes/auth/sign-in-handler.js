@@ -31,9 +31,8 @@ async function handleSignIn(req, res) {
         
         // Compare the received plain password with the record found in DB
         const isPasswordValid = await comparePassword(plainPassword, user.passwordHash);
-
-        // Handle error where the password does not match the one stored in DB
         if (!isPasswordValid) {
+            // Handle error where the password does not match the one stored in DB
             console.log(`Invalid login attempt for email: ${email}`);
             return res.status(401).json(
                 errorResponse(

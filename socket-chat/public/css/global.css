@@ -3,7 +3,8 @@
 * {
     box-sizing: border-box; /* Keep the component in-place inside its parent component */
 }
-html, body {
+html,
+body {
     /* 
      * Make the page as tall as the parent html element 
      * height: ~% requires the parent element to explicitly define their own height

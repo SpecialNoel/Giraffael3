@@ -33,9 +33,8 @@ async function handleSignUp(req, res) {
 
         // Check account existence in DB based on user email
         const userInDB = await findUserByEmail(email);
-
-        // Handle error where received email already associated with an existing account
         if (userInDB) {
+            // Handle error where received email already associated with an existing account
             return res.status(409).json(
                 errorResponse(
                     "USER_ALREADY_EXISTS",

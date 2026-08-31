@@ -16,7 +16,8 @@ function enterRoom(socket, roomCode) {
     socket.emit("enterRoom", roomCode, cursor);
 }
 
-// Set up the application so that it navigates when the user uses the browser's Back and Forward buttons
+// Set up the application so that it navigates to the respective page
+// when the user uses the browser's Back and Forward buttons
 function initializeHistoryNavigation(socket) {
     // Fire the "enter room" socket event (used in room-navigation.js)
     function enterRoomFromURL(socket) {
