@@ -5,6 +5,11 @@
     /* Size */
     --header-height: 50px; /* Reserved height for navigation */
 }
+body {
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+}
 
 /* Dashboard page */
 .dashboard {
@@ -12,6 +17,7 @@
     display: flex; /* Make it easier to align elements */
 
     /* Size */
+    width: 100%;
     height: calc(100dvh - var(--header-height)); /* Calculate the height for the component */
 }
 .left-panel {
@@ -31,6 +37,7 @@
 
     /* Size */
     width: 100%; /* Make this element as wide as its parent (dashboard in this case) */
+    min-width: 0; /* Prevent horizontal scrolling */
 
     /* Spacing */
     padding: 0px 10px 10px 10px; /* Padding for the whole right panel: top-right-bottom-left*/
@@ -54,8 +61,7 @@
         flex-direction: column; /* Stack elements vertically */
 
         /* Size */
-        height: calc(100dvh - var(--header-height)); /* Calculate the height for the component */
-        min-height: 0; /* Prevent the page from being able to be scrolled */
+        min-height: calc(100dvh - var(--header-height)); /* Calculate the height for the component */
     }
     .left-panel {
         /* Layout */

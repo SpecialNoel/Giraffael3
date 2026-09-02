@@ -1,15 +1,17 @@
 /* settings.css */
 
+body {
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+}
+
 /* Settings page */
 .settings-page {
     /* Layout */
     display: flex; /* Make it easier to align elements */
     flex-direction: column;
     position: relative;
-
-    /* Size */
-    /* 100vh: Set the page at least as tall as the viewport */
-    min-height: 100dvh; /* Extra handling the mobile view with dynamic view height (dvh) */
 }
 .settings-header {
     /* Size */
@@ -126,6 +128,17 @@
     font-size: 12px;
 }
 
+/* Keep input values inside the viewport */
+.user-id-value,
+.user-email-value,
+.password-value,
+.username-value,
+.current-password-value,
+.new-password-value,
+.confirm-new-password-value {
+    width: min(250px, 80vw);
+}
+
 /* Change password related */
 .current-password-value,
 .new-password-value,
@@ -234,10 +247,7 @@
     margin: 20px auto; /* Giving spaces between the panel and other elements, while center-aligning it */
 
     /* Size */
-    width: min(
-        90%,
-        500px
-    ); /* Resizable, but only up to 500px; it takes 90% width on mobile view */
+    width: min(90%, 500px); /* Resizable, but only up to 500px; it takes 90% width on mobile view */
 
     /* Border */
     border: 1px solid #959595;
@@ -261,10 +271,7 @@
     /* Spacing */
     top: 40%;
     left: 50%;
-    transform: translate(
-        -50%,
-        -50%
-    ); /* Along with top and left 50%, locating the panel to the center of screen */
+    transform: translate(-50%, -50%); /* Along with top and left 50%, locating the panel to the center of screen */
 
     /* Size */
     width: min(75%, 450px);
@@ -331,8 +338,7 @@
     position: absolute;
 
     /* Spacing */
-    top: 0;
-    left: 0;
+    inset: 0;
 
     /* Size */
     width: 100%;
