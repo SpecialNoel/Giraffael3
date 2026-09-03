@@ -8,7 +8,7 @@ An attempt to implement a chat app with Socket.IO
   - [_Node.js_](https://nodejs.org/en/download)
   - [_Redis_](https://redis.io/docs/latest/operate/oss_and_stack/install/archive/install-redis/)
 
-## Execution Instruction:
+## Execution Instruction (Mac):
 
 - Step 1: Navigate to the directory: `socket-chat`
 - Step 1.5: Make sure the bash file is executable, if haven't already: `chmod +x start-app.sh`
