@@ -10,7 +10,7 @@ import { parseResponse } from "../utils/response-parser.js";
 import { getUserInfoRequest } from "../settings/setting-services.js";
 
 // Send the input message to server (for which server will then relay to other active users in the room)
-function sendMessage(userId, conversationElement, inputElement, socket) {
+function sendMessage(conversationElement, inputElement, socket) {
     // Stop proceeding if user somehow passed an empty message (as this should be handled by form's "required" attribute already)
     if (!inputElement.value) return;
 

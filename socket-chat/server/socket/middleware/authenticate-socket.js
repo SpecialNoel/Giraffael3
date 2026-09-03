@@ -4,11 +4,8 @@ import { verifyToken } from "../../utils/jwt-token-handler.js";
 import { User } from "../../models/user-model.js";
 
 // Authenticate the user for operations handled with socket events
-async function authenticateSocket(socket, next) {
+async function authenticateSocket(token, socket, next) {
     try {
-        // Receive JWT token from user (one time only)
-        const token = socket.handshake.auth.token;
-
         // Verify the received token to ensure its validity
         const { userObjectId, userId } = verifyToken(token);
 
@@ -22,8 +19,7 @@ async function authenticateSocket(socket, next) {
             username: user.username,
             userId: userId,
         };
-        console.log(`Authenticated user ${userId} (SocketID: ${socket.id}) for socket events.`);
-
+        
         // "next()" continues the connection by invocating "io.on("connection")"
         next();
     } catch (err) {

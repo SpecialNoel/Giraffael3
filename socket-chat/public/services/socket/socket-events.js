@@ -91,8 +91,6 @@ function startSession(socket) {
     const emptyMessageElement = document.getElementById("emptyMessage");
     const membersHeadingElement = document.getElementById("membersHeading");
 
-    const userId = localStorage.getItem("userId");
-
     // Upon receiving form submission, send the input message (if any) to the server
     form.addEventListener("submit", (e) => {
         // Prevent web page reloading upon form submission
@@ -100,7 +98,6 @@ function startSession(socket) {
 
         // Send the input message to server (for which server will then relay to other active users in the room)
         sendMessage(
-            userId,
             conversationElement,
             inputElement,
             socket,

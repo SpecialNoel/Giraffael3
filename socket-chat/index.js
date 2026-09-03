@@ -2,8 +2,9 @@
 
 import express from "express";
 import path from "node:path";
+import { parse } from "cookie"; // For Socket cookies
+import cookieParser from "cookie-parser"; // For HTTP cookies
 import { createServer } from "node:http";
-import { join } from "node:path";
 import { Server } from "socket.io";
 
 import { router as signInRouter } from "./server/routes/auth/sign-in-routes.js";
@@ -35,6 +36,7 @@ const app = express();
 */
 app.use(express.static(path.join(process.cwd(), "public")));
 app.use(express.json());
+app.use(cookieParser());
 
 // Set up page routings
 app.use("/signin", signInRouter);
@@ -64,14 +66,21 @@ const redis = await connectToRedis();
 // Authenticate the user for operations handled with socket events before proceeding the connection
 // Note that this comes after the client successfully signed in to the app
 io.use(async (socket, next) => {
-    await authenticateSocket(socket, next);
+    // Parse cookie from client request
+    const cookies = parse(socket.handshake.headers.cookie || "");
+    // Retrieve JWT token from cookie
+    const token = cookies.authToken;
+    if (!token) return next(new Error("Authentication required"));
+
+    await authenticateSocket(token, socket, next);
 });
 
 // SocketIO server handles the connection event
 io.on("connection", async (socket) => {
     // Note that the server has already authenticated the user at this point,
     // given that the socket connection between the user and server is established successfully
-    console.log(`User ${socket.user.userId} (SocketID: ${socket.id}) connected\n`);
+    console.log(`Authenticated User ${socket.user.userId} (SocketID: ${socket.id}) connected\n`);
+
     /* 
     * Store the room code of the current visiting room to the connecting socket
     * For each separate tab opened, the user logging in with the same credentials essentially

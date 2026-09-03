@@ -46,10 +46,6 @@ function signIn() {
                 return;
             }
 
-            // Store necessary user information to the local storage of user's browser
-            localStorage.setItem("userId", result.data.userId);     // userId (user public id)
-            localStorage.setItem("token", result.data.token);       // JWT token
-
             // The credentials are verified by server to be valid, proceed to the Dashboard page.
             setTimeout(() => {
                 window.location.href = "/dashboard"; 

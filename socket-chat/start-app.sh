@@ -8,5 +8,5 @@ else
   echo "Redis already running"
 fi
 
-# Run the server of the application
-node -r dotenv/config ./index.js
+# Run the server of the application; change NODE_ENV to "production" if in production
+NODE_ENV=development node -r dotenv/config ./index.js

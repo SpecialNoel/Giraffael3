@@ -42,17 +42,23 @@ async function handleSignIn(req, res) {
             );
         }
 
-        // Generate a JWT (JSON Web Token) for this user for both authentication and authorization
+        // Generate a JWT (JSON Web Token) for this user for authentication purpose only
         const token = generateToken(user._id, user.userId);
+
+        // Set the JWT token as an HTTP-Only cookie in the user's browser
+        res.cookie("authToken", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            secure: true,
+            sameSite: "lax",
+            maxAge: 60*60*1000,
+            path: "/"
+        });
 
         // Signin success
         return res.status(200).json(
             successResponse(
-                {
-                    userId: user.userId,
-                    username: user.username,
-                    token
-                },
+                {},
                 "Sign in success"
             )
         );

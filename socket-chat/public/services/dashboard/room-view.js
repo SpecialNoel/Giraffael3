@@ -2,6 +2,7 @@
 
 import { enableRoomBackBtn } from "./room-back-btn-handler.js";
 import { parseResponse } from "../utils/response-parser.js";
+import { getUserInfoRequest } from "../settings/setting-services.js";
 import { getRoomInfo } from "./room-api.js";
 import { dashboardState } from "../states/dashboard-state.js";
 import { getRoomCodeFromParams } from "../dashboard/conversation/services.js";
@@ -11,8 +12,12 @@ async function renderBasicGui() {
     // Render the back-to-dashboard button, since the user is currently inside a room
     enableRoomBackBtn();
 
-    // Fetch user public id from local storage
-    const userId = localStorage.getItem("userId");
+    const userIdResult = await parseResponse(await getUserInfoRequest("user-id"));
+    if (!userIdResult.success) {
+        alert("Error in fetching user id");
+        return;
+    }
+    const userId = userIdResult.data.userId;
 
     // Fetch room code from the url bar of the user's browser
     const roomCodeFromUrl = getRoomCodeFromParams();
