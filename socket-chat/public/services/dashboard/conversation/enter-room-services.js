@@ -1,6 +1,6 @@
 // enter-room-services.js
 
-import { appendMessage, getOlderMessages, renderOlderMessages } from "./services.js";
+import { getOlderMessages, renderOlderMessages } from "./services.js";
 import { getCurrentRoomState, updateRoomState } from "../../states/dashboard-state.js";
 
 function getCachedMessages(roomCode) {
@@ -49,7 +49,7 @@ async function renderConversation(conversationElement, messages) {
     // Send requests to fetch older messages from server, and prepend them to conversation element, 
     // until conversation element is filled
     while (conversationElement.scrollHeight <= conversationElement.clientHeight) {
-        const messages = await getOlderMessages(conversationElement);
+        const messages = await getOlderMessages();
         if (!messages) break;
         renderOlderMessages(conversationElement, messages);
     }

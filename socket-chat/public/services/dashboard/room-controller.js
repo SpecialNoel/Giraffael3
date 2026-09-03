@@ -57,9 +57,9 @@ function setUpRoomEvents(socket) {
     // Set up the events attached to each room container ("leave room", "delete room")
     handleRoomsContainer(socket);
     // Set up the "create room" event
-    handleCreateRoom(socket);
+    handleCreateRoom();
     // Set up the "join room" event
-    handleJoinRoom(socket);
+    handleJoinRoom();
 }
 
 export { setUpRoomEvents };

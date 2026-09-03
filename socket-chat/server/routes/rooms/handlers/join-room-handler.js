@@ -20,7 +20,7 @@ async function handleRoomMembershipAdded(io, roomCode) {
     return roomInfo
 }
 
-async function handleJoinRoom(req, res, redis, io) {
+async function handleJoinRoom(req, res, io) {
     try {
         // Receive room code and user info
         const { roomCode } = req.body;

@@ -10,7 +10,7 @@ import { handleCreateRoom } from "./handlers/create-room-handler.js";
 import { handleDeleteRoom } from "./handlers/delete-room-handler.js";
 import { handleJoinRoom } from "./handlers/join-room-handler.js";
 import { handleLeaveRoom } from "./handlers/leave-room-handler.js";
-import { io, redis } from "../../../index.js";
+import { io } from "../../../index.js";
 
 const router = express.Router();
 
@@ -31,7 +31,7 @@ router.post("/delete", authenticateHTTP, async (req, res) => {
     return await handleDeleteRoom(req, res, io);
 });
 router.post("/join", authenticateHTTP, async (req, res) => {
-    return await handleJoinRoom(req, res, redis, io);
+    return await handleJoinRoom(req, res, io);
 });
 router.post("/leave", authenticateHTTP, async (req, res) => {
     return await handleLeaveRoom(req, res, io);

@@ -7,7 +7,7 @@ import { appendMessageToMessageList,
 import { getRoomCodeFromParams } from "../dashboard/conversation/services.js";
 import { storeMessageToState } from "../dashboard/conversation/enter-room-services.js";
 import { parseResponse } from "../utils/response-parser.js";
-import { getUserInfoRequest } from "../settings/setting-services.js";
+import { getUserInfoRequest } from "../settings/setting-api.js";
 
 // Send the input message to server (for which server will then relay to other active users in the room)
 function sendMessage(conversationElement, inputElement, socket) {

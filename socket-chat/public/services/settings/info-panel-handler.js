@@ -1,7 +1,7 @@
 // info-panel-handler.js
 
 import { parseResponse } from "../utils/response-parser.js";
-import { getUserInfoRequest } from "./setting-services.js";
+import { getUserInfoRequest } from "./setting-api.js";
 import { 
     setUpChangeUsernameListener,
     setUpOpenChangePasswordPanelBtn,

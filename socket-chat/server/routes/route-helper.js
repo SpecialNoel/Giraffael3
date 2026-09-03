@@ -1,7 +1,6 @@
 // route-helper.js
 
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 
 // Get the correct path to a directory (root dir in this case) inside server repository
 const projectRoot = process.cwd();

@@ -2,7 +2,6 @@
 
 import { getRoomCodeFromParams } from "../dashboard/conversation/services.js";
 import { getCurrentRoomState } from "../states/dashboard-state.js";
-import { updateRoomCodeInURL } from "./room-view.js";
 
 // Fire an "enter room" socket event to server
 function enterRoom(socket, roomCode) {

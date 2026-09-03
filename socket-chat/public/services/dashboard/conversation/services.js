@@ -32,7 +32,7 @@ function appendMessage(conversationElement, content, senderUsername) {
 }
 
 // Fetch some older messages of the conversation
-async function getOlderMessages(conversationElement) {
+async function getOlderMessages() {
     async function fetchOlderMessagesHelper(roomCode, state) {
         // Fetch older messages
         const result = await parseResponse(await fetchOlderMessages(roomCode, state.cursor));

@@ -21,24 +21,18 @@ function signIn() {
             const plainPassword = document.getElementById("plainPassword").value.trim();
 
             /*
-             * Send them to server for validation (without JWT token)
+             * Send them to server for validation, then retrieve server response
              * Note that client needs to send information to server at this stage
              * to get the JWT token for later operations
             */
-            const response = await fetch("/signin", {
+            const result = await apiFetch("/signin", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
                 body: JSON.stringify({ 
                     email, 
-                    plainPassword 
+                    plainPassword  
                 })
             });
-
-            // Retrieve response sent from server
-            const result = await response.json();
-
+            
             // If the credentials are invalid, display the error message to the user
             if (!result.success) {
                 alert(result.error.message);

@@ -22,23 +22,17 @@ function signUpTraditional() {
             const plainPassword = document.getElementById("plainPassword").value.trim();
 
             /*
-             * Send them to server for validation (without JWT token)
+             * Send them to server for validation, then retrieve server response
              * Note that client does not need the JWT token at this stage
              * as they should not connect to the server yet.
             */
-            const response = await fetch("/signup", {
+            const result = await apiFetch("/signup", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
                 body: JSON.stringify({ 
                     email, 
-                    plainPassword 
+                    plainPassword  
                 })
             });
-
-            // Retrieve response sent from server
-            const result = await response.json();
 
             // If the sign up failed, display the error message to the user
             if (!result.success) {

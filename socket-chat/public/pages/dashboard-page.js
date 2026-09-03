@@ -9,7 +9,7 @@ import { startSession } from "../services/socket/socket-events.js";
 window.addEventListener("DOMContentLoaded", async () => {
     try {
         /* 
-        * Create a socket and send the JWT token to server for authentication for socket events.
+        * Create a socket to connect to server for authentication for socket events.
         * This step needs to be done first for the server to authenticate the client.
         * Once the client is authenticated (i.e. is trusted by server), server can
         *   - use client information such as userObjectId and userId directly without the client

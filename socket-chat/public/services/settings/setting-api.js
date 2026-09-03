@@ -1,4 +1,4 @@
-// setting-services.js
+// setting-api.js
 
 import { apiFetch } from "../utils/api-fetcher.js";
 

@@ -2,7 +2,7 @@
 
 import { enableRoomBackBtn } from "./room-back-btn-handler.js";
 import { parseResponse } from "../utils/response-parser.js";
-import { getUserInfoRequest } from "../settings/setting-services.js";
+import { getUserInfoRequest } from "../settings/setting-api.js";
 import { getRoomInfo } from "./room-api.js";
 import { dashboardState } from "../states/dashboard-state.js";
 import { getRoomCodeFromParams } from "../dashboard/conversation/services.js";

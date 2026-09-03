@@ -4,7 +4,7 @@ import { parseResponse } from "../utils/response-parser.js";
 import { 
     handleUpdateUsernameRequest,
     handleUpdatePasswordRequest
-} from "./setting-services.js";
+} from "./setting-api.js";
 import { validatePasswordFormat } from "../utils/password-format-validator.js";
 
 // Redirect the user back to the Dashboard page when clicked

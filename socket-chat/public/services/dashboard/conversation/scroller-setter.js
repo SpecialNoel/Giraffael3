@@ -12,7 +12,7 @@ async function setUpConversationScroller() {
         // Prepend older messages to conversation upon user scrolling to the very top of the conversation element
         if (conversationElement.scrollTop === 0 && !isLoading) {
             isLoading = true;
-            const messages = await getOlderMessages(conversationElement);
+            const messages = await getOlderMessages();
             renderOlderMessages(conversationElement, messages);
             isLoading = false;
         }

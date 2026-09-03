@@ -10,4 +10,4 @@ fi
 
 # Run the server of the application
 echo "Starting Node server..."
-node -r dotenv/config ./index.js
+NODE_ENV=development node -r dotenv/config ./index.js

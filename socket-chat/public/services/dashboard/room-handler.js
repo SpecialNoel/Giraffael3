@@ -92,7 +92,7 @@ async function handleDeleteRoom(deleteBtn, roomRow) {
 }
 
 // Set up the create-room logic
-function handleCreateRoom(socket) {
+function handleCreateRoom() {
     /*
         Submit user inputted room name to server to create a room when clicked
     */
@@ -141,7 +141,7 @@ function handleCreateRoom(socket) {
 }
 
 // Set up the join-room logic
-function handleJoinRoom(socket) {
+function handleJoinRoom() {
     /*
         Submit user inputted room code to server to join a room when clicked
     */

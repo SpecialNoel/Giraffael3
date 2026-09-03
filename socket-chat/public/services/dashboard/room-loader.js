@@ -1,13 +1,13 @@
 // room-loader.js
 
-import { apiFetch } from "../utils/api-fetcher.js";
 import { parseResponse } from "../utils/response-parser.js";
+import { getRoomsInfo } from "./room-api.js";
 import { appendRoomToRoomsContainer } from "./room-view.js";
 
 // Fetch rooms information from server, and render them to Dashboard page UI
 async function loadRooms() {
     // Retrieve info about all rooms the user has joined from server
-    const result = await parseResponse(await apiFetch("/rooms"));
+    const result = await parseResponse(await getRoomsInfo());
     const roomsInfo = result.data.roomsInfo;
 
     // Render rooms info to Dashboard page UI
