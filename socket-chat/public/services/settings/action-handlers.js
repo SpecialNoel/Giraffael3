@@ -1,6 +1,6 @@
 // action-handlers.js
 
-import { parseResponse } from "../utils/response-parser.js";
+import { parseResponse } from "../utils/api.js";
 import { 
     handleUpdateUsernameRequest,
     handleUpdatePasswordRequest

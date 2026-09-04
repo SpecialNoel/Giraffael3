@@ -1,4 +1,4 @@
-// get-rooms-service.js
+// get-rooms-of-user-service.js
 
 import { Membership } from "../../../models/membership-model.js";
 

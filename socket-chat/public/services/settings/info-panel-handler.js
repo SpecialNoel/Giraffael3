@@ -1,7 +1,7 @@
 // info-panel-handler.js
 
-import { parseResponse } from "../utils/response-parser.js";
-import { getUserInfoRequest } from "./setting-api.js";
+import { parseResponse } from "../utils/api.js";
+import { handleGetUserInfoRequest } from "./setting-api.js";
 import { 
     setUpChangeUsernameListener,
     setUpOpenChangePasswordPanelBtn,
@@ -12,7 +12,7 @@ import {
 
 // Fetch userId from server, then update the value on Settings page; userId should be read-only
 async function fetchAndUpdateUserId() {
-    const userIdResult = await parseResponse(await getUserInfoRequest("user-id"));
+    const userIdResult = await parseResponse(await handleGetUserInfoRequest("user-id"));
     if (!userIdResult.success) {
         alert("Error in fetching user id");
         return;
@@ -24,7 +24,7 @@ async function fetchAndUpdateUserId() {
 
 // Fetch user email from server, then update the value on Settings page; user email should be read-only
 async function fetchAndUpdateUserEmail() {
-    const userEmailResult = await parseResponse(await getUserInfoRequest("user-email"));
+    const userEmailResult = await parseResponse(await handleGetUserInfoRequest("user-email"));
     if (!userEmailResult.success) {
         alert("Error in fetching user email");
         return;
@@ -36,7 +36,7 @@ async function fetchAndUpdateUserEmail() {
 
 // Set up the username container; username should be mutable
 async function setUpUsernameContainer() {
-    const usernameResult = await parseResponse(await getUserInfoRequest("username"));
+    const usernameResult = await parseResponse(await handleGetUserInfoRequest("username"));
     if (!usernameResult.success) {
         alert("Error in fetching username");
         return;

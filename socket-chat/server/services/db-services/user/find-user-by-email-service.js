@@ -1,4 +1,4 @@
-// find-user-service.js
+// find-user-by-email-service.js
 
 import { User } from "../../../models/user-model.js";
 

@@ -1,5 +1,7 @@
 // sign-up-initializer.js
 
+import { apiFetch } from "../utils/api";
+
 // Handle user sign-up request by setting up the signup form which authenticates via credentials
 function signUpTraditional() { 
     /*

@@ -5,7 +5,7 @@
 // "Older message fetching upon user scrolling to the top"
 
 import { getCurrentRoomState, updateRoomState } from "../../states/dashboard-state.js";
-import { parseResponse } from "../../utils/response-parser.js";
+import { parseResponse } from "../../utils/api.js";
 import { fetchOlderMessages } from "../room-api.js";
 
 function getRoomCodeFromParams() {

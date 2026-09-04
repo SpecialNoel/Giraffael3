@@ -1,6 +1,6 @@
 // fetch-older-messages-handler.js
 
-import { getPaginatedConversation } from "../../../services/db-services/message/get-conversation-service.js";
+import { getPaginatedConversation } from "../../../services/db-services/message/get-paginated-conversation-service.js";
 import { successResponse, errorResponse } from "../../../utils/api-response.js";
 
 async function handleFetchOlderMessages(req, res) {

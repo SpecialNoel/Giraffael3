@@ -1,6 +1,6 @@
 // room-api.js
 
-import { apiFetch } from "../utils/api-fetcher.js";
+import { apiFetch } from "../utils/api.js";
 
 // Send "create room" HTTP request to server, then receive an HTTP response from server
 async function createRoom(roomName) {

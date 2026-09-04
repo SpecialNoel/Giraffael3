@@ -1,7 +1,7 @@
-// disconnect-handler.js
+// disconnection-handler.js
 
 // Handle the disconnection event
-async function registerDisconnectHandler(socket) {
+async function handleDisconnection(socket) {
     // Disconnect them from SocketIO, if they are currently in a room
     if (socket.activeRoomCode) {
         // Disconnect the user from SocketIO
@@ -14,4 +14,4 @@ async function registerDisconnectHandler(socket) {
     }
 }
 
-export { registerDisconnectHandler };
+export { handleDisconnection };

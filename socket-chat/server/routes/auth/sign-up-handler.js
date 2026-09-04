@@ -1,7 +1,7 @@
 // sign-up-handler.js
 
 import { PASSWORD_MIN_LENGTH } from "../../config/constants.js";
-import { findUserByEmail } from "../../services/db-services/user/find-user-service.js";
+import { findUserByEmail } from "../../services/db-services/user/find-user-by-email-service.js";
 import { createUser } from "../../services/db-services/user/create-user-service.js";
 import { hashPassword } from "../../utils/password-handler.js";
 import { successResponse, errorResponse } from "../../utils/api-response.js";

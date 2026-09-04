@@ -1,4 +1,4 @@
-// check-creator-service.js
+// is-creator-by-room-code-service.js
 
 import { Membership } from "../../../models/membership-model.js";
 import { Room } from "../../../models/room-model.js";

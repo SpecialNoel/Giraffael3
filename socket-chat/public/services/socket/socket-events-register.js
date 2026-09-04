@@ -1,7 +1,6 @@
 // socket-events.js
 
-import { renderBasicGui } from "../dashboard/room-view.js";
-import { renderMembers } from "../dashboard/members-services.js";
+import { renderBasicGui, renderMembers } from "../dashboard/room-view.js";
 import { appendMessage } from "../dashboard/conversation/services.js";
 import { storeMessageToState, renderConversation } from "../dashboard/conversation/enter-room-services.js";
 import { sendMessage } from "./message-services.js";

@@ -1,7 +1,7 @@
 // room-handler.js
 
-import { getMembersInRoom } from "../../services/db-services/membership/get-members-service.js";
-import { getPaginatedConversation } from "../../services/db-services/message/get-conversation-service.js";
+import { getMembersInRoom } from "../../services/db-services/membership/get-members-in-room-service.js";
+import { getPaginatedConversation } from "../../services/db-services/message/get-paginated-conversation-service.js";
 import { getRoomInfo } from "../../services/db-services/room/get-room-info-service.js";
 
 async function registerEnterRoomHandler(socket, roomCode, cursor) {

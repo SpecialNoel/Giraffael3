@@ -1,10 +1,10 @@
 // setting-api.js
 
-import { apiFetch } from "../utils/api-fetcher.js";
+import { apiFetch } from "../utils/api.js";
 
 // Send a request to server to fetch the corresponding information about user
 // endpoint can be: [user-id, user-email, username] 
-async function getUserInfoRequest(endpoint) {
+async function handleGetUserInfoRequest(endpoint) {
     return await apiFetch(`/settings/${endpoint}`);
 }
 
@@ -30,7 +30,7 @@ async function handleUpdatePasswordRequest(currentPassword, newPassword, confirm
 }
 
 export {
-    getUserInfoRequest, 
+    handleGetUserInfoRequest, 
     handleUpdateUsernameRequest,
     handleUpdatePasswordRequest
 };

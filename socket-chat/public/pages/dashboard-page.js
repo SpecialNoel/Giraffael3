@@ -2,7 +2,7 @@
 
 import { createAuthenticatedSocket } from "../services/socket/socket-client.js";
 import { initializeDashboard } from "../services/dashboard/dashboard-initializer.js";
-import { startSession } from "../services/socket/socket-events.js";
+import { startSession } from "../services/socket/socket-events-register.js";
 
 // Initialize the socket used to communicate with server, and add event listeners for dashboard services
 // to components on the Dashboard page

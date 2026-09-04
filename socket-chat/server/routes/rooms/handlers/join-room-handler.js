@@ -4,7 +4,7 @@ import { joinRoom } from "../../../services/db-services/membership/join-room-ser
 import { getRoomInfo } from "../../../services/db-services/room/get-room-info-service.js";
 import { getMembership } from "../../../services/db-services/membership/get-membership-service.js";
 import { successResponse, errorResponse } from "../../../utils/api-response.js";
-import { getMembersInRoom } from "../../../services/db-services/membership/get-members-service.js"
+import { getMembersInRoom } from "../../../services/db-services/membership/get-members-in-room-service.js"
 import { broadcastUserJoined } from "../../../socket/emitters/room-broadcaster.js";
 
 async function handleRoomMembershipAdded(io, roomCode) {

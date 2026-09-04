@@ -1,6 +1,6 @@
 // sign-in-handler.js
 
-import { findUserByEmail } from "../../services/db-services/user/find-user-service.js";
+import { findUserByEmail } from "../../services/db-services/user/find-user-by-email-service.js";
 import { comparePassword } from "../../utils/password-handler.js";
 import { generateToken } from "../../utils/jwt-token-handler.js";
 import { successResponse, errorResponse } from "../../utils/api-response.js";
@@ -30,8 +30,8 @@ async function handleSignIn(req, res) {
         }
         
         // Compare the received plain password with the record found in DB
-        const isPasswordValid = await comparePassword(plainPassword, user.passwordHash);
-        if (!isPasswordValid) {
+        const passwordMatch = await comparePassword(plainPassword, user.passwordHash);
+        if (!passwordMatch) {
             // Handle error where the password does not match the one stored in DB
             console.log(`Invalid login attempt for email: ${email}`);
             return res.status(401).json(

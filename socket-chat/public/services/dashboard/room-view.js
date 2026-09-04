@@ -1,8 +1,8 @@
 // room-view.js
 
 import { enableRoomBackBtn } from "./room-back-btn-handler.js";
-import { parseResponse } from "../utils/response-parser.js";
-import { getUserInfoRequest } from "../settings/setting-api.js";
+import { parseResponse } from "../utils/api.js";
+import { handleGetUserInfoRequest } from "../settings/setting-api.js";
 import { getRoomInfo } from "./room-api.js";
 import { dashboardState } from "../states/dashboard-state.js";
 import { getRoomCodeFromParams } from "../dashboard/conversation/services.js";
@@ -12,7 +12,7 @@ async function renderBasicGui() {
     // Render the back-to-dashboard button, since the user is currently inside a room
     enableRoomBackBtn();
 
-    const userIdResult = await parseResponse(await getUserInfoRequest("user-id"));
+    const userIdResult = await parseResponse(await handleGetUserInfoRequest("user-id"));
     if (!userIdResult.success) {
         alert("Error in fetching user id");
         return;
@@ -138,4 +138,53 @@ function updateRoomCodeInURL(roomCode) {
     history.pushState({}, "", `/dashboard?room=${roomCode}`);
 }
 
-export { renderBasicGui, appendRoomToRoomsContainer, updateRoomCodeInURL };
+// Render the list of current active users in the room on Dashboard page UI
+function renderMembers(membersElement, emptyMessageElement, membersHeadingElement, members) {
+    // Render the member list container on displaying the empty message or not
+    emptyMessageElement.hidden = members.length > 0;
+    membersElement.hidden = members.length === 0;
+
+    // Render the member list by appending any user that is currently active
+    if (members.length > 0) {
+        // Update the header
+        membersHeadingElement.textContent = `Members (${members.length})`;
+
+        // Empty the list first
+        membersElement.innerHTML = "";
+
+        // For each user that is currently active in the room, add info about the user to the list
+        members.forEach(({ userId, username }) => {
+            const item = document.createElement("li");
+            item.textContent = `[${username}]: ${userId}`;
+            membersElement.appendChild(item);
+            // Scroll the browser window to the bottom of the members element
+            membersElement.scrollTop = membersElement.scrollHeight;
+        });
+    }
+}
+
+// Fetch rooms information from server, and render them to Dashboard page UI
+async function loadRooms() {
+    // Retrieve info about all rooms the user has joined from server
+    const result = await parseResponse(await getRoomsInfo());
+    const roomsInfo = result.data.roomsInfo;
+
+    // Render rooms info to Dashboard page UI
+    const container = document.getElementById("rooms-container");
+    // For each room, append the corresponding info to the room container
+    roomsInfo.forEach(roomInfo => {
+        appendRoomToRoomsContainer(
+            container,
+            roomInfo,
+            roomInfo.role
+        );
+    });
+}
+
+export {
+    renderBasicGui, 
+    appendRoomToRoomsContainer, 
+    updateRoomCodeInURL,
+    renderMembers,
+    loadRooms
+};

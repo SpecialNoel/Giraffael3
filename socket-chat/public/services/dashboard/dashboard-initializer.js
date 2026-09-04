@@ -2,7 +2,7 @@
 
 import { setUpRoomEvents } from "./room-controller.js";
 import { initializeHistoryNavigation } from "./room-navigation.js";
-import { loadRooms } from "./room-loader.js";
+import { loadRooms } from "./room-view.js";
 import { setUpRoomBackBtn } from "./room-back-btn-handler.js";
 import { setUpConversationScroller } from "../../services/dashboard/conversation/scroller-setter.js";
 

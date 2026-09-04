@@ -3,7 +3,7 @@
 import { broadcastChatMessage } from "../emitters/room-broadcaster.js";
 import { storeTextMessage } from "../../services/db-services/message/store-message-service.js";
 
-async function registerChatHandler(socket, tmpId, content, callback) {
+async function handleChat(socket, tmpId, content, callback) {
     // Handle the chat message event
     try {
         // If somehow the server received a message the user sent while the user is not currently inside a room,
@@ -42,4 +42,4 @@ async function registerChatHandler(socket, tmpId, content, callback) {
     }
 };
 
-export { registerChatHandler };
+export { handleChat };

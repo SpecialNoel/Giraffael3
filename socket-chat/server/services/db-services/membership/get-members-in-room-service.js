@@ -1,7 +1,7 @@
-// get-members-service.js
+// get-members-in-room-service.js
 
-import { Room } from "../../../models/room-model.js";
 import { Membership } from "../../../models/membership-model.js";
+import { Room } from "../../../models/room-model.js";
 
 // Get all the active memberships in the room (inactive memberships means that the user has left the room)
 async function getMembersInRoom(roomCode) {

@@ -2,7 +2,7 @@
 
 import { leaveRoom } from "../../../services/db-services/membership/leave-room-service.js";
 import { successResponse, errorResponse } from "../../../utils/api-response.js";
-import { getMembersInRoom } from "../../../services/db-services/membership/get-members-service.js"
+import { getMembersInRoom } from "../../../services/db-services/membership/get-members-in-room-service.js"
 import { broadcastUserLeft } from "../../../socket/emitters/room-broadcaster.js";
 
 async function handleLeaveRoom(req, res, io) {
