@@ -1,6 +1,6 @@
 // update-user-password-handler.js
 
-import { validatePasswordFormat } from "../../../utils/password-format-validator.js";
+import { validatePasswordFormat } from "../../../../shared/validation/password-format-validator.js";
 import { fetchUserPassword } from "../../../services/db-services/user/fetch-user-password-service.js";
 import { hashPassword, comparePassword } from "../../../utils/password-handler.js";
 import { updateUserPassword } from "../../../services/db-services/user/update-user-services.js";

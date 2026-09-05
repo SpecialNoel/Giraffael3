@@ -1,6 +1,6 @@
 // info-panel-handler.js
 
-import { parseResponse } from "../utils/api.js";
+import { parseResponse } from "../../utils/api.js";
 import { handleGetUserInfoRequest } from "./setting-api.js";
 import { 
     setUpChangeUsernameListener,

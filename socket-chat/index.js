@@ -33,6 +33,11 @@ const app = express();
    without adding "public" as part of the path. 
 */
 app.use(express.static(path.join(process.cwd(), "public")));
+// Expose files inside /share/validation to the browser, meaning that it is exposed to the public as well
+app.use(
+    "/shared/validation",
+    express.static(path.join(process.cwd(), "shared/validation"))
+);
 app.use(express.json());
 app.use(cookieParser());
 

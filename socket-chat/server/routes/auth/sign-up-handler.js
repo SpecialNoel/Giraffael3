@@ -1,6 +1,6 @@
 // sign-up-handler.js
 
-import { PASSWORD_MIN_LENGTH } from "../../config/constants.js";
+import { validatePasswordFormat } from "../../../shared/validation/password-format-validator.js";
 import { findUserByEmail } from "../../services/db-services/user/find-user-by-email-service.js";
 import { createUser } from "../../services/db-services/user/create-user-service.js";
 import { hashPassword } from "../../utils/password-handler.js";
@@ -21,12 +21,13 @@ async function handleSignUp(req, res) {
             );
         }
 
-        // Handle too short passwords
-        if (plainPassword.length < PASSWORD_MIN_LENGTH) {
+        // Handle password format
+        const passwordFormatResult = validatePasswordFormat(plainPassword);
+        if (!passwordFormatResult.success) {
             return res.status(400).json(
                 errorResponse(
-                    "PASSWORD_TOO_SHORT",
-                    `Password must be at least ${PASSWORD_MIN_LENGTH} characters`
+                    "INVALID_PASSWORD_FORMAT",
+                    passwordFormatResult.message
                 )
             );
         }

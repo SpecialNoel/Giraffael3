@@ -1,11 +1,11 @@
 // action-handlers.js
 
-import { parseResponse } from "../utils/api.js";
+import { parseResponse } from "../../utils/api.js";
 import { 
     handleUpdateUsernameRequest,
     handleUpdatePasswordRequest
 } from "./setting-api.js";
-import { validatePasswordFormat } from "../utils/password-format-validator.js";
+import { validatePasswordFormat } from "/shared/validation/password-format-validator.js";
 
 // Redirect the user back to the Dashboard page when clicked
 function setUpBackToDashboardButton() {

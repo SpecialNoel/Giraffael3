@@ -1,7 +1,7 @@
 // room-handlers.js
 
 import { getCachedMessages, getCachedMembers } from "./conversation/enter-room-services.js";
-import { parseResponse } from "../utils/api.js";
+import { parseResponse } from "../../utils/api.js";
 import { createRoom, deleteRoom, joinRoom, leaveRoom } from "./room-api.js";
 import { enterRoom } from "./room-navigation.js";
 import { renderBasicGui, appendRoomToRoomsContainer, updateRoomCodeInURL } from "./room-view.js";

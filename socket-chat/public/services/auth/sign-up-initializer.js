@@ -1,6 +1,7 @@
 // sign-up-initializer.js
 
-import { apiFetch } from "../utils/api";
+import { parseResponse } from "../../utils/api.js";
+import { signUpWithEmailAndPassword } from "./auth-api.js";
 
 // Handle user sign-up request by setting up the signup form which authenticates via credentials
 function signUpTraditional() { 
@@ -28,13 +29,7 @@ function signUpTraditional() {
              * Note that client does not need the JWT token at this stage
              * as they should not connect to the server yet.
             */
-            const result = await apiFetch("/signup", {
-                method: "POST",
-                body: JSON.stringify({ 
-                    email, 
-                    plainPassword  
-                })
-            });
+            const result = await parseResponse(await signUpWithEmailAndPassword(email, plainPassword));
 
             // If the sign up failed, display the error message to the user
             if (!result.success) {

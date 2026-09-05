@@ -1,7 +1,7 @@
 // delete-room-handler.js
 
 import { deleteRoom } from "../../../services/db-services/room/delete-room-service.js";
-import { isCreatorByRoomCode } from "../../../services/db-services/membership/is-creator-by-room-code.js";
+import { isCreatorByRoomCode } from "../../../services/db-services/membership/is-creator-by-room-code-service.js";
 import { broadcastRoomDeleted } from "../../../socket/emitters/room-broadcaster.js";
 import { successResponse, errorResponse } from "../../../utils/api-response.js";
 

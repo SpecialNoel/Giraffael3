@@ -1,12 +1,12 @@
 // message-services.js
 
-import { generateTemporaryId } from "../utils/tmp-id-generator.js";
+import { generateTemporaryId } from "../../utils/tmp-id-generator.js";
 import { appendMessageToMessageList, 
          markMessageAsFailed, 
          markMessageAsSent } from "./message-view.js";
 import { getRoomCodeFromParams } from "../dashboard/conversation/services.js";
 import { storeMessageToState } from "../dashboard/conversation/enter-room-services.js";
-import { parseResponse } from "../utils/api.js";
+import { parseResponse } from "../../utils/api.js";
 import { handleGetUserInfoRequest } from "../settings/setting-api.js";
 
 // Send the input message to server (for which server will then relay to other active users in the room)

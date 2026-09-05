@@ -1,6 +1,6 @@
 // setting-api.js
 
-import { apiFetch } from "../utils/api.js";
+import { apiFetch } from "../../utils/api.js";
 
 // Send a request to server to fetch the corresponding information about user
 // endpoint can be: [user-id, user-email, username] 
