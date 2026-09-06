@@ -1,10 +1,12 @@
 // room-controller.js
 
-import { handleEnterRoom, 
-         handleLeaveRoom, 
-         handleDeleteRoom,
-         handleCreateRoom,
-         handleJoinRoom } from "./room-handler.js";
+import { 
+    handleEnterRoom, 
+    handleLeaveRoom, 
+    handleDeleteRoom,
+    handleCreateRoom,
+    handleJoinRoom 
+} from "./room-handlers.js";
 
 // Set up the rooms container
 function handleRoomsContainer(socket) {    

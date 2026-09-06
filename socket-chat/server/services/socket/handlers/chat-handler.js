@@ -1,9 +1,11 @@
 // chat-handler.js
 
 import { broadcastChatMessage } from "../emitters/room-broadcaster.js";
-import { storeTextMessage } from "../../services/db-services/message/store-message-service.js";
+import { storeTextMessage } from "../../db-services/message/store-message-service.js";
 
-async function registerChatHandler(socket, tmpId, content, callback) {
+import { validateMessageContentFormat } from "../../../../shared/validation/message-content-format-validator.js";
+
+async function handleChat(socket, tmpId, content, callback) {
     // Handle the chat message event
     try {
         // If somehow the server received a message the user sent while the user is not currently inside a room,
@@ -16,6 +18,15 @@ async function registerChatHandler(socket, tmpId, content, callback) {
                 status: "error" // return "error" (i.e. not success) back to client
             });       
             return;
+        }
+
+        // Validate input format
+        const messageContentValidnessResult = validateMessageContentFormat(content.trim());
+        if (!messageContentValidnessResult.success) {
+            callback({
+                status: "error",
+                message: messageContentValidnessResult.message
+            });            
         }
 
         // Notify the room about the message
@@ -42,4 +53,4 @@ async function registerChatHandler(socket, tmpId, content, callback) {
     }
 };
 
-export { registerChatHandler };
+export { handleChat };

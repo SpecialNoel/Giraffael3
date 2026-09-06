@@ -1,7 +1,6 @@
 // socket-events.js
 
-import { renderBasicGui } from "../dashboard/room-view.js";
-import { renderMembers } from "../dashboard/members-services.js";
+import { renderBasicGui, renderMembers } from "../dashboard/room-view.js";
 import { appendMessage } from "../dashboard/conversation/services.js";
 import { storeMessageToState, renderConversation } from "../dashboard/conversation/enter-room-services.js";
 import { sendMessage } from "./message-services.js";
@@ -71,6 +70,11 @@ function registerSocketEvents(socket,
     // Handle user sending a message without being inside a room first
     socket.on("messageRejectedNoActiveRoom", () => {
         alert("Failed to send the message. You are not currently inside a room.");
+    });
+
+    // Handler user entering a room with a wrong room code
+    socket.on("enterRoomFailureInvalidRoomCodeFormat", (message) => {
+        alert(message);
     });
 
     // Handle room deletion event

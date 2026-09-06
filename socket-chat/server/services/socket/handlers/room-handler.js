@@ -1,10 +1,19 @@
 // room-handler.js
 
-import { getMembersInRoom } from "../../services/db-services/membership/get-members-service.js";
-import { getPaginatedConversation } from "../../services/db-services/message/get-conversation-service.js";
-import { getRoomInfo } from "../../services/db-services/room/get-room-info-service.js";
+import { getMembersInRoom } from "../../db-services/membership/get-members-in-room-service.js";
+import { getPaginatedConversation } from "../../db-services/message/get-paginated-conversation-service.js";
+import { getRoomInfo } from "../../db-services/room/get-room-info-service.js";
+
+import { validateRoomCodeFormat } from "../../../../shared/validation/room-code-format-validator.js";
 
 async function registerEnterRoomHandler(socket, roomCode, cursor) {
+    // Validate input format (cursor will be validated later)
+    const normalizedRoomCode = roomCode.trim();
+    const roomCodeFormatValidnessResult = validateRoomCodeFormat(normalizedRoomCode);
+    if (!roomCodeFormatValidnessResult.success) {
+        socket.emit("enterRoomFailureInvalidRoomCodeFormat", roomCodeFormatValidnessResult.message)
+    }
+
     // Leave the user from the room if they are already in the room to prevent duplicated enter
     if (socket.activeRoomCode) {
         // Stop the user entering the same room if they are currently inside the target room

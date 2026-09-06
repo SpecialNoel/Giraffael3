@@ -4,11 +4,11 @@ import { User } from "../../../models/user-model.js";
 
 // Update the username of the user in DB
 // Return the updated username if succeeded; return null otherwise
-async function updateUsername(userObjectId, username) {
+async function updateUsername(userObjectId, normalizedUsername) {
     try {
         const updatedUser = await User.findByIdAndUpdate(
             userObjectId,
-            { username },
+            { username: normalizedUsername },
             { new: true }
         );
         return updatedUser?.username ?? null;

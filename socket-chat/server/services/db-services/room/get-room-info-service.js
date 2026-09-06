@@ -3,10 +3,13 @@
 import { Room } from "../../../models/room-model.js"
 
 // Retrieve the target room info
-async function getRoomInfo(roomCode) {
+async function getRoomInfo(normalizedRoomCode) {
     try {
         const room = await Room.findOne(
-            { roomCode, deleted: false},
+            { 
+                roomCode: normalizedRoomCode, 
+                deleted: false
+            },
             "roomName roomCode"
         );
         if (!room) return null;

@@ -23,7 +23,7 @@ const messageSchema = new Schema(
         content: {
             type: String,
             required: true,
-            trim: true // trim removes whitespaces from the beginning and end of the content
+            trim: true
         },
         // type specifies what kind of message this Message document is
         type: {

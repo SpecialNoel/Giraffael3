@@ -13,16 +13,14 @@ import { router as dashboardRouter } from "./server/routes/dashboard/dashboard-r
 import { router as settingsRouter } from "./server/routes/settings/settings-routes.js";
 import { router as roomsRouter } from "./server/routes/rooms/rooms-routes.js";
 
-import { getPublicIPAddress } from "./server/utils/ip-address-getter.js";
 import { connectToDB } from "./server/utils/db-connector.js";
 import { connectToRedis } from "./server/utils/redis-connector.js";
 
-import { authenticateSocket } from "./server/socket/middleware/authenticate-socket.js";
+import { authenticateSocket } from "./server/services/socket/middleware/authenticate-socket.js";
 import { registerEnterRoomHandler, 
-         registerExitRoomHandler } from "./server/socket/handlers/room-handler.js";
-import { registerDisconnectHandler } from "./server/socket/handlers/disconnect-handler.js";
-import { registerChatHandler } from "./server/socket/handlers/chat-handler.js";
-
+         registerExitRoomHandler } from "./server/services/socket/handlers/room-handler.js";
+import { handleChat } from "./server/services/socket/handlers/chat-handler.js";
+import { handleDisconnection } from "./server/services/socket/handlers/disconnection-handler.js";
 
 // ==================== Express App ====================
 // Initialize an Express application (a function handler)
@@ -35,6 +33,11 @@ const app = express();
    without adding "public" as part of the path. 
 */
 app.use(express.static(path.join(process.cwd(), "public")));
+// Expose files inside /share/validation to the browser, meaning that it is exposed to the public as well
+app.use(
+    "/shared/validation",
+    express.static(path.join(process.cwd(), "shared/validation"))
+);
 app.use(express.json());
 app.use(cookieParser());
 
@@ -109,21 +112,19 @@ io.on("connection", async (socket) => {
         * Notify all other users about this, store this message to the database,
         * and notify this user about the status of this operation
         */
-        await registerChatHandler(socket, tmpId, content, callback);
+        await handleChat(socket, tmpId, content, callback);
     });
     socket.on("disconnect", async () => {
         // Register client disconnection socket event to the socket
         /*
         * Leave the user from the room inside the rooms managed with SocketIO
         */
-        await registerDisconnectHandler(socket);
+        await handleDisconnection(socket);
     });
 })
 
 // HTTP server listens on port 3000 (default localhost server for Express)
 let hostname = "localhost";
-// const publicIP = await getPublicIPAddress();
-// hostname = publicIP; // public Ip of this device
 // hostname = process.env.HOSTNAME || "localhost"; // private IP of this device
 
 // Server port to listen on

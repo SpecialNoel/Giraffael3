@@ -11,20 +11,22 @@ const userSchema = new Schema(
         userId: {
             type: String,
             required: true,
-            unique: true
+            unique: true,
+            trim: true
         },
         // username is mainly used by users to differentiate each other
         username: {
             type: String,
-            sparse: true // set sparse to true to allow User documents with no value on this property
+            sparse: true, // set sparse to true to allow User documents with no value on this property
+            trim: true
         },
         // email is used by server as a way for user authentication
         email: {
             type: String,
             required: true,
             unique: true,
-            trim: true,
-            lowercase: true
+            lowercase: true,
+            trim: true
         },
         // passwordHash is invisible to users; it is used in authentication steps
         passwordHash: {

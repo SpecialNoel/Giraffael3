@@ -1,5 +1,8 @@
 // sign-in-initializer.js
 
+import { parseResponse } from "../../utils/api.js";
+import { signInWithEmailAndPassword } from "./auth-api.js";
+
 // Handle user sign-in request by setting up the signin form
 function signIn() {    
     /*
@@ -17,21 +20,15 @@ function signIn() {
         
         try {
             // Get user input on credentials
-            const email = document.getElementById("email").value.trim();
-            const plainPassword = document.getElementById("plainPassword").value.trim();
+            const email = document.getElementById("email").value;
+            const plainPassword = document.getElementById("plainPassword").value;
 
             /*
              * Send them to server for validation, then retrieve server response
              * Note that client needs to send information to server at this stage
              * to get the JWT token for later operations
             */
-            const result = await apiFetch("/signin", {
-                method: "POST",
-                body: JSON.stringify({ 
-                    email, 
-                    plainPassword  
-                })
-            });
+            const result = await parseResponse(await signInWithEmailAndPassword(email, plainPassword));
             
             // If the credentials are invalid, display the error message to the user
             if (!result.success) {

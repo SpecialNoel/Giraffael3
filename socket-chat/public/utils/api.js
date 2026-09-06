@@ -1,4 +1,15 @@
-// response-parser.js
+// api-fetcher.js
+
+// Send the HTTP request to server, and receive an HTTP response from the server
+async function apiFetch(url, options = {}) {
+    return fetch(url, {
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...options.headers
+        }
+    });
+}
 
 // Retrieves data contained in server HTTP response
 async function parseResponse(response) {
@@ -16,4 +27,4 @@ async function parseResponse(response) {
     return result;
 }
 
-export { parseResponse };
+export { apiFetch, parseResponse };

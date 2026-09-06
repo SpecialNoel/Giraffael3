@@ -1,13 +1,13 @@
 // message-services.js
 
-import { generateTemporaryId } from "../utils/tmp-id-generator.js";
+import { generateTemporaryId } from "../../utils/tmp-id-generator.js";
 import { appendMessageToMessageList, 
          markMessageAsFailed, 
          markMessageAsSent } from "./message-view.js";
 import { getRoomCodeFromParams } from "../dashboard/conversation/services.js";
 import { storeMessageToState } from "../dashboard/conversation/enter-room-services.js";
-import { parseResponse } from "../utils/response-parser.js";
-import { getUserInfoRequest } from "../settings/setting-api.js";
+import { parseResponse } from "../../utils/api.js";
+import { handleGetUserInfoRequest } from "../settings/setting-api.js";
 
 // Send the input message to server (for which server will then relay to other active users in the room)
 function sendMessage(conversationElement, inputElement, socket) {
@@ -31,11 +31,12 @@ function sendMessage(conversationElement, inputElement, socket) {
         if (err || res.status !== "success") {
             markMessageAsFailed(tmpId);
             console.log("Server did not acknowledge the transmission of this chat message in the given delay.");
+            alert(res.message);
             return;
         }
 
         // Step 3: Update the message with its id piggybacked from server after successfully sent the message
-        const usernameResult = await parseResponse(await getUserInfoRequest("username"));
+        const usernameResult = await parseResponse(await handleGetUserInfoRequest("username"));
         if (!usernameResult.success) {
             alert("Error in fetching username");
             return;

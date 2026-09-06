@@ -1,17 +1,14 @@
 // join-room-service.js
 
 import { Membership } from "../../../models/membership-model.js";
-import { Room } from "../../../models/room-model.js";
+import { findRoom } from "../room/find-room-service.js";
 
 // Add the user to the given room by creating a new membership,
 // or re-activate the user's membership if it already exists
-async function joinRoom(userObjectId, roomCode, role) {
+async function joinRoom(userObjectId, normalizedRoomCode, role) {
     try {
         // Check room existence
-        const room = await Room.findOne({
-            roomCode,
-            deleted: false
-        }).select("_id");
+        const room = await findRoom(normalizedRoomCode).select("_id");
         if (!room) {
             return {
                 success: false,
