@@ -1,17 +1,13 @@
 // get-members-in-room-service.js
 
 import { Membership } from "../../../models/membership-model.js";
-import { Room } from "../../../models/room-model.js";
+import { findRoom } from "../../db-services/room/find-room-service.js";
 
 // Get all the active memberships in the room (inactive memberships means that the user has left the room)
 async function getMembersInRoom(normalizedRoomCode) {
     try {
         // Fetch the room
-        const room = await Room.findOne(
-            {
-                roomCode: normalizedRoomCode,
-                deleted: false
-            }).select("_id");
+        const room = await findRoom(normalizedRoomCode).select("_id");
         if (!room) return null;
 
         // Fetch all active memberships inside the room

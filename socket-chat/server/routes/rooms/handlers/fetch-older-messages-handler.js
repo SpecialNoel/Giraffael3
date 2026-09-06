@@ -1,6 +1,7 @@
 // fetch-older-messages-handler.js
 
 import { getPaginatedConversation } from "../../../services/db-services/message/get-paginated-conversation-service.js";
+import { hasRoleByRoomCode } from "../../../services/db-services/membership/has-role-by-room-code-service.js";
 import { successResponse, errorResponse } from "../../../utils/api-response.js";
 
 import { validateRoomCodeFormat } from "../../../../shared/validation/room-code-format-validator.js";
@@ -9,6 +10,7 @@ async function handleFetchOlderMessages(req, res) {
     try {
         // Retrieve room code of the requesting room
         const roomCode = req.params.roomCode;
+        const userObjectId = req.user.userObjectId
         const { cursor } = req.query;
         const normalizedRoomCode = roomCode.trim();
 
@@ -21,6 +23,16 @@ async function handleFetchOlderMessages(req, res) {
                     roomCodeFormatValidnessResult.message
                 )
             );        
+        }
+
+        // Check whether the user is a participant of the room
+        if (!hasRoleByRoomCode(userObjectId, normalizedRoomCode, "participant")) {
+            return res.status(401).json(
+                errorResponse(
+                    "NOT_MEMBER_OF_ROOM",
+                    "Failed to fetch older messages due to not being a participant of the room"
+                )
+            );
         }
 
         // Fetch the next paginated conversation

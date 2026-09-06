@@ -35,7 +35,7 @@ async function handleLeaveRoom(req, res, io) {
                     return res.status(400).json(
                         errorResponse(
                             "NOT_IN_ROOM",
-                            "User already in room"
+                            "User is not in room yet"
                         )
                     );
                 case "ROOM_NOT_FOUND":

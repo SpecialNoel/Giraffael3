@@ -25,11 +25,11 @@ async function handleFetchRoomInfo(req, res) {
         }
 
         // Check whether the user is a participant of the room
-        if(!hasRoleByRoomCode(userObjectId, normalizedRoomCode, "participant")) {
+        if (!hasRoleByRoomCode(userObjectId, normalizedRoomCode, "participant")) {
             return res.status(403).json(
                 errorResponse(
                     "INVALID_USER_ROLE",
-                    "User is not a participant of the room"
+                    "Failed to fetch room info due to not being a participant of the room"
                 )
             );               
         }

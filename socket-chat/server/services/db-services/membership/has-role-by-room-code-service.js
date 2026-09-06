@@ -1,17 +1,14 @@
 // has-role-by-room-code-service.js
 
 import { Membership } from "../../../models/membership-model.js";
-import { Room } from "../../../models/room-model.js";
+import { findRoom } from "../room/find-room-service.js";
 
 // Determine whether the user has the target role in the room
 // Note: types for role can be accessed in the Membership schema; "participant" refers to any role
 async function hasRoleByRoomCode(userObjectId, normalizedRoomCode, role) {
     try {
         // Find the target room
-        const room = await Room.findOne({
-            roomCode: normalizedRoomCode,
-            deleted: false
-        }).select("_id");
+        const room = await findRoom(normalizedRoomCode).select("_id");
         if (!room) return false;
 
         // Check whether the user has any role in the room

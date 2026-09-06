@@ -7,7 +7,7 @@ import { successResponse, errorResponse } from "../../../utils/api-response.js";
 
 import { validateRoomCodeFormat } from "../../../../shared/validation/room-code-format-validator.js";
 
-async function c(req, res, io) {
+async function handleDeleteRoom(req, res, io) {
     try {
         // Receive room name and user info
         const { roomCode } = req.body;
@@ -29,7 +29,7 @@ async function c(req, res, io) {
         if (!hasRoleByRoomCode(userObjectId, normalizedRoomCode, "creator")) {
             return res.status(401).json(
                 errorResponse(
-                    "NOT_CREATOR",
+                    "NOT_CREATOR_OF_ROOM",
                     "Failed to delete room due to not being the creator of the room"
                 )
             );
@@ -37,7 +37,6 @@ async function c(req, res, io) {
 
         // Broadcast the room deletion to all users who joined this room via socket events BEFORE actual room deletion
         broadcastRoomDeleted(io, normalizedRoomCode);
-        console.log(`Notified all users in room ${normalizedRoomCode} about room deletion`);
 
         // Delete the room from the database
         const deletedAt = await deleteRoom(normalizedRoomCode);

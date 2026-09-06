@@ -1,15 +1,12 @@
 // get-membership-service.js
 
 import { Membership } from "../../../models/membership-model.js";
-import { Room } from "../../../models/room-model.js";
+import { findRoom } from "../room/find-room-service.js";
 
 // Get the user's membership in the target room
 async function getMembership(userObjectId, normalizedRoomCode) {
     try {
-        const room = await Room.findOne({
-            roomCode: normalizedRoomCode,
-            deleted: false
-        }).select("_id");
+        const room = await findRoom(normalizedRoomCode).select("_id");
         if (!room) return false;
 
         return await Membership.findOne({
