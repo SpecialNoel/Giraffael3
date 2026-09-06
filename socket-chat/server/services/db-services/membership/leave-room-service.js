@@ -4,11 +4,11 @@ import { Membership } from "../../../models/membership-model.js";
 import { Room } from "../../../models/room-model.js";
 
 // Set the user from the given room as inactive by updating the existing membership
-async function leaveRoom(userObjectId, roomCode) {
+async function leaveRoom(userObjectId, normalizedRoomCode) {
     try {
         // Try to fetch the room from database
         const room = await Room.findOne({
-            roomCode,
+            roomCode: normalizedRoomCode,
             deleted: false
         }).select("_id").lean();
         if (!room) {

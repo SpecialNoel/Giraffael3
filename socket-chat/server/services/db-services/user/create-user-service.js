@@ -5,7 +5,7 @@ import { generateIdentifier } from "../../../utils/id-generator.js";
 import { generateUniqueDefaultUsername } from "../../../utils/username-generator.js";
 
 // Create a new user, and store it to the database
-async function createUser(email, passwordHash) {
+async function createUser(normalizedEmail, passwordHash) {
     try {
         // Create and store the user to DB. Repeat if failed due to userId duplication
         let user;
@@ -16,7 +16,7 @@ async function createUser(email, passwordHash) {
                 user = await User.create({
                     userId: generateIdentifier(),
                     username,
-                    email,
+                    email: normalizedEmail,
                     passwordHash
                 });
             } catch (err) {

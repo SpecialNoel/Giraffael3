@@ -3,11 +3,11 @@
 import { Membership } from "../../../models/membership-model.js";
 import { Room } from "../../../models/room-model.js";
 
-// Get the member's role in the target room
-async function getMembership(userObjectId, roomCode) {
+// Get the user's membership in the target room
+async function getMembership(userObjectId, normalizedRoomCode) {
     try {
         const room = await Room.findOne({
-            roomCode,
+            roomCode: normalizedRoomCode,
             deleted: false
         }).select("_id");
         if (!room) return false;

@@ -11,13 +11,13 @@ const membershipSchema = new Schema(
         userObjectId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
-            required: true
+            required: true,
         },
         // roomObjectId refers to the Room document of the corresponding room
         roomObjectId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Room",
-            required: true
+            required: true,
         },
         // role specifies the authority this user has in the room
         role: {

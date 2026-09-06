@@ -4,6 +4,7 @@ const PASSWORD_MIN_LENGTH = 8;
 const PASSWORD_MAX_LENGTH = 128;
 
 // Check the validness of the format of the received password
+// Note: password should not be trimmed before or after validation
 function validatePasswordFormat(password) {
     // Type check
     if (typeof password !== "string") {

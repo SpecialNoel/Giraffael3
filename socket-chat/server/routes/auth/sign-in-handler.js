@@ -5,6 +5,9 @@ import { comparePassword } from "../../utils/password-handler.js";
 import { generateToken } from "../../utils/jwt-token-handler.js";
 import { successResponse, errorResponse } from "../../utils/api-response.js";
 
+import { validateEmailFormat } from "../../../shared/validation/email-format-validator.js";
+import { validatePasswordFormat } from "../../../shared/validation/password-format-validator.js";
+
 async function handleSignIn(req, res) {
     try {
         /* 
@@ -15,16 +18,26 @@ async function handleSignIn(req, res) {
          * TLDR: token verification comes after sign-in.
         */
         const { email, plainPassword } = req.body;
+        const normalizedEmail = email.trim().toLowerCase();
+
+        // Validate input formats
+        if (!validateEmailFormat(normalizedEmail) || !validatePasswordFormat(plainPassword)) {
+            return res.status(400).json(
+                errorResponse(
+                    "INVALID_CREDENTIALS_FORMAT",
+                    "Invalid email or password format" // explain generically for account login
+                )
+            );        
+        }
 
         // Try to find user from database using received email
-        const user = await findUserByEmail(email);
+        const user = await findUserByEmail(normalizedEmail);
         // Handle error where the account associated with the received email does not exist in DB
         if (!user) {
-            console.log(`Email does not exist in DB: ${email}`);
             return res.status(401).json(
                 errorResponse(
                     "INVALID_CREDENTIALS",
-                    "Invalid email or password"
+                    "Invalid email or password" // explain generically for account login
                 )
             );
         }
@@ -33,11 +46,10 @@ async function handleSignIn(req, res) {
         const passwordMatch = await comparePassword(plainPassword, user.passwordHash);
         if (!passwordMatch) {
             // Handle error where the password does not match the one stored in DB
-            console.log(`Invalid login attempt for email: ${email}`);
             return res.status(401).json(
                 errorResponse(
                     "INVALID_CREDENTIALS",
-                    "Invalid email or password"
+                    "Invalid email or password" // explain generically for account login
                 )
             );
         }

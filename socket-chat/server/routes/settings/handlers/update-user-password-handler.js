@@ -1,23 +1,24 @@
 // update-user-password-handler.js
 
-import { validatePasswordFormat } from "../../../../shared/validation/password-format-validator.js";
 import { fetchUserPassword } from "../../../services/db-services/user/fetch-user-password-service.js";
 import { hashPassword, comparePassword } from "../../../utils/password-handler.js";
 import { updateUserPassword } from "../../../services/db-services/user/update-user-services.js";
 import { successResponse, errorResponse } from "../../../utils/api-response.js";
+
+import { validatePasswordFormat } from "../../../../shared/validation/password-format-validator.js";
 
 async function handleUpdateUserPassword(req, res) {
     try {
         const { currentPassword, newPassword, confirmNewPassword } = req.body;
         const userObjectId = req.user.userObjectId;
 
-        // Validate the format of the received new password
-        const validateResult = validatePasswordFormat(newPassword); 
-        if (!validateResult.success) {
+        // Validate input formats
+        const passwordFormatValidnessResult = validatePasswordFormat(newPassword); 
+        if (!passwordFormatValidnessResult.success) {
             return res.status(422).json(
                 errorResponse(
-                    "PASSWORD_UPDATE_FAILURE",
-                    validateResult.message
+                    "INVALID_PASSWORD_FORMAT",
+                    passwordFormatValidnessResult.message
                 )
             );
         }
@@ -26,7 +27,7 @@ async function handleUpdateUserPassword(req, res) {
         if (newPassword != confirmNewPassword) {
             return res.status(422).json(
                 errorResponse(
-                    "PASSWORD_UPDATE_FAILURE",
+                    "PASSWORDS_NOT_MATCH",
                     "Passwords do not match."
                 )
             );
@@ -48,7 +49,7 @@ async function handleUpdateUserPassword(req, res) {
         if (!await comparePassword(currentPassword, passwordHashOnFile)) {
             return res.status(401).json(
                 errorResponse(
-                    "PASSWORD_UPDATE_FAILURE",
+                    "INCORRECT_CURRENT_PASSWORD",
                     "Current password is incorrect."
                 )
             );
@@ -59,7 +60,7 @@ async function handleUpdateUserPassword(req, res) {
         if (await comparePassword(newPassword, passwordHashOnFile)) {
             return res.status(422).json(
                 errorResponse(
-                    "PASSWORD_UPDATE_FAILURE",
+                    "PASSWORD_REUSED",
                     "New password must be different from your current password."
                 )
             );

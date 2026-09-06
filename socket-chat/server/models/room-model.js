@@ -12,12 +12,14 @@ const roomSchema = new Schema(
         roomCode: {
             type: String,
             required: true,
-            unique: true
+            unique: true,
+            trim: true
         },
         // roomName is mainly displayed to users; server accesses the room via "_id"
         roomName: {
             type: String,
-            required: true
+            required: true,
+            trim: true
         },
         // Soft-deletion: room stays in the database after deletion, but users are not allowed interact with it
         deleted: {

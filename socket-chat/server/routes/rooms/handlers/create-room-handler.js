@@ -5,14 +5,28 @@ import { joinRoom } from "../../../services/db-services/membership/join-room-ser
 import { successResponse, errorResponse } from "../../../utils/api-response.js";
 import { handleRoomMembershipAdded } from "./join-room-handler.js";
 
+import { validateRoomNameFormat } from "../../../../shared/validation/room-name-format-validator.js";
+
 async function handleCreateRoom(req, res, io) {
     try {
         // Receive room name and creator info
         const { roomName } = req.body;
         const userObjectId = req.user.userObjectId;
+        const normalizedRoomName = roomName.trim();
+
+        // Validate input format
+        const roomNameFormatValidnessResult = validateRoomNameFormat(normalizedRoomName);
+        if (!roomNameFormatValidnessResult.success) {
+            return res.status(400).json(
+                errorResponse(
+                    "INVALID_ROOM_NAME_FORMAT",
+                    roomNameFormatValidnessResult.message
+                )
+            );        
+        }
 
         // Create the room
-        const room = await createRoom(roomName, userObjectId);
+        const room = await createRoom(normalizedRoomName, userObjectId);
 
         // Create membership by join to the room
         const joinRoomResult = await joinRoom(userObjectId, room.roomCode, "creator");
@@ -47,8 +61,10 @@ async function handleCreateRoom(req, res, io) {
         await handleRoomMembershipAdded(io, room.roomCode);
 
         // Retrieve necessary info about this new room
-        const roomInfo = { roomName: room.roomName, 
-                           roomCode: room.roomCode } ;
+        const roomInfo = {
+            roomName: room.roomName, 
+            roomCode: room.roomCode 
+        };
 
         // Create-room success
         return res.status(200).json(

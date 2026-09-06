@@ -1,7 +1,10 @@
 // email-format-validator.js
 
 const EMAIL_MAX_LENGTH = 254;
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// Check the validness of the format of the received email
+// Note: trim email before validation
 function validateEmailFormat(email) {
     // Type check
     if (typeof email !== "string") {
@@ -19,8 +22,8 @@ function validateEmailFormat(email) {
         };
     }
 
-    // Regex check. Allow: letters, numbers, space, underscore, hyphen 
-    if (!(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))) {
+    // Regex check. Allow: letters, numbers, underscore, hyphen 
+    if (!(EMAIL_PATTERN.test(email))) {
         return {
             success: false,
             message: "Please enter a valid email address."

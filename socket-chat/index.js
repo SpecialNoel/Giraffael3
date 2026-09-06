@@ -16,11 +16,11 @@ import { router as roomsRouter } from "./server/routes/rooms/rooms-routes.js";
 import { connectToDB } from "./server/utils/db-connector.js";
 import { connectToRedis } from "./server/utils/redis-connector.js";
 
-import { authenticateSocket } from "./server/socket/middleware/authenticate-socket.js";
+import { authenticateSocket } from "./server/services/socket/middleware/authenticate-socket.js";
 import { registerEnterRoomHandler, 
-         registerExitRoomHandler } from "./server/socket/handlers/room-handler.js";
-import { handleChat } from "./server/socket/handlers/chat-handler.js";
-import { handleDisconnection } from "./server/socket/handlers/disconnection-handler.js";
+         registerExitRoomHandler } from "./server/services/socket/handlers/room-handler.js";
+import { handleChat } from "./server/services/socket/handlers/chat-handler.js";
+import { handleDisconnection } from "./server/services/socket/handlers/disconnection-handler.js";
 
 // ==================== Express App ====================
 // Initialize an Express application (a function handler)

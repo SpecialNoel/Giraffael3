@@ -72,6 +72,11 @@ function registerSocketEvents(socket,
         alert("Failed to send the message. You are not currently inside a room.");
     });
 
+    // Handler user entering a room with a wrong room code
+    socket.on("enterRoomFailureInvalidRoomCodeFormat", (message) => {
+        alert(message);
+    });
+
     // Handle room deletion event
     socket.on("roomDeleted", (data) => {
         alert(data.msg);

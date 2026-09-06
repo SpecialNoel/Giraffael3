@@ -7,6 +7,7 @@ async function handleGetUserId(req, res) {
     try {
         const userObjectId = req.user.userObjectId;
 
+        // Fetch user public id
         const userId = await fetchUserId(userObjectId);
         if (userId === null) {
             return res.status(404).json(
@@ -20,7 +21,7 @@ async function handleGetUserId(req, res) {
         return res.status(200).json(
             successResponse(
                 {
-                    userId
+                    userId: userId.trim()
                 },
                 "Fetch user id success."
             )

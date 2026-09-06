@@ -7,6 +7,7 @@ async function handleGetUserEmail(req, res) {
     try {
         const userObjectId = req.user.userObjectId;
 
+        // Fetch user email
         const userEmail = await fetchUserEmail(userObjectId);
         if (userEmail === null) {
             return res.status(404).json(
@@ -20,7 +21,7 @@ async function handleGetUserEmail(req, res) {
         return res.status(200).json(
             successResponse(
                 {
-                    userEmail
+                    userEmail: userEmail.trim().toLowerCase()
                 },
                 "Fetch user email success."
             )

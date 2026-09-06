@@ -5,7 +5,7 @@ import { Room } from "../../../models/room-model.js"
 import { generateIdentifier } from "../../../utils/id-generator.js";
 
 // Create a new room with the given room name, and store it to the database
-async function createRoom(roomName, userObjectId) {
+async function createRoom(normalizedRoomName, userObjectId) {
     try {
         // Check if the user exists in the database
         const user = await User.findById(userObjectId);
@@ -17,7 +17,7 @@ async function createRoom(roomName, userObjectId) {
             try {
                 room = await Room.create({
                     roomCode: generateIdentifier(),
-                    roomName
+                    roomName: normalizedRoomName
                 });
             } catch (err) {
                 if (err.code === 11000) continue; // duplicate key error of MongoDB; retry

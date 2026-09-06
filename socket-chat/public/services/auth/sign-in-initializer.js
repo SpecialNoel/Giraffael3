@@ -20,8 +20,8 @@ function signIn() {
         
         try {
             // Get user input on credentials
-            const email = document.getElementById("email").value.trim();
-            const plainPassword = document.getElementById("plainPassword").value.trim();
+            const email = document.getElementById("email").value;
+            const plainPassword = document.getElementById("plainPassword").value;
 
             /*
              * Send them to server for validation, then retrieve server response

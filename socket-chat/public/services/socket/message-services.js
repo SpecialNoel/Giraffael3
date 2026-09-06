@@ -31,6 +31,7 @@ function sendMessage(conversationElement, inputElement, socket) {
         if (err || res.status !== "success") {
             markMessageAsFailed(tmpId);
             console.log("Server did not acknowledge the transmission of this chat message in the given delay.");
+            alert(res.message);
             return;
         }
 

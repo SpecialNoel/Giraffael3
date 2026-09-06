@@ -5,11 +5,11 @@ import { Room } from "../../../models/room-model.js";
 
 // Add the user to the given room by creating a new membership,
 // or re-activate the user's membership if it already exists
-async function joinRoom(userObjectId, roomCode, role) {
+async function joinRoom(userObjectId, normalizedRoomCode, role) {
     try {
         // Check room existence
         const room = await Room.findOne({
-            roomCode,
+            roomCode: normalizedRoomCode,
             deleted: false
         }).select("_id");
         if (!room) {

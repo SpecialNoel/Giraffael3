@@ -4,16 +4,16 @@ import { Room } from "../../../models/room-model.js";
 import { Membership } from "../../../models/membership-model.js";
 
 // Delete the given room from the database
-async function deleteRoom(roomCode) {
+async function deleteRoom(normalizedRoomCode) {
     try {
-        // await Room.deleteOne({ roomCode }); // Hard-delete
+        // await Room.deleteOne({ roomCode: normalizedRoomCode }); // Hard-delete
 
         // Soft-delete: ”deleted” marked as true, but conversation 
         // still exist, and the room becomes inaccessible to everyone
         const date = new Date();
         const room = await Room.findOneAndUpdate(
             { 
-                roomCode: roomCode, 
+                roomCode: normalizedRoomCode, 
                 deleted: false 
             },
             {

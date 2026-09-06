@@ -7,6 +7,7 @@ async function handleGetUsername(req, res) {
     try {
         const userObjectId = req.user.userObjectId;
 
+        // Fetch user username
         const username = await fetchUsername(userObjectId);
         if (username === null) {
             return res.status(404).json(
@@ -20,7 +21,7 @@ async function handleGetUsername(req, res) {
         return res.status(200).json(
             successResponse(
                 {
-                    username
+                    username: username.trim()
                 },
                 "Fetch username success."
             )
