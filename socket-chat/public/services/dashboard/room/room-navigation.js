@@ -1,7 +1,7 @@
 // room-navigation.js
 
-import { getRoomCodeFromParams } from "../dashboard/conversation/services.js";
-import { getCurrentRoomState } from "../states/dashboard-state.js";
+import { getRoomCodeFromParams } from "../conversation/services.js";
+import { getCurrentRoomState } from "../../states/dashboard-state.js";
 
 // Fire an "enter room" socket event to server
 function enterRoom(socket, roomCode) {

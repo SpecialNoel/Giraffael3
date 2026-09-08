@@ -1,6 +1,6 @@
 // dashboard-page.js
 
-import { createAuthenticatedSocket } from "../services/socket/socket-client.js";
+import { getAuthenticatedSocket } from "../services/socket/socket-creator.js";
 import { initializeDashboard } from "../services/dashboard/dashboard-initializer.js";
 import { startSession } from "../services/socket/socket-events-register.js";
 
@@ -18,7 +18,7 @@ window.addEventListener("DOMContentLoaded", async () => {
         * TLDR: JWT token verification comes after user sign-in, but before every other 
         *       dashboard services.
         */
-        const socket = await createAuthenticatedSocket();
+        const socket = getAuthenticatedSocket();
 
         // Set up event listeners for user dashboard services (HTTP endpoints operations)
         await initializeDashboard(socket);

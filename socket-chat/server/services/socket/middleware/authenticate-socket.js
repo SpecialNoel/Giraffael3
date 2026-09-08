@@ -11,7 +11,7 @@ async function authenticateSocket(token, socket, next) {
 
         // Fetch the username of this user (which should already exists as userObjectId exists)
         const user = await User.findById(userObjectId).select("username");
-        if (!user) return next(new Error("User not found"))
+        if (!user) return next(new Error("User not found"));
 
         // Apply received user info inside the token for later use
         socket.user = {
