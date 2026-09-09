@@ -2,6 +2,7 @@
 
 import { parseResponse } from "../../utils/api.js";
 import { signInWithEmailAndPassword } from "./auth-api.js";
+import { connectSocket } from "../socket/socket-creator.js";
 
 // Handle user sign-in request by setting up the signin form
 function signIn() {    
@@ -37,10 +38,12 @@ function signIn() {
                 return;
             }
 
-            // The credentials are verified by server to be valid, proceed to the Dashboard page.
-            setTimeout(() => {
-                window.location.href = "/dashboard"; 
-            }, 50); // delay by 0.05s before switching the page
+            // Create and connect the socket used for socket communication
+            const socket = await connectSocket();
+            console.log(`Client side socket ${socket.id} is ready to go.`);
+
+            // User authenticated by server. Proceed to the Dashboard page.
+            window.location.href = "/dashboard"; 
         } catch (err) {
             // Print error message to client side in case something went wrong during this process
             console.error(err);

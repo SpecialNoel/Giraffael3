@@ -66,13 +66,14 @@ await connectToDB();
 // Connect to Redis
 const redis = await connectToRedis();
 
-// Authenticate the user for operations handled with socket events before proceeding the connection
-// Note that this comes after the client successfully signed in to the app
+// Listen to client's request on socket connection
 io.use(async (socket, next) => {
-    // Parse cookie from client request
+    // Parse cookie attribute from this request
     const cookies = parse(socket.handshake.headers.cookie || "");
-    // Retrieve JWT token from cookie
+    // Retrieve client's assigned JWT token from parsed cookie
     const token = cookies.authToken;
+    
+    // If no token has received from client's browser and verified at server, reject this socket connection attempt
     if (!token) return next(new Error("Authentication required"));
 
     await authenticateSocket(token, socket, next);

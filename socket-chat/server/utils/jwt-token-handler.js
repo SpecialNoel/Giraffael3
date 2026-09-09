@@ -23,14 +23,19 @@ function verifyToken(token) {
     // Fetch the secret for JWT generation
     const secret = process.env.JWT_SECRET;
 
-    // Verify the token with fetched secret if it has been tempered or expired
-    const decoded = jwt.verify(token, secret);
-    
-    // Return the information stored in the payload of this token
-    return { 
-        userObjectId: decoded.sub, 
-        userId: decoded.userId 
-    };
+    try {
+        // Verify the token with fetched secret if it has been tempered or expired
+        const decoded = jwt.verify(token, secret);
+        
+        // Return the information stored in the payload of this token
+        return { 
+            userObjectId: decoded.sub, 
+            userId: decoded.userId 
+        };
+    } catch (err) {
+        // Return null if the token has failed the verification with the on-file secret
+        return null;
+    }
 }
 
 export { generateToken, verifyToken };
