@@ -71,7 +71,7 @@ io.use(async (socket, next) => {
     // Parse cookie attribute from this request
     const cookies = parse(socket.handshake.headers.cookie || "");
     // Retrieve client's assigned JWT token from parsed cookie
-    const token = cookies.authToken;
+    const token = cookies.accessToken;
     
     // If no token has received from client's browser and verified at server, reject this socket connection attempt
     if (!token) return next(new Error("Authentication required"));

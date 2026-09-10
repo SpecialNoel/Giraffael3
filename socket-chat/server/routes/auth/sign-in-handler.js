@@ -58,11 +58,11 @@ async function handleSignIn(req, res) {
         const token = generateToken(user._id, user.userId);
 
         // Set the JWT token as an HTTP-Only cookie in the user's browser
-        res.cookie("authToken", token, {
+        res.cookie("accessToken", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            secure: true,
-            sameSite: "lax",
+            secure: true, // HTTPS
+            sameSite: "lax", // Allow cookies in some cross-site situations; block many other cross-site requests 
             maxAge: 60*60*1000,
             path: "/"
         });

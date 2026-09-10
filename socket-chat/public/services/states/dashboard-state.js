@@ -1,6 +1,9 @@
 // dashboard-state.js
 
-// dashboardState is used to keep track of attributes which a client socket (i.e. not the user itself) had inside the dashboard
+/* 
+* dashboardState contains the dashboard/application state associated with the current client session.
+* It is independent of any particular Socket.IO connection.
+*/
 export const dashboardState = {
     // The room code for the room the user intended to enter
     pendingRoomCode: null,

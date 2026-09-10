@@ -6,7 +6,7 @@ import { errorResponse } from "../utils/api-response.js";
 // Authenticate the user for operations handled with http api endpoints
 function authenticateHTTP(req, res, next) {
     // Try to get the JWT token from the requesting client's browser
-    const token = req.cookies.authToken;
+    const token = req.cookies.accessToken;
     if (!token) {
         return res.status(401).json(
             errorResponse(
