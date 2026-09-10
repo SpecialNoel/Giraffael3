@@ -1,5 +1,6 @@
 // dashboard-page.js
 
+import { connectSocket } from "../services/socket/socket-creator.js";
 import { initializeDashboard } from "../services/dashboard/dashboard-initializer.js";
 import { startSession } from "../services/socket/socket-events-register.js";
 
@@ -7,12 +8,16 @@ import { startSession } from "../services/socket/socket-events-register.js";
 // to components on the Dashboard page
 window.addEventListener("DOMContentLoaded", async () => {
     try {
+        // Create and connect the socket used for socket communication
+        const socket = await connectSocket();
+        console.log(`Client side socket ${socket.id} is ready to go.`);
+
         // Set up event listeners for user dashboard services (HTTP endpoints operations)
-        await initializeDashboard();
+        await initializeDashboard(socket);
         console.log("Initialized dashboard");
 
         // Start socket communication with server with the created socket by setting up the socket events
-        startSession();
+        startSession(socket);
         console.log("Started session");
     } catch (err) {
         // If any error occurs, alert the error message to user and redirect them back to the sign in page

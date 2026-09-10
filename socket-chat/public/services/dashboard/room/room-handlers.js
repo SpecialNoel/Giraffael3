@@ -10,7 +10,7 @@ import { dashboardState } from "../../states/dashboard-state.js";
 import { renderOlderMessages } from "../conversation/services.js";
 
 // Set up the enter-room logic
-async function handleEnterRoom(roomBtn) {
+async function handleEnterRoom(socket, roomBtn) {
     const roomCode = roomBtn.dataset.roomCode; // dataset.roomCode is dynamically parsed from "data-room-code" attribute in html
     console.log("Clicked enter room:", roomCode);
 
@@ -48,7 +48,7 @@ async function handleEnterRoom(roomBtn) {
 
     // Fire an "enter room" socket event to server
     // Room info will then be retrieved and updated to Dashboard page via socket events
-    enterRoom(roomCode);
+    enterRoom(socket, roomCode);
 }
 
 // Set up the leave-room logic

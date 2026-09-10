@@ -1,6 +1,5 @@
 // socket-events.js
 
-import { getSocket } from "./socket-creator.js";
 import { renderBasicGui, renderMembers } from "../dashboard/room/room-view.js";
 import { appendMessage } from "../dashboard/conversation/services.js";
 import { storeMessageToState, renderConversation } from "../dashboard/conversation/enter-room-services.js";
@@ -8,13 +7,11 @@ import { sendMessage } from "./message/message-services.js";
 import { dashboardState, updateRoomState } from "../states/dashboard-state.js";
 
 // Set up socket events
-function registerSocketEvents(conversationElement, 
+function registerSocketEvents(socket,
+                              conversationElement, 
                               membersElement, 
                               emptyMessageElement,
                               membersHeadingElement) {
-    const socket = getSocket();
-    console.log("socket in registerSocketEvents():", socket);
-
     // Handle update on active users list upon user joining or leaving the room
     socket.on("userJoined", (data) => {
         // Display "user join room" message to this user
@@ -90,7 +87,7 @@ function registerSocketEvents(conversationElement,
 }
 
 // Start socket communication with server with the created socket by setting up the socket events
-function startSession() {
+function startSession(socket) {
     const messageForm = document.getElementById("message-form");
     const inputElement = document.getElementById("message-input");
     const conversationElement = document.getElementById("conversation");
@@ -105,13 +102,15 @@ function startSession() {
 
         // Send the input message to server (for which server will then relay to other active users in the room)
         sendMessage(
+            socket,
             conversationElement,
             inputElement
         );
     });
 
     // Set up socket events
-    registerSocketEvents(conversationElement, 
+    registerSocketEvents(socket,
+                         conversationElement, 
                          membersElement, 
                          emptyMessageElement, 
                          membersHeadingElement);

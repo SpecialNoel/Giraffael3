@@ -2,7 +2,6 @@
 
 import { parseResponse } from "../../utils/api.js";
 import { signInWithEmailAndPassword } from "./auth-api.js";
-import { connectSocket } from "../socket/socket-creator.js";
 
 // Handle user sign-in request by setting up the signin form
 function signIn() {    
@@ -37,10 +36,6 @@ function signIn() {
                 console.log(result.error.code);
                 return;
             }
-
-            // Create and connect the socket used for socket communication
-            const socket = await connectSocket();
-            console.log(`Client side socket ${socket.id} is ready to go.`);
 
             // User authenticated by server. Proceed to the Dashboard page.
             window.location.href = "/dashboard"; 

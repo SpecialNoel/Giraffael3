@@ -1,16 +1,9 @@
 // socket-creator.js
 
-// socket: a client side socket, used to connect to server for socket communication
-// socket will be exported and used in socket-related functions in other files
-let socket = null;
-
 // Create a socket and establish connection with server socket
 function connectSocket() {
-    // Return the socket if it was already created before
-    if (socket) return socket;
-
     // Create the socket, which tries to connect with server side socket via SocketIO
-    socket = io();
+    const socket = io();
 
     return new Promise((resolve, reject) => {
         // "connect" is fired by SocketIO on server side when the connection is established successfully
@@ -35,12 +28,6 @@ function connectSocket() {
     });
 }
 
-// Return the client socket if the connection with server succeeded; return null otherwise 
-function getSocket() {
-    return socket;
-}
-
 export { 
-    connectSocket,
-    getSocket
+    connectSocket
 };

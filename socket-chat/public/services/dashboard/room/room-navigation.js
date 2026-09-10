@@ -1,11 +1,10 @@
 // room-navigation.js
 
-import { getSocket } from "../../socket/socket-creator.js";
 import { getRoomCodeFromParams } from "../conversation/services.js";
 import { getCurrentRoomState } from "../../states/dashboard-state.js";
 
 // Fire an "enter room" socket event to server
-function enterRoom(roomCode) {
+function enterRoom(socket, roomCode) {
     if (!roomCode) throw Error("User trying to enter a room with empty room code");
 
     // Check for the cursor on existing state
@@ -13,9 +12,6 @@ function enterRoom(roomCode) {
     const cursor = state ? state.cursor : null;
 
     // Send an "enter room" request to server via socket events
-    const socket = getSocket();
-    console.log("socket in enterRoom():", socket);
-
     socket.emit("enterRoom", roomCode, cursor);
 }
 

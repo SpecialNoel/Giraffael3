@@ -1,6 +1,5 @@
 // message-services.js
 
-import { getSocket } from "../socket-creator.js";
 import { generateTemporaryId } from "../../../utils/tmp-id-generator.js";
 import { 
     appendMessageToMessageList, 
@@ -13,7 +12,7 @@ import { parseResponse } from "../../../utils/api.js";
 import { handleGetUserInfoRequest } from "../../settings/setting-api.js";
 
 // Send the input message to server (for which server will then relay to other active users in the room)
-function sendMessage(conversationElement, inputElement) {
+function sendMessage(socket, conversationElement, inputElement) {
     // Stop proceeding if user somehow passed an empty message (as this should be handled by form's "required" attribute already)
     if (!inputElement.value) return;
 
@@ -26,9 +25,6 @@ function sendMessage(conversationElement, inputElement) {
 
     // Step 2: Emit the chat message to server, with a 5-second timeout
     // This reaches the same functionality as "emiWithAck()"
-    const socket = getSocket();
-    console.log("socket in sendMessage():", socket);
-
     socket.timeout(5000).emit("chatMessage", { content, tmpId }, async (err, res) => {
         // Receive server response and update the appended message based on the response
         console.log("res.status:", res.status);
