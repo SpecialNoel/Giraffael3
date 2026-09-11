@@ -87,7 +87,7 @@ function registerSocketEvents(socket,
 }
 
 // Start socket communication with server with the created socket by setting up the socket events
-function startSession(socket) {
+function initializeSocketEvents(socket) {
     const messageForm = document.getElementById("message-form");
     const inputElement = document.getElementById("message-input");
     const conversationElement = document.getElementById("conversation");
@@ -116,4 +116,4 @@ function startSession(socket) {
                          membersHeadingElement);
 }
 
-export { startSession };
+export { initializeSocketEvents };

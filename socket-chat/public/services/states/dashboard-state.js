@@ -1,22 +1,35 @@
 // dashboard-state.js
 
 /* 
-* dashboardState contains the dashboard/application state associated with the current client session.
-* It is independent of any particular Socket.IO connection.
+* dashboardState contains the application state (on dashboard) associated with the current client.
+* It is independent of any particular Socket.IO connection. This means that while a socket can
+* disconnect/reconnect, the client application state (i.e. dashboardState here) remains intact.
 */
 export const dashboardState = {
     // The room code for the room the user intended to enter
     pendingRoomCode: null,
+
     /* 
-    * currentRoom: { roomCode, roomName }
+    * currentRoom: { 
+    *     roomCode, 
+    *     roomName
+    * }
     * The room the user has already entered successfully
     * "roomCode": string, the public code of the current room
     * "roomName": string, the name of the current room
     */
+
     currentRoom: null,
     /*
-    * roomStates: { roomCode: { members, messages, cursor, hasMore } }
-    * A mapping of room codes the user has entered to other fields to keep track of the fetched messages and the next batch of messages
+    * roomStates: { 
+    *     roomCode: { 
+    *         members, 
+    *         messages, 
+    *         cursor, 
+    *         hasMore
+    *     }
+    * }
+    * A mapping of room codes to client-side state maintained for each room the user has entered.
     * "members": [{userId, username}], a list of users who joined the room
     * "messages": [{username, content}], a list of cached messages sent over the room
     * "cursor": string, the location where last fetched message was located in the database
@@ -25,11 +38,12 @@ export const dashboardState = {
     roomStates: new Map()
 };
 
+// Get the corresponding existing room state, if any
 function getCurrentRoomState(roomCode) {
-    // Get the corresponding existing room state, if any
     return dashboardState.roomStates.get(roomCode) ?? null;
 }
 
+// Update the state of the target room in dashboardState
 function updateRoomState(roomCode, updates) {
     // Get the room state that that corresponds to room code; it is guaranteed at least initialized
     function ensureRoomState(roomCode) {
