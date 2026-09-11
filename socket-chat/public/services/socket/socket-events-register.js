@@ -1,13 +1,13 @@
 // socket-events.js
 
-import { renderBasicGui, renderMembers } from "../dashboard/room-view.js";
+import { renderBasicGui, renderMembers } from "../dashboard/room/room-view.js";
 import { appendMessage } from "../dashboard/conversation/services.js";
 import { storeMessageToState, renderConversation } from "../dashboard/conversation/enter-room-services.js";
-import { sendMessage } from "./message-services.js";
+import { sendMessage } from "./message/message-services.js";
 import { dashboardState, updateRoomState } from "../states/dashboard-state.js";
 
 // Set up socket events
-function registerSocketEvents(socket, 
+function registerSocketEvents(socket,
                               conversationElement, 
                               membersElement, 
                               emptyMessageElement,
@@ -87,8 +87,8 @@ function registerSocketEvents(socket,
 }
 
 // Start socket communication with server with the created socket by setting up the socket events
-function startSession(socket) {
-    const form = document.getElementById("form");
+function initializeSocketEvents(socket) {
+    const messageForm = document.getElementById("message-form");
     const inputElement = document.getElementById("message-input");
     const conversationElement = document.getElementById("conversation");
     const membersElement = document.getElementById("members");
@@ -96,24 +96,24 @@ function startSession(socket) {
     const membersHeadingElement = document.getElementById("membersHeading");
 
     // Upon receiving form submission, send the input message (if any) to the server
-    form.addEventListener("submit", (e) => {
+    messageForm.addEventListener("submit", (e) => {
         // Prevent web page reloading upon form submission
         e.preventDefault();
 
         // Send the input message to server (for which server will then relay to other active users in the room)
         sendMessage(
-            conversationElement,
-            inputElement,
             socket,
+            conversationElement,
+            inputElement
         );
     });
 
     // Set up socket events
-    registerSocketEvents(socket, 
+    registerSocketEvents(socket,
                          conversationElement, 
                          membersElement, 
                          emptyMessageElement, 
                          membersHeadingElement);
 }
 
-export { startSession };
+export { initializeSocketEvents };

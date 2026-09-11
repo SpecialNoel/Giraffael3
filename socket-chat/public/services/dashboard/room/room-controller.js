@@ -24,7 +24,7 @@ function handleRoomsContainer(socket) {
             // Handle user "enter room" request
             const roomBtn = e.target.closest(".room-btn"); 
             if (roomBtn) {
-                await handleEnterRoom(roomBtn, socket);
+                await handleEnterRoom(socket, roomBtn);
                 return;
             }
 

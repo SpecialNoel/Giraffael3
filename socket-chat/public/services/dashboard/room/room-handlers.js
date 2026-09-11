@@ -1,16 +1,16 @@
 // room-handlers.js
 
-import { getCachedMessages, getCachedMembers } from "./conversation/enter-room-services.js";
-import { parseResponse } from "../../utils/api.js";
+import { getCachedMessages, getCachedMembers } from "../conversation/enter-room-services.js";
+import { parseResponse } from "../../../utils/api.js";
 import { createRoom, deleteRoom, joinRoom, leaveRoom } from "./room-api.js";
 import { enterRoom } from "./room-navigation.js";
 import { renderBasicGui, appendRoomToRoomsContainer, updateRoomCodeInURL } from "./room-view.js";
 import { renderMembers } from "./room-view.js";
-import { dashboardState } from "../states/dashboard-state.js";
-import { renderOlderMessages } from "./conversation/services.js";
+import { dashboardState } from "../../states/dashboard-state.js";
+import { renderOlderMessages } from "../conversation/services.js";
 
 // Set up the enter-room logic
-async function handleEnterRoom(roomBtn, socket) {
+async function handleEnterRoom(socket, roomBtn) {
     const roomCode = roomBtn.dataset.roomCode; // dataset.roomCode is dynamically parsed from "data-room-code" attribute in html
     console.log("Clicked enter room:", roomCode);
 
@@ -47,9 +47,8 @@ async function handleEnterRoom(roomBtn, socket) {
     }
 
     // Fire an "enter room" socket event to server
+    // Room info will then be retrieved and updated to Dashboard page via socket events
     enterRoom(socket, roomCode);
-
-    // Room info will be retrieved and updated to Dashboard page via socket events
 }
 
 // Set up the leave-room logic

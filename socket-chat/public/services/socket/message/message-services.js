@@ -1,16 +1,18 @@
 // message-services.js
 
-import { generateTemporaryId } from "../../utils/tmp-id-generator.js";
-import { appendMessageToMessageList, 
-         markMessageAsFailed, 
-         markMessageAsSent } from "./message-view.js";
-import { getRoomCodeFromParams } from "../dashboard/conversation/services.js";
-import { storeMessageToState } from "../dashboard/conversation/enter-room-services.js";
-import { parseResponse } from "../../utils/api.js";
-import { handleGetUserInfoRequest } from "../settings/setting-api.js";
+import { generateTemporaryId } from "../../../utils/tmp-id-generator.js";
+import { 
+    appendMessageToMessageList, 
+    markMessageAsFailed, 
+    markMessageAsSent 
+} from "./message-view.js";
+import { getRoomCodeFromParams } from "../../dashboard/conversation/services.js";
+import { storeMessageToState } from "../../dashboard/conversation/enter-room-services.js";
+import { parseResponse } from "../../../utils/api.js";
+import { handleGetUserInfoRequest } from "../../settings/setting-api.js";
 
 // Send the input message to server (for which server will then relay to other active users in the room)
-function sendMessage(conversationElement, inputElement, socket) {
+function sendMessage(socket, conversationElement, inputElement) {
     // Stop proceeding if user somehow passed an empty message (as this should be handled by form's "required" attribute already)
     if (!inputElement.value) return;
 

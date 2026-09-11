@@ -1,11 +1,11 @@
 // room-view.js
 
 import { enableRoomBackBtn } from "./room-back-btn-handler.js";
-import { parseResponse } from "../../utils/api.js";
-import { handleGetUserInfoRequest } from "../settings/setting-api.js";
+import { parseResponse } from "../../../utils/api.js";
+import { handleGetUserInfoRequest } from "../../settings/setting-api.js";
 import { getRoomInfo, getRoomsInfo } from "./room-api.js";
-import { dashboardState } from "../states/dashboard-state.js";
-import { getRoomCodeFromParams } from "../dashboard/conversation/services.js";
+import { dashboardState } from "../../states/dashboard-state.js";
+import { getRoomCodeFromParams } from "../conversation/services.js";
 
 // Render the room info and user info on Dashboard page UI, after user entering a room
 async function renderBasicGui() {
