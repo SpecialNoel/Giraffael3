@@ -44,6 +44,17 @@
     text-decoration: underline; /* Add an underline to the link */
 }
 
+/* Password hide/show button */
+.password-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+#password-toggler {
+    padding: 1;
+    cursor: pointer;
+}
+
 /* Password strength meter and feedback */
 #password-meter {
     display: flex;

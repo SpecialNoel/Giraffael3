@@ -1,9 +1,17 @@
 // sign-up-initializer.js
 
 import { parseResponse } from "../../utils/api.js";
+import { initializePasswordToggler } from "../../utils/password-toggler-handler.js";
 import { initializePasswordStrengthMeter } from "../../utils/password-strength-meter-handler.js";
 import { initializePasswordRuleChecker } from "../../utils/password-rule-checker-handler.js";
 import { signUpWithEmailAndPassword } from "./auth-api.js";
+
+// Enable the password toggler so that user can hide or show their inputted password
+function setUpPasswordToggler() {
+    const passwordInputElement = document.querySelector("#plainPassword");
+    const passwordToggler = document.querySelector("#password-toggler");
+    initializePasswordToggler(passwordInputElement, passwordToggler);
+}
 
 // Enable estimation on the strength meter of input password
 function setUpPasswordStrengthMeter() {
@@ -31,6 +39,9 @@ function signUpTraditional() {
         Otherwise, receive the response sent by the server and 
         redirect user to sign-in page.
     */
+
+    // Enable the password toggler so that user can hide or show their inputted password
+    setUpPasswordToggler();
 
     // Enable estimation on the strength meter of input password
     setUpPasswordStrengthMeter();

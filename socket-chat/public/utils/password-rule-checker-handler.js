@@ -11,7 +11,7 @@ function updateRuleText(id, passed, text) {
 
 // Enables dynamical password rule update to be displayed to user
 function initializePasswordRuleChecker(passwordInputElement, minLengthRule, maxLengthRule) {
-    const minLengthText = `No less than ${PASSWORD_MIN_LENGTH} characters`;
+    const minLengthText = `At least ${PASSWORD_MIN_LENGTH} characters`;
     const maxLengthText = `No more than ${PASSWORD_MAX_LENGTH} characters`;
 
     minLengthRule.textContent = minLengthText

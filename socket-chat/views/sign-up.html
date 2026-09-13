@@ -16,7 +16,11 @@
     <form id="sign-up-form">
       <label for="email"> Email: </label>
       <input id="email" type="email" placeholder="Enter your email" autocomplete="email" required />
-      <label for="plainPassword"> Password: </label>
+      <div class="password-label">
+        <label for="plainPassword"> Password: </label>
+        <button type="button" id="password-toggler">Show</button>
+      </div>
+
       <input
         id="plainPassword"
         type="password"
