@@ -15,26 +15,24 @@
     <!-- Sign-up -->
     <form id="sign-up-form">
       <label for="email"> Email: </label>
-      <input
-        id="email"
-        type="email"
-        placeholder="Enter your email"
-        autocomplete="email"
-        required
-      />
+      <input id="email" type="email" placeholder="Enter your email" autocomplete="email" required />
       <label for="plainPassword"> Password: </label>
       <input
         id="plainPassword"
         type="password"
         placeholder="Enter your password"
         autocomplete="new-password"
-        maxlength="16"
         required
       />
+      <meter id="password-meter" min="0" max="4" low="1" high="3" optimum="4"></meter>
+      <p id="password-feedback"></p>
       <button type="submit">Sign up</button>
     </form>
 
     <a class="link" href="/signin">Go to Sign-In</a>
+
+    <!-- Password strength meter -->
+    <script src="https://cdn.jsdelivr.net/npm/zxcvbn@4.4.2/dist/zxcvbn.js"></script>
 
     <!-- Handle user side sign-up services -->
     <script type="module" src="/pages/sign-up-page.js"></script>

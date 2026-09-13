@@ -1,7 +1,16 @@
 // sign-up-initializer.js
 
 import { parseResponse } from "../../utils/api.js";
+import { initializePasswordStrengthMeter } from "../../utils/password-strength-meter-handler.js";
 import { signUpWithEmailAndPassword } from "./auth-api.js";
+
+// Enable estimation on the strength meter of input password
+function setUpPasswordStrengthMeter() {
+    const passwordInputElement = document.querySelector("#plainPassword");
+    const strengthMeter = document.querySelector("#password-meter");
+    const feedbackText = document.querySelector("#password-feedback");
+    initializePasswordStrengthMeter(passwordInputElement, strengthMeter, feedbackText);
+}
 
 // Handle user sign-up request by setting up the signup form which authenticates via credentials
 function signUpTraditional() { 
@@ -13,8 +22,12 @@ function signUpTraditional() {
         Otherwise, receive the response sent by the server and 
         redirect user to sign-in page.
     */
-    const signUpForm = document.querySelector("#sign-up-form");
 
+    // Enable estimation on the strength meter of input password
+    setUpPasswordStrengthMeter();
+
+    // Set up the sign-up form
+    const signUpForm = document.querySelector("#sign-up-form");
     const handleSubmit = async (e) => {
         // Prevent the page from refreshing
         e.preventDefault();

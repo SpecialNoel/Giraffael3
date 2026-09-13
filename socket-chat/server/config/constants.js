@@ -2,7 +2,7 @@
 
 // Message expiration interval
 // ["1_hour", "1_day", "1_week", "1_month", "never"]
-export const MESSAGE_EXPIRATION_TYPE = "1_hour"; // options are included in "messageExpiration", room-model.js
+export const MESSAGE_EXPIRATION_TYPE = "never"; // options are included in "messageExpiration", room-model.js
 
 // Message quantity
 export const INITIAL_MESSAGE_LIMIT = 10; // fetch 10 messages upon user entering the room
