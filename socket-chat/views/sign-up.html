@@ -24,8 +24,15 @@
         autocomplete="new-password"
         required
       />
-      <meter id="password-meter" min="0" max="4" low="1" high="3" optimum="4"></meter>
-      <p id="password-feedback"></p>
+      <div>
+        <label>Password Strength:</label>
+        <meter id="password-meter" min="0" max="4" low="1" high="3" optimum="4"></meter>
+        <p id="password-feedback"></p>
+      </div>
+      <ul id="password-rule-checker">
+        <li id="min-length-rule"></li>
+        <li id="max-length-rule"></li>
+      </ul>
       <button type="submit">Sign up</button>
     </form>
 

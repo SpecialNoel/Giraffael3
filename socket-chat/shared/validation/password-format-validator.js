@@ -36,4 +36,8 @@ function validatePasswordFormat(password) {
     }
 }
 
-export { validatePasswordFormat };
+export { 
+    PASSWORD_MIN_LENGTH,
+    PASSWORD_MAX_LENGTH,
+    validatePasswordFormat 
+};
