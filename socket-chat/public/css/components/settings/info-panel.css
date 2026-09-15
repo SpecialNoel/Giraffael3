@@ -1,0 +1,25 @@
+/* info-panel.css */
+
+.info-panel {
+    /* Layout */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    /* Spacing */
+    margin: 20px auto; /* Giving spaces between the panel and other elements, while center-aligning it */
+
+    /* Size */
+    width: min(90%, 500px); /* Resizable, but only up to 500px; it takes 90% width on mobile view */
+
+    /* Border */
+    border: 1px solid #959595;
+
+    /* Appearance */
+    background-color: white;
+}
+
+.info-panel h2 {
+    /* Decoration */
+    text-decoration: underline;
+}

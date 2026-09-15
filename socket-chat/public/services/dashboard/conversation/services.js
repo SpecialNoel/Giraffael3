@@ -8,6 +8,7 @@ import { getCurrentRoomState, updateRoomState } from "../../states/dashboard-sta
 import { parseResponse } from "../../../utils/api.js";
 import { fetchOlderMessages } from "../room/room-api.js";
 
+// Retrieve room code from url parameters
 function getRoomCodeFromParams() {
     return new URLSearchParams(window.location.search).get("room");
 }

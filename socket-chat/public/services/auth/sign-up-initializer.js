@@ -1,10 +1,15 @@
 // sign-up-initializer.js
 
+import { 
+    setUpPasswordToggler, 
+    setUpPasswordStrengthMeter, 
+    setUpPasswordRuleChecker 
+} from "./password-helper.js";
 import { parseResponse } from "../../utils/api.js";
 import { signUpWithEmailAndPassword } from "./auth-api.js";
 
 // Handle user sign-up request by setting up the signup form which authenticates via credentials
-function signUpTraditional() { 
+function signUp() { 
     /*
         On the sign-up page, collect the user's credentials and
         send them to the server for account creation result.
@@ -13,8 +18,16 @@ function signUpTraditional() {
         Otherwise, receive the response sent by the server and 
         redirect user to sign-in page.
     */
-    const signUpForm = document.querySelector("#sign-up-form");
 
+    // Enable the password toggler so that user can hide or show their inputted password
+    setUpPasswordToggler();
+    // Enable estimation on the strength meter of input password
+    setUpPasswordStrengthMeter();
+    // Enables dynamical password rule update to be displayed to user
+    setUpPasswordRuleChecker();
+
+    // Set up the sign-up form
+    const signUpForm = document.querySelector("#sign-up-form");
     const handleSubmit = async (e) => {
         // Prevent the page from refreshing
         e.preventDefault();
@@ -51,4 +64,4 @@ function signUpTraditional() {
     signUpForm.addEventListener("submit", handleSubmit);
 }
 
-export { signUpTraditional };
+export { signUp };

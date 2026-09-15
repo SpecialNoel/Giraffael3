@@ -1,6 +1,6 @@
 // password-format-validator.js
 
-const PASSWORD_MIN_LENGTH = 8;
+const PASSWORD_MIN_LENGTH = 12;
 const PASSWORD_MAX_LENGTH = 128;
 
 // Check the validness of the format of the received password
@@ -36,4 +36,8 @@ function validatePasswordFormat(password) {
     }
 }
 
-export { validatePasswordFormat };
+export { 
+    PASSWORD_MIN_LENGTH,
+    PASSWORD_MAX_LENGTH,
+    validatePasswordFormat 
+};

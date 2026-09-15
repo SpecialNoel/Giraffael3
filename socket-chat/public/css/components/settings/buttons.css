@@ -1,0 +1,115 @@
+/* buttons.css */
+
+.change-username-btn,
+.open-change-password-panel-btn,
+.close-change-password-panel-btn,
+.save-password-change-btn {
+    /* Spacing */
+    padding: 4px 8px;
+
+    /* Appearance */
+    background: none;
+
+    /* Font */
+    font-size: 14px;
+
+    /* Border */
+    border: 1px solid #959595;
+    border-radius: 4px;
+
+    /* Interaction */
+    cursor: pointer; /* Replace the cursor with the pointer, when hovered over */
+}
+
+.change-username-btn {
+    /* Layout */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Spacing */
+    margin-top: 20px;
+}
+
+.change-username-btn,
+.open-change-password-panel-btn {
+    /* Spacing */
+    margin-top: 5px;
+}
+
+.change-username-btn:hover,
+.open-change-password-panel-btn:hover,
+.close-change-password-panel-btn:hover,
+.save-password-change-btn:hover {
+    /* Decoration */
+    text-decoration: underline;
+
+    /* Appearance */
+    background-color: #ffb347;
+}
+
+/* Back to Dashboard button */
+.back-to-dashboard-btn {
+    /* Spacing */
+    padding: 6px 24px;
+
+    /* Appearance */
+    background: none;
+
+    /* Font */
+    font-size: 14px;
+
+    /* Border */
+    border: none;
+
+    /* Interaction */
+    cursor: pointer; /* Replace the cursor with the pointer, when hovered over */
+}
+
+.back-to-dashboard-btn:hover {
+    /* Decoration */
+    text-decoration: underline;
+}
+
+/* Logout button */
+.logout-btn {
+    /* Layout */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Spacing */
+    padding: 6px 12px;
+    margin-top: 20px;
+
+    /* Appearance */
+    background: none;
+
+    /* Font */
+    font-size: 14px;
+
+    /* Interaction */
+    cursor: pointer; /* Replace the cursor with the pointer, when hovered over */
+}
+
+.logout-btn:hover {
+    /* Decoration */
+    text-decoration: underline;
+
+    /* Appearance */
+    background-color: #ffb347;
+}
+
+.logout-btn-container {
+    /* Layout */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Size */
+    width: 100%;
+
+    /* Spacing */
+    margin-top: auto; /* Pushes the container toward the bottom */
+    padding-bottom: 80px;
+}

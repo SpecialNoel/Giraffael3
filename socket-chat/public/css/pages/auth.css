@@ -1,5 +1,7 @@
 /* auth.css */
 
+@import url("../components/auth/password.css");
+
 /* Sign-up and Sign-in pages */
 .auth-page {
     /* Layout */
@@ -9,7 +11,28 @@
     align-items: center; /* Centers the element horizontally; controls the cross axis (horizontal in this case) */
 
     /* Size */
-    height: 100%; /* Makes this element as tall as its parent (body in this case) */
+    height: 90%; /* Makes this element as tall as its parent (body in this case) */
+}
+
+/* Header contains title and messages */
+.header {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically; turns the main axis from horizontal (default) to vertical */
+    align-items: center; /* Centers the element horizontally; controls the cross axis (horizontal in this case) */
+
+    text-align: center;
+    padding: 40px 20px 30px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 48px;
+    line-height: 1.1;
+}
+
+.header p {
+    margin: 12px 0 0;
+    font-size: 18px;
 }
 
 /* Sign-up and Sign-in forms */
@@ -35,7 +58,7 @@
 }
 
 /* Navigation links in Sign-up and Sign-in pages */
-.link {
+.navigation-link {
     /* Spacing */
     margin-top: 4px; /* Lower the element from the element on its top */
 

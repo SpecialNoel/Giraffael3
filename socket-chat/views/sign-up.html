@@ -5,36 +5,46 @@
     <title id="title">Sign up</title>
     <link rel="icon" type="image/svg" href="/assets/favicon.svg" />
     <link rel="stylesheet" href="/css/global.css" />
-    <link rel="stylesheet" href="/css/variables.css" />
     <link rel="stylesheet" href="/css/pages/auth.css" />
   </head>
 
   <body class="auth-page">
-    <h1>This is a sign-up page</h1>
+    <div class="header">
+      <h1>Sign Up</h1>
+    </div>
 
     <!-- Sign-up -->
     <form id="sign-up-form">
       <label for="email"> Email: </label>
-      <input
-        id="email"
-        type="email"
-        placeholder="Enter your email"
-        autocomplete="email"
-        required
-      />
-      <label for="plainPassword"> Password: </label>
+      <input id="email" type="email" placeholder="Enter your email" autocomplete="email" required />
+      <div class="password-label">
+        <label for="plainPassword"> Password: </label>
+        <button type="button" id="password-toggler">Show</button>
+      </div>
+
       <input
         id="plainPassword"
         type="password"
         placeholder="Enter your password"
         autocomplete="new-password"
-        maxlength="16"
         required
       />
+      <div>
+        <label>Password Strength:</label>
+        <meter id="password-meter" min="0" max="4" low="1" high="3" optimum="4"></meter>
+        <p id="password-feedback"></p>
+      </div>
+      <ul id="password-rule-checker">
+        <li id="min-length-rule"></li>
+        <li id="max-length-rule"></li>
+      </ul>
       <button type="submit">Sign up</button>
     </form>
 
-    <a class="link" href="/signin">Go to Sign-In</a>
+    <a class="navigation-link" href="/signin">Go to Sign-In</a>
+
+    <!-- Password strength meter -->
+    <script src="https://cdn.jsdelivr.net/npm/zxcvbn@4.4.2/dist/zxcvbn.js"></script>
 
     <!-- Handle user side sign-up services -->
     <script type="module" src="/pages/sign-up-page.js"></script>
