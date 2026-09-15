@@ -11,4 +11,13 @@ function initializePasswordToggler(passwordInputElement, passwordToggler) {
     });
 }
 
-export { initializePasswordToggler };
+// Reset the component to hide the password
+function resetPasswordToggler(passwordInputElement, passwordToggler) {
+    passwordInputElement.type = "password";
+    passwordToggler.textContent = "Show";
+}
+
+export { 
+    initializePasswordToggler,
+    resetPasswordToggler
+};

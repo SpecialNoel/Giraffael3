@@ -5,12 +5,14 @@
     <title id="title">Sign In</title>
     <link rel="icon" type="image/svg" href="/assets/favicon.svg" />
     <link rel="stylesheet" href="/css/global.css" />
-    <link rel="stylesheet" href="/css/variables.css" />
     <link rel="stylesheet" href="/css/pages/auth.css" />
   </head>
 
   <body class="auth-page">
-    <h1>This is a sign-in page</h1>
+    <div class="header">
+      <h1>Giraffael</h1>
+      <p>Long, but not alone.</p>
+    </div>
 
     <!-- Signin -->
     <form id="sign-in-form">
@@ -28,7 +30,7 @@
       <button type="submit">Sign in</button>
     </form>
 
-    <a class="link" href="/signup">Go to Sign-Up</a>
+    <a class="navigation-link" href="/signup">Go to Sign-Up</a>
 
     <!-- Handle user side sign-in services -->
     <script type="module" src="/pages/sign-in-page.js"></script>

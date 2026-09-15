@@ -1,0 +1,105 @@
+/* info-containers.css */
+
+/* User information containers */
+.user-id-container,
+.user-email-container,
+.username-container,
+.password-container {
+    /* Layout */
+    display: flex;
+    flex-direction: column; /* Align each container vertically */
+    align-items: center;
+
+    /* Spacing */
+    margin-bottom: 20px;
+}
+
+.username-container {
+    /* Spacing */
+    margin-bottom: 14px;
+}
+
+/* User information values */
+.user-id-value,
+.user-email-value,
+.password-value {
+    /* Layout */
+    display: block;
+
+    /* Size */
+    width: 250px;
+
+    /* Spacing */
+    padding: 6px 12px;
+
+    /* Border */
+    border: 1px solid #959595;
+    border-radius: 2px;
+
+    /* Decoration */
+    color: #959595;
+}
+
+/* Change username related */
+.username-value {
+    /* Size */
+    width: 250px;
+
+    /* Spacing */
+    padding: 6px 12px;
+}
+
+.username-status {
+    /* Spacing */
+    margin-top: 6px;
+
+    /* Decoration */
+    font-size: 12px;
+}
+
+/* Keep input values inside the viewport */
+.user-id-value,
+.user-email-value,
+.password-value,
+.username-value,
+.current-password-value,
+.new-password-value,
+.confirm-new-password-value {
+    width: min(250px, 80vw);
+}
+
+/* Change password related */
+.current-password-value,
+.new-password-value,
+.confirm-new-password-value {
+    /* Layout */
+    display: block;
+
+    /* Size */
+    width: 250px;
+
+    /* Spacing */
+    padding: 6px 12px;
+    margin-bottom: 20px;
+
+    /* Border */
+    border: 1px solid #959595;
+    border-radius: 2px;
+
+    /* Decoration */
+    color: black;
+}
+
+.confirm-new-password-value {
+    /* Spacing */
+    padding: 6px 12px;
+    margin-bottom: 12px;
+}
+
+.password-status {
+    /* Spacing */
+    margin: 0 0 20px;
+
+    /* Decoration */
+    font-size: 12px;
+}

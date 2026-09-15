@@ -6,7 +6,6 @@
     <link rel="icon" type="image/svg" href="/assets/favicon.svg" />
     <link rel="stylesheet" href="/css/global.css" />
     <link rel="stylesheet" href="/css/pages/settings.css" />
-    <link rel="stylesheet" href="/css/components/navigation.css" />
   </head>
 
   <body class="settings-page">
@@ -39,31 +38,54 @@
       <div class="password-container">
         <label>Password</label>
         <span class="password-value">••••••••••••</span>
-        <button class="open-change-password-panel-btn" type="button">
-          Change Password
-        </button>
+        <button class="open-change-password-panel-btn" type="button">Change Password</button>
       </div>
     </div>
 
+    <!-- Overlay -->
     <div class="overlay"></div>
 
+    <!-- Change password panel -->
     <div class="change-password-panel">
       <form class="change-password-container">
         <div class="change-password-panel-input-container">
-          <label>Current Password</label>
+          <!-- Current password -->
+          <div class="current-password-label">
+            <label>Current Password</label>
+            <button type="button" id="current-password-toggler">Show</button>
+          </div>
           <input class="current-password-value" type="password" />
-          <label>New Password</label>
+
+          <!-- New password -->
+          <div class="new-password-label">
+            <label>New Password</label>
+            <button type="button" id="new-password-toggler">Show</button>
+          </div>
           <input class="new-password-value" type="password" />
-          <label>Confirm New Password</label>
+
+          <!-- Password strength meter and rules on "New Password" -->
+          <div class="password-strength-container">
+            <label>Password Strength:</label>
+            <meter id="password-meter" min="0" max="4" low="1" high="3" optimum="4"></meter>
+            <p id="password-feedback"></p>
+          </div>
+          <ul id="password-rule-checker">
+            <li id="min-length-rule"></li>
+            <li id="max-length-rule"></li>
+          </ul>
+
+          <!-- Confirm new password -->
+          <div class="confirm-new-password-label">
+            <label>Confirm New Password</label>
+            <button type="button" id="confirm-new-password-toggler">Show</button>
+          </div>
           <input class="confirm-new-password-value" type="password" />
         </div>
+
+        <!-- Close panel button and save change button -->
         <div class="change-password-panel-btn-container">
-          <button class="close-change-password-panel-btn" type="button">
-            Cancel
-          </button>
-          <button class="save-password-change-btn" type="submit">
-            Save Changes
-          </button>
+          <button class="close-change-password-panel-btn" type="button">Cancel</button>
+          <button class="save-password-change-btn" type="submit">Save Changes</button>
         </div>
         <span class="password-status"></span>
       </form>
@@ -73,6 +95,9 @@
     <div class="logout-btn-container">
       <button class="logout-btn">Logout</button>
     </div>
+
+    <!-- Password strength meter -->
+    <script src="https://cdn.jsdelivr.net/npm/zxcvbn@4.4.2/dist/zxcvbn.js"></script>
 
     <!-- Handle user side setting-related services -->
     <script type="module" src="/pages/settings-page.js"></script>

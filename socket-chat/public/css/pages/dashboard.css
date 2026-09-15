@@ -1,10 +1,13 @@
 /* dashboard.css */
 
-/* Root of the document */
-:root {
-    /* Size */
-    --header-height: 50px; /* Reserved height for navigation */
-}
+@import url("../components/dashboard/variables.css");
+@import url("../components/dashboard/go-to-settings-link.css");
+@import url("../components/dashboard/room/room.css");
+@import url("../components/dashboard/room/room-hover-panel.css");
+@import url("../components/dashboard/room/buttons.css");
+@import url("../components/dashboard/message/conversation.css");
+@import url("../components/dashboard/message/message-input.css");
+
 body {
     width: 100%;
     min-height: 100vh;
@@ -18,18 +21,22 @@ body {
 
     /* Size */
     width: 100%;
-    height: calc(100dvh - var(--header-height)); /* Calculate the height for the component */
+    height: 100dvh;
+
+    padding: 10px;
 }
+
 .left-panel {
     /* Size */
     min-width: 300px;
 
     /* Spacing */
-    padding: 20px; /* Keep distance between the component and the parent */
+    padding: 10px; /* Keep distance between the component and the parent */
 
     /* Appearance */
     background-color: rgb(230, 230, 230); /* Control the color of the background of this element */
 }
+
 .right-panel {
     /* Layout */
     display: flex; /* Make it easier to align elements */
@@ -40,7 +47,7 @@ body {
     min-width: 0; /* Prevent horizontal scrolling */
 
     /* Spacing */
-    padding: 0px 10px 10px 10px; /* Padding for the whole right panel: top-right-bottom-left*/
+    padding: 0px 0px 0px 10px; /* Padding for the whole right panel: top-right-bottom-left*/
     gap: 10px; /* Gap between each component in right panel */
 }
 
@@ -61,17 +68,19 @@ body {
         flex-direction: column; /* Stack elements vertically */
 
         /* Size */
-        min-height: calc(100dvh - var(--header-height)); /* Calculate the height for the component */
+        min-height: 100dvh;
     }
+
     .left-panel {
         /* Layout */
         flex: 0 0 auto; /* Prevent the left panel (located on top of the right panel) from shrinking due to the expand of the right panel */
     }
+    
     .right-panel {
         /* Size */
         min-height: 0; /* Enables the scroller when message list overflows the component */
 
         /* Spacing */
-        padding-top: 10px; /* Add an offset between the left panel and the right panel */
+        padding: 10px 0 0 0;
     }
 }

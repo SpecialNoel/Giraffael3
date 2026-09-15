@@ -1,36 +1,15 @@
 // sign-up-initializer.js
 
+import { 
+    setUpPasswordToggler, 
+    setUpPasswordStrengthMeter, 
+    setUpPasswordRuleChecker 
+} from "./password-helper.js";
 import { parseResponse } from "../../utils/api.js";
-import { initializePasswordToggler } from "../../utils/password-toggler-handler.js";
-import { initializePasswordStrengthMeter } from "../../utils/password-strength-meter-handler.js";
-import { initializePasswordRuleChecker } from "../../utils/password-rule-checker-handler.js";
 import { signUpWithEmailAndPassword } from "./auth-api.js";
 
-// Enable the password toggler so that user can hide or show their inputted password
-function setUpPasswordToggler() {
-    const passwordInputElement = document.querySelector("#plainPassword");
-    const passwordToggler = document.querySelector("#password-toggler");
-    initializePasswordToggler(passwordInputElement, passwordToggler);
-}
-
-// Enable estimation on the strength meter of input password
-function setUpPasswordStrengthMeter() {
-    const passwordInputElement = document.querySelector("#plainPassword");
-    const strengthMeter = document.querySelector("#password-meter");
-    const feedbackText = document.querySelector("#password-feedback");
-    initializePasswordStrengthMeter(passwordInputElement, strengthMeter, feedbackText);
-}
-
-// Enables dynamical password rule update to be displayed to user
-function setUpPasswordRuleChecker() {
-    const passwordInputElement = document.querySelector("#plainPassword");
-    const minLengthRule = document.querySelector("#min-length-rule");
-    const maxLengthRule = document.querySelector("#max-length-rule");
-    initializePasswordRuleChecker(passwordInputElement, minLengthRule, maxLengthRule);
-}
-
 // Handle user sign-up request by setting up the signup form which authenticates via credentials
-function signUpTraditional() { 
+function signUp() { 
     /*
         On the sign-up page, collect the user's credentials and
         send them to the server for account creation result.
@@ -42,10 +21,8 @@ function signUpTraditional() {
 
     // Enable the password toggler so that user can hide or show their inputted password
     setUpPasswordToggler();
-
     // Enable estimation on the strength meter of input password
     setUpPasswordStrengthMeter();
-
     // Enables dynamical password rule update to be displayed to user
     setUpPasswordRuleChecker();
 
@@ -87,4 +64,4 @@ function signUpTraditional() {
     signUpForm.addEventListener("submit", handleSubmit);
 }
 
-export { signUpTraditional };
+export { signUp };

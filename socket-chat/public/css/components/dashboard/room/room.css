@@ -1,0 +1,36 @@
+/* room.css */
+
+/* Rooms container in Dashboard page. The Dashboard only has one container; the container has one room row per joined room */
+#rooms-container {
+    /* Layout */
+    display: flex; /* Make it easier to align elements */
+    flex-direction: column; /* Stack elements vertically; turns the main axis from horizontal (default) to vertical */
+
+    /* Spacing */
+    gap: 10px; /* Keep some spaces between each room container */
+}
+
+.room-row {
+    /* Layout */
+    display: flex; /* Make it easier to align elements */
+
+    /* Spacing */
+    gap: 3px; /* Keep some spaces between each buttons inside the room container */
+}
+
+/* Each room input group contains a input text field and a button (create or join) */
+.room-input-group {
+    /* Layout */
+    display: flex;
+}
+
+.room-input {
+    /* Layout */
+    flex: 1;
+
+    /* Size */
+    width: 100%; /* Make this element as wide as its parent (card-left in this case) */
+
+    /* Spacing */
+    margin-right: 2px; /* Keep distance between the room-related input field and the room-related button */
+}

@@ -1,10 +1,6 @@
 // settings-initializer.js
 
-import { 
-    setUpBackToDashboardButton,
-    setUpLogoutButton
-} from "./action-handlers.js";
-
+import { setUpBackToDashboardButton, setUpLogoutButton} from "./action-handlers.js";
 import { 
     fetchAndUpdateUserId,
     fetchAndUpdateUserEmail,

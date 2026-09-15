@@ -1,30 +1,31 @@
 // action-handlers.js
 
 import { parseResponse } from "../../utils/api.js";
-import { 
-    handleUpdateUsernameRequest,
-    handleUpdatePasswordRequest
-} from "./setting-api.js";
+import { handleUpdateUsernameRequest, handleUpdatePasswordRequest } from "./setting-api.js";
 import { validatePasswordFormat } from "/shared/validation/password-format-validator.js";
+import { getPasswordFields } from "./password-fields.js";
+import { initializePasswordToggler, resetPasswordToggler } from "../../utils/password/password-toggler-handler.js";
+import { initializePasswordStrengthMeter } from "../../utils/password/password-strength-meter-handler.js";
+import { initializePasswordRuleChecker } from "../../utils/password/password-rule-checker-handler.js";
+
+// Redirection helper
+function setUpRedirectButton(selector, destination) {
+    const button = document.querySelector(selector);
+    if (!button) return;
+
+    button.addEventListener("click", () => {
+        window.location.href = destination;
+    });
+}
 
 // Redirect the user back to the Dashboard page when clicked
 function setUpBackToDashboardButton() {
-    const backButton = document.querySelector(".back-to-dashboard-btn");
-    if (!backButton) return;
-
-    backButton.addEventListener("click", () => {
-        window.location.href = "/dashboard";
-    });
+    setUpRedirectButton(".back-to-dashboard-btn", "/dashboard")
 }
 
 // Redirect the user back to the Sign-in page when clicked
 function setUpLogoutButton() {
-    const logoutButton = document.querySelector(".logout-btn");
-    if (!logoutButton) return;
-
-    logoutButton.addEventListener("click", () => {
-        window.location.href = "/signin";
-    });
+    setUpRedirectButton(".logout-btn", "/signin")
 }
 
 // Receives and handles change-username requests upon submission
@@ -59,6 +60,14 @@ function setUpChangeUsernameListener(currUsernameValue) {
     });
 }
 
+// Reset the password togglers to hide all passwords fields
+function resetPasswordTogglers() {
+    const passwordFields = getPasswordFields();
+    passwordFields.forEach(({ input, toggler }) => {
+        resetPasswordToggler(input, toggler);
+    });
+}
+
 // Opens the change password panel when clicked, by making the panel and the overlay visible
 function setUpOpenChangePasswordPanelBtn() {
     const changePasswordPanel = document.querySelector(".change-password-panel");
@@ -74,17 +83,23 @@ function setUpOpenChangePasswordPanelBtn() {
 // Closes the change password panel by making the panel and the overlay invisible,
 // as well as clearing inputs inside the panel
 function closeChangePasswordPanel() {
+    // Reset input fields
     const currentPasswordValue = document.querySelector(".current-password-value");
     const newPasswordValue = document.querySelector(".new-password-value");
     const confirmNewPasswordValue = document.querySelector(".confirm-new-password-value");
     const passwordStatus = document.querySelector(".password-status");
+    const changePasswordPanel = document.querySelector(".change-password-panel");
+    const overlay = document.querySelector(".overlay");
+
     currentPasswordValue.value = "";
     newPasswordValue.value = "";
     confirmNewPasswordValue.value = "";
     passwordStatus.textContent = "";
 
-    const changePasswordPanel = document.querySelector(".change-password-panel");
-    const overlay = document.querySelector(".overlay");
+    // Reset the password togglers to hide all passwords fields
+    resetPasswordTogglers();
+
+    // "Deactivate" the panel and overlay by removing them from view
     changePasswordPanel.classList.remove("visible");
     overlay.classList.remove("visible");
 }
@@ -92,6 +107,7 @@ function closeChangePasswordPanel() {
 // Closes the change password panel when clicked
 function setUpCloseChangePasswordPanelBtn() {
     const closeBtn = document.querySelector(".close-change-password-panel-btn");
+    if (!closeBtn) return;
 
     closeBtn.addEventListener("click", () => {
         closeChangePasswordPanel();
@@ -105,6 +121,30 @@ function setUpOverlay() {
     overlay.addEventListener("click", () => {
         closeChangePasswordPanel();
     });
+}
+
+// Enable the password togglers so that user can hide or show their inputted passwords
+function setUpPasswordTogglers() {
+    const passwordFields = getPasswordFields();
+    passwordFields.forEach(({ input, toggler }) => {
+        initializePasswordToggler(input, toggler);
+    });
+}
+
+// Enable estimation on the strength meter of input password
+function setUpPasswordStrengthMeter() {
+    const passwordInputElement = document.querySelector(".new-password-value");
+    const strengthMeter = document.querySelector("#password-meter");
+    const feedbackText = document.querySelector("#password-feedback");
+    initializePasswordStrengthMeter(passwordInputElement, strengthMeter, feedbackText);
+}
+
+// Enables dynamical password rule update to be displayed to user
+function setUpPasswordRuleChecker() {
+    const passwordInputElement = document.querySelector(".new-password-value");
+    const minLengthRule = document.querySelector("#min-length-rule");
+    const maxLengthRule = document.querySelector("#max-length-rule");
+    initializePasswordRuleChecker(passwordInputElement, minLengthRule, maxLengthRule);
 }
 
 // Receives and handles change-password requests upon submission
@@ -142,7 +182,7 @@ function setUpChangePasswordListener() {
         }
 
         // Compare the received new password against with the received confirm new password
-        if (newPassword != confirmNewPassword) {
+        if (newPassword !== confirmNewPassword) {
             // New password does not match confirm new password. Update password status
             passwordStatus.textContent = "Passwords do not match";
             return;
@@ -169,5 +209,8 @@ export {
     setUpOpenChangePasswordPanelBtn,
     setUpCloseChangePasswordPanelBtn,
     setUpOverlay,
+    setUpPasswordTogglers,
+    setUpPasswordStrengthMeter,
+    setUpPasswordRuleChecker,
     setUpChangePasswordListener
 };

@@ -1,0 +1,27 @@
+/* go-to-settings-link.css */
+
+/* The link that redirects the user to the Settings page upon clicking */
+.go-to-settings-link {
+    /* Layout */
+    display: inline-block;
+    align-self: flex-start;
+
+    /* Spacing */
+    padding: 4px 8px;
+    margin-bottom: 8px;
+
+    /* Border */
+    border: 1px solid gray; /* Control the thickness, style and color of the border */
+    border-radius: 5px; /* Control the roundness of the corners of the border */
+
+    /* Appearance */
+    text-decoration: none; /* Remove the underline of the link */
+    color: black; /* Set the color of the text of the link */
+
+    font-size: 16px;
+}
+
+.go-to-settings-link:hover {
+    /* Appearance */
+    background-color: #f3f3f3; /* Control the color of the background of this element */
+}

@@ -1,0 +1,26 @@
+/* overlay.css */
+
+/* Overlay between information panel and change password panel */
+.overlay {
+    /* Style */
+    display: none;
+    position: absolute;
+
+    /* Spacing */
+    inset: 0;
+
+    /* Size */
+    width: 100%;
+    height: 100%;
+
+    /* Appearance */
+    background-color: rgba(0, 0, 0, 0.3);
+
+    /* Composition */
+    z-index: 10;
+}
+
+.overlay.visible {
+    /* Style */
+    display: block;
+}

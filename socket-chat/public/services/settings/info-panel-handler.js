@@ -7,6 +7,9 @@ import {
     setUpOpenChangePasswordPanelBtn,
     setUpCloseChangePasswordPanelBtn,
     setUpOverlay,
+    setUpPasswordTogglers,
+    setUpPasswordStrengthMeter,
+    setUpPasswordRuleChecker,
     setUpChangePasswordListener,
 } from "./action-handlers.js";
 
@@ -56,6 +59,14 @@ function setUpChangePasswordPanelContainer() {
     setUpCloseChangePasswordPanelBtn();
     // Set up the overlay such that it closes when clicked
     setUpOverlay(); // overlay activates when change password panel is opened; it deactivates when the panel is closed
+
+    // Enable the password togglers so that user can hide or show their inputted passwords
+    setUpPasswordTogglers();
+    // Enable estimation on the strength meter of input password
+    setUpPasswordStrengthMeter();
+    // Enables dynamical password rule update to be displayed to user
+    setUpPasswordRuleChecker();
+    
     // Save the changes made to the password by sending received input to server
     setUpChangePasswordListener();
 }
