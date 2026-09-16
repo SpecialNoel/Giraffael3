@@ -39,7 +39,7 @@ function signUp() {
 
             /*
              * Send them to server for validation, then retrieve server response
-             * Note that client does not need the JWT token at this stage
+             * Note that client does not need the accessToken at this stage
              * as they should not connect to the server yet.
             */
             const result = await parseResponse(await signUpWithEmailAndPassword(email, plainPassword));

@@ -2,7 +2,7 @@
 
 import { findUserByEmail } from "../../services/db-services/user/find-user-by-email-service.js";
 import { comparePassword } from "../../utils/password-handler.js";
-import { generateToken } from "../../utils/jwt-token-handler.js";
+import { generateAccessToken, generateRefreshToken } from "../../utils/jwt-token-handler.js";
 import { successResponse, errorResponse } from "../../utils/api-response.js";
 
 import { validateEmailFormat } from "../../../shared/validation/email-format-validator.js";
@@ -13,9 +13,9 @@ async function handleSignIn(req, res) {
         /* 
          * Receive email and plaintext password from user as sign-in credentials
          * Note that at this stage, server cannot access attributes attached to client's
-         *   socket yet since client does not have the token yet (the token will be generated
+         *   socket yet since client does not have the accessToken yet (the accessToken will be generated
          *   by server below, which will then be sent to client as part of sign-in success)
-         * TLDR: token verification comes after sign-in.
+         * TLDR: accessToken verification comes after sign-in.
         */
         const { email, plainPassword } = req.body;
         const normalizedEmail = email.trim().toLowerCase();
@@ -54,16 +54,25 @@ async function handleSignIn(req, res) {
             );
         }
 
-        // Generate a JWT (JSON Web Token) for this user for authentication purpose only
-        const token = generateToken(user._id, user.userId);
+        // Generate JWTs (JSON Web Token) for this user
+        // One for authentication purpose only, and another for refresh purpose only
+        const accessToken = generateAccessToken(user._id, user.userId);
+        const refreshToken = generateRefreshToken(user._id, user.userId);
 
-        // Set the JWT token as an HTTP-Only cookie in the user's browser
-        res.cookie("accessToken", token, {
+        // Set the accessToken as an HTTP-Only cookie in the user's browser
+        res.cookie("accessToken", accessToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            secure: true, // HTTPS
+            secure: process.env.NODE_ENV === "production", // HTTPS if true
             sameSite: "lax", // Allow cookies in some cross-site situations; block many other cross-site requests 
-            maxAge: 60*60*1000,
+            maxAge: 15*60*1000, // 15 minutes
+            path: "/"
+        });
+        // Set the refreshToken as an HTTP-Only cookie in the user's browser
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production", // HTTPS if true
+            sameSite: "lax", // Allow cookies in some cross-site situations; block many other cross-site requests 
+            maxAge: 24*60*60*1000, // 1 day
             path: "/"
         });
 

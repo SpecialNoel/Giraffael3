@@ -17,8 +17,7 @@ import { connectToDB } from "./server/utils/db-connector.js";
 import { connectToRedis } from "./server/utils/redis-connector.js";
 
 import { authenticateSocket } from "./server/services/socket/middleware/authenticate-socket.js";
-import { registerEnterRoomHandler, 
-         registerExitRoomHandler } from "./server/services/socket/handlers/room-handler.js";
+import { registerEnterRoomHandler, registerExitRoomHandler } from "./server/services/socket/handlers/room-handler.js";
 import { handleChat } from "./server/services/socket/handlers/chat-handler.js";
 import { handleDisconnection } from "./server/services/socket/handlers/disconnection-handler.js";
 
@@ -70,13 +69,13 @@ const redis = await connectToRedis();
 io.use(async (socket, next) => {
     // Parse cookie attribute from this request
     const cookies = parse(socket.handshake.headers.cookie || "");
-    // Retrieve client's assigned JWT token from parsed cookie
-    const token = cookies.accessToken;
+    // Retrieve client's assigned accessToken from parsed cookie
+    const accessToken = cookies.accessToken;
     
-    // If no token has received from client's browser and verified at server, reject this socket connection attempt
-    if (!token) return next(new Error("Authentication required"));
+    // If the token was not received from client's browser and verified at server, reject this socket connection attempt
+    if (!accessToken) return next(new Error("Authentication required"));
 
-    await authenticateSocket(token, socket, next);
+    await authenticateSocket(accessToken, socket, next);
 });
 
 // SocketIO server handles the connection event

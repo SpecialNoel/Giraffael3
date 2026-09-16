@@ -26,7 +26,7 @@ function signIn() {
             /*
              * Send them to server for validation, then retrieve server response
              * Note that client needs to send information to server at this stage
-             * to get the JWT token for later operations
+             * to get the accessToken for later operations
             */
             const result = await parseResponse(await signInWithEmailAndPassword(email, plainPassword));
             

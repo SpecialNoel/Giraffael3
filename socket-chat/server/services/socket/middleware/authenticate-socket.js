@@ -1,19 +1,19 @@
 // authenticate-socket.js
 
-import { verifyToken } from "../../../utils/jwt-token-handler.js";
+import { verifyAccessToken } from "../../../utils/jwt-token-handler.js";
 import { User } from "../../../models/user-model.js";
 
 // Authenticate the user for operations handled with socket events
-async function authenticateSocket(token, socket, next) {
+async function authenticateSocket(accessToken, socket, next) {
     try {
-        // Verify the received token to ensure its validity while obtaining client info stored inside
-        const { userObjectId, userId } = verifyToken(token);
+        // Verify the received accessToken to ensure its validity while obtaining client info stored inside
+        const { userObjectId, userId } = verifyAccessToken(accessToken);
 
         // Fetch the username of this user (which should already exists as userObjectId exists)
         const user = await User.findById(userObjectId).select("username");
         if (!user) return next(new Error("User not found"));
 
-        // Apply received user info inside the token for later use
+        // Apply received user info inside the accessToken for later use
         socket.user = {
             userObjectId: userObjectId,
             username: user.username,
@@ -26,7 +26,10 @@ async function authenticateSocket(token, socket, next) {
         console.log("Error in authenticating user:", err);
 
         // "next(new Error())" rejects the connection (i.e. reject the promise on client side connectSocket())
-        next(new Error("Authentication failed"));
+        if (err.name === "TokenExpiredError") {
+            return next(new Error("Access token expired"));
+        }
+        return next(new Error("Authentication failed"));
     }
 }
 

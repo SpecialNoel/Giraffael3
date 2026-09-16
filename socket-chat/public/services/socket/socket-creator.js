@@ -6,7 +6,7 @@ function connectSocket() {
     * Create the socket, which tries to connect with server side socket via SocketIO
     * Note that the current usage of io() assumes that both frontend and backend are running on the same server
     * 
-    * With "withCredentials", client will send the JWT token stored as cookie inside browser to server during connection
+    * With "withCredentials", client will send the accessToken stored as cookie inside browser to server during connection
     * 
     * With "reconnection", automatic reconnection will be triggered if this socket got destroyed.
     * Server side middleware (i.e. io.use(async (socket, next))) will run for the new connection
@@ -39,6 +39,4 @@ function connectSocket() {
     });
 }
 
-export { 
-    connectSocket
-};
+export { connectSocket };

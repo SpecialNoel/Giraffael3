@@ -4,6 +4,7 @@ import express from "express";
 
 import { sendHTMLFile } from "../route-helper.js";
 import { handleSignIn } from "./sign-in-handler.js";
+import { refreshAccessToken } from "./refresh-access-token-handler.js";
 
 const router = express.Router();
 
@@ -14,5 +15,8 @@ router.get("/", (req, res) => {
 router.post("/", async (req, res) => {
     return await handleSignIn(req, res);
 });
+// Refresh the user's access token
+// Triggered upon expiration of user's refresh token
+router.post("/refresh", refreshAccessToken);
 
 export { router };

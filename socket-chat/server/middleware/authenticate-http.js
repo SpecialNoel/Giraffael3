@@ -1,13 +1,13 @@
 // authenticate-http.js
 
-import { verifyToken } from "../utils/jwt-token-handler.js";
+import { verifyAccessToken } from "../utils/jwt-token-handler.js";
 import { errorResponse } from "../utils/api-response.js";
 
 // Authenticate the user for operations handled with http api endpoints
 function authenticateHTTP(req, res, next) {
-    // Try to get the JWT token from the requesting client's browser
-    const token = req.cookies.accessToken;
-    if (!token) {
+    // Try to get the accessToken from the requesting client's browser
+    const accessToken = req.cookies.accessToken;
+    if (!accessToken) {
         return res.status(401).json(
             errorResponse(
                 null,
@@ -17,7 +17,7 @@ function authenticateHTTP(req, res, next) {
     } 
 
     try {
-        const { userObjectId, userId } = verifyToken(token);
+        const { userObjectId, userId } = verifyAccessToken(accessToken);
         req.user = {
             userObjectId,
             userId,
@@ -25,10 +25,19 @@ function authenticateHTTP(req, res, next) {
         next();
         // console.log(`Authenticated user ${userId} for HTTP endpoints.`);
     } catch (err) {
+        if (err.name === "TokenExpiredError") {
+            return res.status(401).json(
+                errorResponse(
+                    null,
+                    "Access token expired"
+                )
+            );
+        }
+
         return res.status(401).json(
             errorResponse(
                 null,
-                "Invalid or expired token"
+                "Invalid access token"
             )
         );
     }
