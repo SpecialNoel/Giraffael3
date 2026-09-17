@@ -71,6 +71,7 @@ io.use(async (socket, next) => {
     const cookies = parse(socket.handshake.headers.cookie || "");
     // Retrieve client's assigned accessToken from parsed cookie
     const accessToken = cookies.accessToken;
+    console.log("access: ", accessToken.substring(0,5))
     
     // If the token was not received from client's browser and verified at server, reject this socket connection attempt
     if (!accessToken) return next(new Error("Authentication required"));

@@ -7,7 +7,10 @@ import { errorResponse } from "../utils/api-response.js";
 function authenticateHTTP(req, res, next) {
     // Try to get the accessToken from the requesting client's browser
     const accessToken = req.cookies.accessToken;
+    console.log("access in authenticateHTTP:", accessToken.substring(0, 10));
+
     if (!accessToken) {
+        console.log("Authentication required");
         return res.status(401).json(
             errorResponse(
                 null,
@@ -26,6 +29,7 @@ function authenticateHTTP(req, res, next) {
         // console.log(`Authenticated user ${userId} for HTTP endpoints.`);
     } catch (err) {
         if (err.name === "TokenExpiredError") {
+            console.log("Access token expired");
             return res.status(401).json(
                 errorResponse(
                     null,
@@ -34,6 +38,7 @@ function authenticateHTTP(req, res, next) {
             );
         }
 
+        console.log("Invalid token expired");
         return res.status(401).json(
             errorResponse(
                 null,

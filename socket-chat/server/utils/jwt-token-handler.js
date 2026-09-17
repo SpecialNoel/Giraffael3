@@ -1,6 +1,7 @@
 // jwt-token-handler.js
 
 import jwt from "jsonwebtoken";
+import { ACCESS_TOKEN_EXPIRATION, REFRESH_TOKEN_EXPIRATION } from "../config/constants.js";
 
 // Generate a JWT for the user for authentication and authorization
 function generateAccessToken(userObjectId, userId) {
@@ -14,7 +15,8 @@ function generateAccessToken(userObjectId, userId) {
     const secret = process.env.JWT_ACCESS_SECRET;
 
     // Generate accessToken by signing the payload with the secret
-    const accessToken = jwt.sign(payload, secret, { expiresIn: "15m" });
+    // Note that ACCESS_TOKEN_EXPIRATION is in milliseconds, meaning that we need to divide it by 1000 to get expected unit for expiresIn
+    const accessToken = jwt.sign(payload, secret, { expiresIn: ACCESS_TOKEN_EXPIRATION / 1000 });
     return accessToken;
 }
 
@@ -30,7 +32,8 @@ function generateRefreshToken(userObjectId, userId) {
     const secret = process.env.JWT_REFRESH_SECRET;
 
     // Generate refreshToken by signing the payload with the secret
-    const refreshToken = jwt.sign(payload, secret, { expiresIn: "1d" });
+    // Note that REFRESH_TOKEN_EXPIRATION is in milliseconds, meaning that we need to divide it by 1000 to get expected unit for expiresIn
+    const refreshToken = jwt.sign(payload, secret, { expiresIn: REFRESH_TOKEN_EXPIRATION / 1000 });
     return refreshToken;
 }
 

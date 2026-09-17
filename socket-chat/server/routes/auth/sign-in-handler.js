@@ -3,6 +3,7 @@
 import { findUserByEmail } from "../../services/db-services/user/find-user-by-email-service.js";
 import { comparePassword } from "../../utils/password-handler.js";
 import { generateAccessToken, generateRefreshToken } from "../../utils/jwt-token-handler.js";
+import { ACCESS_TOKEN_EXPIRATION, REFRESH_TOKEN_EXPIRATION } from "../../config/constants.js";
 import { successResponse, errorResponse } from "../../utils/api-response.js";
 
 import { validateEmailFormat } from "../../../shared/validation/email-format-validator.js";
@@ -64,7 +65,7 @@ async function handleSignIn(req, res) {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production", // HTTPS if true
             sameSite: "lax", // Allow cookies in some cross-site situations; block many other cross-site requests 
-            maxAge: 15*60*1000, // 15 minutes
+            maxAge: ACCESS_TOKEN_EXPIRATION,
             path: "/"
         });
         // Set the refreshToken as an HTTP-Only cookie in the user's browser
@@ -72,7 +73,7 @@ async function handleSignIn(req, res) {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production", // HTTPS if true
             sameSite: "lax", // Allow cookies in some cross-site situations; block many other cross-site requests 
-            maxAge: 24*60*60*1000, // 1 day
+            maxAge: REFRESH_TOKEN_EXPIRATION,
             path: "/"
         });
 

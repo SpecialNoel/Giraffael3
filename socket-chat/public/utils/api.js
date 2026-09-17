@@ -12,6 +12,9 @@ async function apiFetch(url, options = {}) {
     });
     if (response.status !== 401) return response;
 
+    // Status code 401 usually denote incorrect credentials. Since access token expiration
+    // is considered one of the reason of incorrect credentials, when the client receives 
+    // a response with status code 401, they should have their access token refreshed.
     console.log("Access token expired — attempting refresh");
 
     // Access token expired.

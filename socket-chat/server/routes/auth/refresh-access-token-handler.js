@@ -2,6 +2,7 @@
 
 import { successResponse, errorResponse } from "../../utils/api-response.js";
 import { verifyRefreshToken, generateAccessToken } from "../../utils/jwt-token-handler.js";
+import { ACCESS_TOKEN_EXPIRATION } from "../../config/constants.js";
 
 // Refresh the user's accessToken
 function refreshAccessToken(req, res) {
@@ -28,7 +29,7 @@ function refreshAccessToken(req, res) {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production", // HTTPS if true
             sameSite: "lax", // Allow cookies in some cross-site situations; block many other cross-site requests 
-            maxAge: 15*60*1000, // 15 minutes
+            maxAge: ACCESS_TOKEN_EXPIRATION,
             path: "/"
         });
 
