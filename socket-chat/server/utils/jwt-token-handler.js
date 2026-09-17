@@ -11,7 +11,7 @@ function generateAccessToken(userObjectId, userId) {
     };
 
     // Fetch the secret for JWT generation
-    const secret = process.env.JWT_SECRET;
+    const secret = process.env.JWT_ACCESS_SECRET;
 
     // Generate accessToken by signing the payload with the secret
     const accessToken = jwt.sign(payload, secret, { expiresIn: "15m" });
@@ -27,7 +27,7 @@ function generateRefreshToken(userObjectId, userId) {
     };
 
     // Fetch the secret for JWT generation
-    const secret = process.env.JWT_SECRET;
+    const secret = process.env.JWT_REFRESH_SECRET;
 
     // Generate refreshToken by signing the payload with the secret
     const refreshToken = jwt.sign(payload, secret, { expiresIn: "1d" });
@@ -37,7 +37,7 @@ function generateRefreshToken(userObjectId, userId) {
 // Verify the accessToken using the secret and check whether it has been tampered with or expired
 function verifyAccessToken(accessToken) {
     // Fetch the secret for JWT generation
-    const secret = process.env.JWT_SECRET;
+    const secret = process.env.JWT_ACCESS_SECRET;
 
     // Verify the accessToken with fetched secret if it has been tempered or expired
     const decoded = jwt.verify(accessToken, secret);
@@ -52,7 +52,7 @@ function verifyAccessToken(accessToken) {
 // Verify the refreshToken using the secret and check whether it has been tampered with or expired
 function verifyRefreshToken(refreshToken) {
     // Fetch the secret for JWT generation
-    const secret = process.env.JWT_SECRET;
+    const secret = process.env.JWT_REFRESH_SECRET;
 
     // Verify the refreshToken with fetched secret if it has been tempered or expired
     const decoded = jwt.verify(refreshToken, secret);

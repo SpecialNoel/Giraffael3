@@ -11,7 +11,7 @@ function connectSocket() {
     * With "reconnection", automatic reconnection will be triggered if this socket got destroyed.
     * Server side middleware (i.e. io.use(async (socket, next))) will run for the new connection
     */
-    const socket = io({
+    let socket = io({
         withCredentials: true,
         reconnection: true
     });
