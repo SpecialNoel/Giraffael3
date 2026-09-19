@@ -2,6 +2,9 @@
 
 // Send the HTTP request to server, and receive an HTTP response from the server
 async function apiFetch(url, options = {}) {
+    console.log("========== apiFetch START ==========");
+    console.log("URL:", url);
+
     const response = await fetch(url, {
         ...options,
         credentials: "include",
@@ -10,29 +13,37 @@ async function apiFetch(url, options = {}) {
             ...options.headers
         }
     });
-    if (response.status !== 401) return response;
+
+    console.log("Original request response:", response.status);
+    if (response.status !== 401) {
+        console.log("========== apiFetch END ==========");
+        return response;
+    }
 
     // Status code 401 usually denote incorrect credentials. Since access token expiration
     // is considered one of the reason of incorrect credentials, when the client receives 
     // a response with status code 401, they should have their access token refreshed.
-    console.log("Access token expired — attempting refresh");
+    console.log("Access token failed — attempting refresh");
 
     // Access token expired.
-    const refreshResponse = await fetch("/auth/refresh",
+    const refreshResponse = await fetch("/signin/refresh",
         {
             method: "POST",
             credentials: "include"
         }
     );
+    console.log("Refresh request response:", refreshResponse.status);
     if (!refreshResponse.ok) {
         // Refresh token has expired or is invalid.
         // User needs to log in again.
-        throw new Error("Authentication required");
+        console.log("Refresh failed");
+        throw new Error("Authentication required for invalid refresh token");
     }
 
     // The server has set a new accessToken cookie.
     // Retry the original request.
-    return fetch(url, {
+    console.log("Refresh succeeded — retrying original request");
+    const retryResponse = await fetch(url, {
         ...options,
         credentials: "include",
         headers: {
@@ -40,6 +51,10 @@ async function apiFetch(url, options = {}) {
             ...options.headers
         }
     });
+    console.log("Retry response:", retryResponse.status);
+    console.log("Retry body:", await retryResponse.clone().text());
+    console.log("========== apiFetch END ==========");
+    return retryResponse;
 }
 
 // Retrieves data contained in server HTTP response

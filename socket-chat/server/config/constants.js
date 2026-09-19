@@ -11,4 +11,4 @@ export const MESSAGE_FETCH_LIMIT = 10; // fetch 10 older messages user scrolling
 // Token expiration
 // Note that token creation is based on milliseconds. e.g.: 15*60*1000 = 15 minutes
 export const ACCESS_TOKEN_EXPIRATION = 1*60*1000; // the access token expires 15 minutes after creation
-export const REFRESH_TOKEN_EXPIRATION = 24*60*60*1000; // the access token expires 1 day after creation
+export const REFRESH_TOKEN_EXPIRATION = 2*60*1000; // the access token expires 1 day after creation

@@ -4,7 +4,7 @@ import express from "express";
 
 import { sendHTMLFile } from "../route-helper.js";
 import { handleSignIn } from "./sign-in-handler.js";
-import { refreshAccessToken } from "./refresh-access-token-handler.js";
+import { refreshHTTPTokens } from "./refresh-http-tokens-handler.js";
 
 const router = express.Router();
 
@@ -17,6 +17,9 @@ router.post("/", async (req, res) => {
 });
 // Refresh the user's access token
 // Triggered upon expiration of user's refresh token
-router.post("/refresh", refreshAccessToken);
-
+router.post("/refresh", (req, res) => {
+    console.log("========== REFRESH ROUTE REACHED ==========");
+    console.log("Cookies:", req.cookies);
+    return refreshHTTPTokens(req, res);
+});
 export { router };
