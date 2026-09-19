@@ -44,9 +44,9 @@ function handleRoomsContainer(socket) {
                 return;
             }
         } catch (err) {
-            // Print error message to client side in case something went wrong during this process
+            // Print error message to client side in case something unexpected occurred during this process
             console.error(err);
-            alert("Something went wrong");        
+            alert("An unexpected error occurred. Please try again.");        
         }
     };
 

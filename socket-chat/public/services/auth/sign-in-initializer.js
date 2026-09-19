@@ -40,9 +40,9 @@ function signIn() {
             // User authenticated by server. Proceed to the Dashboard page.
             window.location.href = "/dashboard"; 
         } catch (err) {
-            // Print error message to client side in case something went wrong during this process
+            // Print error message to client side in case something unexpected occurred during this process
             console.error(err);
-            alert("Something went wrong");        
+            alert("An unexpected error occurred. Please try again.");        
         }
     };
 

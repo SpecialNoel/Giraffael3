@@ -127,9 +127,9 @@ function handleCreateRoom() {
             // Clear the room name field
             document.querySelector("#roomNameInCreateRoom").value = "";
         } catch (err) {
-            // Print error message to client side in case something went wrong during this process
+            // Print error message to client side in case something unexpected occurred during this process
             console.error(err);
-            alert("Something went wrong");     
+            alert("An unexpected error occurred. Please try again.");     
             // Clear the room name field 
             document.querySelector("#roomCodeInJoinRoom").value = "";  
         }
@@ -176,7 +176,7 @@ function handleJoinRoom() {
             // Clear the room code field
             document.querySelector("#roomCodeInJoinRoom").value = "";
         } catch (err) {
-            // Print error message to client side in case something went wrong during this process
+            // Print error message to client side in case something unexpected occurred during this process
             switch (err.code) {
                 case "ALREADY_IN_ROOM":
                     alert("You have already joined this room");
@@ -186,7 +186,7 @@ function handleJoinRoom() {
 
                 default:
                     console.error(err);
-                    alert("Something went wrong");
+                    alert("An unexpected error occurred. Please try again.");
                     // Clear the room code field
                     document.querySelector("#roomCodeInJoinRoom").value = "";
             }   
