@@ -6,11 +6,7 @@ import { successResponse, errorResponse } from "../../../utils/api-response.js";
 async function handleGetUserId(req, res) {
     try {
         const userObjectId = req.user.userObjectId;
-
-        console.log("req.user =", req.user);
-        console.log("userObjectId =", userObjectId);
-        console.log("typeof userObjectId =", typeof userObjectId);
-
+        
         // Fetch user public id
         const userId = await fetchUserId(userObjectId);
         if (userId === null) {

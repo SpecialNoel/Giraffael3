@@ -24,7 +24,7 @@ async function createRoom(normalizedRoomName, userObjectId) {
                 throw err; // otherwise, report error
             }
         }
-        console.log("Room created and stored to DB\n");
+        console.log("Room created and stored to DB");
         return room;
     } catch (err) {
         console.error("Failed to create room:", err);

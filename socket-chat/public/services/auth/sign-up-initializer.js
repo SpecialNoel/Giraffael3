@@ -42,7 +42,8 @@ function signUp() {
              * Note that client does not need the accessToken at this stage
              * as they should not connect to the server yet.
             */
-            const result = await parseResponse(await signUpWithEmailAndPassword(email, plainPassword));
+            const response = await signUpWithEmailAndPassword(email, plainPassword);
+            const result = await parseResponse(response);
 
             // If the sign up failed, display the error message to the user
             if (!result.success) {
@@ -56,7 +57,7 @@ function signUp() {
         } catch (err) {
             // Print error message to client side in case something unexpected occurred during this process
             console.error(err);
-            alert("An unexpected error occurred. Please try again.");
+            alert("An unexpected error occurred in signUp(). Please try again.");
         }
     };
 

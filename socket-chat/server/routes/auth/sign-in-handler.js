@@ -63,16 +63,16 @@ async function handleSignIn(req, res) {
         // Set the accessToken as an HTTP-Only cookie in the user's browser
         res.cookie("accessToken", accessToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production", // HTTPS if true
-            sameSite: "lax", // Allow cookies in some cross-site situations; block many other cross-site requests 
+            secure: process.env.NODE_ENV === "production", // uses HTTPS if true; uses HTTP otherwise
+            sameSite: "lax", // allow cookies in some cross-site situations; block many other cross-site requests 
             maxAge: ACCESS_TOKEN_EXPIRATION,
             path: "/"
         });
         // Set the refreshToken as an HTTP-Only cookie in the user's browser
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production", // HTTPS if true
-            sameSite: "lax", // Allow cookies in some cross-site situations; block many other cross-site requests 
+            secure: process.env.NODE_ENV === "production", // uses HTTPS if true; uses HTTP otherwise
+            sameSite: "lax", // allow cookies in some cross-site situations; block many other cross-site requests 
             maxAge: REFRESH_TOKEN_EXPIRATION,
             path: "/"
         });

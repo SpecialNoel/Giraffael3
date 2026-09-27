@@ -46,7 +46,7 @@ function handleRoomsContainer(socket) {
         } catch (err) {
             // Print error message to client side in case something unexpected occurred during this process
             console.error(err);
-            alert("An unexpected error occurred. Please try again.");        
+            alert("An unexpected error occurred in handleRoomsContainer(). Please try again.");        
         }
     };
 
@@ -54,7 +54,7 @@ function handleRoomsContainer(socket) {
     containerDiv.addEventListener("click", handleClick);
 }
 
-// Set up the room logics (via http endpoints, socket events, or both)
+// Set up the room logics (via HTTP endpoints, socket events, or both)
 function setUpRoomEvents(socket) {
     // Set up the events attached to each room container ("leave room", "delete room")
     handleRoomsContainer(socket);

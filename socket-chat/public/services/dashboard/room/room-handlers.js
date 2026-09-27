@@ -57,7 +57,8 @@ async function handleLeaveRoom(leaveBtn, roomRow) {
     console.log("Clicked leave room:", roomCode);
 
     // Send roomCode to server, then retrieve result contained in response from server
-    const result = await parseResponse(await leaveRoom(roomCode));
+    const response = await leaveRoom(roomCode);
+    const result = await parseResponse(response);
     if (!result.success) {
         alert("Error in leaving room");
         return;
@@ -129,7 +130,7 @@ function handleCreateRoom() {
         } catch (err) {
             // Print error message to client side in case something unexpected occurred during this process
             console.error(err);
-            alert("An unexpected error occurred. Please try again.");     
+            alert("An unexpected error occurred in handleCreateRoom(). Please try again.");     
             // Clear the room name field 
             document.querySelector("#roomCodeInJoinRoom").value = "";  
         }
@@ -186,7 +187,7 @@ function handleJoinRoom() {
 
                 default:
                     console.error(err);
-                    alert("An unexpected error occurred. Please try again.");
+                    alert("An unexpected error occurred in handleJoinRoom(). Please try again.");
                     // Clear the room code field
                     document.querySelector("#roomCodeInJoinRoom").value = "";
             }   

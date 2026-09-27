@@ -24,7 +24,7 @@ async function createUser(normalizedEmail, passwordHash) {
                 throw err; // otherwise, report error
             }
         } 
-        console.log("User created and stored to DB\n");
+        console.log("User created and stored to DB");
         return user;
     } catch (err) {
         console.error("Failed to create user:", err);

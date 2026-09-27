@@ -14,7 +14,7 @@ import { handleUpdateUserPassword } from "./handlers/update-user-password-handle
 const router = express.Router();
 
 // Settings page
-router.get("/", authenticateHTTP, (req, res) => {
+router.get("/", (req, res) => {
     sendHTMLFile(res, "settings.html");
 });
 router.get("/username", authenticateHTTP, async (req, res) => {

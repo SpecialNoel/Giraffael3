@@ -8,7 +8,7 @@ import { setUpConversationScroller } from "../../services/dashboard/conversation
 
 // Set up event listeners for user dashboard services (HTTP endpoints operations)
 async function initializeDashboard(socket) {
-    // Set up the room logics (via http endpoints, socket events, or both)
+    // Set up the room logics (via HTTP endpoints, socket events, or both)
     setUpRoomEvents(socket);
     // Set up the application so that it navigates when the user uses the browser's Back and Forward buttons
     initializeHistoryNavigation();

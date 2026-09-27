@@ -73,8 +73,9 @@ io.use(async (socket, next) => {
     const accessToken = cookies.accessToken;
     
     // If the token was not received from client's browser and verified at server, reject this socket connection attempt
-    if (!accessToken) return next(new Error("Authentication required"));
+    if (!accessToken) return next(new Error("Error in connecting client socket: access token not found"));
 
+    // Authenticate the user for operations handled with socket events
     await authenticateSocket(accessToken, socket, next);
 });
 

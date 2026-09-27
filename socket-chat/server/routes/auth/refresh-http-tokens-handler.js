@@ -14,11 +14,11 @@ function refreshHTTPTokens(req, res) {
     const refreshToken = req.cookies.refreshToken;
     // Refresh token is invalid due to missing token
     if (!refreshToken) {
-        console.log("Refresh token required");
+        console.log("Refresh token missing");
         return res.status(401).json(
             errorResponse(
-                null,
-                "Refresh token required"
+                "MISSING_REFRESH_TOKEN",
+                "Refresh token missing"
             )
         );
     }
@@ -34,16 +34,16 @@ function refreshHTTPTokens(req, res) {
         // Set the new access token as an HTTP-Only cookie in the user's browser
         res.cookie("accessToken", newAccessToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production", // HTTPS if true
-            sameSite: "lax", // Allow cookies in some cross-site situations; block many other cross-site requests 
+            secure: process.env.NODE_ENV === "production", // uses HTTPS if true; uses HTTP otherwise
+            sameSite: "lax", // allow cookies in some cross-site situations; block many other cross-site requests 
             maxAge: ACCESS_TOKEN_EXPIRATION,
             path: "/"
         });
         // Set the refresh token as an HTTP-Only cookie in the user's browser
         res.cookie("refreshToken", newRefreshToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production", // HTTPS if true
-            sameSite: "lax", // Allow cookies in some cross-site situations; block many other cross-site requests 
+            secure: process.env.NODE_ENV === "production", // uses HTTPS if true; uses HTTP otherwise
+            sameSite: "lax", // allow cookies in some cross-site situations; block many other cross-site requests 
             maxAge: REFRESH_TOKEN_EXPIRATION,
             path: "/"
         });
@@ -56,12 +56,23 @@ function refreshHTTPTokens(req, res) {
             )
         );
     } catch (err) {
+        // Explicitly checking error triggered by an expired refresh token
+        if (err.name === "TokenExpiredError") {
+            console.log("Refresh token expired");
+            return res.status(401).json(
+                errorResponse(
+                    "EXPIRED_REFRESH_TOKEN",
+                    "Refresh token expired"
+                )
+            );        
+        }
+
         // Refresh token is invalid due to it being expired or other reasons
-        console.log("Invalid refresh tokens");
+        console.log("Invalid refresh token");
         return res.status(401).json(
             errorResponse(
-                null,
-                "Invalid refresh tokens"
+                "INVALID_REFRESH_TOKEN",
+                "Refresh token is invalid by other reasons"
             )
         );
     }

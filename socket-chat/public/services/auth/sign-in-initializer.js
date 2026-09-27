@@ -28,7 +28,8 @@ function signIn() {
              * Note that client needs to send information to server at this stage
              * to get the accessToken for later operations
             */
-            const result = await parseResponse(await signInWithEmailAndPassword(email, plainPassword));
+            const response = await signInWithEmailAndPassword(email, plainPassword);
+            const result = await parseResponse(response);
             
             // If the credentials are invalid, display the error message to the user
             if (!result.success) {
@@ -42,7 +43,7 @@ function signIn() {
         } catch (err) {
             // Print error message to client side in case something unexpected occurred during this process
             console.error(err);
-            alert("An unexpected error occurred. Please try again.");        
+            alert("An unexpected error occurred in signIn(). Please try again.");        
         }
     };
 

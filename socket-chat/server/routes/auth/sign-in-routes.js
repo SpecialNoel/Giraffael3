@@ -19,7 +19,6 @@ router.post("/", async (req, res) => {
 // Triggered upon expiration of user's refresh token
 router.post("/refresh", (req, res) => {
     console.log("========== REFRESH ROUTE REACHED ==========");
-    console.log("Cookies:", req.cookies);
     return refreshHTTPTokens(req, res);
 });
 export { router };

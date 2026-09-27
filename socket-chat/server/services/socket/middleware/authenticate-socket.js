@@ -25,10 +25,10 @@ async function authenticateSocket(accessToken, socket, next) {
     } catch (err) {
         console.log("Error in authenticating user:", err);
 
+        // Explicitly checking error triggered by an expired access token
+        if (err.name === "TokenExpiredError")  return next(new Error("Access token expired"));
+
         // "next(new Error())" rejects the connection (i.e. reject the promise on client side connectSocket())
-        if (err.name === "TokenExpiredError") {
-            return next(new Error("Access token expired"));
-        }
         return next(new Error("Authentication failed"));
     }
 }
